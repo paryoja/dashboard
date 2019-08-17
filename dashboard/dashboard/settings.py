@@ -24,7 +24,8 @@ SECRET_KEY = open("dashboard/secret.txt").read().strip()
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ["paryoja.asuscomm.com"]
+ALLOWED_HOSTS = open("dashboard/allowed_hosts.txt").read().split(',')
+ALLOWED_HOSTS = [hosts.strip() for hosts in ALLOWED_HOSTS]
 
 
 # Application definition

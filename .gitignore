@@ -1,3 +1,4 @@
 /dashboard/dashboard/secret.txt
+/dashboard/dashboard/allowed_hosts.txt
 __pycache__
 db.sqlite3
