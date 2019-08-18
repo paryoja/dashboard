@@ -4,7 +4,6 @@ Django==2.2.4
 idna==2.6
 keyring==10.6.0
 keyrings.alt==3.0
-pycrypto==2.6.1
 pygobject==3.26.1
 pytz==2019.2
 SecretStorage==2.3.1
