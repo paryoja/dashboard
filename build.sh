@@ -1,1 +1,2 @@
+#!/bin/bash
 docker build -t yj0604park/dashboard .
