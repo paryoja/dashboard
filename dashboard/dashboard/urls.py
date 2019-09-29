@@ -17,6 +17,6 @@ from django.contrib import admin
 from django.urls import path, include
 
 urlpatterns = [
-    path('bstest/', include('bstest.urls')),
+    path('timezone/', include('timezone.urls')),
     path('admin/', admin.site.urls),
 ]
