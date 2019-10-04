@@ -2,3 +2,5 @@
 /dashboard/dashboard/allowed_hosts.txt
 __pycache__
 db.sqlite3
+.idea/inspectionProfiles/
+/venv/
