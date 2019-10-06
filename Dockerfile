@@ -3,7 +3,7 @@ MAINTAINER Yoonjae Park <yj0604.park@gmail.com>
 
 RUN apt-get update
 RUN apt-get dist-upgrade -y
-RUN apt-get install -y python3 python3-pip
+RUN apt-get install -y python3 python3-pip postgresql-client-common postgresql-client
 
 ADD requirements.txt .
 RUN python3 -m pip install --upgrade pip
