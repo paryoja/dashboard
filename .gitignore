@@ -1,9 +1,10 @@
 __pycache__
 db.sqlite3
-.idea/inspectionProfiles/
 /venv/
 dashboard/dashboard/*.txt
+.idea/inspectionProfiles/
 .idea/dataSources.xml
 .idea/deployment.xml
 .idea/webServers.xml
 .idea/workspace.xml
+/**/migrations/*
