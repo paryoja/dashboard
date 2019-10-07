@@ -10,6 +10,7 @@ For the full list of settings and their values, see
 https://docs.djangoproject.com/en/2.2/ref/settings/
 """
 
+import json
 import os
 
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
@@ -82,15 +83,20 @@ WSGI_APPLICATION = 'dashboard.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql',
-        'NAME': 'testdb2',
-        'USER': 'paryoja',
+        'NAME': '',
+        'USER': '',
         'PASSWORD': '',
-        'HOST': 'database-2.csw07ttanqum.ap-northeast-2.rds.amazonaws.com',
-        'PORT': '5432',
+        'HOST': '',
+        'PORT': '',
     }
 }
 
-DATABASES['default']['PASSWORD'] = open("dashboard/db.txt").read().strip()
+db_settings = json.loads(open("dashboard/db.json").read().strip())
+DATABASES['default']['PASSWORD'] = db_settings['PASSWORD']
+DATABASES['default']['NAME'] = db_settings['NAME']
+DATABASES['default']['USER'] = db_settings['USER']
+DATABASES['default']['HOST'] = db_settings['HOST']
+DATABASES['default']['PORT'] = db_settings['PORT']
 
 # Password validation
 # https://docs.djangoproject.com/en/2.2/ref/settings/#auth-password-validators

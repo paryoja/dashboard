@@ -2,6 +2,7 @@ __pycache__
 db.sqlite3
 /venv/
 dashboard/dashboard/*.txt
+dashboard/dashboard/*.json
 .idea/inspectionProfiles/
 .idea/dataSources.xml
 .idea/deployment.xml
