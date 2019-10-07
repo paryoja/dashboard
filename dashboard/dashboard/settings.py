@@ -38,6 +38,7 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'timezone.apps.TimezoneConfig',
     'book.apps.BookConfig',
+    'bstest.apps.BstestConfig',
 ]
 
 MIDDLEWARE = [

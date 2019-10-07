@@ -1,10 +1,10 @@
 from django.urls import path
 
-from .views import *
+from . import views
 
 app_name = 'book'
 urlpatterns = [
-    path('', index, name='index'),
-    path('cbvList', BoardsListClassView.as_view()),
-    path('fbvList', BoardsListFunctionView),
+    path('', views.index, name='index'),
+    path('link', views.link, name='link'),
+    path('algorithm', views.algorithm, name='algorithm'),
 ]
