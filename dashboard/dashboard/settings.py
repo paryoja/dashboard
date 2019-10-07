@@ -36,6 +36,7 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'timezone.apps.TimezoneConfig',
+    'book.apps.BookConfig',
 ]
 
 MIDDLEWARE = [
@@ -81,10 +82,10 @@ WSGI_APPLICATION = 'dashboard.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql',
-        'NAME': 'testdb',
+        'NAME': 'testdb2',
         'USER': 'paryoja',
         'PASSWORD': '',
-        'HOST': 'database-1.csw07ttanqum.ap-northeast-2.rds.amazonaws.com',
+        'HOST': 'database-2.csw07ttanqum.ap-northeast-2.rds.amazonaws.com',
         'PORT': '5432',
     }
 }

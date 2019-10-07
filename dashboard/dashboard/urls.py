@@ -18,5 +18,6 @@ from django.urls import path, include
 
 urlpatterns = [
     path('timezone/', include('timezone.urls')),
+    path('book/', include('book.urls')),
     path('admin/', admin.site.urls),
 ]

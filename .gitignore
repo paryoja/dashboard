@@ -3,3 +3,7 @@ db.sqlite3
 .idea/inspectionProfiles/
 /venv/
 dashboard/dashboard/*.txt
+.idea/dataSources.xml
+.idea/deployment.xml
+.idea/webServers.xml
+.idea/workspace.xml

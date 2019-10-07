@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <title>FBV Example Page</title>
+</head>
+<body>
+
+<DIV ID="CONTENT">
+<H2>Boards View List</H2>
+<HR />
+
+{% for board in object_list %}
+    <H3>Category</H3>
+    <H3>{{ board.id }}</H3>
+{% endfor %}
+</DIV>
+</body>
+</html>
