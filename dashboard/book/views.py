@@ -18,3 +18,8 @@ def link(request):
 def algorithm(request):
     render_dict = get_render_dict('algorithm')
     return render(request, 'book/algorithm.html', render_dict)
+
+
+def invest(request):
+    render_dict = get_render_dict('invest')
+    return render(request, 'book/invest.html', render_dict)

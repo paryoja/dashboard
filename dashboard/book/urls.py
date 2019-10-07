@@ -7,4 +7,5 @@ urlpatterns = [
     path('', views.index, name='index'),
     path('link', views.link, name='link'),
     path('algorithm', views.algorithm, name='algorithm'),
+    path('invest', views.invest, name='invest'),
 ]
