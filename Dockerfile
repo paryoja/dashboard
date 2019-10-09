@@ -1,9 +1,10 @@
 FROM ubuntu:18.04
 MAINTAINER Yoonjae Park <yj0604.park@gmail.com>
 
+COPY sources.list /etc/apt/sources.list
 RUN apt-get update
 RUN apt-get dist-upgrade -y
-RUN apt-get install -y python3 python3-pip postgresql-client-common postgresql-client
+RUN apt-get install -y --fix-missing python3 python3-pip postgresql-client-common postgresql-client
 
 ADD requirements.txt .
 RUN python3 -m pip install --upgrade pip
