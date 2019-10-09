@@ -1,6 +1,17 @@
 from django.db import models
 
 
+class Link(models.Model):
+    added_date = models.DateTimeField('date added', auto_now_add=True)
+    url = models.URLField()
+
+    content_type = models.CharField(max_length=32, null=True, blank=True)
+    description = models.CharField(max_length=128, null=True, blank=True)
+
+    def __str__(self):
+        return self.description
+
+
 class AuthUser(models.Model):
     password = models.CharField(max_length=128)
     last_login = models.DateTimeField(blank=True, null=True)
