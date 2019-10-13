@@ -1,5 +1,4 @@
 import xml.etree.ElementTree as ET
-from urllib import parse
 
 import requests
 from django.shortcuts import render
@@ -27,6 +26,11 @@ def algorithm(request):
 def invest(request):
     render_dict = get_render_dict('invest')
     return render(request, 'book/invest.html', render_dict)
+
+
+def wine(request):
+    render_dict = get_render_dict('wine')
+    return render(request, 'book/wine.html', render_dict)
 
 
 from xml.etree import cElementTree as ElementTree
