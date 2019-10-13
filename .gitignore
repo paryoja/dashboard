@@ -9,3 +9,4 @@ dashboard/dashboard/*.json
 .idea/webServers.xml
 .idea/workspace.xml
 /**/migrations/*
+venv2/
