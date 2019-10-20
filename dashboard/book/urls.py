@@ -13,4 +13,5 @@ urlpatterns = [
     path('todo', views.todo, name='todo'),
     path('investment/leading_stocks', views.leading_stocks, name="leading_stocks"),
     path('investment/live_currency', views.live_currency, name="live_currency"),
+    path('investment/krx_price_query', views.krx_price_query, name="krx_price_query"),
 ]
