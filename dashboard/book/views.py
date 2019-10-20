@@ -56,3 +56,8 @@ def law_search(request):
         render_dict['law_list'] = law_list
 
     return render(request, 'book/law_search.html', render_dict)
+
+
+def deep_learning(request):
+    render_dict = get_render_dict('deep_learning')
+    return render(request, 'book/deep_learning.html', render_dict)

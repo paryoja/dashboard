@@ -1,10 +1,11 @@
-<nav class="navbar navbar-expand-lg navbar-light bg-light">
+<nav class="navbar navbar-expand-lg navbar-light bg-light bd-navbar">
     <a class="navbar-brand mr-0 mr-md-2" href="{% url 'book:index' %}" aria-label="Bootstrap">
         <svg width="36" height="36" xmlns="http://www.w3.org/2000/svg">
             <!-- Created with Method Draw - http://github.com/duopixel/Method-Draw/ -->
             <g>
                 <text xml:space="preserve" text-anchor="start" font-family="Oswald, sans-serif" font-size="24"
-                      id="svg_4" y="27.843718" x="3.857184" fill-opacity="null" stroke-opacity="null" stroke-width="0"
+                      id="svg_4" y="27.843718" x="3.857184" fill-opacity="null" stroke-opacity="null"
+                      stroke-width="0"
                       stroke="#000" fill="#000000">YZ</text>
             </g>
         </svg>
@@ -18,6 +19,9 @@
         <ul class="navbar-nav mr-auto">
             <li class="nav-item {{ index }}">
                 <a class="nav-link" href="{% url 'book:index' %}">Home</a>
+            </li>
+            <li class="nav-item {{ deep_learning }}">
+                <a class="nav-link" href="{% url 'book:deep_learning' %}">Deep Learning</a>
             </li>
             <li class="nav-item {{ link }}">
                 <a class="nav-link" href="{% url 'book:link' %}">Link</a>
