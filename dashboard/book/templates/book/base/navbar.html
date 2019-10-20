@@ -26,20 +26,22 @@
             <li class="nav-item {{ link }}">
                 <a class="nav-link" href="{% url 'book:link' %}">Link</a>
             </li>
-            <li class="nav-item {{ todo }}">
-                <a class="nav-link" href="{% url 'book:todo' %}">Todo</a>
-            </li>
             <li class="nav-item {{ algorithm }}">
                 <a class="nav-link" href="{% url 'book:algorithm' %}">Algorithm</a>
             </li>
             <li class="nav-item {{ invest }}">
-                <a class="nav-link" href="{% url 'book:invest' %}">Invest</a>
+                <a class="nav-link" href="{% url 'book:leading_stocks' %}">Investment</a>
             </li>
-            <li class="nav-item {{ law_search }}">
-                <a class="nav-link" href="{% url 'book:law_search' %}">Law Search</a>
-            </li>
-            <li class="nav-item {{ wine }}">
-                <a class="nav-link" href="{% url 'book:wine' %}">Wine</a>
+            <li class="nav-item dropdown {{ wine }} {{ law_search }} {{ todo }}">
+                <a class="nav-link dropdown-toggle" href="#" id="navbar_other" role="button"
+                   data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                    Other
+                </a>
+                <div class="dropdown-menu" aria-labelledby="navbar_other">
+                    <a class="dropdown-item" href="{% url 'book:wine' %}">Wine</a>
+                    <a class="dropdown-item" href="{% url 'book:law_search' %}">Law Search</a>
+                    <a class="dropdown-item" href="{% url 'book:todo' %}">Todo List</a>
+                </div>
             </li>
         </ul>
         <form class="form-inline my-2 my-lg-0">

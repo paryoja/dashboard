@@ -2,13 +2,16 @@ from xml.etree import cElementTree as ElementTree
 
 import requests
 from django.shortcuts import render
-from .models import Link
 
+from .models import Link
 from .xml_helper import XmlDictConfig
 
 
-def get_render_dict(current_page):
-    return {current_page: 'active'}
+def get_render_dict(current_page, side_page=None):
+    render_dict = {current_page: 'active'}
+    if side_page:
+        render_dict[side_page] = 'active'
+    return render_dict
 
 
 def index(request):
@@ -27,9 +30,14 @@ def algorithm(request):
     return render(request, 'book/algorithm.html', render_dict)
 
 
-def invest(request):
-    render_dict = get_render_dict('invest')
-    return render(request, 'book/invest.html', render_dict)
+def live_currency(request):
+    render_dict = get_render_dict('invest', 'live_currency')
+    return render(request, 'book/investment/live_currency.html', render_dict)
+
+
+def leading_stocks(request):
+    render_dict = get_render_dict('invest', 'leading_stocks')
+    return render(request, 'book/investment/leading_stocks.html', render_dict)
 
 
 def wine(request):

@@ -18,7 +18,9 @@
 {% include 'book/base/navbar.html' %}
 <div id="root" class="container-fluid">
     <div class="row flex-xl-nowrap">
-        {% include 'book/base/sidebar.html' %}
+        {% block sidebar %}
+            {% include 'book/base/sidebar.html' %}
+        {% endblock %}
         <main class="col-12 col-md-9 col-xl-8 py-md-3 pl-md-5 bd-content" role="main">
             {% block body %}{% endblock %}
         </main>
