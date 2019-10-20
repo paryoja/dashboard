@@ -2,6 +2,7 @@ from xml.etree import cElementTree as ElementTree
 
 import requests
 from django.shortcuts import render
+from .models import Link
 
 from .xml_helper import XmlDictConfig
 
@@ -17,6 +18,7 @@ def index(request):
 
 def link(request):
     render_dict = get_render_dict('link')
+    render_dict['table_content'] = Link.objects.all()
     return render(request, 'book/link.html', render_dict)
 
 
@@ -61,3 +63,8 @@ def law_search(request):
 def deep_learning(request):
     render_dict = get_render_dict('deep_learning')
     return render(request, 'book/deep_learning.html', render_dict)
+
+
+def todo(request):
+    render_dict = get_render_dict('todo')
+    return render(request, 'book/todo.html', render_dict)

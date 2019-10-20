@@ -7,6 +7,7 @@ class Link(models.Model):
 
     content_type = models.CharField(max_length=32, null=True, blank=True)
     description = models.CharField(max_length=128, null=True, blank=True)
+    visit_count = models.IntegerField(default=0)
 
     def __str__(self):
         return self.description
