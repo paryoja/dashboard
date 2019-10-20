@@ -3,7 +3,7 @@
     {% include 'book/investment/invest_sidebar.html' %}
 {% endblock %}
 {% block body %}
-    <H1>주식 가격 조회</H1>
+    <H1><i class="fa fa-search-dollar"></i> 주식 가격 조회</H1>
     <form method="post">
         {% csrf_token %}
         <div class="input-group mb-3">
@@ -18,14 +18,15 @@
     </form>
     {% if realtime_result %}
         <h4>실시간 데이터</h4>
+
         {% if not market_close %}
             {{ realtime_result }}
         {% else %}
-            장마감시에 실시간 데이터는 제공되지 않습니다.
+            장이 마감되었습니다.
         {% endif %}
-        <br><br><br>
     {% endif %}
     {% if statement_result %}
+
         <h3>재무종합</h3>
         {% if balance_sheet %}
             <h4>대차대조표</h4>
@@ -36,6 +37,11 @@
             .right-row {
                 text-align: right;
             }
+
+            .min {
+                width: 1%;
+                white-space: nowrap;
+            }
             </style>
             <table class="table table-sm table-hover">
                 <thead>
@@ -45,7 +51,7 @@
                     <th colspan="3">{{ balance_sheet.year1 }}년 {{ balance_sheet.month1 }}월</th>
                     <th colspan="3">{{ balance_sheet.year2 }}년 {{ balance_sheet.month2 }}월</th>
                 </tr>
-                <tr class="center-row">
+                <tr class="center-row min">
                     <th>항목</th>
                     <th>금액</th>
                     <th>구성비</th>
@@ -60,7 +66,7 @@
                 </thead>
                 <tbody>
                 {% for item in balance_sheet.TBL_DaeCha_data %}
-                    <tr class="right-row">
+                    <tr class="right-row min">
                         {% for value in item %}
                             <td>{{ value }}</td>
                         {% endfor %}
@@ -79,7 +85,7 @@
                     <th colspan="3">{{ income_statement.year1 }}년 {{ income_statement.month1 }}월</th>
                     <th colspan="3">{{ income_statement.year2 }}년 {{ income_statement.month2 }}월</th>
                 </tr>
-                <tr class="center-row">
+                <tr class="center-row min">
                     <th>항목</th>
                     <th>금액</th>
                     <th>구성비</th>
@@ -94,7 +100,7 @@
                 </thead>
                 <tbody>
                 {% for item in income_statement.TBL_SonIk_data %}
-                    <tr class="right-row">
+                    <tr class="right-row min">
                         {% for value in item %}
                             <td>{{ value }}</td>
                         {% endfor %}
@@ -113,7 +119,7 @@
                     <th colspan="2">{{ cash_flow.year1 }}년 {{ cash_flow.month1 }}월</th>
                     <th colspan="2">{{ cash_flow.year2 }}년 {{ cash_flow.month2 }}월</th>
                 </tr>
-                <tr class="center-row">
+                <tr class="center-row min">
                     <th>항목</th>
                     <th>금액</th>
                     <th>증감율</th>
@@ -125,7 +131,7 @@
                 </thead>
                 <tbody>
                 {% for item in cash_flow.TBL_CashFlow_data %}
-                    <tr class="right-row">
+                    <tr class="right-row min">
                         {% for value in item %}
                             <td>{{ value }}</td>
                         {% endfor %}
