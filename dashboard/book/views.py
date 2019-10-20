@@ -55,7 +55,8 @@ def krx_price_query(request):
         realtime_result = get_xml_request(krx_price_query_url.format(query))
         if realtime_result:
             realtime_json = XmlDictConfig(realtime_result[1].find("stockInfo"))
-            render_dict['market_close'] = realtime_json['myJangGubun'] == "장마감"
+            render_dict['market_close'] = realtime_json['myJangGubun'] == "장마감" or realtime_json[
+                'myJangGubun'] == '장개시전'
             render_dict['realtime_result'] = (realtime_json, realtime_result[0])
 
         statement_result = get_xml_request(krx_statement_query_url.format(query))
