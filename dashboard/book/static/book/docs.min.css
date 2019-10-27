@@ -5,6 +5,104 @@
  * Licensed under the Creative Commons Attribution 3.0 Unported License.
  * For details, see https://creativecommons.org/licenses/by/3.0/.
  */
+
+@media (min-width: 768px) {
+    .navbar-vertical.navbar-expand-md.fixed-left {
+        left: 0;
+        border-width: 0 1px 0 0
+    }
+
+    .navbar-vertical.navbar-expand-md .navbar-collapse {
+        flex: 1;
+        display: flex;
+        flex-direction: column;
+        align-items: stretch;
+        margin-left: -1.5rem;
+        margin-right: -1.5rem;
+        padding-left: 1.5rem;
+        padding-right: 1.5rem
+    }
+
+    .navbar-vertical.navbar-expand-md .navbar-collapse > * {
+        min-width: 100%
+    }
+
+    .navbar-vertical.navbar-expand-md .navbar-nav {
+        flex-direction: column;
+        margin-left: -1.5rem;
+        margin-right: -1.5rem
+    }
+
+    .navbar-vertical.navbar-expand-md .navbar-nav .nav-link {
+        padding: .5rem 1.5rem
+    }
+
+    .navbar-vertical.navbar-expand-md .navbar-nav .nav-link.active:before {
+        top: .5rem;
+        bottom: .5rem;
+        left: 0;
+        right: auto;
+        border-left: 2px solid #2c7be5;
+        border-bottom: 0
+    }
+
+    .navbar-vertical.navbar-expand-md .navbar-nav .nav .nav-link {
+        padding-left: 3.25rem
+    }
+
+    .navbar-vertical.navbar-expand-md .navbar-nav .nav .nav .nav-link {
+        padding-left: 4rem
+    }
+
+    .navbar-vertical.navbar-expand-md .navbar-brand {
+        display: block;
+        text-align: center;
+        padding-top: 1.25rem;
+        padding-bottom: 1.25rem
+    }
+
+    .navbar-vertical.navbar-expand-md .navbar-brand-img {
+        max-height: 3rem
+    }
+
+    .navbar-vertical.navbar-expand-md .navbar-user {
+        margin-left: -1.5rem;
+        margin-right: -1.5rem;
+        padding: 1.5rem 1.5rem .75rem;
+        border-top-width: 1px;
+        border-top-style: solid
+    }
+
+    .navbar-vertical.navbar-expand-md .navbar-user .dropup .dropdown-menu {
+        left: 50%;
+        transform: translateX(-50%)
+    }
+}
+
+
+@media (min-width: 768px) {
+    .navbar-vertical.navbar-expand-md {
+        display: block;
+        position: fixed;
+        top: 0;
+        bottom: 0;
+        width: 100%;
+        max-width: 250px;
+        padding-left: 1.5rem;
+        padding-right: 1.5rem;
+        overflow-y: auto
+    }
+
+    .navbar-vertical.navbar-expand-md > [class*=container] {
+        flex-direction: column;
+        align-items: stretch;
+        min-height: 100%;
+        padding-left: 0;
+        padding-right: 0
+    }
+}
+
+
 .bd-navbar {
     min-height: 4rem;
     background-color: #563d7c;
