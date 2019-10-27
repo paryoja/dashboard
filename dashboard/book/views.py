@@ -130,7 +130,7 @@ def lotto(request):
 
 
 def wine(request):
-    render_dict = get_render_dict('wine')
+    render_dict = get_render_dict('others', 'wine')
     return render(request, 'book/wine.html', render_dict)
 
 
@@ -139,7 +139,7 @@ law_query_url = "http://www.law.go.kr/DRF/lawSearch.do?OC=test&target=law&type=X
 
 
 def law_search(request):
-    render_dict = get_render_dict('law_search')
+    render_dict = get_render_dict('others', 'law_search')
 
     if request.POST:
         query = request.POST['query']
@@ -152,6 +152,11 @@ def law_search(request):
         render_dict['law_list'] = law_list
 
     return render(request, 'book/law_search.html', render_dict)
+
+
+def todo(request):
+    render_dict = get_render_dict('others', 'todo')
+    return render(request, 'book/todo.html', render_dict)
 
 
 # study
@@ -168,11 +173,6 @@ def paper(request):
 def colab(request):
     render_dict = get_render_dict('study', 'colab')
     return render(request, 'book/study/colab.html', render_dict)
-
-
-def todo(request):
-    render_dict = get_render_dict('todo')
-    return render(request, 'book/todo.html', render_dict)
 
 
 def idea(request):

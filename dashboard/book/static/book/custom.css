@@ -1,0 +1,96 @@
+body {
+    background-color: #f9fbfd;
+}
+
+.table {
+    margin-bottom: 1.5rem;
+    vertical-align: middle;
+}
+
+.table td, .table th {
+    padding: .5rem;
+}
+
+.center-row {
+    text-align: center;
+}
+
+.right-row {
+    text-align: right;
+}
+
+.min-nowrap {
+    width: 1%;
+    white-space: nowrap;
+}
+
+.display-1, .display-2, .display-3, .display-4, .h1, .h2, .h3, .h4, .h5, .h6, h1, h2, h3, h4, h5, h6 {
+    letter-spacing: -.02em
+}
+
+.h1, h1 {
+    margin-bottom: 1.125rem;
+    font-size: 1.5rem
+}
+
+.h2, h2 {
+    font-size: 1.25rem
+}
+
+.h3, h3 {
+    font-size: 1.0625rem
+}
+
+.h4, h4 {
+    font-size: .9375rem
+}
+
+.h5, h5 {
+    font-size: .8125rem
+}
+
+.h6, h6 {
+    font-size: .625rem
+}
+
+.display-4 {
+    font-size: 2rem
+}
+
+.lead {
+    font-size: 1.17188rem;
+}
+
+hr {
+    margin-top: 1rem;
+    margin-bottom: 1rem;
+    border: 0;
+    border-top: 1px solid #739ace
+}
+
+.jumbotron {
+    background-color: #edf2f9;
+    border-radius: .5rem
+}
+
+.navbar-nav .nav-link > .fe {
+    padding-bottom: .125em;
+    font-size: 1.0625rem;
+    line-height: 1.40625rem
+}
+
+.navbar-nav .nav-link > .fe {
+    display: inline-block;
+    min-width: 1.75rem
+}
+
+.navbar-nav .nav-link > .fa {
+    padding-bottom: .125em;
+    font-size: 1.0625rem;
+    line-height: 1.40625rem
+}
+
+.navbar-nav .nav-link > .fa {
+    display: inline-block;
+    min-width: 1.75rem
+}

@@ -3,29 +3,44 @@
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-    <!-- Bootstrap CSS -->
+
+    <title>YoZit</title>
     {% load static %}
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.8.2/css/all.min.css">
     <link rel="shortcut icon" href="{% static 'book/favicon.ico' %}" type="image/x-icon">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.8.2/css/all.min.css">
+
+    <!-- Bootstrap CSS -->
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
           integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/docsearch.js@2/dist/cdn/docsearch.min.css">
-    <link rel="stylesheet" type="text/css" href="{% static 'book/docs.min.css' %}">
-    <link href="https://fonts.googleapis.com/css?family=Ubuntu" rel="stylesheet">
-    <title>Hello, world!</title>
+
+    <!--<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/docsearch.js@2/dist/cdn/docsearch.min.css">-->
+
+    <link rel="stylesheet" type="text/css" href="{% static 'book/theme.min.css' %}">
+    <link rel="stylesheet" type="text/css" href="{% static 'book/custom.css' %}">
+    <link rel="stylesheet" type="text/css" href="{% static 'book/feather.min.css' %}">
+
+    <!--<link href="https://fonts.googleapis.com/css?family=Ubuntu" rel="stylesheet">-->
+    <!--<script src="https://unpkg.com/feather-icons"></script>-->
 </head>
 <body>
-<div id="root" class="container-fluid">
-    <div class="row flex-xl-nowrap">
-        {% block sidebar %}
-            {% include 'book/base/sidebar.html' %}
-        {% endblock %}
-        <main class="col-12 col-md-9 col-xl-8 py-md-3 pl-md-5 bd-content mt-1" role="main">
+
+{% block sidebar %}
+    {% include 'book/base/sidebar.html' %}
+{% endblock %}
+
+<div id="root" class="main-content">
+    <div class="header pb-5 mt-4">
+        <div class="container-fluid">
             {% block body %}{% endblock %}
-        </main>
+        </div>
     </div>
 </div>
 <!-- jQuery first, then Popper.js, then Bootstrap JS -->
+<!--
+<script>
+    feather.replace()
+</script>
+-->
 <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"
         integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo"
         crossorigin="anonymous"></script>
@@ -35,5 +50,6 @@
 <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"
         integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM"
         crossorigin="anonymous"></script>
+
 </body>
 </html>

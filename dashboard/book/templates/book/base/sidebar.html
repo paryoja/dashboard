@@ -1,79 +1,180 @@
-<div class="col-12 col-md-3 col-xl-2 bd-sidebar">
-    <form class="bd-search d-flex align-items-center">
-
-        <button class="btn btn-link bd-search-docs-toggle d-md-none p-0 ml-3" type="button" data-toggle="collapse"
-                data-target="#bd-docs-nav" aria-controls="bd-docs-nav" aria-expanded="true"
-                aria-label="Toggle docs navigation">
-            <svg xmlns="http://www.w3.org/2000/svg" width="30" height="30" viewBox="0 0 30 30" role="img"
-                 focusable="false"><title>Menu</title>
-                <path stroke="currentColor" stroke-linecap="round" stroke-miterlimit="10" stroke-width="2"
-                      d="M4 7h22M4 15h22M4 23h22"></path>
-            </svg>
-        </button>
-        <a class="navbar-brand mr-0 mr-md-2" href="{% url 'book:index' %}" aria-label="Bootstrap">
-            <svg width="72" height="36" xmlns="http://www.w3.org/2000/svg">
-                <!-- Created with Method Draw - http://github.com/duopixel/Method-Draw/ -->
+<nav class="navbar navbar-vertical fixed-left navbar-expand-md navbar-light bg-vibrant" id="sidebar">
+    <div class="container-fluid">
+        <button class="navbar-toggler collapsed" type="button" data-toggle="collapse"
+                data-target="#sidebarCollapse" aria-controls="sidebarCollapse" aria-expanded="false"
+                aria-label="Toggle navigation"><span class="navbar-toggler-icon"></span></button>
+        <a class="navbar-brand" href="#">
+            <svg width="36" height="36" xmlns="http://www.w3.org/2000/svg">
                 <g>
                     <text xml:space="preserve" text-anchor="start" font-family="Oswald, sans-serif" font-size="24"
-                          id="svg_4" y="27.843718" x="8.857184" fill-opacity="null" stroke-opacity="null"
+                          id="svg_4" y="27.843718" x="3.857184" fill-opacity="null" stroke-opacity="null"
                           stroke-width="0"
-                          stroke="#000" fill="#000000">YoZit</text>
+                          stroke="#000" fill="#000000">YZ</text>
                 </g>
             </svg>
         </a>
-    </form>
+        <div class="navbar-user d-md-none">
 
-    <nav class="bd-links collapse" id="bd-docs-nav" style="">
-        <div class="bd-toc-item">
-            <a class="bd-toc-link" href="#">
-                Getting started
-            </a>
-            <ul class="nav bd-sidenav">
-                <li>
-                    <a href="#">
-                        Introduction
+        </div>
+        <!-- Form -->
+        <div class="navbar-collapse collapse" id="sidebarCollapse" style>
+            <form class="mt-4 mb-3 d-md-none">
+                <div class="input-group input-group-rounded input-group-merge">
+                    <input type="search" class="form-control form-control-rounded form-control-prepended"
+                           placeholder="Search" aria-label="Search">
+                    <div class="input-group-prepend">
+                        <div class="input-group-text">
+                            <span class="fe fe-search"></span>
+                        </div>
+                    </div>
+                </div>
+            </form>
+
+
+            <!-- Navigation -->
+            <ul class="navbar-nav">
+                <li class="nav-item">
+                    <a class="nav-link {{ index }}" href="">
+                        <i class="fe fe-home"></i> Home
                     </a>
                 </li>
-                <li>
-                    <a href="#">
-                        Download
+
+                <li class="nav-item {{ study }}">
+                    <a class="nav-link" href="#sidebarStudy" data-toggle="collapse" role="button"
+                       aria-expanded="{% if study %}true{% else %}false{% endif %}"
+                       aria-controls="sidebarLecture">
+                        <i class="fa fa-chalkboard-teacher"></i> 스터디 정리
+                    </a>
+                    <div class="collapse {% if study %}show{% endif %}"
+                         id="sidebarStudy">
+                        <ul class="nav nav-sm flex-column">
+                            <li class="nav-item {{ slide }}">
+                                <a href="{% url 'book:slide' %}" class="nav-link">
+                                    <i class="fa fa-file-powerpoint"></i> 슬라이드
+                                </a>
+                            </li>
+                            <li class="nav-item {{ paper }}">
+                                <a href="{% url 'book:paper' %}" class="nav-link">
+                                    <i class="fa fa-file-pdf"></i> 논문
+                                </a>
+                            </li>
+                            <li class="nav-item {{ colab }}">
+                                <a href="{% url 'book:colab' %}" class="nav-link">
+                                    <i class="fa fa-file-code"></i> 실습자료
+                                </a>
+                            </li>
+                        </ul>
+                    </div>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link {{ link }}"
+                       href="{% url 'book:link' %}">
+                        <i class="fe fe-link"></i>
+                        링크
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link {{ algorithm }}"
+                       href="{% url 'book:algorithm' %}">
+                        <i class="fe fe-video"></i>
+                        알고리즘 연습
+                    </a>
+                </li>
+                <li class="nav-item {{ invest }}">
+                    <a class="nav-link" href="#sidebarInvest" data-toggle="collapse" role="button"
+                       aria-expanded="{% if invest %}true{% else %}false{% endif %}"
+                       aria-controls="sidebarInvest">
+                        <i class="fe fe-dollar-sign"></i> 투자
+                    </a>
+                    <div class="collapse {% if invest %}show{% endif %}"
+                         id="sidebarInvest">
+                        <ul class="nav nav-sm flex-column">
+                            <li class="nav-item {{ leading_stocks }}">
+                                <a href="{% url 'book:leading_stocks' %}" class="nav-link">
+                                    <i class="fa fa-money-check-alt"></i> Leading Stocks
+                                </a>
+                            </li>
+                            <li class="nav-item {{ live_currency }}">
+                                <a href="{% url 'book:live_currency' %}" class="nav-link">
+                                    <i class="fe fe-bar-chart"></i> Live Currency Cross Rates
+                                </a>
+                            </li>
+                            <li class="nav-item {{ krx_price_query }}">
+                                <a href="{% url 'book:krx_price_query' %}" class="nav-link">
+                                    <i class="fa fa-search-dollar"></i> Price Query
+                                </a>
+                            </li>
+                            <li class="nav-item {{ lotto }}">
+                                <a href="{% url 'book:lotto' %}" class="nav-link">
+                                    <i class="fa fa-money-bill-wave"></i> Lottery
+                                </a>
+                            </li>
+                        </ul>
+                    </div>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link {{ idea }}"
+                       href="{% url 'book:idea' %}">
+                        <i class="fe fe-zap"></i>
+                        아이디어 모음
+                    </a>
+                </li>
+                <li class="nav-item {{ others }}">
+                    <a class="nav-link" href="#sidebarOther" data-toggle="collapse" role="button"
+                       aria-expanded="{% if others %}true{% else %}false{% endif %}"
+                       aria-controls="sidebarOthers">
+                        <i class="fe fe-star"></i> 그 외
+                    </a>
+                    <div class="collapse {% if others %}show{% endif %}"
+                         id="sidebarOther">
+                        <ul class="nav nav-sm flex-column">
+                            <li class="nav-item {{ wine }}">
+                                <a href="{% url 'book:wine' %}" class="nav-link">
+                                    <i class="fa fa-wine-bottle"></i> Wine
+                                </a>
+                            </li>
+                            <li class="nav-item {{ law_search }}">
+                                <a href="{% url 'book:law_search' %}" class="nav-link">
+                                    <i class="fa fa-gavel"></i> 법률 검색
+                                </a>
+                            </li>
+                            <li class="nav-item {{ todo }}">
+                                <a href="{% url 'book:todo' %}" class="nav-link">
+                                    <i class="fa fa-check"></i> Todo List
+                                </a>
+                            </li>
+                        </ul>
+                    </div>
+                </li>
+            </ul>
+
+            <!-- Divider -->
+            <hr class="my-3">
+
+            <!-- Heading -->
+            <h6 class="navbar-heading text-muted">
+                Documentation
+            </h6>
+
+            <!-- Navigation -->
+            <ul class="navbar-nav mb-md-3">
+                <li class="nav-item">
+                    <a class="nav-link" href="/admin" target="_blank">
+                        <i class="fe fe-clipboard"></i> Admin
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link"
+                       href="https://github.com/paryoja/dashboard" target="_blank">
+                        <i class="fe fe-git-branch"></i> Changelog
+                        <span class="badge badge-primary ml-auto">v0.1.0</span>
                     </a>
                 </li>
             </ul>
+
+            <!-- Divider -->
+            <hr class="my-3">
         </div>
-        <div class="bd-toc-item">
-            <a class="bd-toc-link" href="#">
-                Components
-            </a>
-            <ul class="nav bd-sidenav">
-                <li>
-                    <a href="#">
-                        Alerts
-                    </a>
-                </li>
-                <li>
-                    <a href="#">
-                        Badge
-                    </a>
-                </li>
-            </ul>
-        </div>
-        <div class="bd-toc-item active">
-            <a class="bd-toc-link" href="#">
-                Utilities
-            </a>
-            <ul class="nav bd-sidenav">
-                <li>
-                    <a href="#">
-                        Borders
-                    </a>
-                </li>
-                <li class="active">
-                    <a href="#">
-                        Embed
-                    </a>
-                </li>
-            </ul>
-        </div>
-    </nav>
-</div>
+
+    </div> <!-- / .container-fluid -->
+</nav>
