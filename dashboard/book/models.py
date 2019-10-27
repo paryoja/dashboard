@@ -1,3 +1,4 @@
+from django.contrib.postgres import fields
 from django.db import models
 
 
@@ -56,3 +57,8 @@ class BoardCategories(models.Model):
 
     class Meta:
         db_table = 'board_categories'
+
+
+class Lotto(models.Model):
+    draw_number = models.IntegerField()
+    numbers = fields.JSONField()

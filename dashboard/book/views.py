@@ -1,6 +1,10 @@
+import json
+
+import requests
+from django.core import exceptions
 from django.shortcuts import render
 
-from .models import Link
+from .models import Link, Lotto
 from .xml_helper import XmlDictConfig, get_xml_request
 
 
@@ -94,6 +98,37 @@ def krx_price_query(request):
     return render(request, 'book/investment/krx_price_query.html', render_dict)
 
 
+def lotto(request):
+    render_dict = get_render_dict('invest', 'lotto')
+
+    result = ""
+    if request.POST:
+        draw_number = request.POST['draw_number']
+        render_dict["draw_number"] = draw_number
+
+        try:
+            obj = Lotto.objects.get(draw_number=draw_number)
+            result = obj.numbers
+        except exceptions.ObjectDoesNotExist:
+            try:
+                params = {
+                    'method': 'getLottoNumber',
+                    'drwNo': draw_number,
+                }
+                result = requests.get(
+                    "https://www.nlotto.co.kr/common.do", params=params)
+                result = json.loads(result.text)
+                if not result['returnValue'] == 'fail':
+                    obj = Lotto(draw_number=draw_number, numbers=result)
+                    obj.save()
+            except Exception as e:
+                result = str(e)
+
+    render_dict["result"] = result
+
+    return render(request, 'book/investment/lotto.html', render_dict)
+
+
 def wine(request):
     render_dict = get_render_dict('wine')
     return render(request, 'book/wine.html', render_dict)
@@ -119,11 +154,27 @@ def law_search(request):
     return render(request, 'book/law_search.html', render_dict)
 
 
-def deep_learning(request):
-    render_dict = get_render_dict('deep_learning')
-    return render(request, 'book/deep_learning.html', render_dict)
+# study
+def slide(request):
+    render_dict = get_render_dict('study', 'slide')
+    return render(request, 'book/study/slide.html', render_dict)
+
+
+def paper(request):
+    render_dict = get_render_dict('study', 'paper')
+    return render(request, 'book/study/paper.html', render_dict)
+
+
+def colab(request):
+    render_dict = get_render_dict('study', 'colab')
+    return render(request, 'book/study/colab.html', render_dict)
 
 
 def todo(request):
     render_dict = get_render_dict('todo')
     return render(request, 'book/todo.html', render_dict)
+
+
+def idea(request):
+    render_dict = get_render_dict('idea')
+    return render(request, 'book/idea.html', render_dict)

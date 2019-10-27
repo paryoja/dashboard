@@ -1,0 +1,107 @@
+{% extends 'book/base/base.html' %}
+{% load humanize %}
+{% block sidebar %}
+    {% include 'book/investment/invest_sidebar.html' %}
+{% endblock %}
+{% block body %}
+    <H1><i class="fa fa-money-bill-wave"></i> Lotto 조회</H1>
+    <form method="post">
+        {% csrf_token %}
+        <div class="input-group mb-3">
+            <input type="number" min="1" name="draw_number" class="form-control" placeholder="회차" aria-label="Query"
+                   aria-describedby="button-addon2" value="{{ draw_number }}">
+            <div class="input-group-append">
+                <button class="btn btn-outline-secondary" type="submit" id="button-addon2" name="upvote" value="Upvote">
+                    Button
+                </button>
+            </div>
+        </div>
+    </form>
+
+    {% if result %}
+        {{ result }}
+
+        {% if result.returnValue == "fail" %}
+            <h3>{{ draw_number }}회는 아직 추첨하지 않았습니다.</h3>
+        {% else %}
+            <h2>{{ result.drwNoDate }} {{ draw_number }}회차 당첨번호</h2>
+            <div class="table-responsive">
+                <table class="table table-sm table-bordered">
+                    <thead>
+                    <tr>
+                        <th>1</th>
+                        <th>2</th>
+                        <th>3</th>
+                        <th>4</th>
+                        <th>5</th>
+                        <th>6</th>
+                        <th>보너스</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr>
+                        <td>{{ result.drwtNo1 }}</td>
+                        <td>{{ result.drwtNo2 }}</td>
+                        <td>{{ result.drwtNo3 }}</td>
+                        <td>{{ result.drwtNo4 }}</td>
+                        <td>{{ result.drwtNo5 }}</td>
+                        <td>{{ result.drwtNo6 }}</td>
+                        <td>{{ result.bnusNo }}</td>
+                    </tr>
+                    </tbody>
+                </table>
+
+                <h3>총 판매액: {{ result.totSellamnt|intcomma }}원</h3>
+                <table class="table table-sm table-hovered">
+                    <thead>
+                    <tr>
+                        <th>순위</th>
+                        <th>등위별 총 당첨금액</th>
+                        <th>당첨게임 수</th>
+                        <th>1게임당 당첨금액</th>
+                        <th>당첨기준</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr>
+                        <td>1등</td>
+                        <td>{{ result.firstAccumamnt|intcomma }}원</td>
+                        <td>{{ result.firstPrzwnerCo }}</td>
+                        <td>{{ result.firstWinamnt|intcomma }}원</td>
+                        <td>당첨번호 6개 숫자일치</td>
+                    </tr>
+                    <tr>
+                        <td>2등</td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td>당첨번호 5개 숫자일치 + 보너스 숫자일치</td>
+                    </tr>
+                    <tr>
+                        <td>3등</td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td>당첨번호 5개 숫자일치</td>
+                    </tr>
+                    <tr>
+                        <td>4등</td>
+                        <td></td>
+                        <td></td>
+                        <td>50,000원</td>
+                        <td>당첨번호 4개 숫자일치</td>
+                    </tr>
+                    <tr>
+                        <td>5등</td>
+                        <td></td>
+                        <td></td>
+                        <td>1,000원</td>
+                        <td>당첨번호 3개 숫자일치</td>
+                    </tr>
+
+                    </tbody>
+                </table>
+            </div>
+        {% endif %}
+    {% endif %}
+{% endblock %}

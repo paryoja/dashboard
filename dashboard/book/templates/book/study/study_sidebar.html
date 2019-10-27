@@ -21,44 +21,37 @@
     </form>
 
     <nav class="bd-links collapse" id="bd-docs-nav" style="">
-        <div class="bd-toc-item {{ leading_stocks }} {{ live_currency }}">
-            <a class="bd-toc-link" href="{% url 'book:leading_stocks' %}">
-                <i class="fa fa-money-check-alt"></i> Investing.com
+        <div class="bd-toc-item {{ slide }} {{ paper }} {{ colab }}">
+            <a class="bd-toc-link" href="{% url 'book:slide' %}">
+                <i class="fa fa-chalkboard-teacher"></i> Deep Learning
             </a>
 
             <ul class="nav bd-sidenav">
-                <li class="{{ leading_stocks }}">
-                    <a href="{% url 'book:leading_stocks' %}">
-                        Leading Stocks
+                <li class="{{ slide }}">
+                    <a href="{% url 'book:slide' %}">
+                        Slides
                     </a>
                 </li>
-                <li class="{{ live_currency }}">
-                    <a href="{% url 'book:live_currency' %}">
-                        Live Currency Cross Rates
+                <li class="{{ paper }}">
+                    <a href="{% url 'book:paper' %}">
+                        Papers
+                    </a>
+                </li>
+                <li class="{{ colab }}">
+                    <a href="{% url 'book:colab' %}">
+                        Colabs
                     </a>
                 </li>
             </ul>
         </div>
-        <div class="bd-toc-item {{ krx_price_query }}">
+        <div class="bd-toc-item {{ language }}">
             <a class="bd-toc-link" href="{% url 'book:krx_price_query' %}">
-                <i class="fa fa-search-dollar"></i> Price Query
+                <i class="fa fa-language"></i> Language
             </a>
             <ul class="nav bd-sidenav">
                 <li class="{{ krx_price_query }}">
                     <a href="{% url 'book:krx_price_query' %}">
                         KRX Price
-                    </a>
-                </li>
-            </ul>
-        </div>
-        <div class="bd-toc-item {{ lotto }}">
-            <a class="bd-toc-link" href="{% url 'book:lotto' %}">
-                <i class="fa fa-money-bill-wave"></i> Lottery
-            </a>
-            <ul class="nav bd-sidenav">
-                <li class="{{ lotto }}">
-                    <a href="{% url 'book:lotto' %}">
-                        Lotto
                     </a>
                 </li>
             </ul>

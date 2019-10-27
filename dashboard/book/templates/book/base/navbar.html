@@ -1,4 +1,4 @@
-<nav class="navbar navbar-expand-lg navbar-light bg-light bd-navbar">
+<nav class="navbar navbar-expand navbar-light bg-light bd-navbar flex-md-row">
     <a class="navbar-brand mr-0 mr-md-2" href="{% url 'book:index' %}" aria-label="Bootstrap">
         <svg width="36" height="36" xmlns="http://www.w3.org/2000/svg">
             <!-- Created with Method Draw - http://github.com/duopixel/Method-Draw/ -->
@@ -10,18 +10,20 @@
             </g>
         </svg>
     </a>
+    <!--
     <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent"
             aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
         <span class="navbar-toggler-icon"></span>
     </button>
-
+-->
     <div class="collapse navbar-collapse" id="navbarSupportedContent">
+
         <ul class="navbar-nav mr-auto">
             <li class="nav-item {{ index }}">
                 <a class="nav-link" href="{% url 'book:index' %}">Home</a>
             </li>
-            <li class="nav-item {{ deep_learning }}">
-                <a class="nav-link" href="{% url 'book:deep_learning' %}">Deep Learning</a>
+            <li class="nav-item {{ study }}">
+                <a class="nav-link" href="{% url 'book:slide' %}">Study</a>
             </li>
             <li class="nav-item {{ link }}">
                 <a class="nav-link" href="{% url 'book:link' %}">Link</a>
@@ -29,24 +31,46 @@
             <li class="nav-item {{ algorithm }}">
                 <a class="nav-link" href="{% url 'book:algorithm' %}">Algorithm</a>
             </li>
-            <li class="nav-item {{ invest }}">
-                <a class="nav-link" href="{% url 'book:leading_stocks' %}">Investment</a>
+            <li class="nav-item dropdown {{ invest }}">
+                <a class="nav-link dropdown-toggle" href="#" id="navbar_invest" role="button"
+                   data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                    Investment
+                </a>
+                <div class="dropdown-menu" aria-labelledby="navbar_other">
+                    <a class="nav-link" href="{% url 'book:leading_stocks' %}">
+                        <i class="fa fa-money-check-alt"></i> Invest.com</a>
+                    <a class="nav-link" href="{% url 'book:krx_price_query' %}">
+                        <i class="fa fa-search-dollar"></i> Price Query</a>
+                    <a class="nav-link" href="{% url 'book:lotto' %}">
+                        <i class="fa fa-money-bill-wave"></i> Lottery</a>
+                </div>
+            </li>
+            <li class="nav-item {{ idea }}">
+                <a class="nav-link" href="{% url 'book:idea' %}">Ideas</a>
             </li>
             <li class="nav-item dropdown {{ wine }} {{ law_search }} {{ todo }}">
                 <a class="nav-link dropdown-toggle" href="#" id="navbar_other" role="button"
                    data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                    Other
+                    Others
                 </a>
                 <div class="dropdown-menu" aria-labelledby="navbar_other">
                     <a class="dropdown-item" href="{% url 'book:wine' %}"><i class="fa fa-wine-bottle"></i> Wine</a>
-                    <a class="dropdown-item" href="{% url 'book:law_search' %}"><i class="fa fa-gavel"></i> Law Search</a>
+                    <a class="dropdown-item" href="{% url 'book:law_search' %}"><i class="fa fa-gavel"></i> Law
+                        Search</a>
                     <a class="dropdown-item" href="{% url 'book:todo' %}"><i class="fa fa-check"></i> Todo List</a>
                 </div>
             </li>
+            <li class="nav-item">
+                <a class="nav-link" href="/admin" target="_blank">Admin</a>
+            </li>
         </ul>
+        <!--
         <form class="form-inline my-2 my-lg-0">
             <input class="form-control mr-sm-2" type="search" placeholder="Search" aria-label="Search">
             <button class="btn btn-outline-success my-2 my-sm-0" type="submit">Search</button>
         </form>
+        -->
+
     </div>
+
 </nav>
