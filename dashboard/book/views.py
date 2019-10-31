@@ -4,7 +4,7 @@ import requests
 from django.core import exceptions
 from django.shortcuts import render
 
-from .models import Link, Lotto
+from .models import Link, Lotto, Paper
 from .xml_helper import XmlDictConfig, get_xml_request
 
 
@@ -167,6 +167,9 @@ def slide(request):
 
 def paper(request):
     render_dict = get_render_dict('study', 'paper')
+    paper_list = Paper.objects.all()
+
+    render_dict['paper_list'] = paper_list
     return render(request, 'book/study/paper.html', render_dict)
 
 

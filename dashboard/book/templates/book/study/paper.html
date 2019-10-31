@@ -35,13 +35,37 @@
         <tr>
             <th scope="row">4</th>
             <td>ASR with Sentiment Analysis</td>
-            <td><a href="https://docs.google.com/presentation/d/1L6wmfWpe4QVJZubY-S5RBK-Ngt7Zd4Y3dK_8li3e-Vk" target="_blank">
+            <td><a href="https://docs.google.com/presentation/d/1L6wmfWpe4QVJZubY-S5RBK-Ngt7Zd4Y3dK_8li3e-Vk"
+                   target="_blank">
                 <i class="fa fa-link"></i>
             </a></td>
         </tr>
 
+        </tbody>
+    </table>
+    <table class="table table-sm table-hover">
+        <thead>
+        <tr>
+            <th scope="col">#</th>
+            <th scope="col">Description</th>
+            <th scope="col">Slide</th>
+            <th scope="col">Link</th>
+        </tr>
+        </thead>
+        <tbody>
 
-
+        {% for paper in paper_list %}
+            <tr>
+                <th scope="row">{{ paper.id }}</th>
+                <td>{{ paper.title }}</td>
+                <td><a href="{{ paper.slide }}" target="_blank">
+                    <i class="fa fa-link"></i>
+                </a></td>
+                <td><a href="{{ paper.link }}" target="_blank">
+                    <i class="fa fa-link"></i>
+                </a></td>
+            </tr>
+        {% endfor %}
         </tbody>
     </table>
 {% endblock %}

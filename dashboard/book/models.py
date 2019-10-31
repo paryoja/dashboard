@@ -62,3 +62,14 @@ class BoardCategories(models.Model):
 class Lotto(models.Model):
     draw_number = models.IntegerField()
     numbers = fields.JSONField()
+
+
+class Paper(models.Model):
+    title = models.CharField(max_length=200, blank=True, null=True)
+    link = models.URLField(blank=True, null=True)
+    file = models.FileField(blank=True, null=True)
+    slide = models.URLField(blank=True, null=True)
+    authors = fields.ArrayField(models.CharField(max_length=20), blank=True, null=True)
+
+    def __str__(self):
+        return str(self.title)

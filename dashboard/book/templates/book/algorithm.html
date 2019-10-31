@@ -5,4 +5,13 @@
         <iframe class="embed-responsive-item" src="https://www.youtube.com/embed/0qRSiy4XG2c"
                 allowfullscreen></iframe>
     </div>
+
+    <div id="like_button_container"></div>
+    <div id="js_root"></div>
+{% endblock %}
+{% block scripts %}
+    {% load static %}
+    <script src="https://unpkg.com/react@16/umd/react.production.min.js" crossorigin></script>
+    <script src="https://unpkg.com/react-dom@16/umd/react-dom.production.min.js" crossorigin></script>
+    <script src="{% static 'book/js/like_button.js' %}"></script>
 {% endblock %}
