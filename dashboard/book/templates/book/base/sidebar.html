@@ -67,6 +67,13 @@
                     </div>
                 </li>
                 <li class="nav-item">
+                    <a class="nav-link {{ chatbot }}"
+                       href="{% url 'book:chatbot' %}">
+                        <i class="fa fa-comments"></i>
+                        챗봇
+                    </a>
+                </li>
+                <li class="nav-item">
                     <a class="nav-link {{ link }}"
                        href="{% url 'book:link' %}">
                         <i class="fe fe-link"></i>

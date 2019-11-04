@@ -181,3 +181,8 @@ def colab(request):
 def idea(request):
     render_dict = get_render_dict('idea')
     return render(request, 'book/idea.html', render_dict)
+
+
+def chatbot(request):
+    render_dict = get_render_dict('chatbot')
+    return render(request, 'book/chatbot.html', render_dict)
