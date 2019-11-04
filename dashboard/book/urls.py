@@ -18,5 +18,6 @@ urlpatterns = [
     path('investment/live_currency/', views.live_currency, name='live_currency'),
     path('investment/krx_price_query/', views.krx_price_query, name='krx_price_query'),
     path('idea/', views.idea, name='idea'),
-    path('chatbot/', views.chatbot, name='chatbot')
+    path('chatbot/', views.chatbot, name='chatbot'),
+    path('query_chatbot/', views.query_chatbot, name='query_chatbot'),
 ]

@@ -2,6 +2,7 @@ import json
 
 import requests
 from django.core import exceptions
+from django.http import HttpResponse
 from django.shortcuts import render
 
 from .models import Link, Lotto, Paper
@@ -186,3 +187,25 @@ def idea(request):
 def chatbot(request):
     render_dict = get_render_dict('chatbot')
     return render(request, 'book/chatbot.html', render_dict)
+
+
+def query_chatbot(request):
+    if request.POST:
+        message = request.POST['message']
+        data = {
+            "sender": "Rasa",
+            "message": message,
+        }
+
+        result = {}
+        try:
+            text = json.loads(requests.post('http://rasa:5005/webhooks/rest/webhook', json=data).text)
+            result['text'] = text
+            result['status'] = 'success'
+        except Exception as e:
+            result['text'] = str(e)
+            result['status'] = 'failed'
+
+        return HttpResponse(json.dumps(text))
+    else:
+        return HttpResponse("Empty Message")

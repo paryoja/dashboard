@@ -10,4 +10,27 @@
     <pre>
     pip install rasa-x --extra-index-url https://pypi.rasa.com/simple
     </pre>
+    <form method="post" action="{% url 'book:query_chatbot' %}">
+        {% csrf_token %}
+        <div class="input-group mb-3">
+            <input type="text" name="message" class="form-control" placeholder="Message" aria-label="Query"
+                   aria-describedby="button-addon2">
+            <div class="input-group-append">
+                <button class="btn btn-outline-secondary" type="submit" id="button-addon2" name="submit" value="submit">
+                    Submit
+                </button>
+            </div>
+        </div>
+    </form>
+
+    <div id="like_button_container">
+        <textarea></textarea>
+    </div>
+{% endblock %}
+
+{% block scripts %}
+    {% load static %}
+    <script src="https://unpkg.com/react@16/umd/react.production.min.js" crossorigin></script>
+    <script src="https://unpkg.com/react-dom@16/umd/react-dom.production.min.js" crossorigin></script>
+    <script src="{% static 'book/js/chatbot.js' %}"></script>
 {% endblock %}
