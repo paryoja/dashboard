@@ -186,7 +186,7 @@ def idea(request):
 
 def chatbot(request):
     render_dict = get_render_dict('chatbot')
-    return render(request, 'book/chatbot.html', render_dict)
+    return render(request, 'book/chatbot/chatbot.html', render_dict)
 
 
 def query_chatbot(request):

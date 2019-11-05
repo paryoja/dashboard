@@ -21,11 +21,8 @@
             </button>
         </div>
     </div>
-
     <textarea id="message_area" class="form-control data-autoresize" readonly></textarea>
-
-    <div id="result">
-    </div>
+    {% include 'book/chatbot/nlu.html' %}
 {% endblock %}
 
 {% block scripts %}
