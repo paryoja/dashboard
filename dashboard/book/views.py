@@ -13,6 +13,7 @@ def get_render_dict(current_page, side_page=None):
     render_dict = {current_page: 'active'}
     if side_page:
         render_dict[side_page] = 'active'
+
     return render_dict
 
 
