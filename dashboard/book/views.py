@@ -204,9 +204,10 @@ def query_chatbot(request):
             result['text'] = text
             result['status'] = 'success'
         except Exception as e:
+            text = "Server is not responding"
             result['text'] = str(e)
             result['status'] = 'failed'
-        print(text)
+        # print(text)
         return HttpResponse(json.dumps(text))
     else:
         return HttpResponse("Empty Message")
