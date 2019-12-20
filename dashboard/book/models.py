@@ -64,6 +64,11 @@ class Lotto(models.Model):
     numbers = fields.JSONField()
 
 
+class Stock(models.Model):
+    code = models.CharField(max_length=10)
+    name = models.CharField(max_length=30)
+
+
 class Paper(models.Model):
     title = models.CharField(max_length=200, blank=True, null=True)
     link = models.URLField(blank=True, null=True)

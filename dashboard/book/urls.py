@@ -12,6 +12,7 @@ urlpatterns = [
     path('algorithm/', views.algorithm, name='algorithm'),
     path('law_search/', views.law_search, name='law_search'),
     path('lotto/', views.lotto, name='lotto'),
+    path('export_lotto/', views.export_lotto, name='export_lotto'),
     path('wine/', views.wine, name='wine'),
     path('todo/', views.todo, name='todo'),
     path('investment/leading_stocks/', views.leading_stocks, name='leading_stocks'),

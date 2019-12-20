@@ -1,7 +1,11 @@
 {% extends 'book/base/base.html' %}
 {% load humanize %}
 {% block body %}
-    <H1><i class="fa fa-money-bill-wave"></i> Lotto 조회 <button type="button" class="btn btn-secondary btn-sm">Export</button></H1>
+    <H1><i class="fa fa-money-bill-wave"></i> Lotto 조회
+        <a type="button" class="btn btn-secondary btn-sm" href="{% url 'book:export_lotto' %}" download="lotto.csv">
+            Export
+        </a>
+    </H1>
     <form method="post">
         {% csrf_token %}
         <div class="input-group mb-3">
@@ -72,7 +76,7 @@
     {% if all_objects %}
         <table class="table table-sm table-hover">
             <thead>
-            <tr>
+            <tr class="min-nowrap">
                 <td>회차</td>
                 <td>총 판매액</td>
                 <td>1등 당첨금</td>
@@ -82,8 +86,8 @@
             </thead>
             <tbody>
             {% for obj in all_objects %}
-                <tr>
-                    <td>{{ obj.draw_number }}</td>
+                <tr class="min-nowrap">
+                    <td>{{ obj.numbers.drwNoDate }} / {{ obj.draw_number }}</td>
                     <td>{{ obj.numbers.totSellamnt|intcomma }}원</td>
                     <td>{{ obj.numbers.firstWinamnt|intcomma }}원</td>
                     <td>{{ obj.numbers.firstPrzwnerCo }}</td>

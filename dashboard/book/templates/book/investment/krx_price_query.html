@@ -14,12 +14,14 @@
         </div>
     </form>
     {% if realtime_result %}
+        <h2>{{ realtime_result.2.JongName }}</h2>
         <h4>실시간 데이터</h4>
 
         {% if not market_close %}
             {{ realtime_result }}
         {% else %}
             장이 마감되었습니다.
+
         {% endif %}
     {% endif %}
     {% if statement_result %}
@@ -125,5 +127,27 @@
                 </tbody>
             </table>
         {% endif %}
+    {% endif %}
+    {% if stocks %}
+        <table class="table table-sm table-hover">
+            <thead>
+            <tr>
+                <th style="width: 10%">Code</th>
+                <th style="width: 90%">종목명</th>
+            </tr>
+            </thead>
+
+            {% for stock in stocks %}
+                <tr>
+                    <td>
+                        <form method="post" id="form_{{ stock.code }}">
+                            {% csrf_token %}
+                            <input type="hidden" name="query" value="{{ stock.code }}"/>
+                            <button class="btn btn-sm btn-primary">{{ stock.code }}</button>
+                        </form>
+                    <td>{{ stock.name }}</td>
+                </tr>
+            {% endfor %}
+        </table>
     {% endif %}
 {% endblock %}

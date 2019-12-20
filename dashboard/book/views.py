@@ -5,7 +5,8 @@ from django.core import exceptions
 from django.http import HttpResponse
 from django.shortcuts import render
 
-from .models import Link, Lotto, Paper
+from .models import Link, Lotto, Paper, Stock
+from .utils import new_lotto
 from .xml_helper import XmlDictConfig, get_xml_request
 
 
@@ -61,9 +62,17 @@ def krx_price_query(request):
         realtime_result = get_xml_request(krx_price_query_url.format(query))
         if realtime_result:
             realtime_json = XmlDictConfig(realtime_result[1].find("stockInfo"))
+            info_json = XmlDictConfig(realtime_result[1].find('TBL_StockInfo'))
             render_dict['market_close'] = realtime_json['myJangGubun'] == "장마감" or realtime_json[
                 'myJangGubun'] == '장개시전'
-            render_dict['realtime_result'] = (realtime_json, realtime_result[0])
+            render_dict['realtime_result'] = (realtime_json, realtime_result[0], info_json)
+
+            if 'JongName' in info_json and info_json['JongName']:
+                try:
+                    Stock.objects.get(code=query)
+                except exceptions.ObjectDoesNotExist:
+                    stock = Stock(code=query, name=info_json['JongName'])
+                    stock.save()
 
         statement_result = get_xml_request(krx_statement_query_url.format(query))
         if statement_result:
@@ -97,7 +106,38 @@ def krx_price_query(request):
                 cash_flow["TBL_CashFlow_data"] = hangmok_list
                 render_dict['cash_flow'] = cash_flow
             render_dict['statement_result'] = statement_result
+
+    stocks = Stock.objects.all().order_by('code')
+    render_dict['stocks'] = stocks
     return render(request, 'book/investment/krx_price_query.html', render_dict)
+
+
+def export_lotto(request):
+    max_object = Lotto.objects.order_by('-draw_number')[0]
+
+    max_draw = max_object.draw_number
+
+    for draw_number in range(1, max_draw + 10):
+        result, _ = new_lotto(draw_number)
+
+        if result['returnValue'] == 'fail':
+            break
+
+    all_objects = Lotto.objects.order_by('draw_number')
+    result_list = []
+    for obj in all_objects:
+        result_list.append(','.join(map(str, [obj.draw_number,
+                                              obj.numbers['totSellamnt'],
+                                              obj.numbers['firstWinamnt'],
+                                              obj.numbers['firstPrzwnerCo'],
+                                              obj.numbers['drwtNo1'],
+                                              obj.numbers['drwtNo2'],
+                                              obj.numbers['drwtNo3'],
+                                              obj.numbers['drwtNo4'],
+                                              obj.numbers['drwtNo5'],
+                                              obj.numbers['drwtNo6']])))
+
+    return HttpResponse('\n'.join(result_list))
 
 
 def lotto(request):
@@ -108,24 +148,8 @@ def lotto(request):
         draw_number = request.POST['draw_number']
         render_dict["draw_number"] = draw_number
 
-        try:
-            obj = Lotto.objects.get(draw_number=draw_number)
-            result = obj.numbers
-        except exceptions.ObjectDoesNotExist:
-            try:
-                params = {
-                    'method': 'getLottoNumber',
-                    'drwNo': draw_number,
-                }
-                result = requests.get(
-                    "https://www.nlotto.co.kr/common.do", params=params)
-                result = json.loads(result.text)
-                if not result['returnValue'] == 'fail':
-                    obj = Lotto(draw_number=draw_number, numbers=result)
-                    obj.save()
-            except Exception as e:
-                result = str(e)
-    all_objects = Lotto.objects.order_by('-draw_number')[:10]
+        result, _ = new_lotto(draw_number)
+    all_objects = Lotto.objects.order_by('-draw_number')[:30]
     render_dict["result"] = result
     render_dict["all_objects"] = all_objects
 
