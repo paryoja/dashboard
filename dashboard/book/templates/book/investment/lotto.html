@@ -1,7 +1,7 @@
 {% extends 'book/base/base.html' %}
 {% load humanize %}
 {% block body %}
-    <H1><i class="fa fa-money-bill-wave"></i> Lotto 조회</H1>
+    <H1><i class="fa fa-money-bill-wave"></i> Lotto 조회 <button type="button" class="btn btn-secondary btn-sm">Export</button></H1>
     <form method="post">
         {% csrf_token %}
         <div class="input-group mb-3">
@@ -15,10 +15,8 @@
         </div>
     </form>
 
-    {% if result %}
-        {{ result }}
-        <hr>
 
+    {% if result %}
         {% if result.returnValue == "fail" %}
             <h3>{{ draw_number }}회는 아직 추첨하지 않았습니다.</h3>
         {% else %}
@@ -57,49 +55,42 @@
                         <th>총 당첨금액</th>
                         <th>당첨게임 수</th>
                         <th>1게임 금액</th>
-                        <th>당첨기준</th>
                     </tr>
                     </thead>
-                    <tbody  class="min-nowrap">
+                    <tbody class="min-nowrap">
                     <tr>
                         <td>1등</td>
                         <td>{{ result.firstAccumamnt|intcomma }}원</td>
                         <td>{{ result.firstPrzwnerCo }}</td>
                         <td>{{ result.firstWinamnt|intcomma }}원</td>
-                        <td>6개 일치</td>
                     </tr>
-                    <tr>
-                        <td>2등</td>
-                        <td></td>
-                        <td></td>
-                        <td></td>
-                        <td>5개 + 보너스 일치</td>
-                    </tr>
-                    <tr>
-                        <td>3등</td>
-                        <td></td>
-                        <td></td>
-                        <td></td>
-                        <td>5개 일치</td>
-                    </tr>
-                    <tr>
-                        <td>4등</td>
-                        <td></td>
-                        <td></td>
-                        <td>50,000원</td>
-                        <td>4개 일치</td>
-                    </tr>
-                    <tr>
-                        <td>5등</td>
-                        <td></td>
-                        <td></td>
-                        <td>1,000원</td>
-                        <td>3개 일치</td>
-                    </tr>
-
                     </tbody>
                 </table>
             </div>
         {% endif %}
+    {% endif %}
+    {% if all_objects %}
+        <table class="table table-sm table-hover">
+            <thead>
+            <tr>
+                <td>회차</td>
+                <td>총 판매액</td>
+                <td>1등 당첨금</td>
+                <td>당첨자 수</td>
+                <td>번호</td>
+            </tr>
+            </thead>
+            <tbody>
+            {% for obj in all_objects %}
+                <tr>
+                    <td>{{ obj.draw_number }}</td>
+                    <td>{{ obj.numbers.totSellamnt|intcomma }}원</td>
+                    <td>{{ obj.numbers.firstWinamnt|intcomma }}원</td>
+                    <td>{{ obj.numbers.firstPrzwnerCo }}</td>
+                    <td>{{ obj.numbers.drwtNo1 }} {{ obj.numbers.drwtNo2 }} {{ obj.numbers.drwtNo3 }} {{ obj.numbers.drwtNo4 }} {{ obj.numbers.drwtNo5 }} {{ obj.numbers.drwtNo6 }}</td>
+                </tr>
+            {% endfor %}
+            </tbody>
+        </table>
     {% endif %}
 {% endblock %}

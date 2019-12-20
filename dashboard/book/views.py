@@ -125,8 +125,9 @@ def lotto(request):
                     obj.save()
             except Exception as e:
                 result = str(e)
-
+    all_objects = Lotto.objects.order_by('-draw_number')[:10]
     render_dict["result"] = result
+    render_dict["all_objects"] = all_objects
 
     return render(request, 'book/investment/lotto.html', render_dict)
 
