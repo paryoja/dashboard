@@ -15,7 +15,62 @@ def get_render_dict(current_page, side_page=None):
     if side_page:
         render_dict[side_page] = 'active'
 
+    study_list = []
+    study_list.append(get_nav_item("slide", "fa fa-file-powerpoint", "슬라이드", current_page))
+    study_list.append(get_nav_item("paper", "fa fa-file-pdf", "논문", current_page))
+    study_list.append(get_nav_item("colab", "fa fa-file-code", "실습자료", current_page))
+
+    invest_list = []
+    invest_list.append(get_nav_item("leading_stocks", "fa fa-money-check-alt", "Leading Stocks", current_page))
+    invest_list.append(get_nav_item("live_currency", "fe fe-bar-chart", "Live Currency", current_page))
+    invest_list.append(get_nav_item("krx_price_query", "fa fa-search-dollar", "Price Query", current_page))
+    invest_list.append(get_nav_item("lotto", "fa fa-money-bill-wave", "Lottery", current_page))
+
+    other_list = []
+    other_list.append(get_nav_item("wine", "fa fa-wine-bottle", "Wine", current_page))
+    other_list.append(get_nav_item("law_search", "fa fa-gavel", "법률 검색", current_page))
+    other_list.append(get_nav_item("todo", "fa fa-check", "Todo List", current_page))
+
+    nav_list = []
+    nav_list.append(get_nav_item("index", "fe fe-home", "Home", current_page))
+    nav_list.append(get_nav_collapse(study_list, "sidebarLecture", "fa fa-chalkboard-teacher", "스터디 정리"))
+    nav_list.append(get_nav_item("people", "fa fa-users", "인명사전", current_page))
+    nav_list.append(get_nav_item("chatbot", "fa fa-comments", "챗봇", current_page))
+    nav_list.append(get_nav_item("link", "fe fe-link", "링크", current_page))
+    nav_list.append(get_nav_collapse(invest_list, "sidebarInvest", "fe fe-dollar-sign", "투자"))
+    nav_list.append(get_nav_item("idea", "fe fe-zap", "아이디어 모음", current_page))
+    nav_list.append(get_nav_item("algorithm", "fe fe-video", "비디오", current_page))
+    nav_list.append(get_nav_collapse(other_list, "sidebarOther", "fe fe-star", "그 외"))
+
+    render_dict['nav_list'] = nav_list
     return render_dict
+
+
+def get_nav_collapse(child_list, button_url, icon, description):
+    active = ""
+    for item in child_list:
+        print("active", item["active"])
+        if item["active"]:
+            active = "active"
+
+    return {
+        "collapse": True,
+        "button_url": button_url,
+        "icon": icon,
+        "description": description,
+        "child_list": child_list,
+        "active": active,
+    }
+
+
+def get_nav_item(template, icon, description, current_page):
+    return {
+        "collapse": False,
+        "template": "book:{}".format(template),
+        "icon": icon,
+        "description": description,
+        "active": "active" if template == current_page else "",
+    }
 
 
 def index(request):
@@ -36,12 +91,12 @@ def algorithm(request):
 
 # investment
 def live_currency(request):
-    render_dict = get_render_dict('invest', 'live_currency')
+    render_dict = get_render_dict('live_currency')
     return render(request, 'book/investment/live_currency.html', render_dict)
 
 
 def leading_stocks(request):
-    render_dict = get_render_dict('invest', 'leading_stocks')
+    render_dict = get_render_dict('leading_stocks')
     return render(request, 'book/investment/leading_stocks.html', render_dict)
 
 
@@ -54,7 +109,7 @@ cash_order = ['hangMok', 'year1Money', 'year1JungGamRate', 'year2Money', 'year2J
 
 
 def krx_price_query(request):
-    render_dict = get_render_dict('invest', 'krx_price_query')
+    render_dict = get_render_dict('krx_price_query')
     if request.POST:
         query = request.POST['query']
         render_dict['query'] = query
@@ -141,7 +196,7 @@ def export_lotto(request):
 
 
 def lotto(request):
-    render_dict = get_render_dict('invest', 'lotto')
+    render_dict = get_render_dict('lotto')
 
     result = ""
     if request.POST:
@@ -157,7 +212,7 @@ def lotto(request):
 
 
 def wine(request):
-    render_dict = get_render_dict('others', 'wine')
+    render_dict = get_render_dict('wine')
     return render(request, 'book/wine.html', render_dict)
 
 
@@ -166,7 +221,7 @@ law_query_url = "http://www.law.go.kr/DRF/lawSearch.do?OC=test&target=law&type=X
 
 
 def law_search(request):
-    render_dict = get_render_dict('others', 'law_search')
+    render_dict = get_render_dict('law_search')
 
     if request.POST:
         query = request.POST['query']
@@ -182,18 +237,18 @@ def law_search(request):
 
 
 def todo(request):
-    render_dict = get_render_dict('others', 'todo')
+    render_dict = get_render_dict('todo')
     return render(request, 'book/todo.html', render_dict)
 
 
 # study
 def slide(request):
-    render_dict = get_render_dict('study', 'slide')
+    render_dict = get_render_dict('slide')
     return render(request, 'book/study/slide.html', render_dict)
 
 
 def paper(request):
-    render_dict = get_render_dict('study', 'paper')
+    render_dict = get_render_dict('paper')
     paper_list = Paper.objects.all()
 
     render_dict['paper_list'] = paper_list
@@ -201,7 +256,7 @@ def paper(request):
 
 
 def colab(request):
-    render_dict = get_render_dict('study', 'colab')
+    render_dict = get_render_dict('colab')
     return render(request, 'book/study/colab.html', render_dict)
 
 
@@ -236,3 +291,8 @@ def query_chatbot(request):
         return HttpResponse(json.dumps(text))
     else:
         return HttpResponse("Empty Message")
+
+
+def people(request):
+    render_dict = get_render_dict('people')
+    return render(request, 'book/people.html', render_dict)

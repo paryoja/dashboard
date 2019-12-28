@@ -29,130 +29,38 @@
                     </div>
                 </div>
             </form>
-
-
             <!-- Navigation -->
             <ul class="navbar-nav">
-                <li class="nav-item">
-                    <a class="nav-link {{ index }}" href="{% url 'book:index' %}">
-                        <i class="fe fe-home"></i> Home
-                    </a>
-                </li>
-
-                <li class="nav-item {{ study }}">
-                    <a class="nav-link" href="#sidebarStudy" data-toggle="collapse" role="button"
-                       aria-expanded="{% if study %}true{% else %}false{% endif %}"
-                       aria-controls="sidebarLecture">
-                        <i class="fa fa-chalkboard-teacher"></i> 스터디 정리
-                    </a>
-                    <div class="collapse {% if study %}show{% endif %}"
-                         id="sidebarStudy">
-                        <ul class="nav nav-sm flex-column">
-                            <li class="nav-item {{ slide }}">
-                                <a href="{% url 'book:slide' %}" class="nav-link">
-                                    <i class="fa fa-file-powerpoint"></i> 슬라이드
-                                </a>
-                            </li>
-                            <li class="nav-item {{ paper }}">
-                                <a href="{% url 'book:paper' %}" class="nav-link">
-                                    <i class="fa fa-file-pdf"></i> 논문
-                                </a>
-                            </li>
-                            <li class="nav-item {{ colab }}">
-                                <a href="{% url 'book:colab' %}" class="nav-link">
-                                    <i class="fa fa-file-code"></i> 실습자료
-                                </a>
-                            </li>
-                        </ul>
-                    </div>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link {{ chatbot }}"
-                       href="{% url 'book:chatbot' %}">
-                        <i class="fa fa-comments"></i>
-                        챗봇
-                    </a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link {{ link }}"
-                       href="{% url 'book:link' %}">
-                        <i class="fe fe-link"></i>
-                        링크
-                    </a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link {{ algorithm }}"
-                       href="{% url 'book:algorithm' %}">
-                        <i class="fe fe-video"></i>
-                        비디오
-                    </a>
-                </li>
-                <li class="nav-item {{ invest }}">
-                    <a class="nav-link" href="#sidebarInvest" data-toggle="collapse" role="button"
-                       aria-expanded="{% if invest %}true{% else %}false{% endif %}"
-                       aria-controls="sidebarInvest">
-                        <i class="fe fe-dollar-sign"></i> 투자
-                    </a>
-                    <div class="collapse {% if invest %}show{% endif %}"
-                         id="sidebarInvest">
-                        <ul class="nav nav-sm flex-column">
-                            <li class="nav-item {{ leading_stocks }}">
-                                <a href="{% url 'book:leading_stocks' %}" class="nav-link">
-                                    <i class="fa fa-money-check-alt"></i> Leading Stocks
-                                </a>
-                            </li>
-                            <li class="nav-item {{ live_currency }}">
-                                <a href="{% url 'book:live_currency' %}" class="nav-link">
-                                    <i class="fe fe-bar-chart"></i> Live Currency Cross Rates
-                                </a>
-                            </li>
-                            <li class="nav-item {{ krx_price_query }}">
-                                <a href="{% url 'book:krx_price_query' %}" class="nav-link">
-                                    <i class="fa fa-search-dollar"></i> Price Query
-                                </a>
-                            </li>
-                            <li class="nav-item {{ lotto }}">
-                                <a href="{% url 'book:lotto' %}" class="nav-link">
-                                    <i class="fa fa-money-bill-wave"></i> Lottery
-                                </a>
-                            </li>
-                        </ul>
-                    </div>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link {{ idea }}"
-                       href="{% url 'book:idea' %}">
-                        <i class="fe fe-zap"></i>
-                        아이디어 모음
-                    </a>
-                </li>
-                <li class="nav-item {{ others }}">
-                    <a class="nav-link" href="#sidebarOther" data-toggle="collapse" role="button"
-                       aria-expanded="{% if others %}true{% else %}false{% endif %}"
-                       aria-controls="sidebarOthers">
-                        <i class="fe fe-star"></i> 그 외
-                    </a>
-                    <div class="collapse {% if others %}show{% endif %}"
-                         id="sidebarOther">
-                        <ul class="nav nav-sm flex-column">
-                            <li class="nav-item {{ wine }}">
-                                <a href="{% url 'book:wine' %}" class="nav-link">
-                                    <i class="fa fa-wine-bottle"></i> Wine
-                                </a>
-                            </li>
-                            <li class="nav-item {{ law_search }}">
-                                <a href="{% url 'book:law_search' %}" class="nav-link">
-                                    <i class="fa fa-gavel"></i> 법률 검색
-                                </a>
-                            </li>
-                            <li class="nav-item {{ todo }}">
-                                <a href="{% url 'book:todo' %}" class="nav-link">
-                                    <i class="fa fa-check"></i> Todo List
-                                </a>
-                            </li>
-                        </ul>
-                    </div>
-                </li>
+                {% for nav_item in nav_list %}
+                    {% if nav_item.collapse %}
+                        <li class="nav-item {{ nav_item.active }}">
+                            <a class="nav-link" href="#{{ nav_item.button_url }}" data-toggle="collapse" role="button"
+                               aria-expanded="{% if nav_item.active %}true{% else %}false{% endif %}"
+                               aria-controls="{{ nav_item.button_url }}">
+                                <i class="{{ nav_item.icon }}"></i> {{ nav_item.description }}
+                            </a>
+                            <div class="collapse {% if nav_item.active %}show{% endif %}"
+                                 id="{{ nav_item.button_url }}">
+                                <ul class="nav nav-sm flex-column">
+                                    {% for child_nav_item in nav_item.child_list %}
+                                        <li class="nav-item">
+                                            <a class="nav-link {{ child_nav_item.active }}"
+                                               href="{% url child_nav_item.template %}">
+                                                <i class="{{ child_nav_item.icon }}"></i> {{ child_nav_item.description }}
+                                            </a>
+                                        </li>
+                                    {% endfor %}
+                                </ul>
+                            </div>
+                        </li>
+                    {% else %}
+                        <li class="nav-item">
+                            <a class="nav-link {{ nav_item.active }}" href="{% url nav_item.template %}">
+                                <i class="{{ nav_item.icon }}"></i> {{ nav_item.description }}
+                            </a>
+                        </li>
+                    {% endif %}
+                {% endfor %}
             </ul>
 
             <!-- Divider -->
