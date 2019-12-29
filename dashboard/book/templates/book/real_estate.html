@@ -1,0 +1,21 @@
+{% extends 'book/base/base.html' %}
+
+{% block body %}
+    <h1>부동산 투자에 도움되는 사이트</h1>
+    <table class="table table-hover table-sm">
+        <thead>
+        <tr>
+            <th>설명</th>
+            <th>링크</th>
+        </tr>
+        </thead>
+        <tbody>
+        {% for link in useful_link %}
+            <tr>
+                <td>{{ link.description }}</td>
+                <td><a href="{{ link.url }}" target="_blank"><i class="fa fa-link"></i></a></td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+{% endblock %}

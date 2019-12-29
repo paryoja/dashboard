@@ -10,10 +10,8 @@ from .utils import new_lotto
 from .xml_helper import XmlDictConfig, get_xml_request
 
 
-def get_render_dict(current_page, side_page=None):
-    render_dict = {current_page: 'active'}
-    if side_page:
-        render_dict[side_page] = 'active'
+def get_render_dict(current_page):
+    render_dict = {}
 
     study_list = []
     study_list.append(get_nav_item("slide", "fa fa-file-powerpoint", "슬라이드", current_page))
@@ -25,6 +23,7 @@ def get_render_dict(current_page, side_page=None):
     invest_list.append(get_nav_item("live_currency", "fe fe-bar-chart", "Live Currency", current_page))
     invest_list.append(get_nav_item("krx_price_query", "fa fa-search-dollar", "Price Query", current_page))
     invest_list.append(get_nav_item("lotto", "fa fa-money-bill-wave", "Lottery", current_page))
+    invest_list.append(get_nav_item("real_estate", "fa fa-building", "부동산", current_page))
 
     other_list = []
     other_list.append(get_nav_item("wine", "fa fa-wine-bottle", "Wine", current_page))
@@ -296,3 +295,29 @@ def query_chatbot(request):
 def people(request):
     render_dict = get_render_dict('people')
     return render(request, 'book/people.html', render_dict)
+
+
+def real_estate(request):
+    render_dict = get_render_dict('real_estate')
+
+    useful_link = [
+        {"description": "국토교통부 실거래가 공개시스템",
+         "url": "https://rt.molit.go.kr/"},
+        {"description": "토지이용규제정보서비스",
+         "url": "http://luris.molit.go.kr/"},
+        {"description": "주택도시기금",
+         "url": "http://nhuf.molit.go.kr/"},
+        {"description": "대법원 인터넷등기소",
+         "url": "http://www.iros.go.kr/"},
+        {"description": "전국은행연합회",
+         "url": "https://www.kfb.or.kr/"},
+        {"description": "한국주택금융공사",
+         "url": "https://www.hf.go.kr/"},
+        {"description": "대법원 법원경매정보",
+         "url": "https://www.courtauction.go.kr/"},
+        {"description": "온비드",
+         "url": "http://www.onbid.co.kr/"},
+    ]
+
+    render_dict["useful_link"] = useful_link
+    return render(request, 'book/real_estate.html', render_dict)
