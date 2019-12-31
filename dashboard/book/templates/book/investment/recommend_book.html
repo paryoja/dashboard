@@ -1,0 +1,22 @@
+{% extends 'book/base/base.html' %}
+
+{% block body %}
+    <table class="table table-sm table-hover">
+        <thead>
+        <tr>
+            <th>제목</th>
+            <th>저자</th>
+            <th>링크</th>
+        </tr>
+        </thead>
+        <tbody>
+        {% for book in book_list %}
+        <tr>
+            <td>{{ book.name }}</td>
+            <td>{{ book.author }}</td>
+            <td><a href="https://search.kyobobook.co.kr/web/search?vPstrKeyWord={{ book.name }}" target="_blank"><i class="fa fa-book"></i></a></td>
+        </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+{% endblock %}

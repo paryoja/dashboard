@@ -6,70 +6,9 @@ from django.http import HttpResponse
 from django.shortcuts import render
 
 from .models import Link, Lotto, Paper, Stock
+from .nav import get_render_dict
 from .utils import new_lotto
 from .xml_helper import XmlDictConfig, get_xml_request
-
-
-def get_render_dict(current_page):
-    render_dict = {}
-
-    study_list = []
-    study_list.append(get_nav_item("slide", "fa fa-file-powerpoint", "슬라이드", current_page))
-    study_list.append(get_nav_item("paper", "fa fa-file-pdf", "논문", current_page))
-    study_list.append(get_nav_item("colab", "fa fa-file-code", "실습자료", current_page))
-
-    invest_list = []
-    invest_list.append(get_nav_item("leading_stocks", "fa fa-money-check-alt", "Leading Stocks", current_page))
-    invest_list.append(get_nav_item("live_currency", "fe fe-bar-chart", "Live Currency", current_page))
-    invest_list.append(get_nav_item("krx_price_query", "fa fa-search-dollar", "Price Query", current_page))
-    invest_list.append(get_nav_item("lotto", "fa fa-money-bill-wave", "Lottery", current_page))
-    invest_list.append(get_nav_item("real_estate", "fa fa-building", "부동산", current_page))
-
-    other_list = []
-    other_list.append(get_nav_item("wine", "fa fa-wine-bottle", "Wine", current_page))
-    other_list.append(get_nav_item("law_search", "fa fa-gavel", "법률 검색", current_page))
-    other_list.append(get_nav_item("todo", "fa fa-check", "Todo List", current_page))
-
-    nav_list = []
-    nav_list.append(get_nav_item("index", "fe fe-home", "Home", current_page))
-    nav_list.append(get_nav_collapse(study_list, "sidebarLecture", "fa fa-chalkboard-teacher", "스터디 정리"))
-    nav_list.append(get_nav_item("people", "fa fa-users", "인명사전", current_page))
-    nav_list.append(get_nav_item("chatbot", "fa fa-comments", "챗봇", current_page))
-    nav_list.append(get_nav_item("link", "fe fe-link", "링크", current_page))
-    nav_list.append(get_nav_collapse(invest_list, "sidebarInvest", "fe fe-dollar-sign", "투자"))
-    nav_list.append(get_nav_item("idea", "fe fe-zap", "아이디어 모음", current_page))
-    nav_list.append(get_nav_item("algorithm", "fe fe-video", "비디오", current_page))
-    nav_list.append(get_nav_collapse(other_list, "sidebarOther", "fe fe-star", "그 외"))
-
-    render_dict['nav_list'] = nav_list
-    return render_dict
-
-
-def get_nav_collapse(child_list, button_url, icon, description):
-    active = ""
-    for item in child_list:
-        print("active", item["active"])
-        if item["active"]:
-            active = "active"
-
-    return {
-        "collapse": True,
-        "button_url": button_url,
-        "icon": icon,
-        "description": description,
-        "child_list": child_list,
-        "active": active,
-    }
-
-
-def get_nav_item(template, icon, description, current_page):
-    return {
-        "collapse": False,
-        "template": "book:{}".format(template),
-        "icon": icon,
-        "description": description,
-        "active": "active" if template == current_page else "",
-    }
 
 
 def index(request):
@@ -321,3 +260,25 @@ def real_estate(request):
 
     render_dict["useful_link"] = useful_link
     return render(request, 'book/real_estate.html', render_dict)
+
+
+def recommend_book(request):
+    render_dict = get_render_dict('recommend_book')
+
+    book_list = []
+    book_list.append(
+        {'name': '할 수 있다! 퀀트 투자', 'author': '강환국', 'year': '2017'}
+    )
+    book_list.append(
+        {'name': '전략적 가치 투자', 'author': '신진오', 'year': '2009'}
+    )
+    book_list.append(
+        {'name': '마법의 돈 굴리기', 'author': '김성일', 'year': '2017'}
+    )
+    book_list.append(
+        {'name': '주식시장을 이기는 작은 책', 'author': 'Joal Greenblatt', 'year': '2006'}
+    )
+
+    render_dict['book_list'] = book_list
+
+    return render(request, 'book/investment/recommend_book.html', render_dict)
