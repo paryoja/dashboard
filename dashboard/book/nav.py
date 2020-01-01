@@ -41,6 +41,7 @@ def get_render_dict(current_page):
     invest_list.append(get_nav_item("recommend_book", "fa fa-book", "책", current_page))
 
     other_list = []
+    other_list.append(get_nav_item("food", "fa fa-utensils", "맛집", current_page))
     other_list.append(get_nav_item("wine", "fa fa-wine-bottle", "Wine", current_page))
     other_list.append(get_nav_item("law_search", "fa fa-gavel", "법률 검색", current_page))
     other_list.append(get_nav_item("todo", "fa fa-check", "Todo List", current_page))

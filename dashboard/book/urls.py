@@ -24,4 +24,5 @@ urlpatterns = [
     path('people/', views.people, name='people'),
     path('real_estate/', views.real_estate, name='real_estate'),
     path('recommend_book/', views.recommend_book, name='recommend_book'),
+    path('food/', views.food, name='food'),
 ]

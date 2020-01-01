@@ -287,3 +287,39 @@ def recommend_book(request):
     render_dict['book_list'] = book_list
 
     return render(request, 'book/investment/recommend_book.html', render_dict)
+
+
+def food(request):
+    render_dict = get_render_dict('food')
+
+    restaurant_list = [
+        {'name': '고기리막국수',
+         'famous_for': '막국수',
+         'cuisine_type': '한식',
+         'address': '고기리',
+         'visited': False},
+        {'name': '명동교자',
+         'famous_for': '칼국수',
+         'cuisine_type': '한식',
+         'history': '칼국수, 만두',
+         'visited': True},
+        {'name': '라모라',
+         'famous_for': '파스타',
+         'cuisine_type': '양식',
+         'history': '트러플 파스타',
+         'visited': True},
+        {'name': '필동면옥',
+         'famous_for': '평양냉면',
+         'cuisine_type': '한식',
+         'history': '평양냉면',
+         'visited': True},
+        {'name': '임병주산동손칼국수',
+         'famous_for': '칼국수',
+         'cuisine_type': '한식',
+         'history': '칼국수, 콩국수, 만두',
+         'visited': True}
+    ]
+
+    render_dict['restaurant_list'] = restaurant_list
+
+    return render(request, 'book/food.html', render_dict)

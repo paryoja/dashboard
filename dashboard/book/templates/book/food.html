@@ -1,0 +1,30 @@
+{% extends 'book/base/base.html' %}
+
+{% block body %}
+    {% if restaurant_list %}
+        <table class="table table-sm table-hover">
+            <thead>
+            <tr>
+                <th></th>
+                <th>종류</th>
+                <th>상호명</th>
+                <th>유명한 음식</th>
+                <th>먹어본 음식</th>
+            </tr>
+            </thead>
+            <tbody>
+            {% for restaurant in restaurant_list %}
+                <tr>
+                    <td style="width: 30px">{% if restaurant.visited %}<i class="far fa-check-square"></i>{% else %}
+                        <i class="far fa-square"></i>{% endif %}
+                    </td>
+                    <td style="width: 50px">{{ restaurant.cuisine_type }}</td>
+                    <td>{{ restaurant.name }}</td>
+                    <td>{{ restaurant.famous_for }}</td>
+                    <td>{{ restaurant.history }}</td>
+                </tr>
+            {% endfor %}
+            </tbody>
+        </table>
+    {% endif %}
+{% endblock %}
