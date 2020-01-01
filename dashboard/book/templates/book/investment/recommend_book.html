@@ -6,6 +6,7 @@
         <tr>
             <th>제목</th>
             <th>저자</th>
+            <th>연도</th>
             <th>링크</th>
         </tr>
         </thead>
@@ -14,6 +15,7 @@
         <tr>
             <td>{{ book.name }}</td>
             <td>{{ book.author }}</td>
+            <td>{{ book.year }}</td>
             <td><a href="https://search.kyobobook.co.kr/web/search?vPstrKeyWord={{ book.name }}" target="_blank"><i class="fa fa-book"></i></a></td>
         </tr>
         {% endfor %}

@@ -5,7 +5,7 @@ from django.core import exceptions
 from django.http import HttpResponse
 from django.shortcuts import render
 
-from .models import Link, Lotto, Paper, Stock
+from .models import Link, Lotto, Paper, Stock, Book
 from .nav import get_render_dict
 from .utils import new_lotto
 from .xml_helper import XmlDictConfig, get_xml_request
@@ -239,46 +239,51 @@ def people(request):
 def real_estate(request):
     render_dict = get_render_dict('real_estate')
 
-    useful_link = [
-        {"description": "국토교통부 실거래가 공개시스템",
-         "url": "https://rt.molit.go.kr/"},
-        {"description": "토지이용규제정보서비스",
-         "url": "http://luris.molit.go.kr/"},
-        {"description": "주택도시기금",
-         "url": "http://nhuf.molit.go.kr/"},
-        {"description": "대법원 인터넷등기소",
-         "url": "http://www.iros.go.kr/"},
-        {"description": "전국은행연합회",
-         "url": "https://www.kfb.or.kr/"},
-        {"description": "한국주택금융공사",
-         "url": "https://www.hf.go.kr/"},
-        {"description": "대법원 법원경매정보",
-         "url": "https://www.courtauction.go.kr/"},
-        {"description": "온비드",
-         "url": "http://www.onbid.co.kr/"},
-    ]
+    price_link = Link.objects.filter(content_type="부동산 시세")
+    useful_link = Link.objects.filter(content_type="부동산")
 
+    check_list = ["햇빛은 잘 들어오는가?",
+                  "물이 샌(누수) 흔적은 없는가?",
+                  "천장이나 벽, 장판 아래 곰팡이가 핀 곳은 없는가?",
+                  "전기콘센트는 파손된 곳이 없는가?",
+                  "수도는 잘 나오는가?",
+                  "배수는 잘되는가?",
+                  "싱크대, 후드, 수납장 등 파손된 주방시설은 없는가?",
+                  "냉장고를 놓을 수 있는 공간이 있는가?",
+                  "욕실의 변기나 샤워기, 거울 등 파손된 시설은 없는가?",
+                  "세탁기를 놓을 수 있는 공간이 있는가?",
+                  "발코니가 있는가?",
+                  "빨래를 건조할 수 있는 공간이 있는가?",
+                  "방의 높이가 장롱이 들어갈 수 있을 만큼 높은가",
+                  "다용도실 같은 별도의 서비스 공간이 있는가?",
+                  "방충망이나 방범창이 있는가?",
+                  "환기가 잘 되는가?",
+                  "외풍이 심하지 않은가?",
+                  "전기와 수도 계량기는 별도로 사용하는가?",
+                  "주 출입구에 방범시설이 되어 있는가?",
+                  "주차장은 있는가?",
+                  "집 주변에 고물상, 공장 등 혐오시설은 없는가?",
+                  "집 주변에 시장이나 할인마트가 있는가?",
+                  "집 주변에 공원이나 놀이터 등이 있는가?",
+                  "집에서 학교, 어린이집, 학원 등이 가까운가?",
+                  "집에서 병원은 가까운가?",
+                  "지하철역과 버스정류장이 도보로 10분 이내에 있는가?",
+                  "집이 너무 외진 곳에 있지 않은가?",
+                  "저당금액과 총 보증금의 합이 집값의 80%를 넘는가?",
+                  "공부서류들의 내용이 서로 일치하는가?",
+                  "집을 내놓았을 때 잘 나갈 수 있겠는가?"
+                  ]
+
+    render_dict["price_link"] = price_link
     render_dict["useful_link"] = useful_link
+    render_dict["check_list"] = check_list
     return render(request, 'book/real_estate.html', render_dict)
 
 
 def recommend_book(request):
     render_dict = get_render_dict('recommend_book')
 
-    book_list = []
-    book_list.append(
-        {'name': '할 수 있다! 퀀트 투자', 'author': '강환국', 'year': '2017'}
-    )
-    book_list.append(
-        {'name': '전략적 가치 투자', 'author': '신진오', 'year': '2009'}
-    )
-    book_list.append(
-        {'name': '마법의 돈 굴리기', 'author': '김성일', 'year': '2017'}
-    )
-    book_list.append(
-        {'name': '주식시장을 이기는 작은 책', 'author': 'Joal Greenblatt', 'year': '2006'}
-    )
-
+    book_list = Book.objects.all()
     render_dict['book_list'] = book_list
 
     return render(request, 'book/investment/recommend_book.html', render_dict)

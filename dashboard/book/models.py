@@ -78,3 +78,12 @@ class Paper(models.Model):
 
     def __str__(self):
         return str(self.title)
+
+
+class Book(models.Model):
+    name = models.TextField()
+    author = models.CharField(max_length=20)
+    year = models.IntegerField(blank=True, null=True)
+
+    def __str__(self):
+        return "{}: 저자 {}".format(self.name, self.author)

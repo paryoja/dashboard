@@ -1,7 +1,6 @@
 def get_nav_collapse(child_list, button_url, icon, description):
     active = ""
     for item in child_list:
-        print("active", item["active"])
         if item["active"]:
             active = "active"
 

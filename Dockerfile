@@ -10,4 +10,5 @@ ADD requirements.txt .
 RUN python3 -m pip install --upgrade pip
 RUN python3 -m pip install --ignore-installed -r requirements.txt
 
+ENV PYTHONIOENCODING utf-8
 RUN echo alias python="python3" >> /root/.bashrc
