@@ -1,7 +1,13 @@
-version: '1.0'
+version: '3'
 
 services:
-  web:
-    build: .
-    command: gunicorn 
-
+  django:
+    build:
+      context: .
+      dockerfile: ./Dockerfile
+    ports:
+      - "38000:8000"
+    volumes:
+      - ./:/work
+    command:
+      - ./run_server.sh
