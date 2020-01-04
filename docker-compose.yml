@@ -17,8 +17,9 @@ services:
       - ./run_server.sh
 
   celery:
-    image:
-      "dashboard_django"
+    build:
+      context: .
+      dockerfile: ./Dockerfile
     volumes:
       - ./:/work
     command: ["./wait-for-it.sh", "db:5672", "--", "./celery.sh"]
