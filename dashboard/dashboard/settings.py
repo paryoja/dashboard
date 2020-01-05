@@ -22,7 +22,7 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 # SECURITY WARNING: keep the secret key used in production secret!
 SECRET_KEY = open("dashboard/secret.txt").read().strip()
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = os.environ.get("DEBUG", False)
+DEBUG = os.environ.get("DEBUG", "False").lower() == "true"
 
 ALLOWED_HOSTS = open("dashboard/allowed_hosts.txt").read().split(',')
 ALLOWED_HOSTS = [hosts.strip() for hosts in ALLOWED_HOSTS]
