@@ -14,7 +14,7 @@ services:
     volumes:
       - ./:/work
     command:
-      - ./run_server.sh
+      - ./run_gunicorn.sh
 
   celery:
     build:
@@ -23,3 +23,14 @@ services:
     volumes:
       - ./:/work
     command: ["./wait-for-it.sh", "db:5672", "--", "./celery.sh"]
+
+  nginx:
+    image:
+      "nginx:latest"
+    ports:
+      - "80:80"
+    volumes:
+      - /var/www:/usr/share/nginx/html:ro
+      - ./config/nginx:/etc/nginx/conf.d
+      - ./dashboard/:/work
+    command: ["/work/wait-for-it.sh", "django:38000", "--", "nginx", "-g", "daemon off;"]
