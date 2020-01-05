@@ -94,11 +94,8 @@ DATABASES = {
 }
 
 db_settings = json.loads(open("dashboard/db.json").read().strip())
-DATABASES['default']['PASSWORD'] = db_settings['PASSWORD']
-DATABASES['default']['NAME'] = db_settings['NAME']
-DATABASES['default']['USER'] = db_settings['USER']
-DATABASES['default']['HOST'] = db_settings['HOST']
-DATABASES['default']['PORT'] = db_settings['PORT']
+for k, v in db_settings.items():
+    DATABASES['default'][k] = v
 
 # Password validation
 # https://docs.djangoproject.com/en/2.2/ref/settings/#auth-password-validators
@@ -153,7 +150,7 @@ LOGGING = {
         'file': {
             'level': 'INFO',
             'class': 'logging.handlers.RotatingFileHandler',
-            'filename': '/work/dashboard/debug.log',
+            'filename': '/work/dashboard/django.log',
             'formatter': 'format1',
         },
     },
