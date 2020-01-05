@@ -2,8 +2,9 @@ version: '3'
 
 services:
   rabbitmq:
-    image:
-      "rabbitmq:latest"
+    build:
+      context: .
+      dockerfile: ./Dockerfile_rabbitmq
 
   django:
     build:
@@ -13,8 +14,8 @@ services:
       - "38000:8000"
     volumes:
       - ./:/work
-    #environment:
-      # - DEBUG=True
+    environment:
+      - DEBUG=False
     command:
       - ./run_gunicorn.sh
 

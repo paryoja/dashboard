@@ -3,6 +3,7 @@ db.sqlite3
 /venv/
 dashboard/dashboard/*.txt
 dashboard/dashboard/*.json
+dashboard/.static_root/
 .idea/inspectionProfiles/
 .idea/dataSources.xml
 .idea/deployment.xml
