@@ -12,16 +12,18 @@
     </pre>
 
     {% csrf_token %}
-    <div class="input-group mb-3">
-        <input type="text" name="message" class="form-control" placeholder="Message" aria-label="Query" id="message"
-               aria-describedby="button-addon2">
-        <div class="input-group-append">
-            <button class="btn btn-outline-secondary" type="submit" id="button-addon2" name="submit" value="submit">
-                Submit
-            </button>
+    <form id="message_form">
+        <div class="input-group mb-3">
+            <input type="text" name="message" class="form-control" placeholder="Message" aria-label="Query" id="message"
+                   aria-describedby="button-addon2">
+            <div class="input-group-append">
+                <button class="btn btn-outline-secondary" type="submit" id="button-addon2" name="submit" value="submit">
+                    Submit
+                </button>
+            </div>
         </div>
-    </div>
-    <textarea id="message_area" class="form-control data-autoresize" readonly></textarea>
+        <textarea id="message_area" class="form-control data-autoresize" readonly></textarea>
+    </form>
     {% include 'book/chatbot/nlu.html' %}
 {% endblock %}
 
