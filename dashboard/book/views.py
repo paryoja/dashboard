@@ -323,3 +323,10 @@ def food(request):
     render_dict['restaurant_list'] = restaurant_list
 
     return render(request, 'book/food.html', render_dict)
+
+
+def pokemon(request):
+
+    render_dict = get_render_dict('pokemon')
+
+    return render(request, 'book/pokemon.html', render_dict)

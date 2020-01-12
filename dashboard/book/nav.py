@@ -45,6 +45,7 @@ def get_render_dict(current_page):
     other_list.append(get_nav_item("wine", "fa fa-wine-bottle", "Wine", current_page))
     other_list.append(get_nav_item("law_search", "fa fa-gavel", "법률 검색", current_page))
     other_list.append(get_nav_item("todo", "fa fa-check", "Todo List", current_page))
+    other_list.append(get_nav_item("algorithm", "fe fe-video", "비디오", current_page))
 
     nav_list = []
     nav_list.append(get_nav_item("index", "fe fe-home", "Home", current_page))
@@ -54,7 +55,7 @@ def get_render_dict(current_page):
     nav_list.append(get_nav_item("link", "fe fe-link", "링크", current_page))
     nav_list.append(get_nav_collapse(invest_list, "sidebarInvest", "fe fe-dollar-sign", "투자"))
     nav_list.append(get_nav_item("idea", "fe fe-zap", "아이디어 모음", current_page))
-    nav_list.append(get_nav_item("algorithm", "fe fe-video", "비디오", current_page))
+    nav_list.append(get_nav_item("pokemon", "fe fe-gamepad", "포켓몬", current_page))
     nav_list.append(get_nav_collapse(other_list, "sidebarOther", "fe fe-star", "그 외"))
 
     render_dict['nav_list'] = nav_list
