@@ -1,12 +1,14 @@
 from django.contrib import admin
 
-from .models import AuthUser, Boards, BoardCategories, Link, Lotto, Paper, Stock, Book
+from . import models
 
-admin.site.register(AuthUser)
-admin.site.register(Boards)
-admin.site.register(BoardCategories)
-admin.site.register(Link)
-admin.site.register(Lotto)
-admin.site.register(Paper)
-admin.site.register(Stock)
-admin.site.register(Book)
+admin.site.register(models.AuthUser)
+admin.site.register(models.Boards)
+admin.site.register(models.BoardCategories)
+admin.site.register(models.Link)
+admin.site.register(models.Lotto)
+admin.site.register(models.Paper)
+admin.site.register(models.Stock)
+admin.site.register(models.Book)
+admin.site.register(models.Image)
+admin.site.register(models.Category)

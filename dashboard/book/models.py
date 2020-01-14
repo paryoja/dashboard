@@ -87,3 +87,19 @@ class Book(models.Model):
 
     def __str__(self):
         return "{}: 저자 {}".format(self.name, self.author)
+
+
+class Category(models.Model):
+    name = models.CharField(max_length=200)
+
+    def __str__(self):
+        return "{}".format(self.name)
+
+
+class Image(models.Model):
+    url = models.URLField(unique=True)
+    title = models.CharField(max_length=200)
+    category = models.ForeignKey(Category, on_delete=models.SET_NULL, null=True, blank=True)
+
+    def __str__(self):
+        return "{} ({})".format(self.title, self.url)

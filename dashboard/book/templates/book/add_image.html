@@ -1,0 +1,27 @@
+{% extends 'book/base/base.html' %}
+
+{% block body %}
+    {% if user.is_superuser %}
+        <form id="message_form" method="post">
+            {% csrf_token %}
+            <div class="input-group mb-3">
+                <input type="url" name="url" class="form-control" placeholder="url" aria-label="Query"
+                       id="url" aria-describedby="button-addon2">
+                <div class="input-group-append">
+                    <button class="btn btn-outline-secondary" type="submit" id="button-addon2" name="submit"
+                            value="submit">
+                        Submit
+                    </button>
+                </div>
+            </div>
+            <select name="category">
+                {% for category in category_list %}
+                    <option value="{{ category.id }}">{{ category.name }}</option>
+                {% endfor %}
+            </select>
+        </form>
+
+        <h1>Parsed</h1>
+        {{ parsed }}
+    {% endif %}
+{% endblock %}

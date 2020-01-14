@@ -1,11 +1,15 @@
 import json
+import re
+import traceback
 
 import requests
+from bs4 import BeautifulSoup
 from django.core import exceptions
+from django.core.paginator import Paginator
 from django.http import HttpResponse
 from django.shortcuts import render
 
-from .models import Link, Lotto, Paper, Stock, Book
+from .models import Link, Lotto, Paper, Stock, Book, Image, Category
 from .nav import get_render_dict
 from .utils import new_lotto
 from .xml_helper import XmlDictConfig, get_xml_request
@@ -44,6 +48,7 @@ balance_order = ['hangMok', 'year1Money', 'year1GuSungRate', 'year1JungGamRate',
                  'year2JungGamRate', 'year3Money', 'year3GuSungRate', 'year3JungGamRate']
 cash_order = ['hangMok', 'year1Money', 'year1JungGamRate', 'year2Money', 'year2JungGamRate', 'year3Money',
               'year3JungGamRate']
+a_pattern = re.compile('<a href="(.+?)">(.+?)</a>')
 
 
 def krx_price_query(request):
@@ -325,8 +330,61 @@ def food(request):
     return render(request, 'book/food.html', render_dict)
 
 
-def pokemon(request):
-
+def add_image(request):
     render_dict = get_render_dict('pokemon')
+
+    if request.POST:
+        try:
+            url = request.POST["url"]
+            category_id = request.POST["category"]
+            result = requests.get(url)
+            render_dict['result'] = result.text
+
+            bs = BeautifulSoup(result.text, 'html.parser')
+            all_a = bs.findAll('a', text=True)
+
+            parsed_list = []
+            for a in all_a:
+                a_text = "{}".format(a)
+
+                a_parsed = a_pattern.findall(a_text)
+
+                if not a_parsed[0][0].startswith("../"):
+                    try:
+                        image = Image(url=url + a_parsed[0][0],
+                                      title=a_parsed[0][1],
+                                      category=Category.objects.get(id=category_id))
+                        image.save()
+                    except Exception:
+                        continue
+            render_dict['parsed'] = parsed_list
+        except Exception:
+            render_dict['parsed'] = traceback.format_exc()
+
+    category_list = Category.objects.all()
+    render_dict['category_list'] = category_list
+    return render(request, 'book/add_image.html', render_dict)
+
+
+def pokemon(request, page=1):
+    render_dict = get_render_dict('pokemon')
+
+    image_list = Image.objects.all()
+    pagenator = Paginator(image_list, 20)
+    p = pagenator.page(page)
+    render_dict['image_list'] = p
+
+    start_10 = (page - 1) // 10 * 10 + 1
+    end_10 = min(start_10 + 9, pagenator.num_pages)
+
+    page_list = [i for i in range(start_10, end_10 + 1)]
+
+    page_info = {
+        'page': page,
+        'prev': page - 1 if p.has_previous() else 0,
+        'next': page + 1 if p.has_next() else 0,
+        'page_list': page_list,
+    }
+    render_dict['page_info'] = page_info
 
     return render(request, 'book/pokemon.html', render_dict)
