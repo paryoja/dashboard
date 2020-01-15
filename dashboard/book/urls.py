@@ -1,6 +1,7 @@
 from django.urls import path
 
 from . import views
+from . import views_user
 
 app_name = 'book'
 urlpatterns = [
@@ -28,4 +29,6 @@ urlpatterns = [
     path('pokemon/', views.pokemon, name='pokemon'),
     path('pokemon/<int:page>', views.pokemon, name='pokemon'),
     path('add_image/', views.add_image, name='add_image'),
+    path('login/', views_user.BookLoginView.as_view(), name='login'),
+    path('logout/', views_user.BookLogoutView.as_view(), name='logout'),
 ]

@@ -4,6 +4,7 @@ import traceback
 
 import requests
 from bs4 import BeautifulSoup
+from django.contrib.auth.decorators import login_required
 from django.core import exceptions
 from django.core.paginator import Paginator
 from django.http import HttpResponse
@@ -236,6 +237,7 @@ def query_chatbot(request):
         return HttpResponse("Empty Message")
 
 
+@login_required
 def people(request):
     render_dict = get_render_dict('people')
     return render(request, 'book/people.html', render_dict)
@@ -366,6 +368,7 @@ def add_image(request):
     return render(request, 'book/add_image.html', render_dict)
 
 
+@login_required
 def pokemon(request, page=1):
     render_dict = get_render_dict('pokemon')
 

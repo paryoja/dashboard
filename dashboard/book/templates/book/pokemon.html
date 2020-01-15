@@ -5,51 +5,59 @@
         <a href="{% url 'book:add_image' %}">Add new images</a>
     {% endif %}
 
-    <table class="table table-sm table-hover">
-        <thead>
-        <tr>
-            <th rowspan="2">이미지</th>
-            <th colspan="5">귀여움</th>
-        </tr>
-        <tr>
-            <th>0</th>
-            <th>2</th>
-            <th>4</th>
-            <th>8</th>
-            <th>10</th>
-        </tr>
-        </thead>
-        <tbody>
-        {% for image in image_list %}
+    {% if user.is_active %}
+        <table class="table table-sm table-hover">
+            <thead>
             <tr>
-                <td><img src="{{ image.url }}" alt="{{ image.title }}">{{ image.title }}</td>
-                <td><input type="radio" name="cuteness" value="0"></td>
-                <td><input type="radio" name="cuteness" value="2"></td>
-                <td><input type="radio" name="cuteness" value="4"></td>
-                <td><input type="radio" name="cuteness" value="8"></td>
-                <td><input type="radio" name="cuteness" value="10"></td>
+                <th rowspan="2">이미지</th>
+                <th colspan="5">귀여움</th>
             </tr>
-        {% endfor %}
-        </tbody>
-    </table>
-    <div class="row">
-        <button type="submit" class="btn btn btn-primary">제출</button>
-    </div>
-    <br>
-    <nav aria-label="Page navigation">
-        <ul class="pagination">
-            <li class="page-item {% if not page_info.prev %}disabled{% endif %}">
-                <a class="page-link" href="{% url 'book:pokemon' page_info.prev %}">Previous</a>
-            </li>
-            {% for page in page_info.page_list %}
-                <li class="page-item {% if page == page_info.page %}active{% endif %}">
-                    <a class="page-link" href="{% url 'book:pokemon' page %}">{{ page }}</a>
-                </li>
+            <tr>
+                <th>0</th>
+                <th>2</th>
+                <th>4</th>
+                <th>8</th>
+                <th>10</th>
+            </tr>
+            </thead>
+            <tbody>
+            {% for image in image_list %}
+                <tr>
+                    <td><img src="{{ image.url }}" alt="{{ image.title }}">{{ image.title }}</td>
+                    <td><input type="radio" name="cuteness" value="0"></td>
+                    <td><input type="radio" name="cuteness" value="2"></td>
+                    <td><input type="radio" name="cuteness" value="4"></td>
+                    <td><input type="radio" name="cuteness" value="8"></td>
+                    <td><input type="radio" name="cuteness" value="10"></td>
+                </tr>
             {% endfor %}
-            <li class="page-item" {% if page_info.next %}disabled{% endif %}>
-                <a class="page-link" href="{% url 'book:pokemon' page_info.next %}">Next</a>
-            </li>
-        </ul>
-    </nav>
-
+            </tbody>
+        </table>
+        <div class="row">
+            <button type="submit" class="btn btn btn-primary">제출</button>
+        </div>
+        <br>
+        <nav aria-label="Page navigation">
+            <ul class="pagination">
+                <li class="page-item {% if not page_info.prev %}disabled{% endif %}">
+                    <a class="page-link" href="{% url 'book:pokemon' page_info.prev %}">Previous</a>
+                </li>
+                {% for page in page_info.page_list %}
+                    <li class="page-item {% if page == page_info.page %}active{% endif %}">
+                        <a class="page-link" href="{% url 'book:pokemon' page %}">{{ page }}</a>
+                    </li>
+                {% endfor %}
+                <li class="page-item" {% if page_info.next %}disabled{% endif %}>
+                    <a class="page-link" href="{% url 'book:pokemon' page_info.next %}">Next</a>
+                </li>
+            </ul>
+        </nav>
+    {% endif %}
+{% endblock %}
+{% block scripts %}
+    <script>
+        $(document).on('click', 'td', function () {
+            $(this).children('input').attr('checked', true);
+        });
+    </script>
 {% endblock %}

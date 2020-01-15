@@ -89,6 +89,31 @@
 
             <!-- Divider -->
             <hr class="my-3">
+
+            <h6 class="navbar-heading text-muted">
+                Documentation
+            </h6>
+
+            <!-- Navigation -->
+            <ul class="navbar-nav mb-md-3">
+                {% if not user.is_active %}
+                    <li class="nav-item">
+                        <a class="nav-link" href="{% url 'book:login' %}?next=/book">
+                            <i class="fe fe-log-in"></i> Login
+                        </a>
+                    </li>
+                {% else %}
+                    <li class="nav-item">
+                        <a class="nav-link" href="{% url 'book:logout' %}">
+                            <i class="fe fe-log-out"></i> Logout
+                        </a>
+                    </li>
+                {% endif %}
+            </ul>
+
+            <!-- Divider -->
+            <hr class="my-3">
+
         </div>
 
     </div> <!-- / .container-fluid -->

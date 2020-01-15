@@ -162,5 +162,6 @@ LOGGING = {
         },
     },
 }
+LOGIN_URL = '/book/login'
 
 CELERY_BROKER_URL = 'amqp://myuser:mypassword@rabbitmq:5672/myvhost'
