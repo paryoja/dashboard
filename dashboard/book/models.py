@@ -96,8 +96,19 @@ class Category(models.Model):
         return "{}".format(self.name)
 
 
+class PeopleImage(models.Model):
+    url = models.URLField(unique=True, max_length=400)
+    title = models.TextField(max_length=500)
+    category = models.ForeignKey(Category, on_delete=models.SET_NULL, null=True, blank=True)
+    page = models.CharField(max_length=30)
+    selected = models.BooleanField(null=True, blank=True)
+
+    def __str__(self):
+        return "{} ({})".format(self.title, self.url)
+
+
 class Image(models.Model):
-    url = models.URLField(unique=True)
+    url = models.URLField(unique=True, max_length=400)
     title = models.CharField(max_length=200)
     category = models.ForeignKey(Category, on_delete=models.SET_NULL, null=True, blank=True)
 

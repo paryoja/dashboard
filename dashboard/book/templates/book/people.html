@@ -2,4 +2,98 @@
 
 {% block body %}
     <H1><i class="fa fa-users"> </i> 인명사전</H1>
+    {% if user.is_superuser %}
+        <a href="{% url 'book:add_image' 'people' %}">Add new images</a>
+        {% csrf_token %}
+        <h4>Query Count {{ query_count }}, Unclassified {{ unclassified_count }}</h4>
+        <table class="table table-sm table-hover">
+            <thead>
+            <tr>
+                <th>이미지</th>
+                <th>설명</th>
+                <th>Yes</th>
+                <th>No</th>
+            </tr>
+            </thead>
+            <tbody>
+            {% for image in image_list %}
+                <tr>
+                    <td style="width:30%">
+                        <a href="http://instagram.com/{{ image.page }}">
+                            <img src="{{ image.url }}"
+                                 alt="{{ image.title }}"
+                                 style="user-drag: none; user-select: none; -moz-user-select: none;-webkit-user-drag: none;-webkit-user-select: none;-ms-user-select: none;">
+                        </a></td>
+                    <td style="width:30%">{{ image.title }}</td>
+                    <td style="width:20%">
+                        <button class="btn btn-primary like" id="{{ image.id }}_yes">Yes</button>
+                    </td>
+                    <td style="width:20%">
+                        <button class="btn btn-primary like" id="{{ image.id }}_no">No</button>
+                    </td>
+                </tr>
+            {% endfor %}
+            </tbody>
+        </table>
+        <br>
+
+        <table class="table table-sm table-hover">
+            <thead>
+            <tr>
+                <th>이미지</th>
+            </tr>
+            </thead>
+            <tbody>
+            {% for image in selected_list %}
+                <tr>
+                    <td><a href="http://instagram.com/{{ image.page }}"><img src="{{ image.url }}"
+                                                                             alt="{{ image.title }}">{{ image.title }}
+                    </a></td>
+                </tr>
+            {% endfor %}
+            </tbody>
+        </table>
+        <nav aria-label="Page navigation">
+            <ul class="pagination">
+                <li class="page-item {% if not page_info.prev %}disabled{% endif %}">
+                    <a class="page-link" href="{% url 'book:people' page_info.prev %}">Previous</a>
+                </li>
+                {% for page in page_info.page_list %}
+                    <li class="page-item {% if page == page_info.page %}active{% endif %}">
+                        <a class="page-link" href="{% url 'book:people' page %}">{{ page }}</a>
+                    </li>
+                {% endfor %}
+                <li class="page-item" {% if page_info.next %}disabled{% endif %}>
+                    <a class="page-link" href="{% url 'book:people' page_info.next %}">Next</a>
+                </li>
+            </ul>
+        </nav>
+    {% endif %}
+{% endblock %}
+{% block scripts %}
+    <script>
+        $('button[class="btn btn-primary like"]').click(function (e) {
+            console.log(this[0]);
+            console.log(this.id);
+            let temp = this.id.split('_');
+            let csrf = $('[type=hidden]').val();
+            let data = new FormData();
+            data.append('image_id', temp[0]);
+            data.append('csrfmiddlewaretoken', csrf);
+            data.append('selected', temp[1]);
+
+            fetch("{% url 'book:rating_api' %}", {
+                method: 'POST',
+                body: data,
+                credentials: 'same-origin'
+            });
+            $(e.target).closest('tr').remove();
+        });
+        $(document).on('click', 'td', function () {
+            console.log('clicked');
+            console.log($(this)[0]);
+            console.log($(this).children()[0]);
+            $(this).children('button').click();
+        });
+    </script>
 {% endblock %}

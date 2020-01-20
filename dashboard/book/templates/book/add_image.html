@@ -16,7 +16,8 @@
             </div>
             <select name="category">
                 {% for category in category_list %}
-                    <option value="{{ category.id }}">{{ category.name }}</option>
+                    <option value="{{ category.id }}"
+                            {% if data_type == category.name %}selected{% endif %}>{{ category.name }}</option>
                 {% endfor %}
             </select>
         </form>

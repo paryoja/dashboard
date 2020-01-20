@@ -4,13 +4,14 @@ import traceback
 
 import requests
 from bs4 import BeautifulSoup
+from celery import shared_task
 from django.contrib.auth.decorators import login_required
 from django.core import exceptions
 from django.core.paginator import Paginator
 from django.http import HttpResponse
 from django.shortcuts import render
 
-from .models import Link, Lotto, Paper, Stock, Book, Image, Category
+from .models import Link, Lotto, Paper, Stock, Book, Image, Category, PeopleImage
 from .nav import get_render_dict
 from .utils import new_lotto
 from .xml_helper import XmlDictConfig, get_xml_request
@@ -238,8 +239,39 @@ def query_chatbot(request):
 
 
 @login_required
-def people(request):
+def people(request, page=1):
     render_dict = get_render_dict('people')
+
+    query = request.GET.get('query', '')
+
+    unclassified = PeopleImage.objects.filter(selected=None)
+    unclassified_count = unclassified.count()
+    query_count = unclassified.filter(title__contains=query).count()
+    image_list = unclassified.filter(title__contains=query).order_by('?')[:100]
+    render_dict['unclassified_count'] = unclassified_count
+    render_dict['query_count'] = query_count
+
+    render_dict['image_list'] = image_list
+
+    selected_list = PeopleImage.objects.filter(selected=True)
+    pagenator = Paginator(selected_list, 20)
+    p = pagenator.page(page)
+
+    render_dict['selected_list'] = p
+
+    start_10 = (page - 1) // 10 * 10 + 1
+    end_10 = min(start_10 + 9, pagenator.num_pages)
+
+    page_list = [i for i in range(start_10, end_10 + 1)]
+
+    page_info = {
+        'page': page,
+        'prev': page - 1 if p.has_previous() else 0,
+        'next': page + 1 if p.has_next() else 0,
+        'page_list': page_list,
+    }
+    render_dict['page_info'] = page_info
+
     return render(request, 'book/people.html', render_dict)
 
 
@@ -332,38 +364,77 @@ def food(request):
     return render(request, 'book/food.html', render_dict)
 
 
-def add_image(request):
-    render_dict = get_render_dict('pokemon')
+@shared_task
+def add_image_client(a_text, url, category_id):
+    a_parsed = a_pattern.findall(a_text)
+
+    if not a_parsed[0][0].startswith("../"):
+        json_url = url + a_parsed[0][0] + '/image.json'
+        result = json.loads(requests.get(json_url).text)
+
+        for img in result['image_list']:
+            try:
+                image = PeopleImage(url=url + a_parsed[0][0] + img['local'],
+                                    title=img['alt'][:500],
+                                    category_id=category_id,
+                                    page=img['a'])
+                image.save()
+            except Exception:
+                continue
+
+
+def add_image(request, data_type='pokemon'):
+    render_dict = None
+    if data_type == 'pokemon':
+        render_dict = get_render_dict('pokemon')
+    elif data_type == 'people':
+        render_dict = get_render_dict('people')
 
     if request.POST:
         try:
             url = request.POST["url"]
             category_id = request.POST["category"]
-            result = requests.get(url)
-            render_dict['result'] = result.text
 
-            bs = BeautifulSoup(result.text, 'html.parser')
-            all_a = bs.findAll('a', text=True)
+            if data_type == 'pokemon':
+                result = requests.get(url)
+                render_dict['result'] = result.text
 
-            parsed_list = []
-            for a in all_a:
-                a_text = "{}".format(a)
+                bs = BeautifulSoup(result.text, 'html.parser')
+                all_a = bs.findAll('a', text=True)
 
-                a_parsed = a_pattern.findall(a_text)
+                parsed_list = []
+                for a in all_a:
+                    a_text = "{}".format(a)
 
-                if not a_parsed[0][0].startswith("../"):
-                    try:
-                        image = Image(url=url + a_parsed[0][0],
-                                      title=a_parsed[0][1],
-                                      category=Category.objects.get(id=category_id))
-                        image.save()
-                    except Exception:
-                        continue
-            render_dict['parsed'] = parsed_list
+                    a_parsed = a_pattern.findall(a_text)
+
+                    if not a_parsed[0][0].startswith("../"):
+                        try:
+                            image = Image(url=url + a_parsed[0][0],
+                                          title=a_parsed[0][1],
+                                          category_id=category_id)
+                            image.save()
+                        except Exception:
+                            continue
+                render_dict['parsed'] = parsed_list
+
+            elif data_type == 'people':
+                result = requests.get(url)
+                render_dict['result'] = result.text
+
+                bs = BeautifulSoup(result.text, 'html.parser')
+                all_a = bs.findAll('a', text=True)
+                render_dict['parsed'] = all_a
+
+                for a in all_a:
+                    add_image_client.delay("{}".format(a), url, category_id)
+
+
         except Exception:
-            render_dict['parsed'] = traceback.format_exc()
+            render_dict['parsed'] += traceback.format_exc()
 
     category_list = Category.objects.all()
+    render_dict['data_type'] = data_type
     render_dict['category_list'] = category_list
     return render(request, 'book/add_image.html', render_dict)
 
