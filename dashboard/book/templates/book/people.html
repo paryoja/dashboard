@@ -81,6 +81,7 @@
             data.append('image_id', temp[0]);
             data.append('csrfmiddlewaretoken', csrf);
             data.append('selected', temp[1]);
+            data.append('data_type', 'people');
 
             fetch("{% url 'book:rating_api' %}", {
                 method: 'POST',

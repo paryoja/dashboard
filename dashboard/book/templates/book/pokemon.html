@@ -2,33 +2,41 @@
 
 {% block body %}
     {% if user.is_superuser %}
-        <a href="{% url 'book:add_image' %}">Add new images</a>
+        <a href="{% url 'book:add_image' 'pokemon' %}">Add new images</a>
     {% endif %}
 
     {% if user.is_active %}
+        {% csrf_token %}
         <table class="table table-sm table-hover">
             <thead>
             <tr>
-                <th rowspan="2">이미지</th>
-                <th colspan="5">귀여움</th>
+                <th rowspan="2" colspan="2" style="text-align: center">이미지</th>
+                <th colspan="4" style="text-align: center">적합성</th>
             </tr>
             <tr>
-                <th>0</th>
-                <th>2</th>
-                <th>4</th>
-                <th>8</th>
-                <th>10</th>
+                <th style="width:15%;text-align: center">적합</th>
+                <th style="width:15%;text-align: center">단순한 처리 필요함</th>
+                <th style="width:15%;text-align: center">복잡한 처리 필요함</th>
+                <th style="width:15%;text-align: center">부적합</th>
             </tr>
             </thead>
             <tbody>
             {% for image in image_list %}
                 <tr>
-                    <td><img src="{{ image.url }}" alt="{{ image.title }}">{{ image.title }}</td>
-                    <td><input type="radio" name="cuteness" value="0"></td>
-                    <td><input type="radio" name="cuteness" value="2"></td>
-                    <td><input type="radio" name="cuteness" value="4"></td>
-                    <td><input type="radio" name="cuteness" value="8"></td>
-                    <td><input type="radio" name="cuteness" value="10"></td>
+                    <td><img src="{{ image.url }}" alt="{{ image.title }}" style="width:400px"></td>
+                    <td style="text-align: center">{{ image.original_label }}</td>
+                    <td>
+                        <button class="btn btn-primary like" id="{{ image.id }}_yes" style="width:100%">적합</button>
+                    </td>
+                    <td>
+                        <button class="btn btn-primary like" id="{{ image.id }}_little" style="width:100%">단순한 처리 필요함</button>
+                    </td>
+                    <td>
+                        <button class="btn btn-primary like" id="{{ image.id }}_more" style="width:100%">복잡한 처리 필요함</button>
+                    </td>
+                    <td>
+                        <button class="btn btn-primary like" id="{{ image.id }}_no" style="width:100%">부적합</button>
+                    </td>
                 </tr>
             {% endfor %}
             </tbody>
@@ -53,11 +61,23 @@
 {% endblock %}
 {% block scripts %}
     <script>
-        $(document).on('click', 'td', function () {
-            console.log('clicked');
-            console.log($(this)[0]);
-            console.log($(this).children()[0]);
-            $(this).children('input').attr('checked', true);
+        $('button[class="btn btn-primary like"]').click(function (e) {
+            console.log(this[0]);
+            console.log(this.id);
+            let temp = this.id.split('_');
+            let csrf = $('[type=hidden]').val();
+            let data = new FormData();
+            data.append('image_id', temp[0]);
+            data.append('csrfmiddlewaretoken', csrf);
+            data.append('selected', temp[1]);
+            data.append('data_type', 'pokemon');
+
+            fetch("{% url 'book:rating_api' %}", {
+                method: 'POST',
+                body: data,
+                credentials: 'same-origin'
+            });
+            $(e.target).closest('tr').remove();
         });
     </script>
 {% endblock %}

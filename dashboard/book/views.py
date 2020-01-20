@@ -11,7 +11,7 @@ from django.core.paginator import Paginator
 from django.http import HttpResponse
 from django.shortcuts import render
 
-from .models import Link, Lotto, Paper, Stock, Book, Image, Category, PeopleImage
+from .models import Link, Lotto, Paper, Stock, Book, Category, PeopleImage, PokemonImage
 from .nav import get_render_dict
 from .utils import new_lotto
 from .xml_helper import XmlDictConfig, get_xml_request
@@ -365,22 +365,49 @@ def food(request):
 
 
 @shared_task
-def add_image_client(a_text, url, category_id):
+def add_image_client(a_text, url, category_id, data_type):
     a_parsed = a_pattern.findall(a_text)
 
     if not a_parsed[0][0].startswith("../"):
-        json_url = url + a_parsed[0][0] + '/image.json'
-        result = json.loads(requests.get(json_url).text)
 
-        for img in result['image_list']:
+        if data_type == "people":
+            json_url = url + a_parsed[0][0] + '/image.json'
+            result = json.loads(requests.get(json_url).text)["image_list"]
+
+        elif data_type == "pokemon":
+            directory_url = url + a_parsed[0][0]
+            image_result = requests.get(directory_url)
+            bs = BeautifulSoup(image_result.text, 'html.parser')
+
+            all_a = bs.findAll('a', text=True)
+            result = []
+            for a in all_a:
+                image_a_parsed = a_pattern.findall("{}".format(a))
+                print(image_a_parsed)
+                if not image_a_parsed[0][0].startswith("../"):
+                    result.append(directory_url + image_a_parsed[0][0])
+
+        else:
+            raise ValueError("Unsupported data_type {}".format(data_type))
+
+        for img in result:
             try:
-                image = PeopleImage(url=url + a_parsed[0][0] + img['local'],
-                                    title=img['alt'][:500],
-                                    category_id=category_id,
-                                    page=img['a'])
+                if data_type == "people":
+                    image = PeopleImage(url=url + a_parsed[0][0] + img['local'],
+                                        title=img['alt'][:500],
+                                        category_id=category_id,
+                                        page=img['a'])
+                elif data_type == "pokemon":
+                    path = img.split('/')
+                    image = PokemonImage(url=img,
+                                         title=path[-1],
+                                         category_id=category_id,
+                                         original_label=path[-2])
+                else:
+                    raise ValueError("Unsupported data_type {}".format(data_type))
                 image.save()
-            except Exception:
-                continue
+            except Exception as e:
+                print(e)
 
 
 def add_image(request, data_type='pokemon'):
@@ -400,23 +427,12 @@ def add_image(request, data_type='pokemon'):
                 render_dict['result'] = result.text
 
                 bs = BeautifulSoup(result.text, 'html.parser')
+                # directory list
                 all_a = bs.findAll('a', text=True)
 
-                parsed_list = []
                 for a in all_a:
-                    a_text = "{}".format(a)
-
-                    a_parsed = a_pattern.findall(a_text)
-
-                    if not a_parsed[0][0].startswith("../"):
-                        try:
-                            image = Image(url=url + a_parsed[0][0],
-                                          title=a_parsed[0][1],
-                                          category_id=category_id)
-                            image.save()
-                        except Exception:
-                            continue
-                render_dict['parsed'] = parsed_list
+                    add_image_client.delay("{}".format(a), url, category_id, data_type)
+                render_dict['parsed'] = all_a
 
             elif data_type == 'people':
                 result = requests.get(url)
@@ -427,11 +443,13 @@ def add_image(request, data_type='pokemon'):
                 render_dict['parsed'] = all_a
 
                 for a in all_a:
-                    add_image_client.delay("{}".format(a), url, category_id)
-
+                    add_image_client.delay("{}".format(a), url, category_id, data_type)
 
         except Exception:
-            render_dict['parsed'] += traceback.format_exc()
+            if 'parsed' in render_dict:
+                render_dict['parsed'] += traceback.format_exc()
+            else:
+                render_dict['parsed'] = traceback.format_exc()
 
     category_list = Category.objects.all()
     render_dict['data_type'] = data_type
@@ -443,7 +461,7 @@ def add_image(request, data_type='pokemon'):
 def pokemon(request, page=1):
     render_dict = get_render_dict('pokemon')
 
-    image_list = Image.objects.all()
+    image_list = PokemonImage.objects.filter(classified=None)
     pagenator = Paginator(image_list, 20)
     p = pagenator.page(page)
     render_dict['image_list'] = p
