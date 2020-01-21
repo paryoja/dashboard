@@ -239,7 +239,7 @@ def query_chatbot(request):
 
 
 @login_required
-def people(request, page=1):
+def people(request):
     render_dict = get_render_dict('people')
 
     query = request.GET.get('query', '')
@@ -250,14 +250,30 @@ def people(request, page=1):
     image_list = unclassified.filter(title__contains=query).order_by('?')[:100]
     render_dict['unclassified_count'] = unclassified_count
     render_dict['query_count'] = query_count
-
     render_dict['image_list'] = image_list
 
+    return render(request, 'book/people.html', render_dict)
+
+
+@login_required
+def people_result(request, page=1):
+    render_dict = get_render_dict('people_result')
+
     selected_list = PeopleImage.objects.filter(selected=True)
-    pagenator = Paginator(selected_list, 20)
+    pagenator = Paginator(selected_list, 100)
     p = pagenator.page(page)
 
-    render_dict['selected_list'] = p
+    row_count = 20
+    people_table = []
+    count = 0
+    for img in p:
+        if count % row_count == 0:
+            people_row = []
+            people_table.append(people_row)
+        people_row.append(img)
+        count += 1
+
+    render_dict['people_table'] = people_table
 
     start_10 = (page - 1) // 10 * 10 + 1
     end_10 = min(start_10 + 9, pagenator.num_pages)
@@ -272,7 +288,7 @@ def people(request, page=1):
     }
     render_dict['page_info'] = page_info
 
-    return render(request, 'book/people.html', render_dict)
+    return render(request, 'book/people_result.html', render_dict)
 
 
 def real_estate(request):
@@ -459,9 +475,9 @@ def add_image(request, data_type='pokemon'):
 
 @login_required
 def pokemon(request, page=1):
-    render_dict = get_render_dict('pokemon')
+    render_dict = get_render_dict('pokemon_classification')
 
-    image_list = PokemonImage.objects.filter(classified=None)
+    image_list = PokemonImage.objects.filter(classified=None).order_by('?')
     pagenator = Paginator(image_list, 20)
     p = pagenator.page(page)
     render_dict['image_list'] = p
@@ -480,3 +496,24 @@ def pokemon(request, page=1):
     render_dict['page_info'] = page_info
 
     return render(request, 'book/pokemon.html', render_dict)
+
+
+@login_required
+def pokemon_result(request, page=1):
+    render_dict = get_render_dict('pokemon_result')
+
+    image_list = PokemonImage.objects.filter(classified="yes")
+    verified_count = image_list.count()
+    row_count = 20
+    verified_table = []
+    count = 0
+    for img in image_list:
+        if count % row_count == 0:
+            verified_row = []
+            verified_table.append(verified_row)
+        verified_row.append(img)
+        count += 1
+    render_dict['verified_table'] = verified_table
+    render_dict['verified_count'] = verified_count
+
+    return render(request, 'book/pokemon_result.html', render_dict)

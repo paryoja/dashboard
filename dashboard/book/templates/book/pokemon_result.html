@@ -1,0 +1,18 @@
+{% extends 'book/base/base.html' %}
+
+{% block body %}
+    <H1>결과</H1>
+    <H2>사용가능 이미지: {{ verified_count }}개</H2>
+    <table>
+
+        {% for verified_row in verified_table %}
+            <tr>
+                {% for verified in verified_row %}
+                    <td style="width:100px;height:100px"><img src="{{ verified.url }}"
+                                                              style="max-width:100%;max-height:100px"
+                                                              alt="{{ verified.original_label }}"></td>
+                {% endfor %}
+            </tr>
+        {% endfor %}
+    </table>
+{% endblock %}

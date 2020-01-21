@@ -10,7 +10,7 @@
             <thead>
             <tr>
                 <th>이미지</th>
-                <th>설명</th>
+                <th style="max-width:100%;width:100px">설명</th>
                 <th>Yes</th>
                 <th>No</th>
             </tr>
@@ -36,38 +36,6 @@
             </tbody>
         </table>
         <br>
-
-        <table class="table table-sm table-hover">
-            <thead>
-            <tr>
-                <th>이미지</th>
-            </tr>
-            </thead>
-            <tbody>
-            {% for image in selected_list %}
-                <tr>
-                    <td><a href="http://instagram.com/{{ image.page }}"><img src="{{ image.url }}"
-                                                                             alt="{{ image.title }}">{{ image.title }}
-                    </a></td>
-                </tr>
-            {% endfor %}
-            </tbody>
-        </table>
-        <nav aria-label="Page navigation">
-            <ul class="pagination">
-                <li class="page-item {% if not page_info.prev %}disabled{% endif %}">
-                    <a class="page-link" href="{% url 'book:people' page_info.prev %}">Previous</a>
-                </li>
-                {% for page in page_info.page_list %}
-                    <li class="page-item {% if page == page_info.page %}active{% endif %}">
-                        <a class="page-link" href="{% url 'book:people' page %}">{{ page }}</a>
-                    </li>
-                {% endfor %}
-                <li class="page-item" {% if page_info.next %}disabled{% endif %}>
-                    <a class="page-link" href="{% url 'book:people' page_info.next %}">Next</a>
-                </li>
-            </ul>
-        </nav>
     {% endif %}
 {% endblock %}
 {% block scripts %}
