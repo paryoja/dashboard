@@ -7,13 +7,12 @@ from bs4 import BeautifulSoup
 from celery import shared_task
 from django.contrib.auth.decorators import login_required
 from django.core import exceptions
-from django.core.paginator import Paginator
 from django.http import HttpResponse
 from django.shortcuts import render
 
 from .models import Link, Lotto, Paper, Stock, Book, Category, PeopleImage, PokemonImage
 from .nav import get_render_dict
-from .utils import new_lotto
+from .utils import new_lotto, get_page_info
 from .xml_helper import XmlDictConfig, get_xml_request
 
 
@@ -260,12 +259,13 @@ def people_result(request, page=1):
     render_dict = get_render_dict('people_result')
 
     selected_list = PeopleImage.objects.filter(selected=True)
-    pagenator = Paginator(selected_list, 100)
-    p = pagenator.page(page)
+
+    p, page_info = get_page_info(selected_list, page, 100)
 
     row_count = 20
     people_table = []
     count = 0
+    people_row = []
     for img in p:
         if count % row_count == 0:
             people_row = []
@@ -274,18 +274,6 @@ def people_result(request, page=1):
         count += 1
 
     render_dict['people_table'] = people_table
-
-    start_10 = (page - 1) // 10 * 10 + 1
-    end_10 = min(start_10 + 9, pagenator.num_pages)
-
-    page_list = [i for i in range(start_10, end_10 + 1)]
-
-    page_info = {
-        'page': page,
-        'prev': page - 1 if p.has_previous() else 0,
-        'next': page + 1 if p.has_next() else 0,
-        'page_list': page_list,
-    }
     render_dict['page_info'] = page_info
 
     return render(request, 'book/people_result.html', render_dict)
@@ -477,22 +465,14 @@ def add_image(request, data_type='pokemon'):
 def pokemon(request, page=1):
     render_dict = get_render_dict('pokemon_classification')
 
-    image_list = PokemonImage.objects.filter(classified=None).order_by('?')
-    pagenator = Paginator(image_list, 20)
-    p = pagenator.page(page)
+    query = request.GET.get('query', '')
+
+    if query:
+        image_list = PokemonImage.objects.filter(original_label__icontains=query).filter(classified=None).order_by('?')
+    else:
+        image_list = PokemonImage.objects.filter(classified=None).order_by('?')
+    p, page_info = get_page_info(image_list, page, 20)
     render_dict['image_list'] = p
-
-    start_10 = (page - 1) // 10 * 10 + 1
-    end_10 = min(start_10 + 9, pagenator.num_pages)
-
-    page_list = [i for i in range(start_10, end_10 + 1)]
-
-    page_info = {
-        'page': page,
-        'prev': page - 1 if p.has_previous() else 0,
-        'next': page + 1 if p.has_next() else 0,
-        'page_list': page_list,
-    }
     render_dict['page_info'] = page_info
 
     return render(request, 'book/pokemon.html', render_dict)
@@ -503,11 +483,19 @@ def pokemon_result(request, page=1):
     render_dict = get_render_dict('pokemon_result')
 
     image_list = PokemonImage.objects.filter(classified="yes")
+
+    p, page_info = get_page_info(image_list, page, 100)
+
+    render_dict['image_list'] = p
+    render_dict['page_info'] = page_info
+
     verified_count = image_list.count()
     row_count = 20
     verified_table = []
     count = 0
-    for img in image_list:
+    verified_row = None
+
+    for img in p:
         if count % row_count == 0:
             verified_row = []
             verified_table.append(verified_row)
@@ -517,3 +505,7 @@ def pokemon_result(request, page=1):
     render_dict['verified_count'] = verified_count
 
     return render(request, 'book/pokemon_result.html', render_dict)
+
+
+def pokemon_export(request):
+    return HttpResponse("0")

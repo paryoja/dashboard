@@ -2,7 +2,10 @@
 
 {% block body %}
     <H1>결과</H1>
-    <H2>사용가능 이미지: {{ verified_count }}개</H2>
+
+    <H2>사용가능 이미지: {{ verified_count }}개
+        <a href="{% url 'book:pokemon_export' %}" class="btn btn-sm btn-primary">Export</a>
+    </H2>
     <table>
 
         {% for verified_row in verified_table %}
@@ -15,4 +18,10 @@
             </tr>
         {% endfor %}
     </table>
+    <br>
+    {% with current_url='book:pokemon_result' %}
+        <div class="row">
+            {% include 'book/base/pagenator.html' %}
+        </div>
+    {% endwith %}
 {% endblock %}
