@@ -1,5 +1,17 @@
 {% extends 'book/base/base.html' %}
-
+{% block style %}
+    <style>
+        .people-img {
+            width: 100%;
+            object-fit: contain;
+            user-select: none;
+            -moz-user-select: none;
+            -webkit-user-drag: none;
+            -webkit-user-select: none;
+            -ms-user-select: none;
+        }
+    </style>
+{% endblock %}
 {% block body %}
     <H1><i class="fa fa-users"> </i> 인명사전</H1>
     {% if user.is_superuser %}
@@ -15,14 +27,14 @@
             </div>
         </form>
 
-        <table class="table table-sm table-hover">
+        <table class="table table-sm table-hover" style="table-layout:fixed">
             <tbody>
             {% for people_row in people_table %}
                 <tr>
                     {% for image in people_row %}
                         <td>
                             <a href="http://instagram.com{{ image.page }}" target="_blank">
-                                <img src="{{ image.url }}" alt="{{ image.title }}">
+                                <img class="people-img" src="{{ image.url }}" alt="{{ image.title }}">
                             </a>
                         </td>
                     {% endfor %}

@@ -1,5 +1,19 @@
 {% extends 'book/base/base.html' %}
 
+{% block style %}
+    <style>
+        .people-img {
+            width: 100%;
+            object-fit: contain;
+            user-select: none;
+            -moz-user-select: none;
+            -webkit-user-drag: none;
+            -webkit-user-select: none;
+            -ms-user-select: none;
+        }
+    </style>
+{% endblock %}
+
 {% block body %}
     <H1><i class="fa fa-users"> </i> 인명사전</H1>
     {% if user.is_superuser %}
@@ -18,7 +32,7 @@
 
         {% csrf_token %}
         <h4>Query Count {{ query_count }}, Unclassified {{ unclassified_count }}</h4>
-        <table class="table table-sm table-hover" style="table-layout: fixed;width:100%">
+        <table class="table table-sm" style="table-layout:fixed">
             <thead>
             <tr>
                 <th style="max-width:50%;width:50%">이미지</th>
@@ -30,19 +44,22 @@
             <tbody>
             {% for image in image_list %}
                 <tr>
-                    <td style="width:30%">
+                    <td rowspan="2" style="width:30%">
                         <a href="http://instagram.com{{ image.page }}">
                             <img src="{{ image.url }}"
                                  alt="{{ image.title }}"
-                                 style="user-drag: none; user-select: none; -moz-user-select: none;-webkit-user-drag: none;-webkit-user-select: none;-ms-user-select: none;">
+                                 class="people-img">
                         </a></td>
-                    <td style="width:30%;max-width:30%;overflow-wrap:break-word;">{{ image.title }}</td>
-                    <td style="width:10%">
+                    <td style="width:30%;max-width:30%;overflow-wrap:break-word;">{{ image.title | linebreaksbr }}</td>
+                    <td rowspan="2" style="width:10%">
                         <button class="btn btn-primary like" id="{{ image.id }}_yes">Yes</button>
                     </td>
-                    <td style="width:10%">
+                    <td rowspan="2" style="width:10%">
                         <button class="btn btn-primary like" id="{{ image.id }}_no">No</button>
                     </td>
+                </tr>
+                <tr>
+                    <td id="img_{{ image.id }}">예상</td>
                 </tr>
             {% endfor %}
             </tbody>
@@ -52,9 +69,34 @@
 {% endblock %}
 {% block scripts %}
     <script>
+        $(document).ready(function () {
+            console.log("HI");
+            $("td[id^='img_']").each(function () {
+                let id = this.id;
+
+                let csrf = $('[type=hidden]').val();
+                let data = new FormData();
+                console.log(id);
+                data.append('image_id', id);
+                data.append('csrfmiddlewaretoken', csrf);
+
+                fetch("{% url 'book:people_classification_api' %}", {
+                    method: 'POST',
+                    body: data,
+                    credentials: 'same-origin'
+                }).then(function (response) {
+                    return response.json();
+                })
+                    .then(function (json) {
+                        console.log(json);
+                        let target_div = $('#' + id);
+                        console.log(target_div.text());
+                        target_div.text(json["classification"]["label"] + " " + json["classification"]["classification"][0]);
+                    });
+            })
+        });
+
         $('button[class="btn btn-primary like"]').click(function (e) {
-            console.log(this[0]);
-            console.log(this.id);
             let temp = this.id.split('_');
             let csrf = $('[type=hidden]').val();
             let data = new FormData();
@@ -68,12 +110,15 @@
                 body: data,
                 credentials: 'same-origin'
             });
-            $(e.target).closest('tr').remove();
+            let closest_tr = $(e.target).closest('tr');
+            let next_tr = closest_tr.next('tr');
+            console.log(closest_tr[0]);
+            console.log(next_tr[0]);
+            closest_tr.remove();
+            next_tr.remove();
         });
         $(document).on('click', 'td', function () {
             console.log('clicked');
-            console.log($(this)[0]);
-            console.log($(this).children()[0]);
             $(this).children('button').click();
         });
     </script>

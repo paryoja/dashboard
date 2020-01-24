@@ -43,5 +43,7 @@ urlpatterns = [
     path('add_image/<str:data_type>', views.add_image, name='add_image'),
     path('login/', views_user.BookLoginView.as_view(), name='login'),
     path('logout/', views_user.BookLogoutView.as_view(), name='logout'),
+
     path('rating/api', views_api.set_rating, name='rating_api'),
+    path('people/classification_api', views_api.people_classification_api, name='people_classification_api')
 ]

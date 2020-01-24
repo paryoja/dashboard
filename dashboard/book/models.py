@@ -126,3 +126,11 @@ class Image(models.Model):
 
     def __str__(self):
         return "{} ({})".format(self.title, self.url)
+
+
+class APIServers(models.Model):
+    ip = models.GenericIPAddressField(unique=True)
+    title = models.CharField(max_length=20)
+
+    def __str__(self):
+        return "{} {}".format(self.title, self.ip)

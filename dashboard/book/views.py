@@ -249,7 +249,7 @@ def people(request):
     unclassified = PeopleImage.objects.filter(selected=None)
     unclassified_count = unclassified.count()
     query_count = unclassified.filter(title__contains=query).count()
-    image_list = unclassified.filter(title__contains=query).order_by('?')[:100]
+    image_list = unclassified.filter(title__contains=query).order_by('?')[:10]
 
     render_dict['unclassified_count'] = unclassified_count
     render_dict['query_count'] = query_count

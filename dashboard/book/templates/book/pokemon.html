@@ -2,11 +2,12 @@
 {% block style %}
     <style>
         .tenth-cell {
-            width: 10%
+            width: 10px;
+            overflow-wrap: break-word;
         }
 
         .height-400 {
-            height: 300px;
+            height: 150px;
             vertical-align: middle;
         }
 
@@ -16,10 +17,14 @@
             vertical-align: middle;
         }
 
-        .pokemon_image {
-            display: block;
-            max-height: 500px;
-            max-width: 400px
+        .pokemon-img {
+            width: 100%;
+            object-fit: contain;
+            user-select: none;
+            -moz-user-select: none;
+            -webkit-user-drag: none;
+            -webkit-user-select: none;
+            -ms-user-select: none;
         }
     </style>
 {% endblock %}
@@ -43,47 +48,45 @@
 
         {% if image_list %}
             {% csrf_token %}
-            <table class="table table-sm table-hover">
+            <table class="table table-sm table-hover" style="table-layout:fixed">
                 <thead>
                 <tr>
-                    <th rowspan="2" class="center-row">이미지</th>
-                    <th rowspan="2" class="center-row">예시</th>
-                    <th colspan="4" class="center-row">적합성</th>
-                </tr>
-                <tr>
-                    <th class="center-row tenth-cell">적합</th>
-                    <th class="center-row tenth-cell">단순한 처리 필요함</th>
-                    <th class="center-row tenth-cell">복잡한 처리 필요함</th>
-                    <th class="center-row tenth-cell">부적합</th>
+                    <th class="center-row" style="width:40%">이미지</th>
+                    <th class="center-row">예시</th>
+                    <th class="center-row">적합성</th>
                 </tr>
                 </thead>
                 <tbody>
                 {% for image in image_list %}
                     <tr>
-                        <td class="center-row">
+                        <td rowspan="2" class="center-row">
                             <img src="{{ image.url }}" alt="{{ image.title }}"
-                                 class="pokemon_image">
+                                 class="pokemon-img">
                         </td>
-                        <td class="center-row tenth-cell">
+                        <td rowspan="2" class="center-row">
                             {{ image.original_label }}
-                            <img src="http://13.67.47.175:8880/pokemon/static/classifier/pokemon-images-and-types/images/images/{{ image.original_label |lower }}.png">
+                            <img src="http://13.67.47.175:8880/pokemon/static/classifier/pokemon-images-and-types/images/images/{{ image.original_label |lower }}.png"
+                                 alt="Image Not Found">
                         </td>
-                        <td class="height-400 tenth-cell">
+                        <td class="height-400">
                             <button class="btn btn-primary label-button" id="{{ image.id }}_yes">적합
                             </button>
                         </td>
-                        <td class="height-400 tenth-cell">
-                            <button class="btn btn-primary label-button" id="{{ image.id }}_little">
+                        <td class="height-400">
+                            <button class="btn btn-secondary label-button" id="{{ image.id }}_little">
                                 단순한 처리 필요함
                             </button>
                         </td>
-                        <td class="height-400 tenth-cell">
-                            <button class="btn btn-primary label-button" id="{{ image.id }}_more">복잡한
-                                처리 필요함
+                    </tr>
+                    <tr>
+
+                        <td class="height-400">
+                            <button class="btn btn-info label-button" id="{{ image.id }}_more">
+                                복잡한 처리 필요함
                             </button>
                         </td>
-                        <td class="height-400 tenth-cell">
-                            <button class="btn btn-primary label-button" id="{{ image.id }}_no">부적합
+                        <td class="height-400">
+                            <button class="btn btn-danger label-button" id="{{ image.id }}_no">부적합
                             </button>
                         </td>
                     </tr>
