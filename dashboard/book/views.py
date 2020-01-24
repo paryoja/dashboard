@@ -1,12 +1,15 @@
+import base64
 import json
 import re
 import traceback
 
+import lz4.frame
 import requests
 from bs4 import BeautifulSoup
 from celery import shared_task
 from django.contrib.auth.decorators import login_required
 from django.core import exceptions
+from django.core import serializers
 from django.http import HttpResponse
 from django.shortcuts import render
 
@@ -247,9 +250,17 @@ def people(request):
     unclassified_count = unclassified.count()
     query_count = unclassified.filter(title__contains=query).count()
     image_list = unclassified.filter(title__contains=query).order_by('?')[:100]
+
     render_dict['unclassified_count'] = unclassified_count
     render_dict['query_count'] = query_count
-    render_dict['image_list'] = image_list
+
+    if query:
+        id_select = unclassified.filter(url__contains=query)
+        render_dict['query_count'] += id_select.count()
+        render_dict['image_list'] = id_select[:50].values() | image_list.values()
+    else:
+        render_dict['image_list'] = image_list.values()
+    render_dict['query'] = query
 
     return render(request, 'book/people.html', render_dict)
 
@@ -258,11 +269,12 @@ def people(request):
 def people_result(request, page=1):
     render_dict = get_render_dict('people_result')
 
-    selected_list = PeopleImage.objects.filter(selected=True)
+    query = request.GET.get('query', '')
+    selected_list = PeopleImage.objects.filter(url__contains=query).filter(selected=True).order_by('page')
 
-    p, page_info = get_page_info(selected_list, page, 100)
+    p, page_info = get_page_info(selected_list, page, 120)
 
-    row_count = 20
+    row_count = 3
     people_table = []
     count = 0
     people_row = []
@@ -275,8 +287,16 @@ def people_result(request, page=1):
 
     render_dict['people_table'] = people_table
     render_dict['page_info'] = page_info
+    render_dict['query'] = query
 
     return render(request, 'book/people_result.html', render_dict)
+
+
+def people_result_download(request, selected):
+    image_list = PeopleImage.objects.filter(selected=selected).only("url", "selected", "page")
+    image_list = serializers.serialize('json', image_list)
+    compressed = lz4.frame.compress(image_list.encode('utf-8'))
+    return HttpResponse(base64.b85encode(compressed))
 
 
 def real_estate(request):
@@ -474,6 +494,7 @@ def pokemon(request, page=1):
     p, page_info = get_page_info(image_list, page, 20)
     render_dict['image_list'] = p
     render_dict['page_info'] = page_info
+    render_dict['query'] = query
 
     return render(request, 'book/pokemon.html', render_dict)
 
@@ -490,7 +511,7 @@ def pokemon_result(request, page=1):
     render_dict['page_info'] = page_info
 
     verified_count = image_list.count()
-    row_count = 20
+    row_count = 10
     verified_table = []
     count = 0
     verified_row = None
@@ -507,5 +528,8 @@ def pokemon_result(request, page=1):
     return render(request, 'book/pokemon_result.html', render_dict)
 
 
-def pokemon_export(request):
-    return HttpResponse("0")
+def pokemon_export(request, classified="yes"):
+    image_list = PokemonImage.objects.filter(classified=classified)
+    image_list = serializers.serialize('json', image_list)
+    compressed = lz4.frame.compress(image_list.encode('utf-8'))
+    return HttpResponse(base64.b85encode(compressed))

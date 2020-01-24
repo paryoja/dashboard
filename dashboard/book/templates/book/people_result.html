@@ -3,13 +3,25 @@
 {% block body %}
     <H1><i class="fa fa-users"> </i> 인명사전</H1>
     {% if user.is_superuser %}
+        <form method="get" action="{% url "book:people_result" 1 %}">
+            <div class="input-group mb-3">
+                <input type="text" name="query" class="form-control" placeholder="검색" aria-label="Query"
+                       aria-describedby="button-addon2" value="{{ query }}">
+                <div class="input-group-append">
+                    <button class="btn btn-outline-secondary" type="submit" id="button-addon2">
+                        Submit
+                    </button>
+                </div>
+            </div>
+        </form>
+
         <table class="table table-sm table-hover">
             <tbody>
             {% for people_row in people_table %}
                 <tr>
                     {% for image in people_row %}
                         <td>
-                            <a href="http://instagram.com/{{ image.page }}" target="_blank">
+                            <a href="http://instagram.com{{ image.page }}" target="_blank">
                                 <img src="{{ image.url }}" alt="{{ image.title }}">
                             </a>
                         </td>
@@ -18,6 +30,8 @@
             {% endfor %}
             </tbody>
         </table>
-        {% include 'book/base/pagenator.html' %}
+        {% with current_url="book:people_result" %}
+            {% include 'book/base/pagenator.html' %}
+        {% endwith %}
     {% endif %}
 {% endblock %}

@@ -1,15 +1,38 @@
 {% extends 'book/base/base.html' %}
+{% block style %}
+    <style>
+        .tenth-cell {
+            width: 10%
+        }
 
+        .height-400 {
+            height: 300px;
+            vertical-align: middle;
+        }
+
+        .label-button {
+            width: 100%;
+            height: 90%;
+            vertical-align: middle;
+        }
+
+        .pokemon_image {
+            display: block;
+            max-height: 500px;
+            max-width: 400px
+        }
+    </style>
+{% endblock %}
 {% block body %}
     {% if user.is_superuser %}
         <a href="{% url 'book:add_image' 'pokemon_classification' %}">Add new images</a>
     {% endif %}
 
     {% if user.is_active %}
-        <form method="get">
+        <form method="get" action="{% url 'book:pokemon_classification' 1 %}">
             <div class="input-group mb-3">
                 <input type="text" name="query" class="form-control" placeholder="검색" aria-label="Query"
-                       aria-describedby="button-addon2">
+                       aria-describedby="button-addon2" value="{{ query }}">
                 <div class="input-group-append">
                     <button class="btn btn-outline-secondary" type="submit" id="button-addon2">
                         Submit
@@ -18,59 +41,67 @@
             </div>
         </form>
 
-
-        {% csrf_token %}
-        <table class="table table-sm table-hover">
-            <thead>
-            <tr>
-                <th rowspan="2" colspan="2" style="text-align: center">이미지</th>
-                <th colspan="4" style="text-align: center">적합성</th>
-            </tr>
-            <tr>
-                <th style="width:15%;text-align: center">적합</th>
-                <th style="width:15%;text-align: center">단순한 처리 필요함</th>
-                <th style="width:15%;text-align: center">복잡한 처리 필요함</th>
-                <th style="width:15%;text-align: center">부적합</th>
-            </tr>
-            </thead>
-            <tbody>
-            {% for image in image_list %}
+        {% if image_list %}
+            {% csrf_token %}
+            <table class="table table-sm table-hover">
+                <thead>
                 <tr>
-                    <td><img src="{{ image.url }}" alt="{{ image.title }}" style="width:400px"></td>
-                    <td style="text-align: center">{{ image.original_label }}
-                        <img src="http://13.67.47.175:8880/pokemon/static/classifier/pokemon-images-and-types/images/images/{{ image.original_label |lower }}.png">
-                    </td>
-                    <td style="height:500px">
-                        <button class="btn btn-primary like" id="{{ image.id }}_yes" style="width:100%;height:90%">적합
-                        </button>
-                    </td>
-                    <td style="height:500px">
-                        <button class="btn btn-primary like" id="{{ image.id }}_little" style="width:100%;height:90%">
-                            단순한 처리 필요함
-                        </button>
-                    </td>
-                    <td style="height:500px">
-                        <button class="btn btn-primary like" id="{{ image.id }}_more" style="width:100%;height:90%">복잡한
-                            처리 필요함
-                        </button>
-                    </td>
-                    <td style="height:500px">
-                        <button class="btn btn-primary like" id="{{ image.id }}_no" style="width:100%;height:90%">부적합
-                        </button>
-                    </td>
+                    <th rowspan="2" class="center-row">이미지</th>
+                    <th rowspan="2" class="center-row">예시</th>
+                    <th colspan="4" class="center-row">적합성</th>
                 </tr>
-            {% endfor %}
-            </tbody>
-        </table>
-        <br>
-        {% with current_url="book:pokemon_classification" %}
-            {% include 'book/base/pagenator.html' %}
-        {% endwith %}
+                <tr>
+                    <th class="center-row tenth-cell">적합</th>
+                    <th class="center-row tenth-cell">단순한 처리 필요함</th>
+                    <th class="center-row tenth-cell">복잡한 처리 필요함</th>
+                    <th class="center-row tenth-cell">부적합</th>
+                </tr>
+                </thead>
+                <tbody>
+                {% for image in image_list %}
+                    <tr>
+                        <td class="center-row">
+                            <img src="{{ image.url }}" alt="{{ image.title }}"
+                                 class="pokemon_image">
+                        </td>
+                        <td class="center-row tenth-cell">
+                            {{ image.original_label }}
+                            <img src="http://13.67.47.175:8880/pokemon/static/classifier/pokemon-images-and-types/images/images/{{ image.original_label |lower }}.png">
+                        </td>
+                        <td class="height-400 tenth-cell">
+                            <button class="btn btn-primary label-button" id="{{ image.id }}_yes">적합
+                            </button>
+                        </td>
+                        <td class="height-400 tenth-cell">
+                            <button class="btn btn-primary label-button" id="{{ image.id }}_little">
+                                단순한 처리 필요함
+                            </button>
+                        </td>
+                        <td class="height-400 tenth-cell">
+                            <button class="btn btn-primary label-button" id="{{ image.id }}_more">복잡한
+                                처리 필요함
+                            </button>
+                        </td>
+                        <td class="height-400 tenth-cell">
+                            <button class="btn btn-primary label-button" id="{{ image.id }}_no">부적합
+                            </button>
+                        </td>
+                    </tr>
+                {% endfor %}
+                </tbody>
+            </table>
+            <br>
+            {% with current_url="book:pokemon_classification" %}
+                {% include 'book/base/pagenator.html' %}
+            {% endwith %}
+        {% else %}
+            <h3>조건에 해당하는 이미지가 없습니다.</h3>
+        {% endif %}
     {% endif %}
 {% endblock %}
 {% block scripts %}
     <script>
-        $('button[class="btn btn-primary like"]').click(function (e) {
+        $('button[class="btn btn-primary label-button"]').click(function (e) {
             console.log(this[0]);
             console.log(this.id);
             let temp = this.id.split('_');

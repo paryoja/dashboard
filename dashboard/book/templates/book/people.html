@@ -4,31 +4,43 @@
     <H1><i class="fa fa-users"> </i> 인명사전</H1>
     {% if user.is_superuser %}
         <a href="{% url 'book:add_image' 'people' %}">Add new images</a>
+        <form method="get">
+            <div class="input-group mb-3">
+                <input type="text" name="query" class="form-control" placeholder="검색" aria-label="Query"
+                       aria-describedby="button-addon2" value="{{ query }}">
+                <div class="input-group-append">
+                    <button class="btn btn-outline-secondary" type="submit" id="button-addon2">
+                        Submit
+                    </button>
+                </div>
+            </div>
+        </form>
+
         {% csrf_token %}
         <h4>Query Count {{ query_count }}, Unclassified {{ unclassified_count }}</h4>
-        <table class="table table-sm table-hover">
+        <table class="table table-sm table-hover" style="table-layout: fixed;width:100%">
             <thead>
             <tr>
-                <th>이미지</th>
-                <th style="max-width:100%;width:100px">설명</th>
-                <th>Yes</th>
-                <th>No</th>
+                <th style="max-width:50%;width:50%">이미지</th>
+                <th style="max-width:30%;width:30%">설명</th>
+                <th style="width:10%">Yes</th>
+                <th style="width:10%">No</th>
             </tr>
             </thead>
             <tbody>
             {% for image in image_list %}
                 <tr>
                     <td style="width:30%">
-                        <a href="http://instagram.com/{{ image.page }}">
+                        <a href="http://instagram.com{{ image.page }}">
                             <img src="{{ image.url }}"
                                  alt="{{ image.title }}"
                                  style="user-drag: none; user-select: none; -moz-user-select: none;-webkit-user-drag: none;-webkit-user-select: none;-ms-user-select: none;">
                         </a></td>
-                    <td style="width:30%">{{ image.title }}</td>
-                    <td style="width:20%">
+                    <td style="width:30%;max-width:30%;overflow-wrap:break-word;">{{ image.title }}</td>
+                    <td style="width:10%">
                         <button class="btn btn-primary like" id="{{ image.id }}_yes">Yes</button>
                     </td>
-                    <td style="width:20%">
+                    <td style="width:10%">
                         <button class="btn btn-primary like" id="{{ image.id }}_no">No</button>
                     </td>
                 </tr>
