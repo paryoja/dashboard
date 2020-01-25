@@ -92,6 +92,12 @@
                         let target_div = $('#' + id);
                         console.log(target_div.text());
                         target_div.text(json["classification"]["label"] + " " + json["classification"]["classification"][1].toFixed(2));
+                        if (json["classification"]["label"] === 'True') {
+                            target_div.addClass("table-success")
+                        }
+                        else {
+                            target_div.addClass("table-danger")
+                        }
                     });
             })
         });
