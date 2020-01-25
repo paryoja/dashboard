@@ -19,6 +19,7 @@
 
         .pokemon-img {
             width: 100%;
+            height: 400px;
             object-fit: contain;
             user-select: none;
             -moz-user-select: none;
@@ -51,9 +52,9 @@
             <table class="table table-sm table-hover" style="table-layout:fixed">
                 <thead>
                 <tr>
-                    <th class="center-row" style="width:40%">이미지</th>
-                    <th class="center-row">예시</th>
-                    <th class="center-row">적합성</th>
+                    <th class="center-row" style="width:50%">이미지</th>
+                    <th class="center-row" style="width:20%">예시</th>
+                    <th colspan="2" class="center-row" style="width:30%">적합성</th>
                 </tr>
                 </thead>
                 <tbody>
@@ -64,29 +65,29 @@
                                  class="pokemon-img">
                         </td>
                         <td rowspan="2" class="center-row">
-                            {{ image.original_label }}
+
                             <img src="http://13.67.47.175:8880/pokemon/static/classifier/pokemon-images-and-types/images/images/{{ image.original_label |lower }}.png"
-                                 alt="Image Not Found">
+                                 alt="Image Not Found" class="pokemon-img" style="max-width:160px" data-toggle="tooltip"
+                                 data-placement="right" title="{{ image.original_label }}">
                         </td>
                         <td class="height-400">
                             <button class="btn btn-primary label-button" id="{{ image.id }}_yes">적합
                             </button>
                         </td>
                         <td class="height-400">
-                            <button class="btn btn-secondary label-button" id="{{ image.id }}_little">
-                                단순한 처리 필요함
+                            <button class="btn btn-primary label-button" id="{{ image.id }}_little">
+                                단순 처리
                             </button>
                         </td>
                     </tr>
                     <tr>
-
                         <td class="height-400">
                             <button class="btn btn-info label-button" id="{{ image.id }}_more">
-                                복잡한 처리 필요함
+                                복잡 처리
                             </button>
                         </td>
                         <td class="height-400">
-                            <button class="btn btn-danger label-button" id="{{ image.id }}_no">부적합
+                            <button class="btn btn-info label-button" id="{{ image.id }}_no">부적합
                             </button>
                         </td>
                     </tr>
@@ -104,23 +105,36 @@
 {% endblock %}
 {% block scripts %}
     <script>
-        $('button[class="btn btn-primary label-button"]').click(function (e) {
-            console.log(this[0]);
-            console.log(this.id);
-            let temp = this.id.split('_');
-            let csrf = $('[type=hidden]').val();
-            let data = new FormData();
-            data.append('image_id', temp[0]);
-            data.append('csrfmiddlewaretoken', csrf);
-            data.append('selected', temp[1]);
-            data.append('data_type', 'pokemon');
+        $(function () {
+            $('[data-toggle="tooltip"]').tooltip()
+        });
 
-            fetch("{% url 'book:rating_api' %}", {
-                method: 'POST',
-                body: data,
-                credentials: 'same-origin'
-            });
-            $(e.target).closest('tr').remove();
+        $('button').click(function (e) {
+            if ($(this).hasClass("label-button")) {
+                console.log(this[0]);
+                console.log(this.id);
+                let temp = this.id.split('_');
+                let csrf = $('[type=hidden]').val();
+                let data = new FormData();
+                data.append('image_id', temp[0]);
+                data.append('csrfmiddlewaretoken', csrf);
+                data.append('selected', temp[1]);
+                data.append('data_type', 'pokemon');
+
+                fetch("{% url 'book:rating_api' %}", {
+                    method: 'POST',
+                    body: data,
+                    credentials: 'same-origin'
+                });
+                this_tr = $(e.target).closest('tr');
+
+                if ($(this).hasClass("btn-primary")) {
+                    this_tr.next().remove();
+                } else {
+                    this_tr.prev().remove();
+                }
+                this_tr.remove();
+            }
         });
     </script>
 {% endblock %}

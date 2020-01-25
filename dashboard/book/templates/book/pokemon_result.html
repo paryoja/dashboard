@@ -13,14 +13,13 @@
     <H2>사용가능 이미지: {{ verified_count }}개
         <a href="{% url 'book:pokemon_export' 'yes' %}" class="btn btn-sm btn-primary">Export</a>
     </H2>
-    <table>
-
+    <table style="table-layout:fixed">
         {% for verified_row in verified_table %}
             <tr>
                 {% for verified in verified_row %}
-                    <td><img src="{{ verified.url }}"
-                             class="small_img"
-                             alt="{{ verified.original_label }}"></td>
+                    <td style="width:10%; height:100px"><img src="{{ verified.url }}"
+                                                             class="small_img"
+                                                             alt="{{ verified.original_label }}"></td>
                 {% endfor %}
             </tr>
         {% endfor %}

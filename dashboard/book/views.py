@@ -249,7 +249,7 @@ def people(request):
     unclassified = PeopleImage.objects.filter(selected=None)
     unclassified_count = unclassified.count()
     query_count = unclassified.filter(title__contains=query).count()
-    image_list = unclassified.filter(title__contains=query).order_by('?')[:10]
+    image_list = unclassified.filter(title__contains=query).order_by('?')[:50]
 
     render_dict['unclassified_count'] = unclassified_count
     render_dict['query_count'] = query_count
@@ -488,7 +488,8 @@ def pokemon(request, page=1):
     query = request.GET.get('query', '')
 
     if query:
-        image_list = PokemonImage.objects.filter(original_label__icontains=query).filter(classified=None).order_by('?')
+        image_list = PokemonImage.objects.filter(original_label__icontains=query).filter(classified=None).order_by('?')[
+                     :400]
     else:
         image_list = PokemonImage.objects.filter(classified=None).order_by('?')
     p, page_info = get_page_info(image_list, page, 20)
