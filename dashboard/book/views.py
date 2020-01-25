@@ -10,10 +10,11 @@ from celery import shared_task
 from django.contrib.auth.decorators import login_required
 from django.core import exceptions
 from django.core import serializers
+from django.core.paginator import Paginator
 from django.http import HttpResponse
 from django.shortcuts import render
 
-from .models import Link, Lotto, Paper, Stock, Book, Category, PeopleImage, PokemonImage
+from .models import Link, Lotto, Paper, Stock, Book, Category, PeopleImage, PokemonImage, Rating
 from .nav import get_render_dict
 from .utils import new_lotto, get_page_info
 from .xml_helper import XmlDictConfig, get_xml_request
@@ -292,10 +293,41 @@ def people_result(request, page=1):
     return render(request, 'book/people_result.html', render_dict)
 
 
-def people_result_download(request, selected):
+@login_required
+def people_high_expectation(request):
+    render_dict = get_render_dict('people_high_expectation')
+
+    query = request.GET.get('query', '')
+    order = request.GET.get('order', 'decreasing')
+    if order == "decreasing":
+        selected_list = Rating.objects.filter(image__selected=None).order_by("-positive")[:100]
+    elif order == "increasing":
+        selected_list = Rating.objects.filter(image__selected=None).order_by("positive")[:100]
+    elif order == "random":
+        selected_list = Rating.objects.filter(image__selected=None).order_by("?")[:100]
+
+    unclassified = [rating.image for rating in selected_list]
+
+    render_dict['rating'] = selected_list
+
+    render_dict['image_list'] = unclassified
+    render_dict['query'] = query
+
+    return render(request, 'book/people.html', render_dict)
+
+
+def people_result_download(request, selected, page):
     image_list = PeopleImage.objects.filter(selected=selected).only("url", "selected", "page")
-    image_list = serializers.serialize('json', image_list)
-    compressed = lz4.frame.compress(image_list.encode('utf-8'))
+
+    count = 1000
+    pagenator = Paginator(image_list, count)
+    p = pagenator.page(page)
+
+    image_list = serializers.serialize('json', p)
+
+    result = {'has_next': p.has_next(), 'image_list': json.loads(image_list)}
+
+    compressed = lz4.frame.compress(json.dumps(result).encode('utf-8'))
     return HttpResponse(base64.b85encode(compressed))
 
 

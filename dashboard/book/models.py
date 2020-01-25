@@ -104,7 +104,7 @@ class PeopleImage(models.Model):
     selected = models.BooleanField(null=True, blank=True)
 
     def __str__(self):
-        return "{} ({})".format(self.title, self.url)
+        return "{}".format(self.url)
 
 
 class PokemonImage(models.Model):
@@ -134,3 +134,22 @@ class APIServers(models.Model):
 
     def __str__(self):
         return "{} {}".format(self.title, self.ip)
+
+
+class DeepLearningModel(models.Model):
+    domain = models.TextField(max_length=20)
+    version = models.TextField(max_length=10)
+    latest = models.BooleanField(default=True)
+
+    def __str__(self):
+        return "{} {} (latest {})".format(self.domain, self.version, self.latest)
+
+
+class Rating(models.Model):
+    deep_model = models.ForeignKey(DeepLearningModel, on_delete=models.CASCADE)
+    image = models.ForeignKey(PeopleImage, on_delete=models.CASCADE)
+    data = fields.JSONField()
+    positive = models.FloatField(default=0.0)
+
+    def __str__(self):
+        return "{} {}".format(self.id, self.positive, self.image.title)

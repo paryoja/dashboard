@@ -52,6 +52,7 @@ def get_render_dict(current_page):
     other_list.append(get_nav_item("algorithm", "fe fe-video", "비디오", current_page))
     other_list.append(get_nav_item("people", "fa fa-users", "인명사전", current_page))
     other_list.append(get_nav_item("people_result", "fa fa-user-friends", "인명", current_page))
+    other_list.append(get_nav_item("people_high_expectation", "fa fa-user-friends", "예상", current_page))
     other_list.append(get_nav_item("idea", "fe fe-zap", "아이디어 모음", current_page))
 
     nav_list = list()

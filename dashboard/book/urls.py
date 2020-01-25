@@ -29,7 +29,8 @@ urlpatterns = [
     path('people/', views.people, name='people'),
     path('people_result/', views.people_result, name='people_result'),
     path('people_result/<int:page>', views.people_result, name='people_result'),
-    path('people_result/download/<str:selected>', views.people_result_download, name='people_result_download'),
+    path('people_result/download/<str:selected>/<int:page>', views.people_result_download, name='people_result_download'),
+    path('people/high_expectation/', views.people_high_expectation, name='people_high_expectation'),
 
     path('real_estate/', views.real_estate, name='real_estate'),
     path('recommend_book/', views.recommend_book, name='recommend_book'),
