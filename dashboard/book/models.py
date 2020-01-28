@@ -1,5 +1,6 @@
 from django.contrib.postgres import fields
 from django.db import models
+from django.utils.translation import gettext_lazy as _
 
 
 class Link(models.Model):
@@ -165,3 +166,20 @@ class PokemonRating(models.Model):
 
     def __str__(self):
         return "{} {} {}".format(self.id, self.positive, self.image.title)
+
+
+class Currency(models.Model):
+    class CurrencyChoices(models.TextChoices):
+        USD = 'USD', _('USD')
+        KRW = 'KRW', _('KRW')
+
+    date = models.DateField()
+    from_currency = models.CharField(max_length=10, choices=CurrencyChoices.choices, default=CurrencyChoices.KRW)
+    to_currency = models.CharField(max_length=10, choices=CurrencyChoices.choices, default=CurrencyChoices.USD)
+
+    currency_rate = models.FloatField()
+    from_amount = models.FloatField()
+    to_amount = models.FloatField()
+
+    def get_currency_rate(self):
+        return self.from_amount / self.to_amount

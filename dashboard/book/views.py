@@ -11,8 +11,8 @@ from django.core import exceptions
 from django.http import HttpResponse
 from django.shortcuts import render
 
+from . import models
 from . import utils
-from .models import Link, Lotto, Paper, Stock, Book, Category, PeopleImage, PokemonImage, Rating
 from .nav import get_render_dict
 from .xml_helper import XmlDictConfig, get_xml_request
 
@@ -24,7 +24,7 @@ def index(request):
 
 def link(request):
     render_dict = get_render_dict('link')
-    render_dict['table_content'] = Link.objects.all()
+    render_dict['table_content'] = models.Link.objects.all()
     return render(request, 'book/link.html', render_dict)
 
 
@@ -34,8 +34,22 @@ def algorithm(request):
 
 
 # investment
+@user_passes_test(lambda u: u.is_superuser)
 def live_currency(request):
     render_dict = get_render_dict('live_currency')
+    currency_list = models.Currency.objects.all().order_by('-date')
+
+    total_from = 0
+    total_to = 0
+
+    for currency in currency_list:
+        total_from += currency.from_amount
+        total_to += currency.to_amount
+    total = {'from': total_from, 'to': total_to, 'rate': total_from / total_to}
+
+    render_dict['currency_list'] = currency_list
+    render_dict['total'] = total
+
     return render(request, 'book/investment/live_currency.html', render_dict)
 
 
@@ -69,9 +83,9 @@ def krx_price_query(request):
 
             if 'JongName' in info_json and info_json['JongName']:
                 try:
-                    Stock.objects.get(code=query)
+                    models.Stock.objects.get(code=query)
                 except exceptions.ObjectDoesNotExist:
-                    stock = Stock(code=query, name=info_json['JongName'])
+                    stock = models.Stock(code=query, name=info_json['JongName'])
                     stock.save()
 
         statement_result = get_xml_request(krx_statement_query_url.format(query))
@@ -107,13 +121,13 @@ def krx_price_query(request):
                 render_dict['cash_flow'] = cash_flow
             render_dict['statement_result'] = statement_result
 
-    stocks = Stock.objects.all().order_by('code')
+    stocks = models.Stock.objects.all().order_by('code')
     render_dict['stocks'] = stocks
     return render(request, 'book/investment/krx_price_query.html', render_dict)
 
 
 def export_lotto(request):
-    max_object = Lotto.objects.order_by('-draw_number')[0]
+    max_object = models.Lotto.objects.order_by('-draw_number')[0]
 
     max_draw = max_object.draw_number
 
@@ -123,7 +137,7 @@ def export_lotto(request):
         if result['returnValue'] == 'fail':
             break
 
-    all_objects = Lotto.objects.order_by('draw_number')
+    all_objects = models.Lotto.objects.order_by('draw_number')
     result_list = []
     for obj in all_objects:
         result_list.append(','.join(map(str, [obj.draw_number,
@@ -149,7 +163,7 @@ def lotto(request):
         render_dict["draw_number"] = draw_number
 
         result, _ = utils.new_lotto(draw_number)
-    all_objects = Lotto.objects.order_by('-draw_number')[:30]
+    all_objects = models.Lotto.objects.order_by('-draw_number')[:30]
     render_dict["result"] = result
     render_dict["all_objects"] = all_objects
 
@@ -194,7 +208,7 @@ def slide(request):
 
 def paper(request):
     render_dict = get_render_dict('paper')
-    paper_list = Paper.objects.all()
+    paper_list = models.Paper.objects.all()
 
     render_dict['paper_list'] = paper_list
     return render(request, 'book/study/paper.html', render_dict)
@@ -244,7 +258,7 @@ def people(request):
 
     query = request.GET.get('query', '')
 
-    unclassified = PeopleImage.objects.filter(selected=None)
+    unclassified = models.PeopleImage.objects.filter(selected=None)
     unclassified_count = unclassified.count()
     query_count = unclassified.filter(title__contains=query).count()
     image_list = unclassified.filter(title__contains=query).order_by('?')[:100]
@@ -268,7 +282,7 @@ def people_result(request, page=1):
     render_dict = get_render_dict('people_result')
 
     query = request.GET.get('query', '')
-    selected_list = PeopleImage.objects.filter(url__contains=query).filter(selected=True).order_by('page')
+    selected_list = models.PeopleImage.objects.filter(url__contains=query).filter(selected=True).order_by('page')
 
     p, page_info = utils.get_page_info(selected_list, page, 120)
 
@@ -297,7 +311,7 @@ def people_high_expectation(request):
     query = request.GET.get('query', '')
     order = request.GET.get('order', 'decreasing')
 
-    selected_list = Rating.objects.filter(image__selected=None, deep_model__latest=True)
+    selected_list = models.Rating.objects.filter(image__selected=None, deep_model__latest=True)
     if query:
         queried_list = selected_list.filter(image__url__contains=query)[:100]
         selected_list = queried_list | selected_list.filter(image__title__contains=query)[:100]
@@ -321,7 +335,7 @@ def people_high_expectation(request):
 
 @user_passes_test(lambda u: u.is_superuser)
 def people_result_download(request, selected, page):
-    image_list = PeopleImage.objects.filter(selected=selected).only("url", "selected", "page")
+    image_list = models.PeopleImage.objects.filter(selected=selected).only("url", "selected", "page")
 
     count = 1000
     return utils.get_compressed_result(image_list, count, page)
@@ -330,8 +344,8 @@ def people_result_download(request, selected, page):
 def real_estate(request):
     render_dict = get_render_dict('real_estate')
 
-    price_link = Link.objects.filter(content_type="부동산 시세")
-    useful_link = Link.objects.filter(content_type="부동산")
+    price_link = models.Link.objects.filter(content_type="부동산 시세")
+    useful_link = models.Link.objects.filter(content_type="부동산")
 
     check_list = ["햇빛은 잘 들어오는가?",
                   "물이 샌(누수) 흔적은 없는가?",
@@ -374,7 +388,7 @@ def real_estate(request):
 def recommend_book(request):
     render_dict = get_render_dict('recommend_book')
 
-    book_list = Book.objects.all()
+    book_list = models.Book.objects.all()
     render_dict['book_list'] = book_list
 
     return render(request, 'book/investment/recommend_book.html', render_dict)
@@ -445,16 +459,16 @@ def add_image_client(a_text, url, category_id, data_type):
         for img in result:
             try:
                 if data_type == "people":
-                    image = PeopleImage(url=url + a_parsed[0][0] + img['local'],
-                                        title=img['alt'][:500],
-                                        category_id=category_id,
-                                        page=img['a'])
+                    image = models.PeopleImage(url=url + a_parsed[0][0] + img['local'],
+                                               title=img['alt'][:500],
+                                               category_id=category_id,
+                                               page=img['a'])
                 elif data_type == "pokemon":
                     path = img.split('/')
-                    image = PokemonImage(url=img,
-                                         title=path[-1],
-                                         category_id=category_id,
-                                         original_label=path[-2])
+                    image = models.PokemonImage(url=img,
+                                                title=path[-1],
+                                                category_id=category_id,
+                                                original_label=path[-2])
                 else:
                     raise ValueError("Unsupported data_type {}".format(data_type))
                 image.save()
@@ -503,7 +517,7 @@ def add_image(request, data_type='pokemon'):
             else:
                 render_dict['parsed'] = traceback.format_exc()
 
-    category_list = Category.objects.all()
+    category_list = models.Category.objects.all()
     render_dict['data_type'] = data_type
     render_dict['category_list'] = category_list
     return render(request, 'book/add_image.html', render_dict)
@@ -516,10 +530,10 @@ def pokemon(request, page=1):
     query = request.GET.get('query', '')
 
     if query:
-        image_list = PokemonImage.objects.filter(original_label__icontains=query).filter(classified=None).order_by('?')[
-                     :400]
+        image_list = models.PokemonImage.objects.filter(original_label__icontains=query).filter(
+            classified=None).order_by('?')[:400]
     else:
-        image_list = PokemonImage.objects.filter(classified=None).order_by('?')
+        image_list = models.PokemonImage.objects.filter(classified=None).order_by('?')
     p, page_info = utils.get_page_info(image_list, page, 20)
     render_dict['image_list'] = p
     render_dict['page_info'] = page_info
@@ -532,7 +546,7 @@ def pokemon(request, page=1):
 def pokemon_result(request, page=1):
     render_dict = get_render_dict('pokemon_result')
 
-    image_list = PokemonImage.objects.filter(classified="yes")
+    image_list = models.PokemonImage.objects.filter(classified="yes")
 
     p, page_info = utils.get_page_info(image_list, page, 100)
 
@@ -560,6 +574,6 @@ def pokemon_result(request, page=1):
 @login_required
 def pokemon_export(request, classified="yes", page=1):
     count = 1000
-    image_list = PokemonImage.objects.filter(classified=classified)
+    image_list = models.PokemonImage.objects.filter(classified=classified)
 
     return utils.get_compressed_result(image_list, count, page)

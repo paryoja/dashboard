@@ -17,3 +17,18 @@ admin.site.register(models.Category)
 admin.site.register(models.APIServers)
 admin.site.register(models.Rating)
 admin.site.register(models.DeepLearningModel)
+
+
+class LinkAdmin(admin.ModelAdmin):
+    list_display = ('added_date', 'url', 'description', 'content_type')
+
+
+class CurrencyAdmin(admin.ModelAdmin):
+    fieldsets = [('Date information', {'fields': ['date']}),
+                 ('From', {'fields': ['from_currency', 'from_amount']}),
+                 ('To', {'fields': ['to_currency', 'to_amount']}),
+                 ('Rate', {'fields': ['currency_rate']})]
+    list_display = ('date', 'from_amount', 'to_amount', 'currency_rate')
+
+
+admin.site.register(models.Currency, CurrencyAdmin)
