@@ -1,22 +1,19 @@
-import base64
 import json
 import re
 import traceback
 
-import lz4.frame
 import requests
 from bs4 import BeautifulSoup
 from celery import shared_task
 from django.contrib.auth.decorators import login_required
+from django.contrib.auth.decorators import user_passes_test
 from django.core import exceptions
-from django.core import serializers
-from django.core.paginator import Paginator
 from django.http import HttpResponse
 from django.shortcuts import render
 
+from . import utils
 from .models import Link, Lotto, Paper, Stock, Book, Category, PeopleImage, PokemonImage, Rating
 from .nav import get_render_dict
-from .utils import new_lotto, get_page_info
 from .xml_helper import XmlDictConfig, get_xml_request
 
 
@@ -121,7 +118,7 @@ def export_lotto(request):
     max_draw = max_object.draw_number
 
     for draw_number in range(1, max_draw + 10):
-        result, _ = new_lotto(draw_number)
+        result, _ = utils.new_lotto(draw_number)
 
         if result['returnValue'] == 'fail':
             break
@@ -151,7 +148,7 @@ def lotto(request):
         draw_number = request.POST['draw_number']
         render_dict["draw_number"] = draw_number
 
-        result, _ = new_lotto(draw_number)
+        result, _ = utils.new_lotto(draw_number)
     all_objects = Lotto.objects.order_by('-draw_number')[:30]
     render_dict["result"] = result
     render_dict["all_objects"] = all_objects
@@ -241,7 +238,7 @@ def query_chatbot(request):
         return HttpResponse("Empty Message")
 
 
-@login_required
+@user_passes_test(lambda u: u.is_superuser)
 def people(request):
     render_dict = get_render_dict('people')
 
@@ -266,14 +263,14 @@ def people(request):
     return render(request, 'book/people.html', render_dict)
 
 
-@login_required
+@user_passes_test(lambda u: u.is_superuser)
 def people_result(request, page=1):
     render_dict = get_render_dict('people_result')
 
     query = request.GET.get('query', '')
     selected_list = PeopleImage.objects.filter(url__contains=query).filter(selected=True).order_by('page')
 
-    p, page_info = get_page_info(selected_list, page, 120)
+    p, page_info = utils.get_page_info(selected_list, page, 120)
 
     row_count = 3
     people_table = []
@@ -293,18 +290,24 @@ def people_result(request, page=1):
     return render(request, 'book/people_result.html', render_dict)
 
 
-@login_required
+@user_passes_test(lambda u: u.is_superuser)
 def people_high_expectation(request):
     render_dict = get_render_dict('people_high_expectation')
 
     query = request.GET.get('query', '')
     order = request.GET.get('order', 'decreasing')
+
+    selected_list = Rating.objects.filter(image__selected=None, deep_model__latest=True)
+    if query:
+        queried_list = selected_list.filter(image__url__contains=query)[:100]
+        selected_list = queried_list | selected_list.filter(image__title__contains=query)[:100]
+
     if order == "decreasing":
-        selected_list = Rating.objects.filter(image__selected=None).order_by("-positive")[:100]
+        selected_list = selected_list.order_by("-positive")[:100]
     elif order == "increasing":
-        selected_list = Rating.objects.filter(image__selected=None).order_by("positive")[:100]
-    elif order == "random":
-        selected_list = Rating.objects.filter(image__selected=None).order_by("?")[:100]
+        selected_list = selected_list.order_by("positive")[:100]
+    else:
+        selected_list = selected_list.order_by("?")[:100]
 
     unclassified = [rating.image for rating in selected_list]
 
@@ -316,19 +319,12 @@ def people_high_expectation(request):
     return render(request, 'book/people.html', render_dict)
 
 
+@user_passes_test(lambda u: u.is_superuser)
 def people_result_download(request, selected, page):
     image_list = PeopleImage.objects.filter(selected=selected).only("url", "selected", "page")
 
     count = 1000
-    pagenator = Paginator(image_list, count)
-    p = pagenator.page(page)
-
-    image_list = serializers.serialize('json', p)
-
-    result = {'has_next': p.has_next(), 'image_list': json.loads(image_list)}
-
-    compressed = lz4.frame.compress(json.dumps(result).encode('utf-8'))
-    return HttpResponse(base64.b85encode(compressed))
+    return utils.get_compressed_result(image_list, count, page)
 
 
 def real_estate(request):
@@ -524,7 +520,7 @@ def pokemon(request, page=1):
                      :400]
     else:
         image_list = PokemonImage.objects.filter(classified=None).order_by('?')
-    p, page_info = get_page_info(image_list, page, 20)
+    p, page_info = utils.get_page_info(image_list, page, 20)
     render_dict['image_list'] = p
     render_dict['page_info'] = page_info
     render_dict['query'] = query
@@ -538,7 +534,7 @@ def pokemon_result(request, page=1):
 
     image_list = PokemonImage.objects.filter(classified="yes")
 
-    p, page_info = get_page_info(image_list, page, 100)
+    p, page_info = utils.get_page_info(image_list, page, 100)
 
     render_dict['image_list'] = p
     render_dict['page_info'] = page_info
@@ -561,8 +557,9 @@ def pokemon_result(request, page=1):
     return render(request, 'book/pokemon_result.html', render_dict)
 
 
-def pokemon_export(request, classified="yes"):
+@login_required
+def pokemon_export(request, classified="yes", page=1):
+    count = 1000
     image_list = PokemonImage.objects.filter(classified=classified)
-    image_list = serializers.serialize('json', image_list)
-    compressed = lz4.frame.compress(image_list.encode('utf-8'))
-    return HttpResponse(base64.b85encode(compressed))
+
+    return utils.get_compressed_result(image_list, count, page)

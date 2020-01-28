@@ -34,7 +34,8 @@
                     {% for image in people_row %}
                         <td>
                             <a href="http://instagram.com{{ image.page }}" target="_blank">
-                                <img class="people-img" src="{{ image.url }}" alt="{{ image.title }}">
+                                <img class="people-img" src="{{ image.url }}" alt="Image Not Found"
+                                     data-toggle="tooltip" title="{{ image.title }}">
                             </a>
                         </td>
                     {% endfor %}
@@ -46,4 +47,11 @@
             {% include 'book/base/pagenator.html' %}
         {% endwith %}
     {% endif %}
+{% endblock %}
+{% block scripts %}
+    <script>
+        $(function () {
+            $('[data-toggle="tooltip"]').tooltip()
+        });
+    </script>
 {% endblock %}

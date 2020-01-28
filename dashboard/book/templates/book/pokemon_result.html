@@ -11,7 +11,7 @@
     <H1>결과</H1>
 
     <H2>사용가능 이미지: {{ verified_count }}개
-        <a href="{% url 'book:pokemon_export' 'yes' %}" class="btn btn-sm btn-primary">Export</a>
+        <a href="{% url 'book:pokemon_export' 'yes' 1 %}" class="btn btn-sm btn-primary">Export</a>
     </H2>
     <table style="table-layout:fixed">
         {% for verified_row in verified_table %}

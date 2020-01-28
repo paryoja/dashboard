@@ -1,8 +1,12 @@
+import base64
 import json
 
+import lz4.frame
 import requests
 from django.core import exceptions
+from django.core import serializers
 from django.core.paginator import Paginator
+from django.http import HttpResponse
 
 from .models import Lotto
 
@@ -48,3 +52,15 @@ def get_page_info(object_list, page, count):
     }
 
     return p, page_info
+
+
+def get_compressed_result(image_list, count, page):
+    paginator = Paginator(image_list, count)
+    p = paginator.page(page)
+
+    image_list = serializers.serialize('json', p)
+
+    result = {'has_next': p.has_next(), 'image_list': json.loads(image_list)}
+
+    compressed = lz4.frame.compress(json.dumps(result).encode('utf-8'))
+    return HttpResponse(base64.b85encode(compressed))

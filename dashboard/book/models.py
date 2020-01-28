@@ -129,8 +129,10 @@ class Image(models.Model):
 
 
 class APIServers(models.Model):
-    ip = models.GenericIPAddressField(unique=True)
-    title = models.CharField(max_length=20)
+    ip = models.CharField(max_length=200, unique=False)
+    title = models.CharField(max_length=20, unique=True)
+    endpoint = models.CharField(max_length=100)
+    port = models.IntegerField()
 
     def __str__(self):
         return "{} {}".format(self.title, self.ip)
@@ -152,4 +154,14 @@ class Rating(models.Model):
     positive = models.FloatField(default=0.0)
 
     def __str__(self):
-        return "{} {}".format(self.id, self.positive, self.image.title)
+        return "{} {} {}".format(self.id, self.positive, self.image.title)
+
+
+class PokemonRating(models.Model):
+    deep_model = models.ForeignKey(DeepLearningModel, on_delete=models.CASCADE)
+    image = models.ForeignKey(PokemonImage, on_delete=models.CASCADE)
+    data = fields.JSONField()
+    positive = models.FloatField(default=0.0)
+
+    def __str__(self):
+        return "{} {} {}".format(self.id, self.positive, self.image.title)

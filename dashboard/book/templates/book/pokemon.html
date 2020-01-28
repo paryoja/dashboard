@@ -65,10 +65,10 @@
                                  class="pokemon-img">
                         </td>
                         <td rowspan="2" class="center-row">
-
                             <img src="http://13.67.47.175:8880/pokemon/static/classifier/pokemon-images-and-types/images/images/{{ image.original_label |lower }}.png"
                                  alt="Image Not Found" class="pokemon-img" style="max-width:160px" data-toggle="tooltip"
                                  data-placement="right" title="{{ image.original_label }}">
+                            <div id="img_{{ image.id }}">예측</div>
                         </td>
                         <td class="height-400">
                             <button class="btn btn-primary label-button" id="{{ image.id }}_yes">적합
@@ -108,7 +108,36 @@
         $(function () {
             $('[data-toggle="tooltip"]').tooltip()
         });
+        $(document).ready(function () {
+            $("div[id^='img_']").each(function () {
+                let id = this.id;
+                let csrf = $('[type=hidden]').val();
+                let data = new FormData();
+                data.append('image_id', id);
+                data.append('csrfmiddlewaretoken', csrf);
 
+                fetch("{% url 'book:pokemon_classification_api' %}", {
+                    method: 'POST',
+                    body: data,
+                    credentials: 'same-origin'
+                }).then(function (response) {
+                    return response.json();
+                })
+                    .then(function (json) {
+                        let target_div = $('#' + id);
+                        if (json["classification"]["status"] === "requested") {
+                            target_div.text("Requested")
+                        } else {
+                            target_div.text(json["classification"]["label"] + " " + json["classification"]["classification"][1].toFixed(2));
+                            if (json["classification"]["label"] === 'True') {
+                                target_div.addClass("table-success")
+                            } else {
+                                target_div.addClass("table-danger")
+                            }
+                        }
+                    });
+            })
+        });
         $('button').click(function (e) {
             if ($(this).hasClass("label-button")) {
                 console.log(this[0]);
