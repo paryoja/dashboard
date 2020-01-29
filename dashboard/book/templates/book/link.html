@@ -7,7 +7,6 @@
         <tr>
             <th scope="col">#</th>
             <th scope="col">Type</th>
-            <th scope="col">Description</th>
             <th scope="col">Link</th>
         </tr>
         </thead>
@@ -16,8 +15,7 @@
         <tr>
             <th scope="row">{{ item.id }}</th>
             <td>{{ item.content_type }}</td>
-            <td>{{ item.description }}</td>
-            <td><a href="{{ item.url }}" target="_blank"><i class="fe fe-link"></i></a></td>
+            <td><a href="{{ item.url }}" target="_blank">{{ item.description }}</a></td>
         </tr>
         {% endfor %}
         </tbody>

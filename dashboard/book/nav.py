@@ -38,7 +38,7 @@ def get_render_dict(current_page):
 
     invest_list = list()
     invest_list.append(get_nav_item("leading_stocks", "fa fa-money-check-alt", "Leading Stocks", current_page))
-    invest_list.append(get_nav_item("live_currency", "fe fe-exchange-alt", "Currency History", current_page))
+    invest_list.append(get_nav_item("live_currency", "fa fa-exchange-alt", "Currency History", current_page))
     invest_list.append(get_nav_item("krx_price_query", "fa fa-search-dollar", "Price Query", current_page))
     invest_list.append(get_nav_item("lotto", "fa fa-money-bill-wave", "Lottery", current_page))
     invest_list.append(get_nav_item("real_estate", "fa fa-building", "부동산", current_page))

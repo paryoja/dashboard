@@ -172,6 +172,9 @@ def lotto(request):
 
 def wine(request):
     render_dict = get_render_dict('wine')
+
+    wine_list = models.Wine.objects.all()
+    render_dict['wine_list'] = wine_list
     return render(request, 'book/wine.html', render_dict)
 
 

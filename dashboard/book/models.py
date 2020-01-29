@@ -183,3 +183,18 @@ class Currency(models.Model):
 
     def get_currency_rate(self):
         return self.from_amount / self.to_amount
+
+
+class Wine(models.Model):
+    class RatingChoices(models.IntegerChoices):
+        one = 1
+        two = 2
+        three = 3
+        four = 4
+        five = 5
+
+    name = models.TextField()
+    rating = models.SmallIntegerField(choices=RatingChoices.choices)
+    price = models.IntegerField()
+    comments = models.TextField(blank=True, null=True)
+    image_url = models.URLField(blank=True, null=True)

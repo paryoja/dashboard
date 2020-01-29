@@ -128,8 +128,8 @@
                         if (json["classification"]["status"] === "requested") {
                             target_div.text("Requested")
                         } else {
-                            target_div.text(json["classification"]["label"] + " " + json["classification"]["classification"][1].toFixed(2));
-                            if (json["classification"]["label"] === 'True') {
+                            target_div.text(json["classification"]["label"] + " " + Math.max(...json["classification"]["classification"]).toFixed(2));
+                            if (json["classification"]["label"] === 'yes') {
                                 target_div.addClass("table-success")
                             } else {
                                 target_div.addClass("table-danger")

@@ -3,24 +3,39 @@ from django.contrib import admin
 from . import models
 
 admin.site.register(models.AuthUser)
-admin.site.register(models.Boards)
-admin.site.register(models.BoardCategories)
-admin.site.register(models.Link)
 admin.site.register(models.Lotto)
 admin.site.register(models.Paper)
-admin.site.register(models.Stock)
-admin.site.register(models.Book)
-admin.site.register(models.Image)
-admin.site.register(models.PeopleImage)
-admin.site.register(models.PokemonImage)
 admin.site.register(models.Category)
-admin.site.register(models.APIServers)
 admin.site.register(models.Rating)
-admin.site.register(models.DeepLearningModel)
+admin.site.register(models.Wine)
+
+
+class StockAdmin(admin.ModelAdmin):
+    list_display = ('code', 'name')
+
+
+admin.site.register(models.Stock, StockAdmin)
 
 
 class LinkAdmin(admin.ModelAdmin):
     list_display = ('added_date', 'url', 'description', 'content_type')
+
+
+admin.site.register(models.Link, LinkAdmin)
+
+
+class BookAdmin(admin.ModelAdmin):
+    list_display = ('name', 'author', 'year')
+
+
+admin.site.register(models.Book, BookAdmin)
+
+
+class APIServerAdmin(admin.ModelAdmin):
+    list_display = ('title', 'ip', 'port', 'endpoint')
+
+
+admin.site.register(models.APIServers, APIServerAdmin)
 
 
 class CurrencyAdmin(admin.ModelAdmin):
@@ -32,3 +47,31 @@ class CurrencyAdmin(admin.ModelAdmin):
 
 
 admin.site.register(models.Currency, CurrencyAdmin)
+
+
+class DeepLearningModelAdmin(admin.ModelAdmin):
+    list_display = ('domain', 'version', 'latest')
+
+
+admin.site.register(models.DeepLearningModel, DeepLearningModelAdmin)
+
+
+class ImageAdmin(admin.ModelAdmin):
+    list_display = ('url', 'title')
+
+
+admin.site.register(models.Image, ImageAdmin)
+
+
+class PeopleImageAdmin(admin.ModelAdmin):
+    list_display = ('url', 'title', 'selected')
+
+
+admin.site.register(models.PeopleImage, PeopleImageAdmin)
+
+
+class PokemonImageAdmin(admin.ModelAdmin):
+    list_display = ('url', 'title', 'original_label', 'classified')
+
+
+admin.site.register(models.PokemonImage)

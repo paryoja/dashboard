@@ -18,7 +18,10 @@
         <h4>실시간 데이터</h4>
 
         {% if not market_close %}
-            {{ realtime_result }}
+            real
+            {% for k in realtime_result %}
+                {{ k }}
+            {% endfor %}
         {% else %}
             장이 마감되었습니다.
 
