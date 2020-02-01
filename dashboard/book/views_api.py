@@ -102,8 +102,10 @@ def get_classification_result(domain, int_img_id):
         rating.save()
 
     elif domain == Domain.Pokemon:
+        class_names = json_data["class_names"]
+        positive = json_data["classification"][class_names["yes"]]
         rating = models.PokemonRating(deep_model=target_deep_model, image_id=int_img_id,
-                                      data=json_data, positive=json_data["classification"][0])
+                                      data=json_data, positive=positive)
         rating.save()
 
 

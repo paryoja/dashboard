@@ -285,7 +285,12 @@ def people_result(request, page=1):
     render_dict = get_render_dict('people_result')
 
     query = request.GET.get('query', '')
-    selected_list = models.PeopleImage.objects.filter(url__contains=query).filter(selected=True).order_by('page')
+    selected_list = models.PeopleImage.objects.filter(selected=True)
+    if query:
+        queried_list = selected_list.filter(url__contains=query)
+        selected_list = queried_list | selected_list.filter(title__contains=query)
+    else:
+        selected_list = models.PeopleImage.objects.filter(selected=True).order_by('url')
 
     p, page_info = utils.get_page_info(selected_list, page, 120)
 
