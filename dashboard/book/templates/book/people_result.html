@@ -35,7 +35,7 @@
                         <td>
                             <a href="http://instagram.com{{ image.page }}" target="_blank">
                                 <img class="people-img" src="{{ image.url }}" alt="Image Not Found"
-                                     data-toggle="tooltip" title="{{ image.title }}">
+                                     data-toggle="tooltip" title="{{ image.title|truncatechars:100 }}" >
                             </a>
                         </td>
                     {% endfor %}

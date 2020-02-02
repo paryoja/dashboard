@@ -44,15 +44,18 @@ def get_render_dict(current_page):
     invest_list.append(get_nav_item("real_estate", "fa fa-building", "부동산", current_page))
     invest_list.append(get_nav_item("recommend_book", "fa fa-book", "책", current_page))
 
+    classifier_list = list()
+    classifier_list.append(get_nav_item("people", "fa fa-users", "인명사전", current_page))
+    classifier_list.append(get_nav_item("people_result", "fa fa-user-friends", "인명", current_page))
+    classifier_list.append(get_nav_item("people_high_expectation", "fa fa-user-check", "예상", current_page))
+
     other_list = list()
     other_list.append(get_nav_item("food", "fa fa-utensils", "맛집", current_page))
     other_list.append(get_nav_item("wine", "fa fa-wine-bottle", "Wine", current_page))
     other_list.append(get_nav_item("law_search", "fa fa-gavel", "법률 검색", current_page))
     other_list.append(get_nav_item("todo", "fa fa-check", "Todo List", current_page))
     other_list.append(get_nav_item("algorithm", "fe fe-video", "비디오", current_page))
-    other_list.append(get_nav_item("people", "fa fa-users", "인명사전", current_page))
-    other_list.append(get_nav_item("people_result", "fa fa-user-friends", "인명", current_page))
-    other_list.append(get_nav_item("people_high_expectation", "fa fa-user-friends", "예상", current_page))
+    other_list.append(get_nav_collapse(classifier_list, "sidebarClassifier", "fa fa-tags", "분류기"))
     other_list.append(get_nav_item("idea", "fe fe-zap", "아이디어 모음", current_page))
 
     nav_list = list()

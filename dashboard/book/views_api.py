@@ -94,19 +94,30 @@ def get_classification_result(domain, int_img_id):
         target_deep_model = models.DeepLearningModel(domain=domain, version=json_data["version"])
         target_deep_model.save()
 
-    if domain == Domain.People:
-        class_names = json_data["class_names"]
-        positive = json_data["classification"][class_names["True"]]
-        rating = models.Rating(deep_model=target_deep_model, image_id=int_img_id,
-                               data=json_data, positive=positive)
-        rating.save()
+    if json_data["status"] == "success":
+        if domain == Domain.People:
+            class_names = json_data["class_names"]
+            positive = json_data["classification"][class_names["True"]]
+            rating = models.Rating(deep_model=target_deep_model, image_id=int_img_id,
+                                   data=json_data, positive=positive)
+            rating.save()
 
-    elif domain == Domain.Pokemon:
-        class_names = json_data["class_names"]
-        positive = json_data["classification"][class_names["yes"]]
-        rating = models.PokemonRating(deep_model=target_deep_model, image_id=int_img_id,
-                                      data=json_data, positive=positive)
-        rating.save()
+        elif domain == Domain.Pokemon:
+            class_names = json_data["class_names"]
+            positive = json_data["classification"][class_names["yes"]]
+            rating = models.PokemonRating(deep_model=target_deep_model, image_id=int_img_id,
+                                          data=json_data, positive=positive)
+            rating.save()
+    else:
+        if domain == Domain.People:
+            rating = models.Rating(deep_model=target_deep_model, image_id=int_img_id,
+                                   data=json_data)
+            rating.save()
+
+        elif domain == Domain.Pokemon:
+            rating = models.PokemonRating(deep_model=target_deep_model, image_id=int_img_id,
+                                          data=json_data)
+            rating.save()
 
 
 def get_response(img_id, domain):

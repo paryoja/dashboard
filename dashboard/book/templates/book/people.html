@@ -15,6 +15,8 @@
 {% endblock %}
 
 {% block body %}
+    {% load book_extras %}
+
     <H1><i class="fa fa-users"> </i> 인명사전</H1>
     {% if user.is_superuser %}
         <a href="{% url 'book:add_image' 'people' %}">Add new images</a>
@@ -45,12 +47,12 @@
             {% for image in image_list %}
                 <tr>
                     <td rowspan="2" style="width:30%">
-                        <a href="http://instagram.com{{ image.page }}">
+                        <a href="http://instagram.com{{ image.page }}" target="_blank">
                             <img src="{{ image.url }}"
                                  alt="{{ image.title }}"
                                  class="people-img">
                         </a></td>
-                    <td style="width:30%;max-width:30%;overflow-wrap:break-word;">{{ image.title | linebreaksbr }}</td>
+                    <td style="width:30%;max-width:30%;overflow-wrap:break-word;">{{ image.title | truncatechars:1000 | highlight_user | urlize | linebreaksbr }}</td>
                     <td rowspan="2" style="width:10%">
                         <button class="btn btn-primary like" id="{{ image.id }}_yes">Yes</button>
                     </td>

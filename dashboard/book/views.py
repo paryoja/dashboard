@@ -320,9 +320,13 @@ def people_high_expectation(request):
     order = request.GET.get('order', 'decreasing')
 
     selected_list = models.Rating.objects.filter(image__selected=None, deep_model__latest=True)
+    render_dict['unclassified_count'] = selected_list.count()
+
     if query:
         queried_list = selected_list.filter(image__url__contains=query)[:100]
         selected_list = queried_list | selected_list.filter(image__title__contains=query)[:100]
+
+    render_dict['query_count'] = selected_list.count()
 
     if order == "decreasing":
         selected_list = selected_list.order_by("-positive")[:100]

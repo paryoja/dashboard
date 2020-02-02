@@ -1,0 +1,23 @@
+<li class="nav-item {{ nav_item.active }}">
+    <a class="nav-link" href="#{{ nav_item.button_url }}" data-toggle="collapse" role="button"
+       aria-expanded="{% if nav_item.active %}true{% else %}false{% endif %}"
+       aria-controls="{{ nav_item.button_url }}">
+        <i class="{{ nav_item.icon }}"></i> {{ nav_item.description }}
+    </a>
+    <div class="collapse {% if nav_item.active %}show{% endif %}"
+         id="{{ nav_item.button_url }}">
+        <ul class="nav nav-sm flex-column">
+            {% for child_nav_item in nav_item.child_list %}
+                {% if child_nav_item.collapse %}
+                    {% with nav_item=child_nav_item %}
+                        {% include 'book/base/sidebar_navitem_collapse.html' %}
+                    {% endwith %}
+                {% else %}
+                    {% with nav_item=child_nav_item %}
+                        {% include 'book/base/sidebar_navitem.html' %}
+                    {% endwith %}
+                {% endif %}
+            {% endfor %}
+        </ul>
+    </div>
+</li>
