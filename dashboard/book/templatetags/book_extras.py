@@ -13,3 +13,11 @@ def highlight_user(value):
     user_highlight = user_pattern.sub(r'https://www.instagram.com/\1', value)
 
     return user_highlight
+
+
+@register.filter(name='get_split')
+def get_split(value, index):
+    try:
+        return value.split('/')[index]
+    except:
+        return None

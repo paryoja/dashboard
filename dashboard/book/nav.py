@@ -1,3 +1,8 @@
+from django.conf import settings
+
+VERSION = getattr(settings, "VERSION", "0.0.1")
+
+
 def get_nav_collapse(child_list, button_url, icon, description):
     active = ""
     for item in child_list:
@@ -45,8 +50,8 @@ def get_render_dict(current_page):
     invest_list.append(get_nav_item("recommend_book", "fa fa-book", "책", current_page))
 
     classifier_list = list()
-    classifier_list.append(get_nav_item("people", "fa fa-users", "인명사전", current_page))
-    classifier_list.append(get_nav_item("people_result", "fa fa-user-friends", "인명", current_page))
+    classifier_list.append(get_nav_item("people", "fa fa-users", "미분류", current_page))
+    classifier_list.append(get_nav_item("people_result", "fa fa-user-friends", "분류", current_page))
     classifier_list.append(get_nav_item("people_high_expectation", "fa fa-user-check", "예상", current_page))
 
     other_list = list()
@@ -69,4 +74,5 @@ def get_render_dict(current_page):
     nav_list.append(get_nav_collapse(other_list, "sidebarOther", "fe fe-star", "그 외"))
 
     render_dict['nav_list'] = nav_list
+    render_dict['version'] = VERSION
     return render_dict

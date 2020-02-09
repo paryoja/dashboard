@@ -11,13 +11,17 @@
             -webkit-user-select: none;
             -ms-user-select: none;
         }
+
+        .people-table {
+            table-layout: fixed;
+        }
     </style>
 {% endblock %}
 
 {% block body %}
     {% load book_extras %}
 
-    <H1><i class="fa fa-users"> </i> 인명사전</H1>
+    <H1><i class="fa fa-users"> </i> 분류</H1>
     {% if user.is_superuser %}
         <a href="{% url 'book:add_image' 'people' %}">Add new images</a>
         <form method="get">
@@ -32,9 +36,51 @@
             </div>
         </form>
 
+        {% if distinct or query %}
+            <div class="row">
+                {% if distinct %}
+                    <div class="col-md-6">
+                        <a class="btn btn-success" data-toggle="collapse" href="#collapseStatus" role="button"
+                           aria-expanded="false" aria-controls="collapseExample">
+                            분류 현황 보기
+                        </a>
+                    </div>
+                {% endif %}
+                {% if query %}
+                    <div class="col-md-6">
+                        {% if 'high_expectation' in request.META.PATH_INFO %}
+                            <a class="btn btn-success" href="{% url 'book:people' %}?query={{ query }}">
+                                추가 분류
+                            </a>
+                        {% else %}
+                            <a class="btn btn-success"
+                               href="{% url 'book:people_high_expectation' %}?query={{ query }}">
+                                추가 분류
+                            </a>
+                        {% endif %}
+                    </div>
+                {% endif %}
+            </div>
+            {% if distinct %}
+                <div class="collapse" id="collapseStatus">
+                    <table class="table table-sm table-hover">
+                        {% for value_list in distinct %}
+                            <tr>
+                                {% for value in value_list %}
+                                    <td><a href="?query={{ value.user_id }}">{{ value.user_id }}
+                                        (count: {{ value.id__count }})</a></td>
+                                {% endfor %}
+                            </tr>
+                        {% endfor %}
+                    </table>
+                </div>
+            {% endif %}
+        {% endif %}
+
+
         {% csrf_token %}
         <h4>Query Count {{ query_count }}, Unclassified {{ unclassified_count }}</h4>
-        <table class="table table-sm" style="table-layout:fixed">
+        <table class="table table-sm people-table">
             <thead>
             <tr>
                 <th style="max-width:50%;width:50%">이미지</th>
@@ -49,10 +95,13 @@
                     <td rowspan="2" style="width:30%">
                         <a href="http://instagram.com{{ image.page }}" target="_blank">
                             <img src="{{ image.url }}"
-                                 alt="{{ image.title }}"
+                                 alt="Not Found"
                                  class="people-img">
                         </a></td>
-                    <td style="width:30%;max-width:30%;overflow-wrap:break-word;">{{ image.title | truncatechars:1000 | highlight_user | urlize | linebreaksbr }}</td>
+                    <td style="width:30%;max-width:30%;overflow-wrap:break-word;">
+                        <a href="?query={{ image.user_id }}">{{ image.user_id }}</a>
+                        <br>{{ image.title | truncatechars:1000 | highlight_user | urlize | linebreaksbr }}
+                    </td>
                     <td rowspan="2" style="width:10%">
                         <button class="btn btn-primary like" id="{{ image.id }}_yes">Yes</button>
                     </td>

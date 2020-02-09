@@ -9,17 +9,53 @@
 {% endblock %}
 {% block body %}
     <H1>결과</H1>
+    <form method="get" action="{% url 'book:pokemon_result' 1 %}">
+        <div class="input-group mb-3">
+            <input type="text" name="query" class="form-control" placeholder="검색" aria-label="Query"
+                   aria-describedby="button-addon2" value="{{ query }}">
+            <div class="input-group-append">
+                <button class="btn btn-outline-secondary" type="submit" id="button-addon2">
+                    Submit
+                </button>
+            </div>
+        </div>
+    </form>
 
-    <H2>사용가능 이미지: {{ verified_count }}개
-        <a href="{% url 'book:pokemon_export' 'yes' 1 %}" class="btn btn-sm btn-primary">Export</a>
-    </H2>
+    {% if distinct %}
+        <div class="row">
+            <div class="col-md-6">
+                <a class="btn btn-success" data-toggle="collapse" href="#collapseStatus" role="button"
+                   aria-expanded="false" aria-controls="collapseExample">
+                    분류 현황 보기
+                </a>
+            </div>
+            <div class="col-6">
+                <H2>사용가능 이미지: {{ verified_count }}개</H2>
+            </div>
+        </div>
+        <div class="collapse" id="collapseStatus">
+            <table class="table table-sm table-hover">
+                {% for value_list in distinct %}
+                    <tr>
+                        {% for value in value_list %}
+                            <td><a href="?query={{ value.original_label }}">{{ value.original_label }}
+                                (count: {{ value.id__count }})</a></td>
+                        {% endfor %}
+                    </tr>
+                {% endfor %}
+            </table>
+        </div>
+    {% endif %}
+
     <table style="table-layout:fixed">
         {% for verified_row in verified_table %}
             <tr>
                 {% for verified in verified_row %}
-                    <td style="width:10%; height:100px"><img src="{{ verified.url }}"
-                                                             class="small_img"
-                                                             alt="{{ verified.original_label }}"></td>
+                    <td style="width:10%; height:100px">
+                        <img src="{{ verified.url }}"
+                             class="small_img"
+                             alt="{{ verified.original_label }}">
+                    </td>
                 {% endfor %}
             </tr>
         {% endfor %}

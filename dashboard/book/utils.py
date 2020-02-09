@@ -64,3 +64,16 @@ def get_compressed_result(image_list, count, page):
 
     compressed = lz4.frame.compress(json.dumps(result).encode('utf-8'))
     return HttpResponse(base64.b85encode(compressed))
+
+
+def to_table(contents, row_count):
+    table = []
+    row = None
+    for count, img in enumerate(contents):
+        if count % row_count == 0:
+            row = []
+            table.append(row)
+        row.append(img)
+        count += 1
+
+    return table

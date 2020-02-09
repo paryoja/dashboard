@@ -165,3 +165,10 @@ LOGGING = {
 LOGIN_URL = '/book/login'
 
 CELERY_BROKER_URL = 'amqp://myuser:mypassword@rabbitmq:5672/myvhost'
+
+import requests
+
+try:
+    VERSION = requests.get('https://api.github.com/repos/paryoja/dashboard/releases').json()[0]['tag_name']
+except:
+    VERSION = "UNK"

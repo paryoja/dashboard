@@ -98,11 +98,21 @@ class Category(models.Model):
 
 
 class PeopleImage(models.Model):
+
+    def get_user_id(self):
+        return self.url.split('/')[5]
+
     url = models.URLField(unique=True, max_length=400)
     title = models.TextField(max_length=500)
     category = models.ForeignKey(Category, on_delete=models.SET_NULL, null=True, blank=True)
     page = models.CharField(max_length=30)
     selected = models.BooleanField(null=True, blank=True)
+    user_id = models.CharField(max_length=20)
+
+    def save(self, force_insert=False, force_update=False, using=None,
+             update_fields=None):
+        self.user_id = self.get_user_id()
+        super().save(force_insert, force_update, using, update_fields)
 
     def __str__(self):
         return "{}".format(self.url)

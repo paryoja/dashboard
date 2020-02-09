@@ -10,6 +10,7 @@ from celery import shared_task
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.decorators import user_passes_test
 from django.core import exceptions
+from django.db.models import Count
 from django.http import HttpResponse
 from django.shortcuts import render
 
@@ -263,13 +264,19 @@ def people(request):
 
     query = request.GET.get('query', '')
 
-    unclassified = models.PeopleImage.objects.filter(selected=None)
+    unclassified = models.PeopleImage.objects.filter(selected=None, rating=None)
     unclassified_count = unclassified.count()
+
+    distinct = unclassified.order_by().values('user_id').distinct().annotate(Count("id")).order_by('id__count')
+    distinct = utils.to_table(distinct, 5)
+    render_dict['distinct'] = distinct
+
     query_count = unclassified.filter(title__contains=query).count()
     image_list = unclassified.filter(title__contains=query).order_by('?')[:100]
 
     render_dict['unclassified_count'] = unclassified_count
     render_dict['query_count'] = query_count
+    render_dict['distinct'] = distinct
 
     if query:
         id_select = unclassified.filter(url__contains=query)
@@ -288,6 +295,12 @@ def people_result(request, page=1):
 
     query = request.GET.get('query', '')
     selected_list = models.PeopleImage.objects.filter(selected=True)
+
+    distinct = selected_list.order_by().values('user_id').distinct().annotate(Count("id")).order_by(
+        '-id__count')
+    distinct = utils.to_table(distinct, 5)
+    render_dict['distinct'] = distinct
+
     if query:
         queried_list = selected_list.filter(url__contains=query)
         selected_list = queried_list | selected_list.filter(title__contains=query)
@@ -297,15 +310,7 @@ def people_result(request, page=1):
     p, page_info = utils.get_page_info(selected_list, page, 120)
 
     row_count = 3
-    people_table = []
-    count = 0
-    people_row = []
-    for img in p:
-        if count % row_count == 0:
-            people_row = []
-            people_table.append(people_row)
-        people_row.append(img)
-        count += 1
+    people_table = utils.to_table(p, row_count)
 
     render_dict['people_table'] = people_table
     render_dict['page_info'] = page_info
@@ -548,6 +553,12 @@ def pokemon(request, page=1):
             classified=None).order_by('?')[:400]
     else:
         image_list = models.PokemonImage.objects.filter(classified=None).order_by('?')
+
+        distinct = image_list.order_by().values('original_label').distinct().annotate(Count("id")).order_by(
+            'id__count')
+        distinct = utils.to_table(distinct, 5)
+        render_dict['distinct'] = distinct
+
     p, page_info = utils.get_page_info(image_list, page, 20)
     render_dict['image_list'] = p
     render_dict['page_info'] = page_info
@@ -560,25 +571,25 @@ def pokemon(request, page=1):
 def pokemon_result(request, page=1):
     render_dict = get_render_dict('pokemon_result')
 
+    query = request.GET.get('query', '')
     image_list = models.PokemonImage.objects.filter(classified="yes")
 
+    distinct = image_list.order_by().values('original_label').distinct().annotate(Count("id")).order_by(
+        'id__count')
+    distinct = utils.to_table(distinct, 5)
+
+    if query:
+        image_list = image_list.filter(original_label=query)
     p, page_info = utils.get_page_info(image_list, page, 100)
 
+    render_dict['distinct'] = distinct
     render_dict['image_list'] = p
     render_dict['page_info'] = page_info
 
     verified_count = image_list.count()
     row_count = 10
-    verified_table = []
-    count = 0
-    verified_row = None
-
-    for img in p:
-        if count % row_count == 0:
-            verified_row = []
-            verified_table.append(verified_row)
-        verified_row.append(img)
-        count += 1
+    verified_table = utils.to_table(p, row_count)
+    render_dict['query'] = query
     render_dict['verified_table'] = verified_table
     render_dict['verified_count'] = verified_count
 

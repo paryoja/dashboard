@@ -47,6 +47,25 @@
             </div>
         </form>
 
+        {% if distinct %}
+            <a class="btn btn-success" data-toggle="collapse" href="#collapseStatus" role="button"
+               aria-expanded="false" aria-controls="collapseExample">
+                분류 현황 보기
+            </a>
+            <div class="collapse" id="collapseStatus">
+                <table class="table table-sm table-hover">
+                    {% for value_list in distinct %}
+                        <tr>
+                            {% for value in value_list %}
+                                <td><a href="?query={{ value.original_label }}">{{ value.original_label }}
+                                    (count: {{ value.id__count }})</a></td>
+                            {% endfor %}
+                        </tr>
+                    {% endfor %}
+                </table>
+            </div>
+        {% endif %}
+
         {% if image_list %}
             {% csrf_token %}
             <table class="table table-sm table-hover" style="table-layout:fixed">
