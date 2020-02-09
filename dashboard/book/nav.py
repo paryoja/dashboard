@@ -38,8 +38,9 @@ def get_render_dict(current_page):
     study_list.append(get_nav_item("colab", "fa fa-file-code", "실습자료", current_page))
 
     pokemon_list = list()
-    pokemon_list.append(get_nav_item("pokemon_classification", "fa fa-check-square", "분류하기", current_page))
-    pokemon_list.append(get_nav_item("pokemon_result", "fa fa-poll", "분류결과", current_page))
+    pokemon_list.append(get_nav_item("pokemon_classification", "fa fa-check-square", "분류", current_page))
+    pokemon_list.append(get_nav_item("pokemon_result", "fa fa-poll", "결과", current_page))
+    pokemon_list.append(get_nav_item("pokemon_sorted", "fa fa-sort-numeric-down", "Yes 순 분류", current_page))
 
     invest_list = list()
     invest_list.append(get_nav_item("leading_stocks", "fa fa-money-check-alt", "Leading Stocks", current_page))

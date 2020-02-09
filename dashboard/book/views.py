@@ -568,6 +568,25 @@ def pokemon(request, page=1):
 
 
 @login_required
+def pokemon_sorted(request):
+    render_dict = get_render_dict('pokemon_sorted')
+
+    query = request.GET.get('query', '')
+
+    image_list = models.PokemonRating.objects.filter(deep_model__latest=True).filter(
+        image__classified=None)
+    if query:
+        image_list = image_list.filter(image__original_label__icontains=query)
+
+    image_list = image_list.order_by("-positive")[:20]
+
+    render_dict['image_list'] = [rating.image for rating in image_list]
+    render_dict['query'] = query
+
+    return render(request, 'book/pokemon.html', render_dict)
+
+
+@login_required
 def pokemon_result(request, page=1):
     render_dict = get_render_dict('pokemon_result')
 

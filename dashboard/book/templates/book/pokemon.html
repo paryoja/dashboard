@@ -114,9 +114,11 @@
                 </tbody>
             </table>
             <br>
-            {% with current_url="book:pokemon_classification" %}
-                {% include 'book/base/pagenator.html' %}
-            {% endwith %}
+            {% if page_info %}
+                {% with current_url="book:pokemon_classification" %}
+                    {% include 'book/base/pagenator.html' %}
+                {% endwith %}
+            {% endif %}
         {% else %}
             <h3>조건에 해당하는 이미지가 없습니다.</h3>
         {% endif %}

@@ -36,13 +36,20 @@ urlpatterns = [
     path('real_estate/', views.real_estate, name='real_estate'),
     path('recommend_book/', views.recommend_book, name='recommend_book'),
     path('food/', views.food, name='food'),
+
+    # pokemon
     path('pokemon/', views.pokemon, name='pokemon_classification'),
     path('pokemon/<int:page>', views.pokemon, name='pokemon_classification'),
     path('pokemon_result/', views.pokemon_result, name='pokemon_result'),
+    path('pokemon/sorted/', views.pokemon_sorted, name='pokemon_sorted'),
     path('pokemon_result/<int:page>', views.pokemon_result, name='pokemon_result'),
     path('pokemon_export/<str:classified>/<int:page>', views.pokemon_export, name='pokemon_export'),
+
+    # image
     path('add_image/', views.add_image, name='add_image'),
     path('add_image/<str:data_type>', views.add_image, name='add_image'),
+
+    # session
     path('login/', views_user.BookLoginView.as_view(), name='login'),
     path('logout/', views_user.BookLogoutView.as_view(), name='logout'),
 

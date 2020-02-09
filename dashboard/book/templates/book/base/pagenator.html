@@ -1,15 +1,17 @@
-<nav aria-label="Page navigation">
-    <ul class="pagination">
-        <li class="page-item {% if not page_info.prev %}disabled{% endif %}">
-            <a class="page-link" href="{% url current_url page_info.prev %}?query={{ query }}">&laquo;</a>
-        </li>
-        {% for page in page_info.page_list %}
-            <li class="page-item {% if page == page_info.page %}active{% endif %}">
-                <a class="page-link" href="{% url current_url page %}?query={{ query }}">{{ page }}</a>
+{% if page_info %}
+    <nav aria-label="Page navigation">
+        <ul class="pagination">
+            <li class="page-item {% if not page_info.prev %}disabled{% endif %}">
+                <a class="page-link" href="{% url current_url page_info.prev %}?query={{ query }}">&laquo;</a>
             </li>
-        {% endfor %}
-        <li class="page-item {% if not page_info.next %}disabled{% endif %}">
-            <a class="page-link" href="{% url current_url page_info.next %}?query={{ query }}">&raquo;</a>
-        </li>
-    </ul>
-</nav>
+            {% for page in page_info.page_list %}
+                <li class="page-item {% if page == page_info.page %}active{% endif %}">
+                    <a class="page-link" href="{% url current_url page %}?query={{ query }}">{{ page }}</a>
+                </li>
+            {% endfor %}
+            <li class="page-item {% if not page_info.next %}disabled{% endif %}">
+                <a class="page-link" href="{% url current_url page_info.next %}?query={{ query }}">&raquo;</a>
+            </li>
+        </ul>
+    </nav>
+{% endif %}
