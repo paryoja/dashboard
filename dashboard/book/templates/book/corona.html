@@ -1,0 +1,122 @@
+{% extends 'book/base/base.html' %}
+
+{% block body %}
+    <H1>Corona Virus Status</H1>
+
+    <canvas id="myChart" width="400" height="300"></canvas>
+    <table class="table table-sm table-hover">
+        <thead>
+        <tr>
+            <th>날짜</th>
+            <th>확진자</th>
+            <th>사망자</th>
+        </tr>
+        </thead>
+        {% for count in expected %}
+            <tr>
+                <td>{{ count.date }}</td>
+                <td>{{ count.confirmed | floatformat:0 }} (예상)</td>
+                <td>{{ count.death | floatformat:0 }} (예상)</td>
+            </tr>
+        {% endfor %}
+        {% for count in counts %}
+            <tr>
+                <td>{{ count.date }}</td>
+                <td>{{ count.confirmed }}</td>
+                <td>{{ count.death }}</td>
+            </tr>
+        {% endfor %}
+    </table>
+
+{% endblock %}
+{% block scripts %}
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@2.9.3/dist/Chart.min.js"
+            integrity="sha256-R4pqcOYV8lt7snxMQO/HSbVCFRPMdrhAFMH+vr9giYI=" crossorigin="anonymous"></script>
+    <script>
+        console.log(window.chartColors);
+        var ctx = document.getElementById('myChart').getContext('2d');
+        var myChart = new Chart(ctx, {
+            type: 'line',
+            data: {
+                labels: [{% for x in counts reversed %}"{{ x.date }}",{% endfor %}
+                    {% for x in expected reversed %}"{{ x.date }}"{% if not forloop.last %}, {% endif %}{% endfor %}],
+                datasets: [
+                    {
+                        label: '# of Death',
+                        data: [
+                            {% for x in counts reversed %}
+                                {{ x.death }},
+                            {% endfor %}
+                        ],
+                        backgroundColor: 'rgba(255, 99, 132)',
+                        borderColor: 'rgba(255, 99, 132)',
+                        fill: false,
+                    },
+                    {
+                        label: 'Expected # of Death',
+                        data: [
+                            {% for x in counts reversed %}
+                                {% if forloop.last %}
+                                    {{ x.death }}
+                                {% else %}
+                                    NaN
+                                {% endif %},
+                            {% endfor %}
+                            {% for x in expected reversed %}
+                                {{ x.death | floatformat:0 }},
+                            {% endfor %}
+                        ],
+                        backgroundColor: 'rgba(75, 192, 192)',
+                        borderColor: 'rgba(75, 192, 192)',
+                        fill: false,
+                    },
+                    {
+                        label: '# of Confirmed',
+                        data: [
+                            {% for x in counts reversed %}
+                                {{ x.confirmed }},
+                            {% endfor %}],
+                        backgroundColor: 'rgba(255, 159, 64)',
+                        borderColor: 'rgba(255, 159, 64)',
+                        fill: false,
+                    },
+                    {
+                        label: 'Expected # of Confirmed',
+                        data: [
+                            {% for x in counts reversed %}
+                                {% if forloop.last %}
+                                    {{ x.confirmed }}
+                                {% else %}
+                                    NaN
+                                {% endif %},
+                            {% endfor %}
+                            {% for x in expected reversed %}
+                                {{ x.confirmed | floatformat:0 }},
+                            {% endfor %}
+                        ],
+                        backgroundColor: 'rgba(153, 102, 255)',
+                        borderColor: 'rgba(153, 102, 255)',
+                        fill: false,
+                    }]
+            },
+            options: {
+                scales: {
+                    yAxes: [{
+                        ticks: {
+                            beginAtZero: true
+                        }
+                    }]
+                },
+                hover: {
+                    mode: 'nearest',
+                    intersect: true
+                },
+                tooltips: {
+                    position: 'nearest',
+                    mode: 'index',
+                    intersect: false,
+                },
+            }
+        });
+    </script>
+{% endblock %}

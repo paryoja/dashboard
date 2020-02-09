@@ -1,4 +1,6 @@
+import datetime
 import json
+import math
 import re
 import traceback
 
@@ -589,3 +591,44 @@ def pokemon_export(request, classified="yes", page=1):
     image_list = models.PokemonImage.objects.filter(classified=classified)
 
     return utils.get_compressed_result(image_list, count, page)
+
+
+def compute_expectation(x, coeff):
+    value = coeff['a'] / (1 + math.exp(-(x - coeff['x0']) / coeff['b']))
+    return value
+
+
+def corona(request):
+    render_dict = get_render_dict('corona')
+
+    counts = models.Corona.objects.all().order_by("-date")
+    render_dict['counts'] = counts
+
+    confirmed = {
+        'a': 49823.777,
+        'b': 3.513674,
+        'x0': 14.174237
+    }
+    death = {
+        'a': 1374.9548,
+        'b': 4.3781347,
+        'x0': 16.540905
+    }
+    offset = counts.count()
+    latest_date = counts[0].date
+    delta = datetime.timedelta(days=1)
+
+    expected = []
+
+    for off in range(offset + 1, offset + 10):
+        latest_date += delta
+        expected_confirmed = compute_expectation(off, confirmed)
+        expected_death = compute_expectation(off, death)
+        expected.append({
+            'date': latest_date,
+            'confirmed': expected_confirmed,
+            'death': expected_death,
+        })
+    expected = sorted(expected, key=lambda x: x['date'], reverse=True)
+    render_dict['expected'] = expected
+    return render(request, 'book/corona.html', render_dict)

@@ -198,3 +198,9 @@ class Wine(models.Model):
     price = models.IntegerField()
     comments = models.TextField(blank=True, null=True)
     image_url = models.URLField(blank=True, null=True)
+
+
+class Corona(models.Model):
+    date = models.DateField()
+    confirmed = models.IntegerField()
+    death = models.IntegerField()

@@ -73,7 +73,9 @@
             </div>
         {% endif %}
     {% endif %}
+
     {% if all_objects %}
+        <canvas id="myChart" width="400" height="300"></canvas>
         <table class="table table-sm table-hover">
             <thead>
             <tr class="min-nowrap">
@@ -97,4 +99,104 @@
             </tbody>
         </table>
     {% endif %}
+{% endblock %}
+{% block scripts %}
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@2.9.3/dist/Chart.min.js"
+            integrity="sha256-R4pqcOYV8lt7snxMQO/HSbVCFRPMdrhAFMH+vr9giYI=" crossorigin="anonymous"></script>
+    <script>
+        console.log(window.chartColors);
+        var ctx = document.getElementById('myChart').getContext('2d');
+        var myChart = new Chart(ctx, {
+            type: 'bar',
+            data: {
+                labels: [{% for x in all_objects reversed %}"{{ x.draw_number }}",{% endfor %}
+                    {% for x in expected reversed %}"{{ x.date }}"{% if not forloop.last %}, {% endif %}{% endfor %}],
+                datasets: [
+                    {
+                        type: 'line',
+                        label: '판매량',
+                        data: [
+                            {% for obj in all_objects reversed %}
+                                {{ obj.numbers.totSellamnt }},
+                            {% endfor %}
+                        ],
+                        backgroundColor: 'rgba(255, 99, 132)',
+                        borderColor: 'rgba(255, 99, 132)',
+                        fill: false,
+                        yAxisID: 'y-axis-1',
+                    },
+                    {
+                        label: '1등 당첨금',
+                        data: [
+                            {% for obj in all_objects reversed %}
+                                {{ obj.numbers.firstWinamnt }},
+                            {% endfor %}
+                        ],
+                        backgroundColor: 'rgba(75, 192, 192)',
+                        borderColor: 'rgba(75, 192, 192)',
+                        fill: false,
+                        yAxisID: 'y-axis-2'
+                    }]
+            },
+            options: {
+                responsive: true,
+                hoverMode: 'index',
+                stacked: false,
+                title: {
+                    display: true,
+                    text: 'Chart.js Line Chart - Multi Axis'
+                },
+                scales: {
+                    yAxes: [{
+                        type: 'linear', // only linear but allow scale type registration. This allows extensions to exist solely for log scale for instance
+                        display: true,
+                        position: 'left',
+                        id: 'y-axis-1',
+                        ticks: {
+                            // Include a dollar sign in the ticks
+                            callback: function (value, index, values) {
+                                return Math.round(value / 100000000) + '억원';
+                            }
+                        }
+                    }, {
+                        type: 'linear', // only linear but allow scale type registration. This allows extensions to exist solely for log scale for instance
+                        display: true,
+                        position: 'right',
+                        id: 'y-axis-2',
+                        ticks: {
+                            // Include a dollar sign in the ticks
+                            callback: function (value, index, values) {
+                                return Math.round(value / 100000000) + '억원';
+                            }
+                        },
+                        // grid line settings
+                        gridLines: {
+                            drawOnChartArea: false, // only want the grid lines for one axis to show up
+                        },
+                    }],
+                },
+                hover: {
+                    mode: 'nearest',
+                    intersect: true
+                },
+                tooltips: {
+                    mode: 'index',
+                    position: 'nearest',
+                    intersect: false,
+                    callbacks: {
+                        label: function (tooltipItem, data) {
+                            var label = data.datasets[tooltipItem.datasetIndex].label || '';
+
+                            if (label) {
+                                label += ': ';
+                            }
+                            label += Math.round(tooltipItem.yLabel / 100000000) + '억원';
+                            return label;
+                        }
+                    }
+
+                },
+            }
+        });
+    </script>
 {% endblock %}

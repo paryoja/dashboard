@@ -49,4 +49,7 @@ urlpatterns = [
     path('rating/api', views_api.set_rating, name='rating_api'),
     path('people/classification_api', views_api.people_classification_api, name='people_classification_api'),
     path('pokemon/classification_api', views_api.pokemon_classification_api, name='pokemon_classification_api'),
+
+    # corona
+    path('corona', views.corona, name='corona'),
 ]

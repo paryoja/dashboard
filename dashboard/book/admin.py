@@ -8,6 +8,7 @@ admin.site.register(models.Paper)
 admin.site.register(models.Category)
 admin.site.register(models.Rating)
 admin.site.register(models.Wine)
+admin.site.register(models.Corona)
 
 
 class StockAdmin(admin.ModelAdmin):

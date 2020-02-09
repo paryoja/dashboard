@@ -62,6 +62,7 @@ def get_render_dict(current_page):
     nav_list.append(get_nav_item("index", "fe fe-home", "Home", current_page))
     nav_list.append(get_nav_collapse(study_list, "sidebarLecture", "fa fa-chalkboard-teacher", "스터디 정리"))
     nav_list.append(get_nav_collapse(pokemon_list, "sidebarPokemon", "fa fa-gamepad", "포켓몬"))
+    nav_list.append(get_nav_item("corona", "fa fa-exclamation-triangle", "코로나", current_page))
     nav_list.append(get_nav_item("chatbot", "fa fa-comments", "챗봇", current_page))
     nav_list.append(get_nav_item("link", "fe fe-link", "링크", current_page))
     nav_list.append(get_nav_collapse(invest_list, "sidebarInvest", "fe fe-dollar-sign", "투자"))
