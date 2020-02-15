@@ -120,6 +120,7 @@
 {% endblock %}
 {% block scripts %}
     <script>
+        var element_count = {{ image_list|length }};
         $(document).ready(function () {
             $("td[id^='img_']").each(function () {
                 let id = this.id;
@@ -167,13 +168,16 @@
             });
             let closest_tr = $(e.target).closest('tr');
             let next_tr = closest_tr.next('tr');
-            console.log(closest_tr[0]);
-            console.log(next_tr[0]);
+
             closest_tr.remove();
             next_tr.remove();
+            element_count--;
+
+            if (element_count === 0) {
+                location.reload();
+            }
         });
         $(document).on('click', 'td', function () {
-            console.log('clicked');
             $(this).children('button').click();
         });
     </script>

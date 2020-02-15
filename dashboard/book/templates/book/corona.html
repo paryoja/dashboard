@@ -2,7 +2,8 @@
 
 {% block body %}
     <H1>Corona Virus Status</H1>
-
+    <H3><a href="https://en.wikipedia.org/wiki/Template:2019%E2%80%9320_Wuhan_coronavirus_data/China_medical_cases">데이터
+        출처</a></H3>
     <canvas id="myChart" width="400" height="300"></canvas>
     <table class="table table-sm table-hover">
         <thead>
@@ -51,6 +52,7 @@
                         backgroundColor: 'rgba(255, 99, 132)',
                         borderColor: 'rgba(255, 99, 132)',
                         fill: false,
+                        yAxisID: "y-axis-2"
                     },
                     {
                         label: 'Expected # of Death',
@@ -69,6 +71,8 @@
                         backgroundColor: 'rgba(75, 192, 192)',
                         borderColor: 'rgba(75, 192, 192)',
                         fill: false,
+                        yAxisID: "y-axis-2"
+
                     },
                     {
                         label: '# of Confirmed',
@@ -96,15 +100,25 @@
                         ],
                         backgroundColor: 'rgba(153, 102, 255)',
                         borderColor: 'rgba(153, 102, 255)',
-                        fill: false,
+                        fill: false
                     }]
             },
             options: {
                 scales: {
                     yAxes: [{
                         ticks: {
-                            beginAtZero: true
+                            beginAtZero: true,
+                            suggestedMax: 80000,
                         }
+                    }, {
+                        ticks: {
+                            beginAtZero: true,
+                            suggestedMax: 4000,
+                        },
+                        type: 'linear', // only linear but allow scale type registration. This allows extensions to exist solely for log scale for instance
+                        display: true,
+                        position: 'right',
+                        id: 'y-axis-2'
                     }]
                 },
                 hover: {
@@ -116,6 +130,7 @@
                     mode: 'index',
                     intersect: false,
                 },
+
             }
         });
     </script>

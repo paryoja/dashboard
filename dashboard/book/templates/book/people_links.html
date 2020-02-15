@@ -1,0 +1,20 @@
+{% extends 'book/base/base.html' %}
+
+{% block body %}
+    {% load book_extras %}
+    <table>
+        {% for name in user_names %}
+            <tr>
+                <td><a href="https://www.instagram.com/{{ name }}" target="_blank">{{ name }}</a></td>
+                <td>
+                    <a class="btn btn-sm btn-primary"
+                       href="{% url 'book:add_user' %}?username={{ name }}&checked=True">True</a>
+                </td>
+                <td>
+                    <a class="btn btn-sm btn-primary"
+                       href="{% url 'book:add_user' %}?username={{ name }}&checked=False">False</a>
+                </td>
+            </tr>
+        {% endfor %}
+    </table>
+{% endblock %}

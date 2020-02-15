@@ -41,7 +41,14 @@
                             추가 분류
                         </a>
                     </div>
+                {% else %}
+                    <div class="col-md-6">
+                        <a class="btn btn-success" href="{% url 'book:people_links' %}">
+                            유저 링크
+                        </a>
+                    </div>
                 {% endif %}
+
             </div>
             <div class="collapse" id="collapseStatus">
                 <table class="table table-sm table-hover">
@@ -64,7 +71,8 @@
                         <td>
                             <a href="http://instagram.com{{ image.page }}" target="_blank">
                                 <img class="people-img" src="{{ image.url }}" alt="Image Not Found"
-                                     data-toggle="tooltip" title="{{ image.user_id }}/{{ image.title|truncatechars:100 }}">
+                                     data-toggle="tooltip"
+                                     title="{{ image.user_id }}/{{ image.title|truncatechars:100 }}">
                             </a>
                         </td>
                     {% endfor %}

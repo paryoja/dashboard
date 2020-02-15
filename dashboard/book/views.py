@@ -17,6 +17,7 @@ from django.shortcuts import render
 from . import models
 from . import utils
 from .nav import get_render_dict
+from .templatetags import book_extras
 from .xml_helper import XmlDictConfig, get_xml_request
 
 
@@ -269,6 +270,7 @@ def people(request):
 
     distinct = unclassified.order_by().values('user_id').distinct().annotate(Count("id")).order_by('id__count')
     distinct = utils.to_table(distinct, 5)
+
     render_dict['distinct'] = distinct
 
     query_count = unclassified.filter(title__contains=query).count()
@@ -350,6 +352,42 @@ def people_high_expectation(request):
     render_dict['query'] = query
 
     return render(request, 'book/people.html', render_dict)
+
+
+@user_passes_test(lambda u: u.is_superuser)
+def people_links(request):
+    render_dict = get_render_dict('people_result')
+
+    selected_list = models.PeopleImage.objects.filter(title__contains="@").order_by("?")
+
+    new_id = 0
+    user_names = set()
+    stop = False
+    for image in selected_list:
+        names = book_extras.user_pattern.findall(image.title)
+        for name in names:
+            if not models.User.objects.filter(username=name).exists():
+                user_names.add(name)
+                new_id += 1
+
+                if new_id == 10:
+                    stop = True
+                    break
+        if stop:
+            break
+
+    verified = set()
+
+    while user_names:
+        user = user_names.pop()
+        r = requests.get("https://www.instagram.com/" + user)
+        if r.status_code == 200:
+            verified.add(user)
+        else:
+            models.User(username=user, checked=False).save()
+
+    render_dict['user_names'] = verified
+    return render(request, 'book/people_links.html', render_dict)
 
 
 @user_passes_test(lambda u: u.is_superuser)
@@ -495,12 +533,14 @@ def add_image_client(a_text, url, category_id, data_type):
                 print(e)
 
 
+@login_required
 def add_image(request, data_type='pokemon'):
-    render_dict = None
     if data_type == 'pokemon':
         render_dict = get_render_dict('pokemon')
     elif data_type == 'people':
         render_dict = get_render_dict('people')
+    else:
+        raise KeyError("{} is not valid data_type".format(data_type))
 
     if request.POST:
         try:
@@ -548,16 +588,17 @@ def pokemon(request, page=1):
 
     query = request.GET.get('query', '')
 
+    distinct = models.PokemonImage.objects.filter(classified="yes").order_by().values(
+        'original_label').distinct().annotate(Count("id")).order_by(
+        'id__count')
+    distinct = utils.to_table(distinct, 5)
+    render_dict['distinct'] = distinct
+
     if query:
         image_list = models.PokemonImage.objects.filter(original_label__icontains=query).filter(
             classified=None).order_by('?')[:400]
     else:
         image_list = models.PokemonImage.objects.filter(classified=None).order_by('?')
-
-        distinct = image_list.order_by().values('original_label').distinct().annotate(Count("id")).order_by(
-            'id__count')
-        distinct = utils.to_table(distinct, 5)
-        render_dict['distinct'] = distinct
 
     p, page_info = utils.get_page_info(image_list, page, 20)
     render_dict['image_list'] = p
@@ -635,14 +676,14 @@ def corona(request):
     render_dict['counts'] = counts
 
     confirmed = {
-        'a': 49823.777,
-        'b': 3.513674,
-        'x0': 14.174237
+        'a': 122279.35,
+        'b': 6.1021295,
+        'x0': 23.049456
     }
     death = {
-        'a': 1374.9548,
-        'b': 4.3781347,
-        'x0': 16.540905
+        'a': 4967.7617,
+        'b': 6.436095,
+        'x0': 28.529556
     }
     offset = counts.count()
     latest_date = counts[0].date
@@ -662,3 +703,14 @@ def corona(request):
     expected = sorted(expected, key=lambda x: x['date'], reverse=True)
     render_dict['expected'] = expected
     return render(request, 'book/corona.html', render_dict)
+
+
+@user_passes_test(lambda u: u.is_superuser)
+def add_user(request):
+    user = request.GET['username']
+    checked = request.GET['checked']
+
+    obj = models.User(username=user, checked=checked)
+    obj.save()
+
+    return HttpResponse("1")

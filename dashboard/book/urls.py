@@ -32,6 +32,7 @@ urlpatterns = [
     path('people_result/download/<str:selected>/<int:page>', views.people_result_download,
          name='people_result_download'),
     path('people/high_expectation/', views.people_high_expectation, name='people_high_expectation'),
+    path('people/people_links/', views.people_links, name='people_links'),
 
     path('real_estate/', views.real_estate, name='real_estate'),
     path('recommend_book/', views.recommend_book, name='recommend_book'),
@@ -48,6 +49,7 @@ urlpatterns = [
     # image
     path('add_image/', views.add_image, name='add_image'),
     path('add_image/<str:data_type>', views.add_image, name='add_image'),
+    path('add_user/', views.add_user, name='add_user'),
 
     # session
     path('login/', views_user.BookLoginView.as_view(), name='login'),

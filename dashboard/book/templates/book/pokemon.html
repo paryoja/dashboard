@@ -31,7 +31,7 @@
 {% endblock %}
 {% block body %}
     {% if user.is_superuser %}
-        <a href="{% url 'book:add_image' 'pokemon_classification' %}">Add new images</a>
+        <a href="{% url 'book:add_image' 'pokemon' %}">Add new images</a>
     {% endif %}
 
     {% if user.is_active %}
@@ -50,7 +50,7 @@
         {% if distinct %}
             <a class="btn btn-success" data-toggle="collapse" href="#collapseStatus" role="button"
                aria-expanded="false" aria-controls="collapseExample">
-                남은 이미지 현황
+                분류 현황
             </a>
             <div class="collapse" id="collapseStatus">
                 <table class="table table-sm table-hover">
@@ -126,6 +126,7 @@
 {% endblock %}
 {% block scripts %}
     <script>
+        var element_count = {{ image_list|length }};
         $(function () {
             $('[data-toggle="tooltip"]').tooltip()
         });
@@ -184,6 +185,13 @@
                     this_tr.prev().remove();
                 }
                 this_tr.remove();
+
+                element_count--;
+
+                if (element_count === 0) {
+                    console.log("reload");
+                    location.reload();
+                }
             }
         });
     </script>

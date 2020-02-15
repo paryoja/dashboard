@@ -118,6 +118,11 @@ class PeopleImage(models.Model):
         return "{}".format(self.url)
 
 
+class User(models.Model):
+    username = models.CharField(max_length=30, unique=True)
+    checked = models.BooleanField(default=False)
+
+
 class PokemonImage(models.Model):
     url = models.URLField(unique=True, max_length=400)
     title = models.CharField(max_length=200)
