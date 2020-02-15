@@ -37,8 +37,9 @@
                 </div>
                 {% if query %}
                     <div class="col-md-6">
-                        <a class="btn btn-success" href="{% url 'book:people_high_expectation' %}?query={{ query }}">
-                            추가 분류
+                        <a class="btn btn-success"
+                           href="{% url 'book:people_high_expectation' %}?query={{ query }}&page=1">
+                            예상 순서 분류
                         </a>
                     </div>
                 {% else %}
@@ -55,7 +56,7 @@
                     {% for value_list in distinct %}
                         <tr>
                             {% for value in value_list %}
-                                <td><a href="?query={{ value.user_id }}">{{ value.user_id }}
+                                <td><a href="{% url 'book:people_result' 1 %}?query={{ value.user_id }}">{{ value.user_id }}
                                     (count: {{ value.id__count }})</a></td>
                             {% endfor %}
                         </tr>

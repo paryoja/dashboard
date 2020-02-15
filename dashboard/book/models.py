@@ -219,3 +219,7 @@ class Corona(models.Model):
     date = models.DateField()
     confirmed = models.IntegerField()
     death = models.IntegerField()
+
+
+class BestPhoto(models.Model):
+    img = models.ForeignKey(PeopleImage, on_delete=models.CASCADE)

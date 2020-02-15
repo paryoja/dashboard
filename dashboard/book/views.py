@@ -311,7 +311,7 @@ def people_result(request, page=1):
 
     p, page_info = utils.get_page_info(selected_list, page, 120)
 
-    row_count = 3
+    row_count = 6
     people_table = utils.to_table(p, row_count)
 
     render_dict['people_table'] = people_table
@@ -676,14 +676,14 @@ def corona(request):
     render_dict['counts'] = counts
 
     confirmed = {
-        'a': 122279.35,
-        'b': 6.1021295,
-        'x0': 23.049456
+        'a': 136837.34,
+        'b': 6.2889895,
+        'x0': 24.181396
     }
     death = {
-        'a': 4967.7617,
-        'b': 6.436095,
-        'x0': 28.529556
+        'a': 2709.4172,
+        'b': 5.5343347,
+        'x0': 22.587513
     }
     offset = counts.count()
     latest_date = counts[0].date

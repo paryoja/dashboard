@@ -47,18 +47,26 @@
                     </div>
                 {% endif %}
                 {% if query %}
-                    <div class="col-md-6">
-                        {% if 'high_expectation' in request.META.PATH_INFO %}
+                    {% if 'high_expectation' in request.META.PATH_INFO %}
+                        <div class="col-md-6">
                             <a class="btn btn-success" href="{% url 'book:people' %}?query={{ query }}">
-                                추가 분류
+                                랜덤 분류
                             </a>
-                        {% else %}
+                        </div>
+                        <div class="col-md-6">
+                            <a class="btn btn-success" href="{% url 'book:people_result' 1 %}?query={{ query }}">
+                                분류된 이미지
+                            </a>
+                        </div>
+                    {% else %}
+                        <div class="col-md-6">
                             <a class="btn btn-success"
                                href="{% url 'book:people_high_expectation' %}?query={{ query }}">
-                                추가 분류
+                                예상 순서 분류
                             </a>
-                        {% endif %}
-                    </div>
+                        </div>
+                    {% endif %}
+
                 {% endif %}
             </div>
             {% if distinct %}
