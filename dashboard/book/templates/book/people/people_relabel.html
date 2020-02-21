@@ -1,0 +1,63 @@
+{% extends 'book/base/base.html' %}
+
+{% block body %}
+    <H1>Image Details</H1>
+    <form method="get">
+        <div class="input-group mb-3">
+            <input type="text" name="query" class="form-control" placeholder="검색" aria-label="Query"
+                   aria-describedby="button-addon2" value="{{ query }}">
+            <div class="input-group-append">
+                <button class="btn btn-outline-secondary" type="submit" id="button-addon2">
+                    Submit
+                </button>
+            </div>
+        </div>
+    </form>
+
+    <table class="table table-sm table-hover">
+        <thead>
+        <tr>
+            <td>URL</td>
+            <td>Image</td>
+            <td>Rate</td>
+            <td>Delete</td>
+        </tr>
+        </thead>
+        {% for obj in objects %}
+            <tr>
+                <td>{{ obj }}</td>
+                <td><img src="{{ obj.url }}"></td>
+                <td>{{ obj.id }}</td>
+                <td>
+                    <button class="btn btn-sm btn-danger delete" id="{{ obj.id }}">Delete</button>
+                </td>
+            </tr>
+        {% endfor %}
+    </table>
+{% endblock %}
+{% block scripts %}
+    <script src="https://cdn.jsdelivr.net/npm/js-cookie@2/src/js.cookie.min.js"></script>
+
+    <script>
+        $('button[class="btn btn-sm btn-danger delete"]').click(function (e) {
+            let temp = this.id;
+            let csrf = Cookies.get('csrftoken');
+            let data = new FormData();
+            data.append('image_id', temp);
+            data.append('csrfmiddlewaretoken', csrf);
+            console.log(temp);
+            console.log(csrf);
+            for (var p of data) {
+                console.log(p);
+            }
+
+            fetch("{% url 'book:image' 'DELETE' %}", {
+                method: 'POST',
+                body: data,
+                credentials: 'same-origin'
+            });
+            let closest_tr = $(e.target).closest('tr');
+            closest_tr.remove();
+        });
+    </script>
+{% endblock %}

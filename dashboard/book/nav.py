@@ -54,6 +54,7 @@ def get_render_dict(current_page):
     classifier_list.append(get_nav_item("people", "fa fa-users", "미분류", current_page))
     classifier_list.append(get_nav_item("people_result", "fa fa-user-friends", "분류", current_page))
     classifier_list.append(get_nav_item("people_high_expectation", "fa fa-user-check", "예상", current_page))
+    classifier_list.append(get_nav_item("people_relabel", "fa fa-user-edit", "수정", current_page))
 
     other_list = list()
     other_list.append(get_nav_item("food", "fa fa-utensils", "맛집", current_page))

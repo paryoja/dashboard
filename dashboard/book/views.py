@@ -288,7 +288,7 @@ def people(request):
         render_dict['image_list'] = image_list.values()
     render_dict['query'] = query
 
-    return render(request, 'book/people.html', render_dict)
+    return render(request, 'book/people/people.html', render_dict)
 
 
 @user_passes_test(lambda u: u.is_superuser)
@@ -318,7 +318,7 @@ def people_result(request, page=1):
     render_dict['page_info'] = page_info
     render_dict['query'] = query
 
-    return render(request, 'book/people_result.html', render_dict)
+    return render(request, 'book/people/people_result.html', render_dict)
 
 
 @user_passes_test(lambda u: u.is_superuser)
@@ -351,7 +351,7 @@ def people_high_expectation(request):
     render_dict['image_list'] = unclassified
     render_dict['query'] = query
 
-    return render(request, 'book/people.html', render_dict)
+    return render(request, 'book/people/people.html', render_dict)
 
 
 @user_passes_test(lambda u: u.is_superuser)
@@ -387,7 +387,7 @@ def people_links(request):
             models.User(username=user, checked=False).save()
 
     render_dict['user_names'] = verified
-    return render(request, 'book/people_links.html', render_dict)
+    return render(request, 'book/people/people_links.html', render_dict)
 
 
 @user_passes_test(lambda u: u.is_superuser)
@@ -534,7 +534,7 @@ def add_image_client(a_text, url, category_id, data_type):
 
 
 @login_required
-def add_image(request, data_type='pokemon'):
+def image(request, data_type='pokemon'):
     if data_type == 'pokemon':
         render_dict = get_render_dict('pokemon')
     elif data_type == 'people':
@@ -676,14 +676,14 @@ def corona(request):
     render_dict['counts'] = counts
 
     confirmed = {
-        'a': 136837.34,
-        'b': 6.2889895,
-        'x0': 24.181396
+        'a': 83096.91,
+        'b': 4.4773245,
+        'x0': 18.513666,
     }
     death = {
-        'a': 2709.4172,
-        'b': 5.5343347,
-        'x0': 22.587513
+        'a': 2961.9773,
+        'b': 5.8489833,
+        'x0': 23.626362
     }
     offset = counts.count()
     latest_date = counts[0].date
@@ -714,3 +714,16 @@ def add_user(request):
     obj.save()
 
     return HttpResponse("1")
+
+
+@user_passes_test(lambda u: u.is_superuser)
+def relabel(request):
+    render_dict = get_render_dict('people_relabel')
+    query = request.GET.get("query", "")
+
+    if query:
+        objects = models.PeopleImage.objects.filter(url__endswith=query)
+        render_dict["objects"] = objects
+    render_dict["query"] = query
+
+    return render(request, 'book/people/people_relabel.html', render_dict)

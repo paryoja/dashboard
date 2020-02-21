@@ -13,6 +13,16 @@ class Domain:
     Pokemon = "pokemon"
 
 
+def image(request, method):
+    if method == "DELETE":
+        image_id = request.POST.get("image_id")
+        img = models.PeopleImage.objects.get(id=int(image_id))
+        img.delete()
+        return HttpResponse("Done")
+    else:
+        return HttpResponseBadRequest("Unknown Method")
+
+
 def set_rating(request):
     img_id = int(request.POST.get('image_id'))
     data_type = request.POST.get('data_type')
@@ -27,6 +37,12 @@ def set_rating(request):
 
     img.save()
     return HttpResponse(request.POST.get('selected'))
+
+
+def get_id(request):
+    query = request.POST.get('query')
+    image = models.PeopleImage.objects.filter(url__endswith=query)[0]
+    return HttpResponse(image.id)
 
 
 @shared_task

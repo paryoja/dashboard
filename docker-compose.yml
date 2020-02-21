@@ -10,6 +10,7 @@ services:
     build:
       context: .
       dockerfile: ./Dockerfile
+    shm_size: '512MB'
     ports:
       - "38000:8000"
     volumes:

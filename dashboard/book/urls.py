@@ -33,6 +33,7 @@ urlpatterns = [
          name='people_result_download'),
     path('people/high_expectation/', views.people_high_expectation, name='people_high_expectation'),
     path('people/people_links/', views.people_links, name='people_links'),
+    path('people/relabel', views.relabel, name='people_relabel'),
 
     path('real_estate/', views.real_estate, name='real_estate'),
     path('recommend_book/', views.recommend_book, name='recommend_book'),
@@ -47,9 +48,10 @@ urlpatterns = [
     path('pokemon_export/<str:classified>/<int:page>', views.pokemon_export, name='pokemon_export'),
 
     # image
-    path('add_image/', views.add_image, name='add_image'),
-    path('add_image/<str:data_type>', views.add_image, name='add_image'),
+    path('add_image/', views.image, name='add_image'),
+    path('add_image/<str:data_type>', views.image, name='add_image'),
     path('add_user/', views.add_user, name='add_user'),
+    path('image/api/<str:method>', views_api.image, name='image'),
 
     # session
     path('login/', views_user.BookLoginView.as_view(), name='login'),
@@ -58,6 +60,7 @@ urlpatterns = [
     path('rating/api', views_api.set_rating, name='rating_api'),
     path('people/classification_api', views_api.people_classification_api, name='people_classification_api'),
     path('pokemon/classification_api', views_api.pokemon_classification_api, name='pokemon_classification_api'),
+    path('people/get_id', views_api.get_id, name='people_get_id'),
 
     # corona
     path('corona', views.corona, name='corona'),
