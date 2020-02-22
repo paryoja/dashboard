@@ -127,7 +127,30 @@
     {% endif %}
 {% endblock %}
 {% block scripts %}
+    <script src="https://cdn.jsdelivr.net/npm/js-cookie@2/src/js.cookie.min.js"></script>
     <script>
+        $.fn.delete_fn = function (e) {
+            e.stopPropagation();
+            e.preventDefault();
+
+            let temp = this.id;
+            let csrf = Cookies.get('csrftoken');
+            let data = new FormData();
+            data.append('image_id', temp);
+            data.append('csrfmiddlewaretoken', csrf);
+            console.log(temp);
+            console.log(csrf);
+
+            fetch("{% url 'book:image' 'DELETE' %}", {
+                method: 'POST',
+                body: data,
+                credentials: 'same-origin'
+            });
+            let closest_tr = $(e.target).closest('tr');
+            closest_tr.prev().remove();
+            closest_tr.remove();
+        };
+
         var element_count = {{ image_list|length }};
         $(document).ready(function () {
             $("td[id^='img_']").each(function () {
@@ -152,8 +175,19 @@
                             target_div.text(json["classification"]["label"] + " " + Math.max(...json["classification"]["classification"]).toFixed(2));
                             if (json["classification"]["label"] === 'True') {
                                 target_div.addClass("table-success")
-                            } else {
+                            } else if (json["classification"]["label"] === 'False') {
                                 target_div.addClass("table-danger")
+                            } else {
+                                target_div.addClass("table-info");
+                                let delete_btn = $(`<button/>`,
+                                    {
+                                        class: "btn btn-sm btn-danger delete",
+                                        id: id.split('_')[1],
+                                        text: "Delete",
+                                        click: $.fn.delete_fn
+                                    });
+                                target_div.append("<br>");
+                                target_div.append(delete_btn)
                             }
                         }
                     });
@@ -161,6 +195,9 @@
         });
 
         $('button[class="btn btn-primary like"]').click(function (e) {
+            e.stopPropagation();
+            e.preventDefault();
+
             let temp = this.id.split('_');
             let csrf = $('[type=hidden]').val();
             let data = new FormData();
@@ -185,8 +222,16 @@
                 location.reload();
             }
         });
-        $(document).on('click', 'td', function () {
-            $(this).children('button').click();
+
+
+        $("table tr td").click(function (e) {
+            let button_in_td = $(this).children('button');
+            console.log(this);
+            console.log(button_in_td[0]);
+            if (button_in_td[0] != null) {
+                button_in_td[0].click();
+            }
         });
+
     </script>
 {% endblock %}
