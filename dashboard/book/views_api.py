@@ -3,6 +3,7 @@ import json
 import requests
 import urllib3
 from celery import shared_task
+from django.forms.models import model_to_dict
 from django.http import HttpResponse, HttpResponseBadRequest, JsonResponse
 
 from . import models
@@ -19,6 +20,10 @@ def image(request, method):
         img = models.PeopleImage.objects.get(id=int(image_id))
         img.delete()
         return HttpResponse("Done")
+    if method == "GET":
+        image_id = request.POST.get("image_id")
+        img = models.PeopleImage.objects.get(id=image_id)
+        return JsonResponse(model_to_dict(img))
     else:
         return HttpResponseBadRequest("Unknown Method")
 

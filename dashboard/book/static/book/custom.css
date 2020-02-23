@@ -159,6 +159,17 @@ hr {
     min-width: 1.75rem
 }
 
+.navbar-nav .nav-link > .far {
+    padding-bottom: .125em;
+    font-size: 1.0625rem;
+    line-height: 1.40625rem
+}
+
+.navbar-nav .nav-link > .far {
+    display: inline-block;
+    min-width: 1.75rem
+}
+
 .navbar-collapse {
     flex-basis: 100%;
     flex-grow: 1;

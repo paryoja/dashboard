@@ -14,6 +14,7 @@
 {% endblock %}
 {% block body %}
     <H1><i class="fa fa-users"> </i> 인명사전</H1>
+
     {% if user.is_superuser %}
         <form method="get" action="{% url "book:people_result" 1 %}">
             <div class="input-group mb-3">
@@ -49,31 +50,49 @@
                         </a>
                     </div>
                 {% endif %}
-
             </div>
             <div class="collapse" id="collapseStatus">
                 <table class="table table-sm table-hover">
                     {% for value_list in distinct %}
                         <tr>
                             {% for value in value_list %}
-                                <td><a href="{% url 'book:people_result' 1 %}?query={{ value.user_id }}">{{ value.user_id }}
-                                    (count: {{ value.id__count }})</a></td>
+                                <td>
+                                    <a href="{% url 'book:people_result' 1 %}?query={{ value.user_id }}">{{ value.user_id }}
+                                        (count: {{ value.id__count }})</a></td>
                             {% endfor %}
                         </tr>
                     {% endfor %}
                 </table>
             </div>
         {% endif %}
+
+        <!-- modal -->
+        <div class="modal fade bd-example-modal-lg" id="exampleModal" tabindex="-1" role="dialog"
+             aria-labelledby="exampleModalLabel"
+             aria-hidden="true">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                    <div class="modal-body">
+                        <!--<img src="" width="100%">-->
+                        <div id="instagram"></div>
+                    </div>
+                    <div class="modal-footer">
+                        <div><a class="btn btn-primary" id="modify">수정</a></div>
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
         <table class="table table-sm table-hover" style="table-layout:fixed">
             <tbody>
             {% for people_row in people_table %}
                 <tr>
                     {% for image in people_row %}
                         <td>
-                            <a href="http://instagram.com{{ image.page }}" target="_blank">
-                                <img class="people-img" src="{{ image.url }}" alt="Image Not Found"
-                                     data-toggle="tooltip"
-                                     title="{{ image.user_id }}/{{ image.title|truncatechars:100 }}">
+                            <a data-toggle="modal" data-target="#exampleModal"
+                               data-whatever="{{ image.id }}">
+                                <img class="people-img" src="{{ image.url }}" alt="Image Not Found">
                             </a>
                         </td>
                     {% endfor %}
@@ -87,9 +106,49 @@
     {% endif %}
 {% endblock %}
 {% block scripts %}
+    <script src="https://cdn.jsdelivr.net/npm/js-cookie@2/src/js.cookie.min.js"></script>
     <script>
-        $(function () {
-            $('[data-toggle="tooltip"]').tooltip()
-        });
+        $.fn.fetch_fn = function (image_id) {
+            let csrf = Cookies.get('csrftoken');
+            let data = new FormData();
+            data.append('image_id', image_id);
+            data.append('csrfmiddlewaretoken', csrf);
+            console.log(csrf);
+
+            return fetch("{% url 'book:image' 'GET' %}", {
+                method: 'POST',
+                body: data,
+                credentials: 'same-origin'
+            });
+        };
+
+        $('#exampleModal').on('show.bs.modal', function (event) {
+            var button = $(event.relatedTarget); // Button that triggered the modal
+            var image_id = button.data('whatever'); // Extract info from data-* attributes
+            // If necessary, you could initiate an AJAX request here (and then do the updating in a callback).
+            // Update the modal's content. We'll use jQuery here, but you could use a data binding library or other methods instead.
+            var modal = $(this);
+            let response = $.fn.fetch_fn(image_id);
+            response.then(function (res) {
+                return res.json();
+            }).then(function (res) {
+                let url = `https://instagram.com${res.page}`;
+                let api_url = `https://api.instagram.com/oembed/?url=${url}`;
+                console.log(url);
+                let modify_div = $('#modify');
+
+                let modify_url = `{% url 'book:people_relabel' %}?query=${res.url}`;
+                modify_div.attr("href", modify_url);
+
+                return fetch(api_url)
+            }).then(function (res) {
+                return res.json();
+            }).then(function (res) {
+                let instagram_div = $('#instagram');
+                instagram_div.html(res.html);
+                console.log(res);
+                window.instgrm.Embeds.process();
+            });
+        })
     </script>
 {% endblock %}

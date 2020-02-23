@@ -44,9 +44,9 @@ def get_render_dict(current_page):
     study_list.append(get_nav_item("colab", "fa fa-file-code", "실습자료", current_page))
 
     pokemon_result_list = list()
-    pokemon_result_list.append(get_nav_item("pokemon_result", "fa fa-thumbs-up", "Yes", current_page, "yes"))
+    pokemon_result_list.append(get_nav_item("pokemon_result", "far fa-thumbs-up", "Yes", current_page, "yes"))
     pokemon_result_list.append(get_nav_item("pokemon_result", "far fa-thumbs-down", "No", current_page, "no"))
-    pokemon_result_list.append(get_nav_item("pokemon_result", "far fa-angle-right", "Little", current_page, "little"))
+    pokemon_result_list.append(get_nav_item("pokemon_result", "fa fa-angle-right", "Little", current_page, "little"))
     pokemon_result_list.append(get_nav_item("pokemon_result", "fa fa-angle-double-right", "More", current_page, "more"))
 
     pokemon_list = list()
@@ -65,8 +65,9 @@ def get_render_dict(current_page):
 
     classifier_list = list()
     classifier_list.append(get_nav_item("people", "fa fa-users", "미분류", current_page))
-    classifier_list.append(get_nav_item("people_result", "fa fa-user-friends", "분류", current_page))
-    classifier_list.append(get_nav_item("people_high_expectation", "fa fa-user-check", "예상", current_page))
+    classifier_list.append(get_nav_item("people_result", "fa fa-user-check", "선택", current_page, "True"))
+    classifier_list.append(get_nav_item("people_result", "fa fa-user-times", "미선택", current_page, "False"))
+    classifier_list.append(get_nav_item("people_high_expectation", "fa fa-user-plus", "예상", current_page))
     classifier_list.append(get_nav_item("people_relabel", "fa fa-user-edit", "수정", current_page))
 
     other_list = list()
