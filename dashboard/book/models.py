@@ -182,6 +182,16 @@ class PokemonRating(models.Model):
     def __str__(self):
         return "{} {} {}".format(self.id, self.positive, self.image.title)
 
+    def get_prob(self):
+        if "classification" in self.data and "class_names" in self.data:
+            result_list = []
+            if isinstance(self.data["classification"], list):
+                for class_name, idx in self.data["class_names"].items():
+                    result_list.append((class_name, self.data["classification"][idx]))
+                result_list = sorted(result_list, key=lambda x: x[1], reverse=True)
+
+            return result_list
+
 
 class Currency(models.Model):
     class CurrencyChoices(models.TextChoices):

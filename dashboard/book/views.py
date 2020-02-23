@@ -363,8 +363,8 @@ def people_links(request):
     new_id = 0
     user_names = set()
     stop = False
-    for image in selected_list:
-        names = book_extras.user_pattern.findall(image.title)
+    for selected_image in selected_list:
+        names = book_extras.user_pattern.findall(selected_image.title)
         for name in names:
             if not models.User.objects.filter(username=name).exists():
                 user_names.add(name)
@@ -516,19 +516,19 @@ def add_image_client(a_text, url, category_id, data_type):
         for img in result:
             try:
                 if data_type == "people":
-                    image = models.PeopleImage(url=url + a_parsed[0][0] + img['local'],
-                                               title=img['alt'][:500],
-                                               category_id=category_id,
-                                               page=img['a'])
+                    image_obj = models.PeopleImage(url=url + a_parsed[0][0] + img['local'],
+                                                   title=img['alt'][:500],
+                                                   category_id=category_id,
+                                                   page=img['a'])
                 elif data_type == "pokemon":
                     path = img.split('/')
-                    image = models.PokemonImage(url=img,
-                                                title=path[-1],
-                                                category_id=category_id,
-                                                original_label=path[-2])
+                    image_obj = models.PokemonImage(url=img,
+                                                    title=path[-1],
+                                                    category_id=category_id,
+                                                    original_label=path[-2])
                 else:
                     raise ValueError("Unsupported data_type {}".format(data_type))
-                image.save()
+                image_obj.save()
             except Exception as e:
                 print(e)
 
@@ -605,7 +605,7 @@ def pokemon(request, page=1):
     render_dict['page_info'] = page_info
     render_dict['query'] = query
 
-    return render(request, 'book/pokemon.html', render_dict)
+    return render(request, 'book/pokemon/pokemon.html', render_dict)
 
 
 @login_required
@@ -619,20 +619,21 @@ def pokemon_sorted(request):
     if query:
         image_list = image_list.filter(image__original_label__icontains=query)
 
-    image_list = image_list.order_by("-positive")[:20]
+    image_list = image_list.order_by("-positive")[:50]
 
     render_dict['image_list'] = [rating.image for rating in image_list]
     render_dict['query'] = query
 
-    return render(request, 'book/pokemon.html', render_dict)
+    return render(request, 'book/pokemon/pokemon.html', render_dict)
 
 
 @login_required
 def pokemon_result(request, page=1):
-    render_dict = get_render_dict('pokemon_result')
+    classified = request.GET.get("arg", "yes")
+    render_dict = get_render_dict('pokemon_result_{}'.format(classified))
 
     query = request.GET.get('query', '')
-    image_list = models.PokemonImage.objects.filter(classified="yes")
+    image_list = models.PokemonImage.objects.filter(classified=classified)
 
     distinct = image_list.order_by().values('original_label').distinct().annotate(Count("id")).order_by(
         'id__count')
@@ -645,6 +646,7 @@ def pokemon_result(request, page=1):
     render_dict['distinct'] = distinct
     render_dict['image_list'] = p
     render_dict['page_info'] = page_info
+    render_dict['arg'] = classified
 
     verified_count = image_list.count()
     row_count = 10
@@ -653,7 +655,7 @@ def pokemon_result(request, page=1):
     render_dict['verified_table'] = verified_table
     render_dict['verified_count'] = verified_count
 
-    return render(request, 'book/pokemon_result.html', render_dict)
+    return render(request, 'book/pokemon/pokemon_result.html', render_dict)
 
 
 @login_required
@@ -662,6 +664,24 @@ def pokemon_export(request, classified="yes", page=1):
     image_list = models.PokemonImage.objects.filter(classified=classified)
 
     return utils.get_compressed_result(image_list, count, page)
+
+
+@login_required
+def pokemon_relabel(request):
+    render_dict = get_render_dict('pokemon_relabel')
+    query = request.GET.get("query", "")
+
+    if query:
+        objects = models.PokemonImage.objects.filter(url__endswith=query)
+
+        rating_list = []
+        for obj in objects:
+            rating_list.append(models.PokemonRating.objects.filter(image=obj))
+        render_dict["objects"] = zip(objects, rating_list)
+
+    render_dict["query"] = query
+
+    return render(request, 'book/pokemon/pokemon_relabel.html', render_dict)
 
 
 def compute_expectation(x, coeff):

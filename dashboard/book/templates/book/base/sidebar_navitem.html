@@ -1,6 +1,10 @@
 <li class="nav-item">
     <a class="nav-link {{ nav_item.active }}"
-       href="{% url nav_item.template %}">
+            {% if nav_item.arg %}
+       href="{% url nav_item.template %}?arg={{ nav_item.arg }}"
+            {% else %}
+       href="{% url nav_item.template %}"
+            {% endif %}>
         <i class="{{ nav_item.icon }}"></i> {{ nav_item.description }}
     </a>
 </li>

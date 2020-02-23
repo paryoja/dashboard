@@ -19,13 +19,19 @@ def get_nav_collapse(child_list, button_url, icon, description):
     }
 
 
-def get_nav_item(template, icon, description, current_page):
+def get_nav_item(template, icon, description, current_page, arg=None):
+    if arg:
+        active_page = "{}_{}".format(template, arg)
+    else:
+        active_page = template
+
     return {
         "collapse": False,
         "template": "book:{}".format(template),
+        "arg": arg,
         "icon": icon,
         "description": description,
-        "active": "active" if template == current_page else "",
+        "active": "active" if active_page == current_page else "",
     }
 
 
@@ -37,10 +43,17 @@ def get_render_dict(current_page):
     study_list.append(get_nav_item("paper", "fa fa-file-pdf", "논문", current_page))
     study_list.append(get_nav_item("colab", "fa fa-file-code", "실습자료", current_page))
 
+    pokemon_result_list = list()
+    pokemon_result_list.append(get_nav_item("pokemon_result", "fa fa-thumbs-up", "Yes", current_page, "yes"))
+    pokemon_result_list.append(get_nav_item("pokemon_result", "far fa-thumbs-down", "No", current_page, "no"))
+    pokemon_result_list.append(get_nav_item("pokemon_result", "far fa-angle-right", "Little", current_page, "little"))
+    pokemon_result_list.append(get_nav_item("pokemon_result", "fa fa-angle-double-right", "More", current_page, "more"))
+
     pokemon_list = list()
     pokemon_list.append(get_nav_item("pokemon_classification", "fa fa-check-square", "분류", current_page))
-    pokemon_list.append(get_nav_item("pokemon_result", "fa fa-poll", "결과", current_page))
+    pokemon_list.append(get_nav_collapse(pokemon_result_list, "sidebarPokemonResult", "fa fa-poll", "분류결과"))
     pokemon_list.append(get_nav_item("pokemon_sorted", "fa fa-sort-numeric-down", "Yes 순 분류", current_page))
+    pokemon_list.append(get_nav_item("pokemon_relabel", "fa fa-edit", "분류 수정", current_page))
 
     invest_list = list()
     invest_list.append(get_nav_item("leading_stocks", "fa fa-money-check-alt", "Leading Stocks", current_page))

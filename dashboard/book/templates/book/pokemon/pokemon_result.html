@@ -53,9 +53,11 @@
             <tr>
                 {% for verified in verified_row %}
                     <td style="width:10%; height:100px">
-                        <img src="{{ verified.url }}"
-                             class="small_img"
-                             alt="{{ verified.original_label }}">
+                        <a href="{% url 'book:pokemon_relabel' %}?query={{ verified.title | urlencode }}"><img
+                                src="{{ verified.url }}"
+                                class="small_img"
+                                alt="{{ verified.original_label }}">
+                        </a>
                     </td>
                 {% endfor %}
             </tr>

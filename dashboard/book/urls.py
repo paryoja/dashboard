@@ -43,9 +43,10 @@ urlpatterns = [
     path('pokemon/', views.pokemon, name='pokemon_classification'),
     path('pokemon/<int:page>', views.pokemon, name='pokemon_classification'),
     path('pokemon_result/', views.pokemon_result, name='pokemon_result'),
-    path('pokemon/sorted/', views.pokemon_sorted, name='pokemon_sorted'),
     path('pokemon_result/<int:page>', views.pokemon_result, name='pokemon_result'),
+    path('pokemon/sorted/', views.pokemon_sorted, name='pokemon_sorted'),
     path('pokemon_export/<str:classified>/<int:page>', views.pokemon_export, name='pokemon_export'),
+    path('pokemon/relabel', views.pokemon_relabel, name='pokemon_relabel'),
 
     # image
     path('add_image/', views.image, name='add_image'),

@@ -80,8 +80,9 @@
                 {% for image in image_list %}
                     <tr>
                         <td rowspan="2" class="center-row">
-                            <img src="{{ image.url }}" alt="{{ image.title }}"
-                                 class="pokemon-img">
+                            <a href="{% url 'book:pokemon_relabel' %}?query={{ image.title | urlencode }}"><img
+                                    src="{{ image.url }}" alt="{{ image.title }}"
+                                    class="pokemon-img"></a>
                         </td>
                         <td rowspan="2" class="center-row">
                             <img src="http://13.67.47.175:8880/pokemon/static/classifier/pokemon-images-and-types/images/images/{{ image.original_label |lower }}.png"

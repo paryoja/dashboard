@@ -6,9 +6,7 @@ admin.site.register(models.AuthUser)
 admin.site.register(models.Lotto)
 admin.site.register(models.Paper)
 admin.site.register(models.Category)
-admin.site.register(models.Rating)
 admin.site.register(models.Wine)
-admin.site.register(models.Corona)
 admin.site.register(models.User)
 
 
@@ -76,4 +74,25 @@ class PokemonImageAdmin(admin.ModelAdmin):
     list_display = ('url', 'title', 'original_label', 'classified')
 
 
-admin.site.register(models.PokemonImage)
+admin.site.register(models.PokemonImage, PokemonImageAdmin)
+
+
+class CoronaAdmin(admin.ModelAdmin):
+    list_display = ('date', 'confirmed', 'death')
+
+
+admin.site.register(models.Corona, CoronaAdmin)
+
+
+class RatingAdmin(admin.ModelAdmin):
+    raw_id_fields = ("image",)
+
+
+admin.site.register(models.Rating, RatingAdmin)
+
+
+class PokemonRatingAdmin(admin.ModelAdmin):
+    raw_id_fields = ("image",)
+
+
+admin.site.register(models.PokemonRating, PokemonRatingAdmin)
