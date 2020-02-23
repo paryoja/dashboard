@@ -107,6 +107,7 @@
 {% endblock %}
 {% block scripts %}
     <script src="https://cdn.jsdelivr.net/npm/js-cookie@2/src/js.cookie.min.js"></script>
+    <script async src="https://www.instagram.com/embed.js"></script>
     <script>
         $.fn.fetch_fn = function (image_id) {
             let csrf = Cookies.get('csrftoken');
@@ -133,7 +134,7 @@
                 return res.json();
             }).then(function (res) {
                 let url = `https://instagram.com${res.page}`;
-                let api_url = `https://api.instagram.com/oembed/?url=${url}`;
+                let api_url = `https://api.instagram.com/oembed/?url=${url}&hidecaption=1&omitscript=1`;
                 console.log(url);
                 let modify_div = $('#modify');
 
@@ -147,6 +148,7 @@
                 let instagram_div = $('#instagram');
                 instagram_div.html(res.html);
                 console.log(res);
+            }).then(function () {
                 window.instgrm.Embeds.process();
             });
         })

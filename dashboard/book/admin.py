@@ -78,7 +78,7 @@ admin.site.register(models.PokemonImage, PokemonImageAdmin)
 
 
 class CoronaAdmin(admin.ModelAdmin):
-    list_display = ('date', 'confirmed', 'death')
+    list_display = ('date', 'confirmed', 'death', 'country')
 
 
 admin.site.register(models.Corona, CoronaAdmin)

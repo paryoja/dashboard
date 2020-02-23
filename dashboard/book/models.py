@@ -229,7 +229,19 @@ class Corona(models.Model):
     date = models.DateField()
     confirmed = models.IntegerField()
     death = models.IntegerField()
+    country = models.CharField(default="Korea", max_length=20)
 
 
 class BestPhoto(models.Model):
     img = models.ForeignKey(PeopleImage, on_delete=models.CASCADE)
+
+
+class TodoItem(models.Model):
+    class StatusChoices(models.TextChoices):
+        DONE = 'Done', _('Done')
+        TODO = 'Todo', _('Todo')
+        IN_PROGRESS = 'In Progress', _('In Progress')
+
+    title = models.CharField(max_length=100)
+    added_date = models.DateTimeField(auto_now_add=True)
+    modified_date = models.DateTimeField(auto_now=True)

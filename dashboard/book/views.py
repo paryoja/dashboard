@@ -690,39 +690,83 @@ def compute_expectation(x, coeff):
     return value
 
 
+corona_constant = {
+    "Korea": {
+        "confirmed": {
+            'a': 83096.91,
+            'b': 4.4773245,
+            'x0': 18.513666,
+        },
+        "death": {
+            'a': 2961.9773,
+            'b': 5.8489833,
+            'x0': 23.626362
+        }
+    },
+    "China": {
+        "confirmed": {
+            'a': 83096.91,
+            'b': 4.4773245,
+            'x0': 18.513666,
+        },
+        "death": {
+            'a': 2961.9773,
+            'b': 5.8489833,
+            'x0': 23.626362
+        }
+    }
+}
+
+def range_date(start, end):
+    diff = (end - start).days
+
+    for i in range(diff):
+        yield start + datetime.timedelta(days=i)
+
 def corona(request):
     render_dict = get_render_dict('corona')
 
-    counts = models.Corona.objects.all().order_by("-date")
-    render_dict['counts'] = counts
+    start_date = models.Corona.objects.order_by("date")[0].date
+    end_date = datetime.date.today() + datetime.timedelta(days=10)
 
-    confirmed = {
-        'a': 83096.91,
-        'b': 4.4773245,
-        'x0': 18.513666,
-    }
-    death = {
-        'a': 2961.9773,
-        'b': 5.8489833,
-        'x0': 23.626362
-    }
-    offset = counts.count()
-    latest_date = counts[0].date
+    labels = []
+
+    for date in range_date(start_date, end_date):
+        labels.append(date)
+
+    render_dict['labels'] = labels
+
     delta = datetime.timedelta(days=1)
+    country_list = []
+    for country in ["China", "Korea"]:
+        counts = models.Corona.objects.filter(country=country).order_by("date")
 
-    expected = []
+        actual_start_date = counts[0].date
+        actual_end_date = models.Corona.objects.filter(country=country).order_by("-date")[0].date
+        count_list = []
+        for count_type in ["confirmed", "death"]:
+            actual = []
+            for _ in range_date(start_date, actual_start_date):
+                actual.append("NaN")
 
-    for off in range(offset + 1, offset + 10):
-        latest_date += delta
-        expected_confirmed = compute_expectation(off, confirmed)
-        expected_death = compute_expectation(off, death)
-        expected.append({
-            'date': latest_date,
-            'confirmed': expected_confirmed,
-            'death': expected_death,
-        })
-    expected = sorted(expected, key=lambda x: x['date'], reverse=True)
-    render_dict['expected'] = expected
+            for count in counts:
+                actual.append(getattr(count, count_type))
+
+            expected = []
+            param = corona_constant[country][count_type]
+
+            for _ in range_date(start_date, actual_end_date):
+                expected.append("NaN")
+
+            for date in range_date(actual_end_date, end_date):
+                off = (date - actual_start_date).days + 1
+                value = compute_expectation(off, param)
+                expected.append(value)
+
+            count_list.append((count_type, actual, expected))
+        country_list.append(country, count_list)
+
+    render_dict['country_list'] = country_list
     return render(request, 'book/corona.html', render_dict)
 
 
