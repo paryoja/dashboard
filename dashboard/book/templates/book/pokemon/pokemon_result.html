@@ -38,7 +38,7 @@
                 {% for value_list in distinct %}
                     <tr>
                         {% for value in value_list %}
-                            <td><a href="?query={{ value.original_label }}">{{ value.original_label }}
+                            <td><a href="?query={{ value.original_label }}&arg={{ arg }}">{{ value.original_label }}
                                 (count: {{ value.id__count }})</a></td>
                         {% endfor %}
                     </tr>
