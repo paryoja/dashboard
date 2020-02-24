@@ -53,6 +53,7 @@ urlpatterns = [
     path('add_image/<str:data_type>', views.image, name='add_image'),
     path('add_user/', views.add_user, name='add_user'),
     path('image/api/<str:method>', views_api.image, name='image'),
+    path('image/api/<str:method>/<str:image_type>', views_api.image, name='image'),
 
     # session
     path('login/', views_user.BookLoginView.as_view(), name='login'),

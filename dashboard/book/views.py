@@ -693,14 +693,14 @@ def compute_expectation(x, coeff):
 corona_constant = {
     "Korea": {
         "confirmed": {
-            'a': 83096.91,
-            'b': 4.4773245,
-            'x0': 18.513666,
+            'a': 910.90906,
+            'b': 1.0933201,
+            'x0': 29.204279
         },
         "death": {
-            'a': 2961.9773,
-            'b': 5.8489833,
-            'x0': 23.626362
+            'a': 685.366,
+            'b': 1.3281595,
+            'x0': 36.321884
         }
     },
     "China": {
@@ -717,11 +717,13 @@ corona_constant = {
     }
 }
 
+
 def range_date(start, end):
     diff = (end - start).days
 
     for i in range(diff):
         yield start + datetime.timedelta(days=i)
+
 
 def corona(request):
     render_dict = get_render_dict('corona')
@@ -736,7 +738,6 @@ def corona(request):
 
     render_dict['labels'] = labels
 
-    delta = datetime.timedelta(days=1)
     country_list = []
     for country in ["China", "Korea"]:
         counts = models.Corona.objects.filter(country=country).order_by("date")
@@ -755,16 +756,16 @@ def corona(request):
             expected = []
             param = corona_constant[country][count_type]
 
-            for _ in range_date(start_date, actual_end_date):
-                expected.append("NaN")
+            # for _ in range_date(start_date, actual_end_date):
+            #     expected.append("NaN")
 
-            for date in range_date(actual_end_date, end_date):
+            for date in range_date(start_date, end_date):
                 off = (date - actual_start_date).days + 1
                 value = compute_expectation(off, param)
                 expected.append(value)
 
             count_list.append((count_type, actual, expected))
-        country_list.append(country, count_list)
+        country_list.append((country, count_list))
 
     render_dict['country_list'] = country_list
     return render(request, 'book/corona.html', render_dict)

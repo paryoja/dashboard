@@ -38,8 +38,12 @@
                 {% for value_list in distinct %}
                     <tr>
                         {% for value in value_list %}
-                            <td><a href="?query={{ value.original_label }}&arg={{ arg }}">{{ value.original_label }}
-                                (count: {{ value.id__count }})</a></td>
+                            <td>
+                                <a href="?query={{ value.original_label }}&arg={{ arg }}">
+                                    {{ value.original_label }}
+                                    (count: {{ value.id__count }})
+                                </a>
+                            </td>
                         {% endfor %}
                     </tr>
                 {% endfor %}
@@ -53,10 +57,10 @@
             <tr>
                 {% for verified in verified_row %}
                     <td style="width:10%; height:100px">
-                        <a href="{% url 'book:pokemon_relabel' %}?query={{ verified.title | urlencode }}"><img
-                                src="{{ verified.url }}"
-                                class="small_img"
-                                alt="{{ verified.original_label }}">
+                        <a data-toggle="modal" data-target="#exampleModal" data-whatever="{{ verified.id }}">
+                            <img src="{{ verified.url }}"
+                                 class="small_img"
+                                 alt="{{ verified.original_label }}">
                         </a>
                     </td>
                 {% endfor %}
@@ -69,4 +73,129 @@
             {% include 'book/base/pagenator.html' %}
         </div>
     {% endwith %}
+
+    <!-- modal -->
+    <div class="modal fade bd-example-modal-lg" id="exampleModal" tabindex="-1" role="dialog"
+         aria-labelledby="exampleModalLabel"
+         aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h4 class="modal-title" id="image_id"></h4>
+                    <h4 class="modal-title" id="exampleModalLabel"> 이미지 정보 수정</h4>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+
+                <div class="modal-body">
+                    <div id="classification"><p>현재 분류: </p>
+                        <form>
+                            <div class="form-group row">
+                                <label class="col-sm-2 col-form-label" for="change_class">분류</label>
+                                <div class="col-sm-8">
+                                    <select class="form-control" id="change_class">
+                                        <option value="yes">적합</option>
+                                        <option value="little">단순 처리</option>
+                                        <option value="more">복잡 처리</option>
+                                        <option value="no">부적합</option>
+                                    </select>
+                                </div>
+                                <button type="submit" class="btn btn-primary mb-2">수정</button>
+                            </div>
+                        </form>
+                    </div>
+                    <div id="pokemon-image"><img src="/" width="100%" alt="Not Found"></div>
+                </div>
+                <div class="modal-footer">
+                    <div><a class="btn btn-primary" id="modify">상세 정보</a></div>
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}
+{% block scripts %}
+    <script src="https://cdn.jsdelivr.net/npm/js-cookie@2/src/js.cookie.min.js"></script>
+    <script>
+        $.fn.fetch_fn = function (image_id) {
+            let csrf = Cookies.get('csrftoken');
+            let data = new FormData();
+            data.append('image_id', image_id);
+            data.append('csrfmiddlewaretoken', csrf);
+
+            return fetch("{% url 'book:image' 'GET' 'Pokemon' %}", {
+                method: 'POST',
+                body: data,
+                credentials: 'same-origin'
+            });
+        };
+        $('#exampleModal').on('show.bs.modal', function (event) {
+            var button = $(event.relatedTarget); // Button that triggered the modal
+            var image_id = button.data('whatever'); // Extract info from data-* attributes
+            // If necessary, you could initiate an AJAX request here (and then do the updating in a callback).
+            // Update the modal's content. We'll use jQuery here, but you could use a data binding library or other methods instead.
+            var modal = $(this);
+            let response = $.fn.fetch_fn(image_id);
+            response.then(function (res) {
+                return res.json();
+            }).then(function (res) {
+                let modify_div = $('#modify');
+                let url = encodeURI(res.url);
+                let modify_url = `{% url 'book:pokemon_relabel' %}?query=${url}`;
+                modify_div.attr("href", modify_url);
+
+                let image = modal.find('.modal-body img');
+                image.attr("src", res.url);
+
+                let title = modal.find('.modal-header #exampleModalLabel');
+                title.text(`: ${res.title} 정보 수정`);
+                modal.find('.modal-header #image_id').text(res.id);
+                let current_cls = modal.find('.modal-body p');
+                let label = res.classified;
+                if (res.classified === "yes") {
+                    label = "적합"
+                } else if (res.classified === "no") {
+                    label = "부적합"
+                } else if (res.classified === "little") {
+                    label = "단순 처리"
+                } else if (res.classified === "more") {
+                    label = "복잡 처리"
+                }
+                current_cls.text(`현재 분류: ${res.original_label} ${label}`);
+
+                modal.find('.modal-body select').find('option').each(function () {
+                    if ($(this).val() === res.classified) {
+                        $(this).prop("selected", true);
+                    }
+                    else{
+                        $(this).prop("selected", false);
+                    }
+                })
+            });
+        });
+
+        $('button[class="btn btn-primary mb-2"]').click(function (e) {
+            e.stopPropagation();
+            e.preventDefault();
+            let modal = $('#exampleModal');
+            let selected_option = $("select.form-control").children("option:selected");
+            console.log(selected_option);
+
+            let csrf = Cookies.get('csrftoken');
+            let data = new FormData();
+            let image_id = modal.find('.modal-header #image_id').text();
+
+            data.append('image_id', image_id);
+            data.append('csrfmiddlewaretoken', csrf);
+            data.append('selected', selected_option.val());
+            data.append('data_type', 'pokemon');
+
+            fetch("{% url 'book:rating_api' %}", {
+                method: 'POST',
+                body: data,
+                credentials: 'same-origin'
+            });
+        });
+    </script>
 {% endblock %}

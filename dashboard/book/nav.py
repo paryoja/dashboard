@@ -44,10 +44,11 @@ def get_render_dict(current_page):
     study_list.append(get_nav_item("colab", "fa fa-file-code", "실습자료", current_page))
 
     pokemon_result_list = list()
-    pokemon_result_list.append(get_nav_item("pokemon_result", "far fa-thumbs-up", "Yes", current_page, "yes"))
-    pokemon_result_list.append(get_nav_item("pokemon_result", "far fa-thumbs-down", "No", current_page, "no"))
-    pokemon_result_list.append(get_nav_item("pokemon_result", "fa fa-angle-right", "Little", current_page, "little"))
-    pokemon_result_list.append(get_nav_item("pokemon_result", "fa fa-angle-double-right", "More", current_page, "more"))
+    pokemon_result_list.append(get_nav_item("pokemon_result", "far fa-thumbs-up", "적합", current_page, "yes"))
+    pokemon_result_list.append(get_nav_item("pokemon_result", "fa fa-angle-right", "단순 처리", current_page, "little"))
+    pokemon_result_list.append(
+        get_nav_item("pokemon_result", "fa fa-angle-double-right", "복잡 처리", current_page, "more"))
+    pokemon_result_list.append(get_nav_item("pokemon_result", "far fa-thumbs-down", "부적합", current_page, "no"))
 
     pokemon_list = list()
     pokemon_list.append(get_nav_item("pokemon_classification", "fa fa-check-square", "분류", current_page))

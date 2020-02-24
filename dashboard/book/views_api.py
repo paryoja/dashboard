@@ -14,15 +14,19 @@ class Domain:
     Pokemon = "pokemon"
 
 
-def image(request, method):
-    if method == "DELETE":
-        image_id = request.POST.get("image_id")
+def image(request, method, image_type="People"):
+    image_id = request.POST.get("image_id")
+    if image_type == "People":
         img = models.PeopleImage.objects.get(id=int(image_id))
+    elif image_type == "Pokemon":
+        img = models.PokemonImage.objects.get(id=int(image_id))
+    else:
+        raise ValueError("Unknown image type {}".format(image_type))
+
+    if method == "DELETE":
         img.delete()
         return HttpResponse("Done")
     if method == "GET":
-        image_id = request.POST.get("image_id")
-        img = models.PeopleImage.objects.get(id=image_id)
         return JsonResponse(model_to_dict(img))
     else:
         return HttpResponseBadRequest("Unknown Method")
@@ -46,8 +50,8 @@ def set_rating(request):
 
 def get_id(request):
     query = request.POST.get('query')
-    image = models.PeopleImage.objects.filter(url__endswith=query)[0]
-    return HttpResponse(image.id)
+    image_obj = models.PeopleImage.objects.filter(url__endswith=query)[0]
+    return HttpResponse(image_obj.id)
 
 
 @shared_task
@@ -66,7 +70,6 @@ def get_classification_result(domain, int_img_id):
         raise KeyError("Domain {} unknown".format(domain))
 
     # 이미 가져온건지 다시 확인 -> 작업 추가시에 중복되어 있을 수 있음
-    need_to_request = True
     if existing_rating.count() != 0:
         return
 

@@ -2,75 +2,105 @@
 
 {% block body %}
     <H1>Corona Virus Status</H1>
-    <H3><a href="https://en.wikipedia.org/wiki/Template:2019%E2%80%9320_Wuhan_coronavirus_data/China_medical_cases">데이터
-        출처</a></H3>
-    {% for data in count_map %}
-        {{ data }}
-    {% endfor %}
-    <canvas id="myChart" width="400" height="300"></canvas>
+    <H3><a href="https://wuhanvirus.kr/">한국 데이터 출처</a></H3>
+    <H3><a href="https://en.wikipedia.org/wiki/Template:2019%E2%80%9320_Wuhan_coronavirus_data/China_medical_cases">
+        중국 데이터 출처</a></H3>
+    <div class="chart-container">
+        <canvas id="KoreaChart" width="400" height="300"></canvas>
+    </div>
+    <div class="chart-container">
+        <canvas id="ChinaChart" width="400" height="300"></canvas>
+    </div>
 {% endblock %}
+
 {% block scripts %}
     <script src="https://cdn.jsdelivr.net/npm/chart.js@2.9.3/dist/Chart.min.js"
             integrity="sha256-R4pqcOYV8lt7snxMQO/HSbVCFRPMdrhAFMH+vr9giYI=" crossorigin="anonymous"></script>
     <script>
-        let chartColors = ['rgba(255, 99, 132)', 'rgba(75, 192, 192)', 'rgba(255, 159, 64)', 'rgba(153, 102, 255)'];
-        console.log(window.chartColors);
-        var ctx = document.getElementById('myChart').getContext('2d');
-        var myChart = new Chart(ctx, {
-            type: 'line',
-            data: {
-                labels: [{% for label in labels %}"{{ label }}", {% endfor %}],
-                datasets: [
-                    {% for country, count_list in country_list %}
-                        {% for count_type, data in count_list %}
-                            {% with country=data.0 count_type=data.1 actual=data.2 expected=data.3 %}
+        let chartColors = ['rgba(255, 99, 132)', 'rgba(75, 192, 192)', 'rgb(54, 150, 235)', 'rgb(201, 203, 207)',
+            'rgba(255, 159, 64)', 'rgba(153, 102, 255)', 'rgb(255, 205, 86)', 'rgb(64, 64, 255)',];
+
+        let chart_options = {
+            title: {
+                display: true,
+                text: ''
+            },
+            scales: {
+                yAxes: [{
+                    ticks: {
+                        beginAtZero: true,
+                    }
+                }, {
+                    ticks: {
+                        beginAtZero: true,
+                    },
+                    type: 'linear', // only linear but allow scale type registration. This allows extensions to exist solely for log scale for instance
+                    display: true,
+                    position: 'right',
+                    id: 'y-axis-2'
+                }]
+            },
+            hover: {
+                mode: 'nearest',
+                intersect: true
+            },
+            tooltips: {
+                position: 'nearest',
+                mode: 'index',
+                intersect: false,
+            },
+            maintainAspectRatio: false,
+        };
+
+        {% for country, count_list in country_list %}
+            let ctx_{{ country }} = document.getElementById('{{ country }}Chart').getContext('2d');
+            console.log(ctx_{{ country }});
+            chart_options.title.text = "{{ country }}";
+
+            var myChart = new Chart(ctx_{{ country }}, {
+                    type: 'line',
+                    data: {
+                        labels: [{% for label in labels %}"{{ label }}", {% endfor %}],
+                        datasets: [
+                            {% for count_type, actual, expected in count_list %}
                                 {
-                                    label: '# of {{ count_type }} ({{ country }})',
-                                    data: [
-                                        {% for x in actual %}
-                                            {{ x }},
-                                        {% endfor %}
-                                    ],
+                                    label: '# of {{ count_type }}',
                                     fill: false,
                                     backgroundColor: chartColors[{{ forloop.counter0 }}],
                                     borderColor: chartColors[{{ forloop.counter0 }}],
                                     {% if count_type == "death" %}
                                         yAxisID: "y-axis-2",
                                     {% endif %}
+                                    data: [
+                                        {% for v in actual %}
+                                            {{ v }},
+                                        {% endfor %}
+                                    ]
                                 },
-                            {% endwith %}
-                        {% endfor %}
-                    {% endfor %}
-                ]
-            },
-            options: {
-                scales: {
-                    yAxes: [{
-                        ticks: {
-                            beginAtZero: true,
-                            suggestedMax: 80000,
-                        }
-                    }, {
-                        ticks: {
-                            beginAtZero: true,
-                            suggestedMax: 4000,
-                        },
-                        type: 'linear', // only linear but allow scale type registration. This allows extensions to exist solely for log scale for instance
-                        display: true,
-                        position: 'right',
-                        id: 'y-axis-2'
-                    }]
-                },
-                hover: {
-                    mode: 'nearest',
-                    intersect: true
-                },
-                tooltips: {
-                    position: 'nearest',
-                    mode: 'index',
-                    intersect: false,
-                },
-            }
-        });
+                                {
+                                    label: 'Expected # of {{ count_type }}',
+                                    fill: false,
+                                    backgroundColor: chartColors[{{ forloop.counter0 }} +4],
+                                    borderColor: chartColors[{{ forloop.counter0 }} +4],
+                                    {% if count_type == "death" %}
+                                        yAxisID: "y-axis-2",
+                                    {% endif %}
+                                    data: [
+                                        {% for v in expected %}
+                                            {% if v == "NaN" %}
+                                                {{ v }},
+                                            {% else %}
+                                                {{ v | floatformat:0 }},
+                                            {% endif %}
+                                        {% endfor %}
+                                    ]
+                                },
+                            {% endfor %}
+                        ]
+                    },
+                    options: chart_options,
+                }
+            );
+        {% endfor %}
     </script>
 {% endblock %}
