@@ -163,8 +163,6 @@
         });
         $('button').click(function (e) {
             if ($(this).hasClass("label-button")) {
-                console.log(this[0]);
-                console.log(this.id);
                 let temp = this.id.split('_');
                 let csrf = $('[type=hidden]').val();
                 let data = new FormData();
@@ -190,7 +188,6 @@
                 element_count--;
 
                 if (element_count === 0) {
-                    console.log("reload");
                     location.reload();
                 }
             }

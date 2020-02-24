@@ -18,6 +18,7 @@
     {% if user.is_superuser %}
         <form method="get" action="{% url "book:people_result" 1 %}">
             <div class="input-group mb-3">
+                <input type="hidden" name="arg" value="{{ arg }}">
                 <input type="text" name="query" class="form-control" placeholder="검색" aria-label="Query"
                        aria-describedby="button-addon2" value="{{ query }}">
                 <div class="input-group-append">
@@ -57,7 +58,8 @@
                         <tr>
                             {% for value in value_list %}
                                 <td>
-                                    <a href="{% url 'book:people_result' 1 %}?query={{ value.user_id }}">{{ value.user_id }}
+                                    <a href="{% url 'book:people_result' 1 %}?query={{ value.user_id }}&arg={{ arg }}">
+                                        {{ value.user_id }}
                                         (count: {{ value.id__count }})</a></td>
                             {% endfor %}
                         </tr>
@@ -72,8 +74,29 @@
              aria-hidden="true">
             <div class="modal-dialog" role="document">
                 <div class="modal-content">
+                    <div class="modal-header">
+                        <h4 class="modal-title" id="image_id"></h4>
+                        <h4 class="modal-title" id="exampleModalLabel"> 이미지 정보 수정</h4>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
                     <div class="modal-body">
                         <!--<img src="" width="100%">-->
+                        <div id="classification"><p>현재 분류: </p>
+                            <form>
+                                <div class="form-group row">
+                                    <label class="col-sm-2 col-form-label" for="change_class">분류</label>
+                                    <div class="col-sm-8">
+                                        <select class="form-control" id="change_class">
+                                            <option value="true">True</option>
+                                            <option value="false">False</option>
+                                        </select>
+                                    </div>
+                                    <button type="submit" class="btn btn-primary mb-2">수정</button>
+                                </div>
+                            </form>
+                        </div>
                         <div id="instagram"></div>
                     </div>
                     <div class="modal-footer">
@@ -114,7 +137,6 @@
             let data = new FormData();
             data.append('image_id', image_id);
             data.append('csrfmiddlewaretoken', csrf);
-            console.log(csrf);
 
             return fetch("{% url 'book:image' 'GET' %}", {
                 method: 'POST',
@@ -130,16 +152,30 @@
             // Update the modal's content. We'll use jQuery here, but you could use a data binding library or other methods instead.
             var modal = $(this);
             let response = $.fn.fetch_fn(image_id);
+
             response.then(function (res) {
                 return res.json();
             }).then(function (res) {
                 let url = `https://instagram.com${res.page}`;
                 let api_url = `https://api.instagram.com/oembed/?url=${url}&hidecaption=1&omitscript=1`;
-                console.log(url);
+
                 let modify_div = $('#modify');
+
+                let title = modal.find('.modal-header #exampleModalLabel');
+                title.text(`: ${res.page} 정보 수정`);
+                modal.find('.modal-header #image_id').text(res.id);
 
                 let modify_url = `{% url 'book:people_relabel' %}?query=${res.url}`;
                 modify_div.attr("href", modify_url);
+
+                modal.find('.modal-body p').text(`현재 분류: ${res.selected}`);
+                modal.find('.modal-body select').find('option').each(function () {
+                    if (JSON.parse($(this).val()) === res.selected) {
+                        $(this).prop("selected", true);
+                    } else {
+                        $(this).prop("selected", false);
+                    }
+                });
 
                 return fetch(api_url)
             }).then(function (res) {
@@ -147,10 +183,32 @@
             }).then(function (res) {
                 let instagram_div = $('#instagram');
                 instagram_div.html(res.html);
-                console.log(res);
             }).then(function () {
                 window.instgrm.Embeds.process();
             });
         })
+
+        $('button[class="btn btn-primary mb-2"]').click(function (e) {
+            e.stopPropagation();
+            e.preventDefault();
+            let modal = $('#exampleModal');
+            let selected_option = $("select.form-control").children("option:selected");
+
+            let csrf = Cookies.get('csrftoken');
+            let data = new FormData();
+            let image_id = modal.find('.modal-header #image_id').text();
+
+            data.append('image_id', image_id);
+            data.append('csrfmiddlewaretoken', csrf);
+            data.append('selected', selected_option.val());
+            data.append('data_type', 'people');
+            fetch("{% url 'book:rating_api' %}", {
+                method: 'POST',
+                body: data,
+                credentials: 'same-origin'
+            }).then(function (e) {
+                location.reload()
+            });
+        });
     </script>
 {% endblock %}

@@ -40,7 +40,8 @@ def set_rating(request):
         img.classified = request.POST.get('selected').lower()
     elif data_type == Domain.People:
         img = models.PeopleImage.objects.get(id=img_id)
-        img.selected = request.POST.get('selected').lower() == 'yes'
+        selected = request.POST.get('selected').lower()
+        img.selected = selected == 'true' or selected == 'yes'
     else:
         return HttpResponseBadRequest("Not Supported data_type {}".format(data_type))
 

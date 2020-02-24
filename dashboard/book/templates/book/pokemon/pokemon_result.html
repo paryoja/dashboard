@@ -11,6 +11,7 @@
     <H1>결과</H1>
     <form method="get" action="{% url 'book:pokemon_result' 1 %}">
         <div class="input-group mb-3">
+            <input type="hidden" name="arg" value="{{ arg }}">
             <input type="text" name="query" class="form-control" placeholder="검색" aria-label="Query"
                    aria-describedby="button-addon2" value="{{ query }}">
             <div class="input-group-append">
@@ -167,8 +168,7 @@
                 modal.find('.modal-body select').find('option').each(function () {
                     if ($(this).val() === res.classified) {
                         $(this).prop("selected", true);
-                    }
-                    else{
+                    } else {
                         $(this).prop("selected", false);
                     }
                 })
@@ -180,7 +180,6 @@
             e.preventDefault();
             let modal = $('#exampleModal');
             let selected_option = $("select.form-control").children("option:selected");
-            console.log(selected_option);
 
             let csrf = Cookies.get('csrftoken');
             let data = new FormData();
@@ -195,7 +194,7 @@
                 method: 'POST',
                 body: data,
                 credentials: 'same-origin'
-            }).then(function(){
+            }).then(function () {
                 location.reload()
             });
         });

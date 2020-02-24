@@ -77,11 +77,6 @@
             let data = new FormData();
             data.append('image_id', temp);
             data.append('csrfmiddlewaretoken', csrf);
-            console.log(temp);
-            console.log(csrf);
-            for (var p of data) {
-                console.log(p);
-            }
 
             fetch("{% url 'book:image' 'DELETE' %}", {
                 method: 'POST',

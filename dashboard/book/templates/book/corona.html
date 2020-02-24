@@ -54,7 +54,6 @@
 
         {% for country, count_list in country_list %}
             let ctx_{{ country }} = document.getElementById('{{ country }}Chart').getContext('2d');
-            console.log(ctx_{{ country }});
             chart_options.title.text = "{{ country }}";
 
             var myChart = new Chart(ctx_{{ country }}, {

@@ -138,8 +138,6 @@
             let data = new FormData();
             data.append('image_id', temp);
             data.append('csrfmiddlewaretoken', csrf);
-            console.log(temp);
-            console.log(csrf);
 
             fetch("{% url 'book:image' 'DELETE' %}", {
                 method: 'POST',
@@ -226,8 +224,6 @@
 
         $("table tr td").click(function (e) {
             let button_in_td = $(this).children('button');
-            console.log(this);
-            console.log(button_in_td[0]);
             if (button_in_td[0] != null) {
                 button_in_td[0].click();
             }

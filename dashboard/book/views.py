@@ -293,8 +293,10 @@ def people(request):
 
 @user_passes_test(lambda u: u.is_superuser)
 def people_result(request, page=1):
-    render_dict = get_render_dict('people_result')
     selected = request.GET.get('arg', 'True')
+    render_dict = get_render_dict('people_result_{}'.format(selected))
+    render_dict['arg'] = selected
+
     selected = selected == 'True'
     query = request.GET.get('query', '')
     selected_list = models.PeopleImage.objects.filter(selected=selected)
@@ -308,8 +310,8 @@ def people_result(request, page=1):
         queried_list = selected_list.filter(url__contains=query)
         selected_list = queried_list | selected_list.filter(title__contains=query)
     else:
-        selected_list = models.PeopleImage.objects.filter(selected=selected).order_by('url')
-
+        selected_list = models.PeopleImage.objects.filter(selected=selected)
+    selected_list = selected_list.order_by('-id')
     p, page_info = utils.get_page_info(selected_list, page, 120)
 
     row_count = 6

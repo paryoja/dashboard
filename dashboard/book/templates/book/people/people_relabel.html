@@ -17,7 +17,7 @@
     <table class="table table-sm table-hover">
         <thead>
         <tr>
-            <td>URL</td>
+            <td>ID</td>
             <td>Image</td>
             <td>Rate</td>
             <td>Delete</td>
@@ -25,9 +25,9 @@
         </thead>
         {% for obj in objects %}
             <tr>
-                <td>{{ obj }}</td>
-                <td><img src="{{ obj.url }}"></td>
                 <td>{{ obj.id }}</td>
+                <td><img src="{{ obj.url }}"></td>
+                <td>{{ obj.selected }}</td>
                 <td>
                     <button class="btn btn-sm btn-danger delete" id="{{ obj.id }}">Delete</button>
                 </td>
@@ -45,11 +45,6 @@
             let data = new FormData();
             data.append('image_id', temp);
             data.append('csrfmiddlewaretoken', csrf);
-            console.log(temp);
-            console.log(csrf);
-            for (var p of data) {
-                console.log(p);
-            }
 
             fetch("{% url 'book:image' 'DELETE' %}", {
                 method: 'POST',
