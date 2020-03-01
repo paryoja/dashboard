@@ -13,3 +13,4 @@ dashboard/.static_root/
 venv2/
 .gitignore
 /**/wait-for-it.sh
+env.sh

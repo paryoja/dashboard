@@ -1,0 +1,12 @@
+FROM yj0604park/general:18.04
+MAINTAINER Yoonjae Park <yj0604.park@gmail.com>
+
+WORKDIR /work
+ADD wait-for-it.sh .
+ADD filebeat-oss-7.6.0-amd64.deb .
+RUN dpkg -i filebeat-oss-7.6.0-amd64.deb
+
+ADD ./config/filebeat/filebeat.yml /etc/filebeat/filebeat.yml
+RUN chown root:root /etc/filebeat/filebeat.yml
+
+ADD ./filebeat.sh .
