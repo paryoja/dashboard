@@ -30,7 +30,7 @@
         </form>
         {% if distinct %}
             <div class="row">
-                <div class="col-md-6">
+                <div class="col-md-3">
                     <a class="btn btn-success" data-toggle="collapse" href="#collapseStatus" role="button"
                        aria-expanded="false" aria-controls="collapseExample">
                         분류 현황 보기
@@ -38,14 +38,29 @@
                     </a>
                 </div>
                 {% if query %}
-                    <div class="col-md-6">
+                    <div class="col-md-3">
                         <a class="btn btn-success"
                            href="{% url 'book:people_high_expectation' %}?query={{ query }}&page=1">
                             예상 순서 분류
                         </a>
                     </div>
+                    {% if arg != "False" %}
+                        <div class="col-md-3">
+                            <a class="btn btn-success"
+                               href="{% url 'book:people_result' 1 %}?query={{ query }}&page=1&arg=False">
+                                미선택
+                            </a>
+                        </div>
+                    {% else %}
+                        <div class="col-md-3">
+                            <a class="btn btn-success"
+                               href="{% url 'book:people_result' 1 %}?query={{ query }}&page=1&arg=True">
+                                선택
+                            </a>
+                        </div>
+                    {% endif %}
                 {% else %}
-                    <div class="col-md-6">
+                    <div class="col-md-3">
                         <a class="btn btn-success" href="{% url 'book:people_links' %}">
                             유저 링크
                         </a>
@@ -84,6 +99,7 @@
                     <div class="modal-body">
                         <!--<img src="" width="100%">-->
                         <div id="classification"><p>현재 분류: </p>
+                            <button class="btn btn-primary">Best</button>
                             <form>
                                 <div class="form-group row">
                                     <label class="col-sm-2 col-form-label" for="change_class">분류</label>

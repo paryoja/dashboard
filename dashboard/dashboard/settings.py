@@ -150,7 +150,7 @@ LOGGING = {
         'file': {
             'level': 'INFO',
             'class': 'logging.handlers.RotatingFileHandler',
-            'filename': '/work/dashboard/django.log',
+            'filename': BASE_DIR + '/django.log',
             'formatter': 'format1',
         },
     },

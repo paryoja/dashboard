@@ -14,7 +14,14 @@ Including another URLconf
     2. Add a URL to urlpatterns:  path('blog/', include('blog.urls'))
 """
 from django.contrib import admin
+from django.shortcuts import redirect
 from django.urls import path, include
+from django.urls import reverse
+
+
+def simple_redirect(request):
+    return redirect(reverse('book:index'))
+
 
 urlpatterns = [
     path('timezone/', include('timezone.urls')),
@@ -22,5 +29,5 @@ urlpatterns = [
     path('bstest/', include('bstest.urls')),
     path('admin/', admin.site.urls),
     path('accounts/', include('django.contrib.auth.urls')),
-    path('', include('book.urls')),
+    path('', simple_redirect),
 ]

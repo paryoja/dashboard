@@ -695,26 +695,26 @@ def compute_expectation(x, coeff):
 corona_constant = {
     "Korea": {
         "confirmed": {
-            'a': 910.90906,
-            'b': 1.0933201,
-            'x0': 29.204279
+            'a': 6591.4785,
+            'b': 2.7211623,
+            'x0': 36.688503
         },
         "death": {
-            'a': 685.366,
-            'b': 1.3281595,
-            'x0': 36.321884
+            'a': 17.149622,
+            'b': 1.7989516,
+            'x0': 31.290888
         }
     },
     "China": {
         "confirmed": {
-            'a': 83096.91,
-            'b': 4.4773245,
-            'x0': 18.513666,
+            'a': 80307.234,
+            'b': 4.234807,
+            'x0': 18.250608
         },
         "death": {
-            'a': 2961.9773,
-            'b': 5.8489833,
-            'x0': 23.626362
+            'a': 3089.586,
+            'b': 6.176563,
+            'x0': 24.240225
         }
     }
 }
@@ -745,7 +745,7 @@ def corona(request):
         counts = models.Corona.objects.filter(country=country).order_by("date")
 
         actual_start_date = counts[0].date
-        actual_end_date = models.Corona.objects.filter(country=country).order_by("-date")[0].date
+
         count_list = []
         for count_type in ["confirmed", "death"]:
             actual = []
@@ -762,7 +762,9 @@ def corona(request):
             #     expected.append("NaN")
 
             for date in range_date(start_date, end_date):
-                off = (date - actual_start_date).days + 1
+                off = (date - start_date).days + 1
+                if country == "Korea":
+                    off = off - 3
                 value = compute_expectation(off, param)
                 expected.append(value)
 

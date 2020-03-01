@@ -50,9 +50,17 @@
 
             <!-- Navigation -->
             <ul class="navbar-nav mb-md-3">
+                {% if user.is_superuser %}
+                    <li class="nav-item">
+                        <a class="nav-link" href="/admin" target="_blank">
+                            <i class="fe fe-clipboard"></i> Admin
+                        </a>
+                    </li>
+                {% endif %}
                 <li class="nav-item">
-                    <a class="nav-link" href="/admin" target="_blank">
-                        <i class="fe fe-clipboard"></i> Admin
+                    <a class="nav-link"
+                       href="https://github.com/paryoja/dashboard" target="_blank">
+                        <i class="fab fa-github"></i> Blog
                     </a>
                 </li>
                 <li class="nav-item">

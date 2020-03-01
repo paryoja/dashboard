@@ -234,6 +234,7 @@ class Corona(models.Model):
 
 class BestPhoto(models.Model):
     img = models.ForeignKey(PeopleImage, on_delete=models.CASCADE)
+    url = models.URLField(unique=True, max_length=400)
 
 
 class TodoItem(models.Model):

@@ -11,3 +11,5 @@ dashboard/.static_root/
 .idea/workspace.xml
 /**/migrations/*
 venv2/
+.gitignore
+/**/wait-for-it.sh
