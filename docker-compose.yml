@@ -1,5 +1,8 @@
 version: '3'
 
+volumes:
+  production_logs: {}
+
 services:
   rabbitmq:
     build:
@@ -35,6 +38,7 @@ services:
       - /var/www:/usr/share/nginx/html:ro
       - ./config/nginx:/etc/nginx/conf.d
       - ./:/work
+      - production_logs:/work/log/nginx
     command: ["/work/dashboard/wait-for-it.sh", "django:38000", "--", "nginx", "-g", "daemon off;"]
 
   filebeat:
@@ -44,9 +48,8 @@ services:
     env_file:
       - ./.envs/.production/.filebeat
     volumes:
-      - ./log/nginx:/var/log/nginx
-      - ./env.sh:/work/env.sh
-    command: ["/work/filebeat.sh"]
+      - production_logs:/var/log/nginx
+    command: ["./filebeat.sh"]
 
 
   flower:

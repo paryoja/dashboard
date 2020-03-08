@@ -1,12 +1,16 @@
-FROM yj0604park/general:18.04
+FROM docker.elastic.co/beats/filebeat:7.6.1
 MAINTAINER Yoonjae Park <yj0604.park@gmail.com>
+USER root
 
-WORKDIR /work
-ADD wait-for-it.sh .
-ADD filebeat-oss-7.6.0-amd64.deb .
-RUN dpkg -i filebeat-oss-7.6.0-amd64.deb
+RUN mkdir /work
+RUN chown filebeat:filebeat /work
+# WORKDIR /work
 
-ADD ./config/filebeat/filebeat.yml /etc/filebeat/filebeat.yml
-RUN chown root:root /etc/filebeat/filebeat.yml
+USER filebeat
 
-ADD ./filebeat.sh .
+# ADD --chown=filebeat:filebeat /work/wait-for-it.sh .
+ADD --chown=filebeat:filebeat ./config/filebeat/filebeat.yml /usr/share/filebeat/filebeat.yml
+ADD --chown=filebeat:filebeat ./filebeat.sh .
+
+# RUN chown filebeat:filebeat ./filebeat.sh
+# RUN chown -R filebeat:filebeat /work

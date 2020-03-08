@@ -32,3 +32,5 @@ lz4==3.0.2
 numpy==1.18.1
 flower==0.9.3
 pycodestyle==2.5.0
+pylint_django==2.0.14
+pylint_celery==0.3
