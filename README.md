@@ -5,6 +5,7 @@ Yozit Homepage
 
 ![Language](https://img.shields.io/github/languages/count/paryoja/dashboard)
 ![CI](https://github.com/paryoja/dashboard/workflows/CI/badge.svg?branch=master)
+![Unittest](https://github.com/paryoja/dashboard/workflows/Unittest/badge.svg)
 
 ## 기본 용도
 * 프로그래밍 연습
