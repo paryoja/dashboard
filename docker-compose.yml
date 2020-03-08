@@ -6,27 +6,25 @@ services:
       context: .
       dockerfile: ./Dockerfile_rabbitmq
 
-  django:
+  celery: &celery
+    env_file:
+      - ./.envs/.production/.django
+    depends_on:
+      - rabbitmq
     build:
       context: .
       dockerfile: ./Dockerfile
+    volumes:
+      - ./:/work
+    command: ["./wait-for-it.sh", "rabbitmq:5672", "--", "./run_celery.sh"]
+
+  django: &django
+    <<: *celery
     shm_size: '512MB'
     ports:
       - "38000:8000"
-    volumes:
-      - ./:/work
-    environment:
-      - DEBUG=False
     command:
       - ./run_gunicorn.sh
-
-  celery:
-    build:
-      context: .
-      dockerfile: ./Dockerfile
-    volumes:
-      - ./:/work
-    command: ["./wait-for-it.sh", "rabbitmq:5672", "--", "./celery.sh"]
 
   nginx:
     image:
@@ -43,10 +41,16 @@ services:
     build:
       context: .
       dockerfile: ./Dockerfile_filebeat
-    environment:
-      - ES_HOST
-      - KIBANA_HOST
+    env_file:
+      - ./.envs/.production/.filebeat
     volumes:
       - ./log/nginx:/var/log/nginx
       - ./env.sh:/work/env.sh
     command: ["/work/filebeat.sh"]
+
+
+  flower:
+    <<: *celery
+    ports:
+      - "5555:5555"
+    command: ["./wait-for-it.sh", "rabbitmq:5672", "--", "./run_flower.sh"]

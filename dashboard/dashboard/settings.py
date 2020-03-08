@@ -13,6 +13,8 @@ https://docs.djangoproject.com/en/2.2/ref/settings/
 import json
 import os
 
+import requests
+
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
@@ -37,9 +39,7 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'django.contrib.humanize',
-    'timezone.apps.TimezoneConfig',
     'book.apps.BookConfig',
-    'bstest.apps.BstestConfig',
 ]
 
 MIDDLEWARE = [
@@ -166,9 +166,7 @@ LOGIN_URL = '/book/login'
 
 CELERY_BROKER_URL = 'amqp://myuser:mypassword@rabbitmq:5672/myvhost'
 
-import requests
-
 try:
     VERSION = requests.get('https://api.github.com/repos/paryoja/dashboard/releases').json()[0]['tag_name']
-except:
+except KeyError:
     VERSION = "UNK"

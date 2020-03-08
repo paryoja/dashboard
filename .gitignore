@@ -14,3 +14,7 @@ venv2/
 .gitignore
 /**/wait-for-it.sh
 env.sh
+
+.env
+.envs/*
+!.envs/.local/

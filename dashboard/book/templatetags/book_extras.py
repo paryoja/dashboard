@@ -19,5 +19,5 @@ def highlight_user(value):
 def get_split(value, index):
     try:
         return value.split('/')[index]
-    except:
+    except IndexError:
         return None
