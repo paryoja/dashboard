@@ -1,8 +1,10 @@
-# Yozit Homepage
+Yozit Homepage
+==============
+
 잡다한 것들 통합 뷰어
 
-.. image:: https://img.shields.io/github/languages/count/beygee/survive
-     :target: https://github.com/paryoja/dashboard/
+![Language](https://img.shields.io/github/languages/count/paryoja/dashboard)
+
 
 ## 기본 용도
 * 프로그래밍 연습
