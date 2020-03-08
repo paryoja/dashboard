@@ -4,7 +4,7 @@ Yozit Homepage
 잡다한 것들 통합 뷰어
 
 ![Language](https://img.shields.io/github/languages/count/paryoja/dashboard)
-
+![CI](https://github.com/paryoja/dashboard/workflows/CI/badge.svg?branch=master)
 
 ## 기본 용도
 * 프로그래밍 연습
