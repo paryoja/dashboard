@@ -21,7 +21,7 @@ services:
       - ./:/work
     command: ["./wait-for-it.sh", "rabbitmq:5672", "--", "./run_celery.sh"]
 
-  django: &django
+  django:
     <<: *celery
     shm_size: '512MB'
     ports:

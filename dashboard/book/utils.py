@@ -19,13 +19,12 @@ def new_lotto(draw_number):
     except exceptions.ObjectDoesNotExist:
         try:
             params = {
-                'method': 'getLottoNumber',
-                'drwNo': draw_number,
+                "method": "getLottoNumber",
+                "drwNo": draw_number,
             }
-            result = requests.get(
-                "https://www.nlotto.co.kr/common.do", params=params)
+            result = requests.get("https://www.nlotto.co.kr/common.do", params=params)
             result = json.loads(result.text)
-            if not result['returnValue'] == 'fail':
+            if not result["returnValue"] == "fail":
                 obj = Lotto(draw_number=draw_number, numbers=result)
                 obj.save()
                 is_new = True
@@ -45,10 +44,10 @@ def get_page_info(object_list, page, count):
     page_list = [i for i in range(start_10, end_10 + 1)]
 
     page_info = {
-        'page': page,
-        'prev': page - 1 if p.has_previous() else 0,
-        'next': page + 1 if p.has_next() else 0,
-        'page_list': page_list,
+        "page": page,
+        "prev": page - 1 if p.has_previous() else 0,
+        "next": page + 1 if p.has_next() else 0,
+        "page_list": page_list,
     }
 
     return p, page_info
@@ -58,11 +57,11 @@ def get_compressed_result(image_list, count, page):
     paginator = Paginator(image_list, count)
     p = paginator.page(page)
 
-    image_list = serializers.serialize('json', p)
+    image_list = serializers.serialize("json", p)
 
-    result = {'has_next': p.has_next(), 'image_list': json.loads(image_list)}
+    result = {"has_next": p.has_next(), "image_list": json.loads(image_list)}
 
-    compressed = lz4.frame.compress(json.dumps(result).encode('utf-8'))
+    compressed = lz4.frame.compress(json.dumps(result).encode("utf-8"))
     return HttpResponse(base64.b85encode(compressed))
 
 

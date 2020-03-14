@@ -5,4 +5,4 @@ from django.contrib.auth.models import User
 class LoginForm(AuthenticationForm):
     class Meta:
         model = User
-        fields = ['username', 'password']
+        fields = ["username", "password"]

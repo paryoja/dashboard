@@ -4,7 +4,7 @@ from django.utils.translation import gettext_lazy as _
 
 
 class Link(models.Model):
-    added_date = models.DateTimeField('date added', auto_now_add=True)
+    added_date = models.DateTimeField("date added", auto_now_add=True)
     url = models.URLField()
 
     content_type = models.CharField(max_length=32, null=True, blank=True)
@@ -29,12 +29,12 @@ class AuthUser(models.Model):
     date_of_birth = models.DateTimeField()
 
     class Meta:
-        db_table = 'book_auth_user'
+        db_table = "book_auth_user"
 
 
 class Boards(models.Model):
-    category = models.ForeignKey('BoardCategories', models.DO_NOTHING)
-    user = models.ForeignKey('AuthUser', models.DO_NOTHING)
+    category = models.ForeignKey("BoardCategories", models.DO_NOTHING)
+    user = models.ForeignKey("AuthUser", models.DO_NOTHING)
     title = models.CharField(max_length=300)
     content = models.TextField()
     registered_date = models.DateTimeField(blank=True, null=True)
@@ -43,7 +43,7 @@ class Boards(models.Model):
     image = models.CharField(max_length=255, blank=True, null=True)
 
     class Meta:
-        db_table = 'boards'
+        db_table = "boards"
 
 
 class BoardCategories(models.Model):
@@ -57,7 +57,7 @@ class BoardCategories(models.Model):
     last_update_date = models.DateTimeField(blank=True, null=True)
 
     class Meta:
-        db_table = 'board_categories'
+        db_table = "board_categories"
 
 
 class Lotto(models.Model):
@@ -98,19 +98,21 @@ class Category(models.Model):
 
 
 class PeopleImage(models.Model):
-
     def get_user_id(self):
-        return self.url.split('/')[5]
+        return self.url.split("/")[5]
 
     url = models.URLField(unique=True, max_length=400)
     title = models.TextField(max_length=500)
-    category = models.ForeignKey(Category, on_delete=models.SET_NULL, null=True, blank=True)
+    category = models.ForeignKey(
+        Category, on_delete=models.SET_NULL, null=True, blank=True
+    )
     page = models.CharField(max_length=30)
     selected = models.BooleanField(null=True, blank=True)
     user_id = models.CharField(max_length=20)
 
-    def save(self, force_insert=False, force_update=False, using=None,
-             update_fields=None):
+    def save(
+        self, force_insert=False, force_update=False, using=None, update_fields=None
+    ):
         self.user_id = self.get_user_id()
         super().save(force_insert, force_update, using, update_fields)
 
@@ -126,7 +128,9 @@ class User(models.Model):
 class PokemonImage(models.Model):
     url = models.URLField(unique=True, max_length=400)
     title = models.CharField(max_length=200)
-    category = models.ForeignKey(Category, on_delete=models.SET_NULL, null=True, blank=True)
+    category = models.ForeignKey(
+        Category, on_delete=models.SET_NULL, null=True, blank=True
+    )
     original_label = models.CharField(max_length=100)
     modified_label = models.CharField(max_length=100, null=True, blank=True)
     classified = models.CharField(max_length=20, null=True, blank=True)
@@ -138,7 +142,9 @@ class PokemonImage(models.Model):
 class Image(models.Model):
     url = models.URLField(unique=True, max_length=400)
     title = models.CharField(max_length=200)
-    category = models.ForeignKey(Category, on_delete=models.SET_NULL, null=True, blank=True)
+    category = models.ForeignKey(
+        Category, on_delete=models.SET_NULL, null=True, blank=True
+    )
 
     def __str__(self):
         return "{} ({})".format(self.title, self.url)
@@ -195,12 +201,16 @@ class PokemonRating(models.Model):
 
 class Currency(models.Model):
     class CurrencyChoices(models.TextChoices):
-        USD = 'USD', _('USD')
-        KRW = 'KRW', _('KRW')
+        USD = "USD", _("USD")
+        KRW = "KRW", _("KRW")
 
     date = models.DateField()
-    from_currency = models.CharField(max_length=10, choices=CurrencyChoices.choices, default=CurrencyChoices.KRW)
-    to_currency = models.CharField(max_length=10, choices=CurrencyChoices.choices, default=CurrencyChoices.USD)
+    from_currency = models.CharField(
+        max_length=10, choices=CurrencyChoices.choices, default=CurrencyChoices.KRW
+    )
+    to_currency = models.CharField(
+        max_length=10, choices=CurrencyChoices.choices, default=CurrencyChoices.USD
+    )
 
     currency_rate = models.FloatField()
     from_amount = models.FloatField()
@@ -239,9 +249,9 @@ class BestPhoto(models.Model):
 
 class TodoItem(models.Model):
     class StatusChoices(models.TextChoices):
-        DONE = 'Done', _('Done')
-        TODO = 'Todo', _('Todo')
-        IN_PROGRESS = 'In Progress', _('In Progress')
+        DONE = "Done", _("Done")
+        TODO = "Todo", _("Todo")
+        IN_PROGRESS = "In Progress", _("In Progress")
 
     title = models.CharField(max_length=100)
     added_date = models.DateTimeField(auto_now_add=True)
