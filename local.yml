@@ -7,7 +7,7 @@ services:
   rabbitmq:
     build:
       context: .
-      dockerfile: dockerfiles/Dockerfile_rabbitmq
+      dockerfile: dockerfiles/production/Dockerfile_rabbitmq
 
   celery: &celery
     env_file:
@@ -17,7 +17,7 @@ services:
       - rabbitmq
     build:
       context: .
-      dockerfile: dockerfiles/Dockerfile
+      dockerfile: dockerfiles/local/Dockerfile
     volumes:
       - ./:/work
     command: ["./wait-for-it.sh", "rabbitmq:5672", "--", "/scripts/run_celery.sh"]
@@ -47,3 +47,8 @@ services:
       - ./:/work
       - production_logs:/work/log/nginx
     command: ["/work/dashboard/wait-for-it.sh", "django:38000", "--", "nginx", "-g", "daemon off;"]
+
+  postgres:
+    image: postgres:12.2
+    env_file:
+      - ./.envs/.local/.postgres

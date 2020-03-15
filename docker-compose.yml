@@ -7,7 +7,7 @@ services:
   rabbitmq:
     build:
       context: .
-      dockerfile: dockerfiles/Dockerfile_rabbitmq
+      dockerfile: dockerfiles/production/Dockerfile_rabbitmq
 
   celery: &celery
     env_file:
@@ -17,7 +17,7 @@ services:
       - rabbitmq
     build:
       context: .
-      dockerfile: dockerfiles/Dockerfile
+      dockerfile: dockerfiles/production/Dockerfile
     volumes:
       - ./:/work
     command: ["./wait-for-it.sh", "rabbitmq:5672", "--", "/scripts/run_celery.sh"]
@@ -51,7 +51,7 @@ services:
   filebeat:
     build:
       context: .
-      dockerfile: dockerfiles/Dockerfile_filebeat
+      dockerfile: dockerfiles/production/Dockerfile_filebeat
     env_file:
       - ./.envs/.production/.filebeat
     volumes:
