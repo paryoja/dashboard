@@ -10,7 +10,7 @@ USER filebeat
 
 # ADD --chown=filebeat:filebeat /work/wait-for-it.sh .
 ADD --chown=filebeat:filebeat ./config/filebeat/filebeat.yml /usr/share/filebeat/filebeat.yml
-ADD --chown=filebeat:filebeat ./filebeat.sh .
+ADD --chown=filebeat:filebeat ./scripts/filebeat.sh .
 
 # RUN chown filebeat:filebeat ./filebeat.sh
 # RUN chown -R filebeat:filebeat /work

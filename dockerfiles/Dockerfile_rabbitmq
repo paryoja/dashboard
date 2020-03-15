@@ -4,7 +4,7 @@ FROM rabbitmq
 ENV RABBITMQ_USER myuser
 ENV RABBITMQ_PASSWORD mypassword
 
-ADD config/rabbitmq config
+ADD ./config/rabbitmq config
 RUN chmod u+x config/*.sh
 
 # Define default command

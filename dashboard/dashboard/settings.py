@@ -9,14 +9,16 @@ https://docs.djangoproject.com/en/2.2/topics/settings/
 For the full list of settings and their values, see
 https://docs.djangoproject.com/en/2.2/ref/settings/
 """
-
 import json
-import os
 
+import environ
 import requests
 
-# Build paths inside the project like this: os.path.join(BASE_DIR, ...)
-BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+ROOT_DIR = (
+    environ.Path(__file__) - 2
+)  # (dashboard/dashboard/settings.py - 2 = dashboard/)
+APPS_DIR = ROOT_DIR.path("cc_test")
+env = environ.Env()
 
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/2.2/howto/deployment/checklist/
@@ -24,7 +26,7 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 # SECURITY WARNING: keep the secret key used in production secret!
 SECRET_KEY = open("dashboard/secret.txt").read().strip()
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = os.environ.get("DEBUG", "False").lower() == "true"
+DEBUG = env.bool("DEBUG", "False")
 
 ALLOWED_HOSTS = open("dashboard/allowed_hosts.txt").read().split(",")
 ALLOWED_HOSTS = [hosts.strip() for hosts in ALLOWED_HOSTS]
@@ -75,27 +77,7 @@ WSGI_APPLICATION = "dashboard.wsgi.application"
 # Database
 # https://docs.djangoproject.com/en/2.2/ref/settings/#databases
 
-# DATABASES = {
-#     'default': {
-#         'ENGINE': 'django.db.backends.sqlite3',
-#         'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
-#     }
-# }
-
-DATABASES = {
-    "default": {
-        "ENGINE": "django.db.backends.postgresql",
-        "NAME": "",
-        "USER": "",
-        "PASSWORD": "",
-        "HOST": "",
-        "PORT": "",
-    }
-}
-
-db_settings = json.loads(open("dashboard/db.json").read().strip())
-for k, v in db_settings.items():
-    DATABASES["default"][k] = v
+DATABASES = {"default": env.db("DATABASE_URL")}
 
 # Password validation
 # https://docs.djangoproject.com/en/2.2/ref/settings/#auth-password-validators
@@ -104,9 +86,9 @@ AUTH_PASSWORD_VALIDATORS = [
     {
         "NAME": "django.contrib.auth.password_validation.UserAttributeSimilarityValidator",
     },
-    {"NAME": "django.contrib.auth.password_validation.MinimumLengthValidator", },
-    {"NAME": "django.contrib.auth.password_validation.CommonPasswordValidator", },
-    {"NAME": "django.contrib.auth.password_validation.NumericPasswordValidator", },
+    {"NAME": "django.contrib.auth.password_validation.MinimumLengthValidator",},
+    {"NAME": "django.contrib.auth.password_validation.CommonPasswordValidator",},
+    {"NAME": "django.contrib.auth.password_validation.NumericPasswordValidator",},
 ]
 
 # Internationalization
@@ -142,17 +124,17 @@ LOGGING = {
         "file": {
             "level": "INFO",
             "class": "logging.handlers.RotatingFileHandler",
-            "filename": BASE_DIR + "/django.log",
+            "filename": ROOT_DIR + "/django.log",
             "formatter": "format1",
         },
     },
     "loggers": {
-        "django": {"handlers": ["file"], "level": "DEBUG", "propagate": True, },
+        "django": {"handlers": ["file"], "level": "DEBUG", "propagate": True,},
     },
 }
 LOGIN_URL = "/book/login"
 
-CELERY_BROKER_URL = os.getenv("CELERY_BROKER_URL", "amqp://rabbitmq:5672/myvhost")
+CELERY_BROKER_URL = env.url("CELERY_BROKER_URL", "amqp://rabbitmq:5672/myvhost")
 
 try:
     VERSION = requests.get(

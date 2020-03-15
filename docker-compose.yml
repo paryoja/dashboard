@@ -7,19 +7,20 @@ services:
   rabbitmq:
     build:
       context: .
-      dockerfile: ./Dockerfile_rabbitmq
+      dockerfile: dockerfiles/Dockerfile_rabbitmq
 
   celery: &celery
     env_file:
       - ./.envs/.production/.django
+      - ./.envs/.production/.postgres
     depends_on:
       - rabbitmq
     build:
       context: .
-      dockerfile: ./Dockerfile
+      dockerfile: dockerfiles/Dockerfile
     volumes:
       - ./:/work
-    command: ["./wait-for-it.sh", "rabbitmq:5672", "--", "./run_celery.sh"]
+    command: ["./wait-for-it.sh", "rabbitmq:5672", "--", "/scripts/run_celery.sh"]
 
   django:
     <<: *celery
@@ -27,7 +28,13 @@ services:
     ports:
       - "38000:8000"
     command:
-      - ./run_gunicorn.sh
+      - /scripts/run_gunicorn.sh
+
+  flower:
+    <<: *celery
+    ports:
+      - "5555:5555"
+    command: ["./wait-for-it.sh", "rabbitmq:5672", "--", "/scripts/run_flower.sh"]
 
   nginx:
     image:
@@ -44,16 +51,10 @@ services:
   filebeat:
     build:
       context: .
-      dockerfile: ./Dockerfile_filebeat
+      dockerfile: dockerfiles/Dockerfile_filebeat
     env_file:
       - ./.envs/.production/.filebeat
     volumes:
       - production_logs:/var/log/nginx
     command: ["./filebeat.sh"]
 
-
-  flower:
-    <<: *celery
-    ports:
-      - "5555:5555"
-    command: ["./wait-for-it.sh", "rabbitmq:5672", "--", "./run_flower.sh"]
