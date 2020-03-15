@@ -6,6 +6,7 @@ Yozit Homepage
 ![Language](https://img.shields.io/github/languages/count/paryoja/dashboard)
 ![CI](https://github.com/paryoja/dashboard/workflows/CI/badge.svg?branch=master)
 ![Unittest](https://github.com/paryoja/dashboard/workflows/Unittest/badge.svg?branch=master)
+![Codestyle](https://img.shields.io/badge/code%20style-black-000000.svg)
 [![CircleCI](https://circleci.com/gh/paryoja/dashboard.svg?style=svg)](https://circleci.com/gh/paryoja/dashboard)
 
 ## 기본 용도
