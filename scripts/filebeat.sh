@@ -1,7 +1,8 @@
 #!/bin/bash
 
-#chown filebeat:filebeat /etc/filebeat/filebeat.yml
-#chmod 644 /etc/filebeat/filebeat.yml
+set -o errexit
+set -o pipefail
+set -o nounset
 
 filebeat modules enable nginx
 filebeat setup

@@ -9,7 +9,6 @@ https://docs.djangoproject.com/en/2.2/topics/settings/
 For the full list of settings and their values, see
 https://docs.djangoproject.com/en/2.2/ref/settings/
 """
-import json
 
 import environ
 import requests
@@ -23,13 +22,11 @@ env = environ.Env()
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/2.2/howto/deployment/checklist/
 
-# SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = open("dashboard/secret.txt").read().strip()
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = env.bool("DEBUG", "False")
 
-ALLOWED_HOSTS = open("dashboard/allowed_hosts.txt").read().split(",")
-ALLOWED_HOSTS = [hosts.strip() for hosts in ALLOWED_HOSTS]
+ALLOWED_HOSTS = env.list("DJANGO_ALLOWED_HOSTS", default=["localhost"])
+
 
 # Application definition
 
@@ -78,17 +75,16 @@ WSGI_APPLICATION = "dashboard.wsgi.application"
 # https://docs.djangoproject.com/en/2.2/ref/settings/#databases
 
 DATABASES = {"default": env.db("DATABASE_URL")}
-
 # Password validation
 # https://docs.djangoproject.com/en/2.2/ref/settings/#auth-password-validators
 
 AUTH_PASSWORD_VALIDATORS = [
     {
-        "NAME": "django.contrib.auth.password_validation.UserAttributeSimilarityValidator",
+        "NAME": "django.contrib.auth.password_validation.UserAttributeSimilarityValidator"
     },
-    {"NAME": "django.contrib.auth.password_validation.MinimumLengthValidator",},
-    {"NAME": "django.contrib.auth.password_validation.CommonPasswordValidator",},
-    {"NAME": "django.contrib.auth.password_validation.NumericPasswordValidator",},
+    {"NAME": "django.contrib.auth.password_validation.MinimumLengthValidator"},
+    {"NAME": "django.contrib.auth.password_validation.CommonPasswordValidator"},
+    {"NAME": "django.contrib.auth.password_validation.NumericPasswordValidator"},
 ]
 
 # Internationalization
@@ -128,9 +124,7 @@ LOGGING = {
             "formatter": "format1",
         },
     },
-    "loggers": {
-        "django": {"handlers": ["file"], "level": "DEBUG", "propagate": True,},
-    },
+    "loggers": {"django": {"handlers": ["file"], "level": "DEBUG", "propagate": True}},
 }
 LOGIN_URL = "/book/login"
 
