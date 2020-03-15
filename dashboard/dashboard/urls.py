@@ -30,6 +30,7 @@ urlpatterns = [
     path("admin/", admin.site.urls),
     path("accounts/", include("django.contrib.auth.urls")),
     path("", simple_redirect),
+    path("api/", include("dashboard.api_router")),
 ]
 
 if settings.DEBUG:
