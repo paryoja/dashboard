@@ -4,4 +4,5 @@ pylint_django==2.0.14
 pylint_celery==0.3
 flake8
 pytest-django
+django-stubs==1.5.0  # https://github.com/typeddjango/django-stubs
 mypy==0.770
