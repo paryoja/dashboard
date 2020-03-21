@@ -1,12 +1,10 @@
 import datetime
 import json
 import math
-import re
 import traceback
 
 import requests
 from bs4 import BeautifulSoup
-from celery import shared_task
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.decorators import user_passes_test
 from django.core import exceptions
@@ -16,6 +14,7 @@ from django.shortcuts import render
 
 from . import models
 from . import utils
+from . import views_api
 from .nav import get_render_dict
 from .templatetags import book_extras
 from .xml_helper import XmlDictConfig, get_xml_request
@@ -85,7 +84,6 @@ cash_order = [
     "year3Money",
     "year3JungGamRate",
 ]
-a_pattern = re.compile('<a href="(.+?)">(.+?)</a>')
 
 
 def krx_price_query(request):
@@ -552,56 +550,6 @@ def food(request):
     return render(request, "book/food.html", render_dict)
 
 
-@shared_task
-def add_image_client(a_text, url, category_id, data_type):
-    a_parsed = a_pattern.findall(a_text)
-
-    if not a_parsed[0][0].startswith("../"):
-
-        if data_type == "people":
-            json_url = url + a_parsed[0][0] + "/image.json"
-            result = json.loads(requests.get(json_url).text)["image_list"]
-
-        elif data_type == "pokemon":
-            directory_url = url + a_parsed[0][0]
-            image_result = requests.get(directory_url)
-            bs = BeautifulSoup(image_result.text, "html.parser")
-
-            all_a = bs.findAll("a", text=True)
-            result = []
-            for a in all_a:
-                image_a_parsed = a_pattern.findall("{}".format(a))
-                print(image_a_parsed)
-                if not image_a_parsed[0][0].startswith("../"):
-                    result.append(directory_url + image_a_parsed[0][0])
-
-        else:
-            raise ValueError("Unsupported data_type {}".format(data_type))
-
-        for img in result:
-            try:
-                if data_type == "people":
-                    image_obj = models.PeopleImage(
-                        url=url + a_parsed[0][0] + img["local"],
-                        title=img["alt"][:500],
-                        category_id=category_id,
-                        page=img["a"],
-                    )
-                elif data_type == "pokemon":
-                    path = img.split("/")
-                    image_obj = models.PokemonImage(
-                        url=img,
-                        title=path[-1],
-                        category_id=category_id,
-                        original_label=path[-2],
-                    )
-                else:
-                    raise ValueError("Unsupported data_type {}".format(data_type))
-                image_obj.save()
-            except Exception as e:
-                print(e)
-
-
 @login_required
 def image(request, data_type="pokemon"):
     if data_type == "pokemon":
@@ -625,7 +573,9 @@ def image(request, data_type="pokemon"):
                 all_a = bs.findAll("a", text=True)
 
                 for a in all_a:
-                    add_image_client.delay("{}".format(a), url, category_id, data_type)
+                    views_api.add_image_client.delay(
+                        "{}".format(a), url, category_id, data_type
+                    )
                 render_dict["parsed"] = all_a
 
             elif data_type == "people":
@@ -637,7 +587,9 @@ def image(request, data_type="pokemon"):
                 render_dict["parsed"] = all_a
 
                 for a in all_a:
-                    add_image_client.delay("{}".format(a), url, category_id, data_type)
+                    views_api.add_image_client.delay(
+                        "{}".format(a), url, category_id, data_type
+                    )
 
         except Exception:
             if "parsed" in render_dict:

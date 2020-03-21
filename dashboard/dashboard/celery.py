@@ -1,6 +1,7 @@
 import os
 
 from celery import Celery
+from celery.schedules import crontab
 
 # set the default Django my_settings module for the 'celery' program.
 os.environ.setdefault("DJANGO_SETTINGS_MODULE", "dashboard.my_settings.production")
@@ -20,3 +21,17 @@ app.autodiscover_tasks()
 @app.task(bind=True)
 def debug_task(self):
     print("Request: {0!r}".format(self.request))
+
+
+app.conf.update(
+    CELERYBEAT_SCHEDULE={
+        "add-every-1-minutes-contrab": {
+            "task": "dashboard.celery.debug_task",
+            "schedule": crontab(hour="*", minute="*"),
+        },
+        "add-image": {
+            "task": "book.views_api.cron_image_add",
+            "schedule": crontab(hour="3", minute="00"),
+        },
+    }
+)

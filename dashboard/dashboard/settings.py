@@ -39,7 +39,7 @@ DJANGO_APPS = [
     "django.contrib.humanize",
 ]
 
-THIRD_PARTY_APPS = ["rest_framework"]
+THIRD_PARTY_APPS = ["rest_framework", "django_extensions"]
 
 LOCAL_APPS = ["book.apps.BookConfig"]
 

@@ -4,4 +4,4 @@ pylint_django==2.0.14
 pylint_celery==0.3
 flake8
 pytest-django
-mypy
+mypy==0.770

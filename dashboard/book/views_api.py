@@ -1,12 +1,17 @@
 import json
+import re
 
 import requests
 import urllib3
+from bs4 import BeautifulSoup
 from celery import shared_task
 from django.forms.models import model_to_dict
-from django.http import HttpResponse, HttpResponseBadRequest, JsonResponse
+from django.http import HttpResponse
+from django.http import HttpResponseBadRequest, JsonResponse
 
 from . import models
+
+a_pattern = re.compile('<a href="(.+?)">(.+?)</a>')
 
 
 class Domain:
@@ -203,3 +208,71 @@ def pokemon_classification_api(request):
         response = get_response(img_id, domain=Domain.Pokemon)
         return JsonResponse(response)
     return HttpResponseBadRequest("No Image Id")
+
+
+@shared_task
+def add_image_client(a_text, url, category_id, data_type):
+    a_parsed = a_pattern.findall(a_text)
+
+    if not a_parsed[0][0].startswith("../"):
+
+        if data_type == "people":
+            json_url = url + a_parsed[0][0] + "/image.json"
+            result = json.loads(requests.get(json_url).text)["image_list"]
+
+        elif data_type == "pokemon":
+            directory_url = url + a_parsed[0][0]
+            image_result = requests.get(directory_url)
+            bs = BeautifulSoup(image_result.text, "html.parser")
+
+            all_a = bs.findAll("a", text=True)
+            result = []
+            for a in all_a:
+                image_a_parsed = a_pattern.findall("{}".format(a))
+                print(image_a_parsed)
+                if not image_a_parsed[0][0].startswith("../"):
+                    result.append(directory_url + image_a_parsed[0][0])
+
+        else:
+            raise ValueError("Unsupported data_type {}".format(data_type))
+
+        for img in result:
+            try:
+                if data_type == "people":
+                    image_obj = models.PeopleImage(
+                        url=url + a_parsed[0][0] + img["local"],
+                        title=img["alt"][:500],
+                        category_id=category_id,
+                        page=img["a"],
+                    )
+                elif data_type == "pokemon":
+                    path = img.split("/")
+                    image_obj = models.PokemonImage(
+                        url=img,
+                        title=path[-1],
+                        category_id=category_id,
+                        original_label=path[-2],
+                    )
+                else:
+                    raise ValueError("Unsupported data_type {}".format(data_type))
+                image_obj.save()
+            except Exception as e:
+                print(e)
+
+
+@shared_task
+def cron_image_add():
+    try:
+        category_id = "people"
+        data_type = "people"
+        url = models.APIServers.objects.filter(title="people_image")[0]
+        url_text = "http://{}:{}/{}".format(url.ip, url.port, url.endpoint)
+        result = requests.get(url_text)
+        bs = BeautifulSoup(result.text, "html.parser")
+        all_a = bs.findAll("a", text=True)
+
+        for a in all_a:
+            add_image_client.delay("{}".format(a), url_text, category_id, data_type)
+
+    except Exception as e:
+        return "Error {}".format(e)

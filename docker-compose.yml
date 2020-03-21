@@ -22,6 +22,10 @@ services:
       - ./:/work
     command: ["./wait-for-it.sh", "rabbitmq:5672", "--", "/scripts/run_celery.sh"]
 
+  celerybeat:
+    <<: *celery
+    command: ["./wait-for-it.sh", "rabbitmq:5672", "--", "/scripts/run_celery_beat.sh"]
+
   django:
     <<: *celery
     shm_size: '512MB'
@@ -57,4 +61,3 @@ services:
     volumes:
       - production_logs:/var/log/nginx
     command: ["./filebeat.sh"]
-
