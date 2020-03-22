@@ -1,6 +1,5 @@
-from rest_framework import serializers
-
 from book.models import PokemonImage
+from rest_framework import serializers
 
 
 class PokemonImageSerializer(serializers.ModelSerializer):
