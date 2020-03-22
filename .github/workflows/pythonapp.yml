@@ -35,6 +35,7 @@ jobs:
       run: |
         cd dashboard
         ./get_wait-for-it.sh
+        chmod 777 wait-for-it.sh
         cd ..
         docker-compose -f local.yml up -d
         docker-compose -f local.yml run --rm django bash -c "cd .. && pytest"
