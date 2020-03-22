@@ -7,7 +7,7 @@ from .. import models
 
 class StandardResultsSetPagination(PageNumberPagination):
     page_size = 100
-    page_size_query_param = 'page_size'
+    page_size_query_param = "page_size"
     max_page_size = 1000
 
 
@@ -16,4 +16,4 @@ class PokemonImageViewSet(viewsets.ModelViewSet):
     serializer_class = PokemonImageSerializer
     pagination_class = StandardResultsSetPagination
 
-    filter_fields = ('title', 'url')
+    filter_fields = ("title", "url")
