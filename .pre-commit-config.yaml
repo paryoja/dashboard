@@ -8,3 +8,13 @@ repos:
     hooks:
       - id: trailing-whitespace
         files: (^|/)a/.+\.(py|html|sh|css|js)$
+
+-   repo: local
+    hooks:
+      - id: flake8
+        name: flake8
+        entry: flake8
+        language: python
+        types: [python]
+        args: ['--config=setup.cfg']
+

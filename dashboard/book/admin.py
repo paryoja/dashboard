@@ -10,34 +10,27 @@ admin.site.register(models.Wine)
 admin.site.register(models.User)
 
 
+@admin.register(models.Stock)
 class StockAdmin(admin.ModelAdmin):
     list_display = ("code", "name")
 
 
-admin.site.register(models.Stock, StockAdmin)
-
-
+@admin.register(models.Link)
 class LinkAdmin(admin.ModelAdmin):
     list_display = ("added_date", "url", "description", "content_type")
 
 
-admin.site.register(models.Link, LinkAdmin)
-
-
+@admin.register(models.Book)
 class BookAdmin(admin.ModelAdmin):
     list_display = ("name", "author", "year")
 
 
-admin.site.register(models.Book, BookAdmin)
-
-
+@admin.register(models.APIServers)
 class APIServerAdmin(admin.ModelAdmin):
     list_display = ("title", "ip", "port", "endpoint")
 
 
-admin.site.register(models.APIServers, APIServerAdmin)
-
-
+@admin.register(models.Currency)
 class CurrencyAdmin(admin.ModelAdmin):
     fieldsets = [
         ("Date information", {"fields": ["date"]}),
@@ -48,53 +41,36 @@ class CurrencyAdmin(admin.ModelAdmin):
     list_display = ("date", "from_amount", "to_amount", "currency_rate")
 
 
-admin.site.register(models.Currency, CurrencyAdmin)
-
-
+@admin.register(models.DeepLearningModel)
 class DeepLearningModelAdmin(admin.ModelAdmin):
     list_display = ("domain", "version", "latest")
 
 
-admin.site.register(models.DeepLearningModel, DeepLearningModelAdmin)
-
-
+@admin.register(models.Image)
 class ImageAdmin(admin.ModelAdmin):
     list_display = ("url", "title")
 
 
-admin.site.register(models.Image, ImageAdmin)
-
-
+@admin.register(models.PeopleImage)
 class PeopleImageAdmin(admin.ModelAdmin):
     list_display = ("url", "title", "selected")
 
 
-admin.site.register(models.PeopleImage, PeopleImageAdmin)
-
-
+@admin.register(models.PokemonImage)
 class PokemonImageAdmin(admin.ModelAdmin):
     list_display = ("url", "title", "original_label", "classified")
 
 
-admin.site.register(models.PokemonImage, PokemonImageAdmin)
-
-
+@admin.register(models.Corona)
 class CoronaAdmin(admin.ModelAdmin):
     list_display = ("date", "confirmed", "death", "country")
 
 
-admin.site.register(models.Corona, CoronaAdmin)
-
-
+@admin.register(models.Rating)
 class RatingAdmin(admin.ModelAdmin):
     raw_id_fields = ("image",)
 
 
-admin.site.register(models.Rating, RatingAdmin)
-
-
+@admin.register(models.PokemonRating)
 class PokemonRatingAdmin(admin.ModelAdmin):
     raw_id_fields = ("image",)
-
-
-admin.site.register(models.PokemonRating, PokemonRatingAdmin)
