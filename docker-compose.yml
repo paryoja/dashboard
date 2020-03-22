@@ -46,7 +46,6 @@ services:
     ports:
       - "80:80"
     volumes:
-      - /var/www:/usr/share/nginx/html:ro
       - ./config/nginx:/etc/nginx/conf.d
       - ./:/work
       - production_logs:/work/log/nginx

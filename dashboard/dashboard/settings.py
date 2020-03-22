@@ -39,7 +39,7 @@ DJANGO_APPS = [
     "django.contrib.humanize",
 ]
 
-THIRD_PARTY_APPS = ["rest_framework", "django_extensions"]
+THIRD_PARTY_APPS = ["rest_framework", "django_extensions", "django_filters"]
 
 LOCAL_APPS = ["book.apps.BookConfig"]
 
@@ -150,4 +150,5 @@ REST_FRAMEWORK = {
         "rest_framework.authentication.TokenAuthentication",
     ),
     "DEFAULT_PERMISSION_CLASSES": ("rest_framework.permissions.IsAuthenticated",),
+    "DEFAULT_FILTER_BACKENDS": ["django_filters.rest_framework.DjangoFilterBackend"],
 }

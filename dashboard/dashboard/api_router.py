@@ -1,7 +1,6 @@
+from book.api.views import PokemonImageViewSet
 from django.conf import settings
 from rest_framework.routers import DefaultRouter, SimpleRouter
-
-from book.api.views import PokemonImageViewSet
 
 if settings.DEBUG:
     router = DefaultRouter()

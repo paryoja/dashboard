@@ -3,11 +3,23 @@ from django.contrib import admin
 from . import models
 
 admin.site.register(models.AuthUser)
-admin.site.register(models.Lotto)
-admin.site.register(models.Paper)
 admin.site.register(models.Category)
 admin.site.register(models.Wine)
-admin.site.register(models.User)
+
+
+@admin.register(models.Paper)
+class PaperAdmin(admin.ModelAdmin):
+    list_display = ("title", "link", "file", "slide", "authors")
+
+
+@admin.register(models.User)
+class UserAdmin(admin.ModelAdmin):
+    list_display = ("username", "checked")
+
+
+@admin.register(models.Lotto)
+class LottoAdmin(admin.ModelAdmin):
+    list_display = ("draw_number", "numbers")
 
 
 @admin.register(models.Stock)
