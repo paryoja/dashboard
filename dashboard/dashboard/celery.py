@@ -25,10 +25,6 @@ def debug_task(self):
 
 app.conf.update(
     CELERYBEAT_SCHEDULE={
-        "add-every-1-minutes-contrab": {
-            "task": "dashboard.celery.debug_task",
-            "schedule": crontab(hour="*", minute="*"),
-        },
         "add-image": {
             "task": "book.views_api.cron_image_add",
             "schedule": crontab(hour="3", minute="00"),
