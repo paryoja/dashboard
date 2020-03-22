@@ -1,15 +1,19 @@
 import json
+import logging
 import re
+import typing
 
 import requests
 import urllib3
 from bs4 import BeautifulSoup
 from celery import shared_task
+from django.db import models as dj_models
 from django.forms.models import model_to_dict
-from django.http import HttpResponse
-from django.http import HttpResponseBadRequest, JsonResponse
+from django.http import HttpResponse, HttpResponseBadRequest, JsonResponse
 
 from . import models
+
+logger = logging.getLogger(__name__)
 
 a_pattern = re.compile('<a href="(.+?)">(.+?)</a>')
 
@@ -19,7 +23,7 @@ class Domain:
     Pokemon = "pokemon"
 
 
-def image(request, method, image_type="People"):
+def image(request, method, image_type="People") -> HttpResponse:
     image_id = request.POST.get("image_id")
     if image_type == "People":
         img = models.PeopleImage.objects.get(id=int(image_id))
@@ -37,7 +41,7 @@ def image(request, method, image_type="People"):
         return HttpResponseBadRequest("Unknown Method")
 
 
-def set_rating(request):
+def set_rating(request) -> HttpResponse:
     img_id = int(request.POST.get("image_id"))
     data_type = request.POST.get("data_type")
     if data_type == Domain.Pokemon:
@@ -54,14 +58,17 @@ def set_rating(request):
     return HttpResponse(request.POST.get("selected"))
 
 
-def get_id(request):
+def get_id(request) -> HttpResponse:
     query = request.POST.get("query")
     image_obj = models.PeopleImage.objects.filter(url__endswith=query)[0]
     return HttpResponse(image_obj.id)
 
 
-@shared_task
-def get_classification_result(domain, int_img_id):
+def get_img_rating(
+    domain, int_img_id
+) -> typing.Tuple[
+    typing.Union[models.PokemonImage, models.PokemonImage], dj_models.query.QuerySet
+]:
     if domain == Domain.People:
         img = models.PeopleImage.objects.get(id=int_img_id)
         existing_rating = models.Rating.objects.filter(
@@ -73,7 +80,57 @@ def get_classification_result(domain, int_img_id):
             image_id=int_img_id, deep_model__domain=domain, deep_model__latest=True
         )
     else:
-        raise KeyError("Domain {} unknown".format(domain))
+        message = "Domain {} unknown".format(domain)
+        logger.warning(message)
+        raise KeyError(message)
+    return img, existing_rating
+
+
+def save_success(
+    domain: str, json_data: dict, target_deep_model: str, int_img_id: int
+) -> None:
+    if domain == Domain.People:
+        class_names = json_data["class_names"]
+        positive = json_data["classification"][class_names["True"]]
+        rating = models.Rating(
+            deep_model=target_deep_model,
+            image_id=int_img_id,
+            data=json_data,
+            positive=positive,
+        )
+        rating.save()
+
+    elif domain == Domain.Pokemon:
+        class_names = json_data["class_names"]
+        positive = json_data["classification"][class_names["yes"]]
+        rating = models.PokemonRating(
+            deep_model=target_deep_model,
+            image_id=int_img_id,
+            data=json_data,
+            positive=positive,
+        )
+        rating.save()
+
+
+def save_failure(
+    domain: str, json_data: dict, target_deep_model: str, int_img_id: int
+) -> None:
+    if domain == Domain.People:
+        rating = models.Rating(
+            deep_model=target_deep_model, image_id=int_img_id, data=json_data
+        )
+        rating.save()
+
+    elif domain == Domain.Pokemon:
+        rating = models.PokemonRating(
+            deep_model=target_deep_model, image_id=int_img_id, data=json_data
+        )
+        rating.save()
+
+
+@shared_task
+def get_classification_result(domain: str, int_img_id: int) -> None:
+    img, existing_rating = get_img_rating(domain, int_img_id)
 
     # 이미 가져온건지 다시 확인 -> 작업 추가시에 중복되어 있을 수 있음
     if existing_rating.count() != 0:
@@ -122,42 +179,12 @@ def get_classification_result(domain, int_img_id):
         target_deep_model.save()
 
     if json_data["status"] == "success":
-        if domain == Domain.People:
-            class_names = json_data["class_names"]
-            positive = json_data["classification"][class_names["True"]]
-            rating = models.Rating(
-                deep_model=target_deep_model,
-                image_id=int_img_id,
-                data=json_data,
-                positive=positive,
-            )
-            rating.save()
-
-        elif domain == Domain.Pokemon:
-            class_names = json_data["class_names"]
-            positive = json_data["classification"][class_names["yes"]]
-            rating = models.PokemonRating(
-                deep_model=target_deep_model,
-                image_id=int_img_id,
-                data=json_data,
-                positive=positive,
-            )
-            rating.save()
+        save_success(domain, json_data, target_deep_model, int_img_id)
     else:
-        if domain == Domain.People:
-            rating = models.Rating(
-                deep_model=target_deep_model, image_id=int_img_id, data=json_data
-            )
-            rating.save()
-
-        elif domain == Domain.Pokemon:
-            rating = models.PokemonRating(
-                deep_model=target_deep_model, image_id=int_img_id, data=json_data
-            )
-            rating.save()
+        save_failure(domain, json_data, target_deep_model, int_img_id)
 
 
-def get_response(img_id, domain):
+def get_response(img_id: str, domain: str) -> dict:
     int_img_id = int(img_id.split("_")[1])
 
     # 이미 존재하는지 체크
@@ -193,7 +220,7 @@ def get_response(img_id, domain):
     return response
 
 
-def people_classification_api(request):
+def people_classification_api(request) -> HttpResponse:
     img_id = request.POST.get("image_id")
     if img_id:
         response = get_response(img_id, domain=Domain.People)
@@ -202,7 +229,7 @@ def people_classification_api(request):
     return HttpResponseBadRequest("No Image Id")
 
 
-def pokemon_classification_api(request):
+def pokemon_classification_api(request) -> HttpResponse:
     img_id = request.POST.get("image_id")
     if img_id:
         response = get_response(img_id, domain=Domain.Pokemon)
@@ -211,7 +238,7 @@ def pokemon_classification_api(request):
 
 
 @shared_task
-def add_image_client(a_text, url, category_id, data_type):
+def add_image_client(a_text, url, category_id, data_type) -> None:
     a_parsed = a_pattern.findall(a_text)
 
     if not a_parsed[0][0].startswith("../"):
@@ -261,7 +288,7 @@ def add_image_client(a_text, url, category_id, data_type):
 
 
 @shared_task
-def cron_image_add():
+def cron_image_add() -> None:
     try:
         category_id = "people"
         data_type = "people"
@@ -275,4 +302,4 @@ def cron_image_add():
             add_image_client.delay("{}".format(a), url_text, category_id, data_type)
 
     except Exception as e:
-        return "Error {}".format(e)
+        raise "Error {}".format(e)

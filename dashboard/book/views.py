@@ -1,23 +1,23 @@
 import datetime
 import json
+import logging
 import math
 import traceback
 
 import requests
 from bs4 import BeautifulSoup
-from django.contrib.auth.decorators import login_required
-from django.contrib.auth.decorators import user_passes_test
+from django.contrib.auth.decorators import login_required, user_passes_test
 from django.core import exceptions
 from django.db.models import Count
 from django.http import HttpResponse
 from django.shortcuts import render
 
-from . import models
-from . import utils
-from . import views_api
+from . import models, utils, views_api
 from .nav import get_render_dict
 from .templatetags import book_extras
 from .xml_helper import XmlDictConfig, get_xml_request
+
+logger = logging.getLogger(__name__)
 
 
 def index(request):
@@ -285,7 +285,6 @@ def query_chatbot(request):
             text = "Server is not responding"
             result["text"] = str(e)
             result["status"] = "failed"
-        # print(text)
         return HttpResponse(json.dumps(text))
     else:
         return HttpResponse("Empty Message")

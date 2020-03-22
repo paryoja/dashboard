@@ -3,7 +3,7 @@ from django.conf import settings
 VERSION = getattr(settings, "VERSION", "0.0.1")
 
 
-def get_nav_collapse(child_list, button_url, icon, description):
+def get_nav_collapse(child_list, button_url, icon, description) -> dict:
     active = ""
     for item in child_list:
         if item["active"]:
@@ -19,7 +19,7 @@ def get_nav_collapse(child_list, button_url, icon, description):
     }
 
 
-def get_nav_item(template, icon, description, current_page, arg=None):
+def get_nav_item(template, icon, description, current_page, arg=None) -> dict:
     if arg:
         active_page = "{}_{}".format(template, arg)
     else:
@@ -35,9 +35,7 @@ def get_nav_item(template, icon, description, current_page, arg=None):
     }
 
 
-def get_render_dict(current_page):
-    render_dict = {}
-
+def get_study_sub_list(current_page: str) -> dict:
     study_list = list()
     study_list.append(
         get_nav_item("slide", "fa fa-file-powerpoint", "슬라이드", current_page)
@@ -45,6 +43,13 @@ def get_render_dict(current_page):
     study_list.append(get_nav_item("paper", "fa fa-file-pdf", "논문", current_page))
     study_list.append(get_nav_item("colab", "fa fa-file-code", "실습자료", current_page))
 
+    collapse = get_nav_collapse(
+        study_list, "sidebarLecture", "fa fa-chalkboard-teacher", "스터디 정리"
+    )
+    return collapse
+
+
+def get_pokemon_sub_list(current_page: str) -> dict:
     pokemon_result_list = list()
     pokemon_result_list.append(
         get_nav_item("pokemon_result", "far fa-thumbs-up", "적합", current_page, "yes")
@@ -81,6 +86,11 @@ def get_render_dict(current_page):
         get_nav_item("pokemon_relabel", "fa fa-edit", "분류 수정", current_page)
     )
 
+    collapse = get_nav_collapse(pokemon_list, "sidebarPokemon", "fa fa-gamepad", "포켓몬")
+    return collapse
+
+
+def get_invest_sub_list(current_page: str) -> dict:
     invest_list = list()
     invest_list.append(
         get_nav_item(
@@ -105,6 +115,11 @@ def get_render_dict(current_page):
     )
     invest_list.append(get_nav_item("recommend_book", "fa fa-book", "책", current_page))
 
+    collapse = get_nav_collapse(invest_list, "sidebarInvest", "fe fe-dollar-sign", "투자")
+    return collapse
+
+
+def get_other_sub_list(current_page: str) -> dict:
     classifier_list = list()
     classifier_list.append(get_nav_item("people", "fa fa-users", "미분류", current_page))
     classifier_list.append(
@@ -130,26 +145,29 @@ def get_render_dict(current_page):
         get_nav_collapse(classifier_list, "sidebarClassifier", "fa fa-tags", "분류기")
     )
     other_list.append(get_nav_item("idea", "fe fe-zap", "아이디어 모음", current_page))
+    collapse = get_nav_collapse(other_list, "sidebarOther", "fe fe-star", "그 외")
+    return collapse
+
+
+def get_render_dict(current_page: str) -> dict:
+    render_dict = {}
+
+    study_list = get_study_sub_list(current_page)
+    pokemon_list = get_pokemon_sub_list(current_page)
+    invest_list = get_invest_sub_list(current_page)
+    other_list = get_other_sub_list(current_page)
 
     nav_list = list()
     nav_list.append(get_nav_item("index", "fe fe-home", "Home", current_page))
-    nav_list.append(
-        get_nav_collapse(
-            study_list, "sidebarLecture", "fa fa-chalkboard-teacher", "스터디 정리"
-        )
-    )
-    nav_list.append(
-        get_nav_collapse(pokemon_list, "sidebarPokemon", "fa fa-gamepad", "포켓몬")
-    )
+    nav_list.append(study_list)
+    nav_list.append(pokemon_list)
     nav_list.append(
         get_nav_item("corona", "fa fa-exclamation-triangle", "코로나", current_page)
     )
     nav_list.append(get_nav_item("chatbot", "fa fa-comments", "챗봇", current_page))
     nav_list.append(get_nav_item("link", "fe fe-link", "링크", current_page))
-    nav_list.append(
-        get_nav_collapse(invest_list, "sidebarInvest", "fe fe-dollar-sign", "투자")
-    )
-    nav_list.append(get_nav_collapse(other_list, "sidebarOther", "fe fe-star", "그 외"))
+    nav_list.append(invest_list)
+    nav_list.append(other_list)
 
     render_dict["nav_list"] = nav_list
     render_dict["version"] = VERSION

@@ -16,7 +16,7 @@ import requests
 ROOT_DIR = (
     environ.Path(__file__) - 2
 )  # (dashboard/dashboard/settings.py - 2 = dashboard/)
-APPS_DIR = ROOT_DIR.path("cc_test")
+APPS_DIR = ROOT_DIR.path("dashboar")
 env = environ.Env()
 
 # Quick-start development settings - unsuitable for production
