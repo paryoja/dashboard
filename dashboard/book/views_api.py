@@ -128,14 +128,7 @@ def save_failure(
         rating.save()
 
 
-@shared_task
-def get_classification_result(domain: str, int_img_id: int) -> None:
-    img, existing_rating = get_img_rating(domain, int_img_id)
-
-    # 이미 가져온건지 다시 확인 -> 작업 추가시에 중복되어 있을 수 있음
-    if existing_rating.count() != 0:
-        return
-
+def call_api_server(img, domain: str) -> typing.Optional:
     data = {"requested_url": img.url}
     headers = {"Content-Type": "application/json"}
 
@@ -145,16 +138,29 @@ def get_classification_result(domain: str, int_img_id: int) -> None:
     try:
         result = requests.post(request_url, json=data, headers=headers)
     except urllib3.exceptions.MaxRetryError:
-        print("Max tries failed {}".format(request_url))
+        logger.warning("Max tries failed {}".format(request_url))
         return
     except requests.exceptions.ConnectionError:
-        print("Connection Refused".format(request_url))
+        logger.warning("Connection Refused".format(request_url))
         return
 
     if result.status_code != 200:
-        print(result.text, result.status_code)
+        logger.warning(result.text, result.status_code)
+        return
+    return result
+
+
+@shared_task
+def get_classification_result(domain: str, int_img_id: int) -> None:
+    img, existing_rating = get_img_rating(domain, int_img_id)
+
+    # 이미 가져온건지 다시 확인 -> 작업 추가시에 중복되어 있을 수 있음
+    if existing_rating.count() != 0:
         return
 
+    result = call_api_server(img, domain)
+    if not result:
+        return
     json_data = json.loads(result.text)
 
     # 신규 모델인지 확인
@@ -237,32 +243,34 @@ def pokemon_classification_api(request) -> HttpResponse:
     return HttpResponseBadRequest("No Image Id")
 
 
+def get_image_directory_list(data_type, url, a_parsed):
+    if data_type == "people":
+        json_url = url + a_parsed[0][0] + "/image.json"
+        result = json.loads(requests.get(json_url).text)["image_list"]
+
+    elif data_type == "pokemon":
+        directory_url = url + a_parsed[0][0]
+        image_result = requests.get(directory_url)
+        bs = BeautifulSoup(image_result.text, "html.parser")
+
+        all_a = bs.findAll("a", text=True)
+        result = []
+        for a in all_a:
+            image_a_parsed = a_pattern.findall("{}".format(a))
+            logger.info(image_a_parsed)
+            if not image_a_parsed[0][0].startswith("../"):
+                result.append(directory_url + image_a_parsed[0][0])
+
+    else:
+        raise ValueError("Unsupported data_type {}".format(data_type))
+
+
 @shared_task
 def add_image_client(a_text, url, category_id, data_type) -> None:
     a_parsed = a_pattern.findall(a_text)
 
     if not a_parsed[0][0].startswith("../"):
-
-        if data_type == "people":
-            json_url = url + a_parsed[0][0] + "/image.json"
-            result = json.loads(requests.get(json_url).text)["image_list"]
-
-        elif data_type == "pokemon":
-            directory_url = url + a_parsed[0][0]
-            image_result = requests.get(directory_url)
-            bs = BeautifulSoup(image_result.text, "html.parser")
-
-            all_a = bs.findAll("a", text=True)
-            result = []
-            for a in all_a:
-                image_a_parsed = a_pattern.findall("{}".format(a))
-                print(image_a_parsed)
-                if not image_a_parsed[0][0].startswith("../"):
-                    result.append(directory_url + image_a_parsed[0][0])
-
-        else:
-            raise ValueError("Unsupported data_type {}".format(data_type))
-
+        result = get_image_directory_list(data_type, url, a_parsed)
         for img in result:
             try:
                 if data_type == "people":

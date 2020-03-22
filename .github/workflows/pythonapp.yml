@@ -38,4 +38,4 @@ jobs:
         chmod 777 wait-for-it.sh
         cd ..
         docker-compose -f local.yml up -d
-        docker-compose -f local.yml run --rm django bash -c "cd .. && pytest"
+        docker-compose -f local.yml run --rm django bash -c "python manage.py test"
