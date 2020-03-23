@@ -8,5 +8,5 @@ django-stubs==1.5.0  # https://github.com/typeddjango/django-stubs
 mypy==0.770
 pre-commit==2.2.0
 
-flake8
+flake8==3.7.9
 flake8-isort==2.9.0  # https://github.com/gforcada/flake8-isort
