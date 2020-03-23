@@ -243,7 +243,7 @@ def pokemon_classification_api(request) -> HttpResponse:
     return HttpResponseBadRequest("No Image Id")
 
 
-def get_image_directory_list(data_type, url, a_parsed):
+def get_image_directory_list(data_type, url, a_parsed) -> list:
     if data_type == "people":
         json_url = url + a_parsed[0][0] + "/image.json"
         result = json.loads(requests.get(json_url).text)["image_list"]
@@ -263,6 +263,8 @@ def get_image_directory_list(data_type, url, a_parsed):
 
     else:
         raise ValueError("Unsupported data_type {}".format(data_type))
+
+    return result
 
 
 @shared_task
