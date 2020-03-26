@@ -2,6 +2,7 @@ import requests
 from book import models, utils
 from book.nav import get_render_dict
 from book.templatetags import book_extras
+from celery import shared_task
 from django.contrib.auth.decorators import user_passes_test
 from django.db.models import Count
 from django.shortcuts import render
@@ -120,37 +121,39 @@ def people_high_expectation(request):
     return render(request, "book/people/people.html", render_dict)
 
 
-@user_passes_test(lambda u: u.is_superuser)
-def people_links(request):
-    render_dict = get_render_dict("people_result")
-
-    selected_list = models.PeopleImage.objects.filter(title__contains="@").order_by("?")
+@shared_task
+def get_new_people_links():
+    selected_list = models.PeopleImage.objects.filter(title__contains="@").filter(
+        content_parsed=None
+    )[:100]
 
     new_id = 0
     user_names = set()
-    stop = False
+
     for selected_image in selected_list:
         names = book_extras.user_pattern.findall(selected_image.title)
         for name in names:
             if not models.User.objects.filter(username=name).exists():
                 user_names.add(name)
                 new_id += 1
-
-                if new_id == 10:
-                    stop = True
-                    break
-        if stop:
-            break
-
-    verified = set()
+        selected_image.content_parsed = True
+        selected_image.save()
 
     while user_names:
         user = user_names.pop()
         r = requests.get("https://www.instagram.com/" + user)
         if r.status_code == 200:
-            verified.add(user)
+            models.User(username=user, checked=None).save()
         else:
             models.User(username=user, checked=False).save()
+
+
+@user_passes_test(lambda u: u.is_superuser)
+def people_links(request):
+    render_dict = get_render_dict("people_result")
+
+    get_new_people_links.delay()
+    verified = models.User.objects.filter(checked=None)
 
     render_dict["user_names"] = verified
     return render(request, "book/people/people_links.html", render_dict)

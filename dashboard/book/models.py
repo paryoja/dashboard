@@ -98,9 +98,6 @@ class Category(models.Model):
 
 
 class PeopleImage(models.Model):
-    def get_user_id(self):
-        return self.url.split("/")[5]
-
     url = models.URLField(unique=True, max_length=400)
     title = models.TextField(max_length=500)
     category = models.ForeignKey(
@@ -109,6 +106,10 @@ class PeopleImage(models.Model):
     page = models.CharField(max_length=30)
     selected = models.BooleanField(null=True, blank=True)
     user_id = models.CharField(max_length=20)
+    content_parsed = models.BooleanField(null=True, blank=True, default=None)
+
+    def get_user_id(self):
+        return self.url.split("/")[5]
 
     def save(
         self, force_insert=False, force_update=False, using=None, update_fields=None
@@ -122,7 +123,10 @@ class PeopleImage(models.Model):
 
 class User(models.Model):
     username = models.CharField(max_length=30, unique=True)
-    checked = models.BooleanField(default=False)
+    checked = models.BooleanField(default=None, null=True, blank=True)
+
+    def __str__(self):
+        return "{}".format(self.username, self.checked)
 
 
 class PokemonImage(models.Model):

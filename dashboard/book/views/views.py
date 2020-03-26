@@ -640,7 +640,8 @@ def add_user(request):
     user = request.GET["username"]
     checked = request.GET["checked"]
 
-    obj = models.User(username=user, checked=checked)
+    obj = models.User.objects.get(username=user)
+    obj.checked = checked
     obj.save()
 
     return HttpResponse("1")

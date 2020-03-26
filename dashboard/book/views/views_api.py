@@ -24,6 +24,8 @@ class Domain:
 
 def image(request, method, image_type="People") -> HttpResponse:
     image_id = request.POST.get("image_id")
+    if image_id is None:
+        return HttpResponseBadRequest("Empty Image Id")
     if image_type == "People":
         img = models.PeopleImage.objects.get(id=int(image_id))
     elif image_type == "Pokemon":
