@@ -39,9 +39,14 @@ DJANGO_APPS = [
     "django.contrib.humanize",
 ]
 
-THIRD_PARTY_APPS = ["rest_framework", "django_extensions", "django_filters"]
+THIRD_PARTY_APPS = [
+    "rest_framework",
+    "django_extensions",
+    "django_filters",
+    "crispy_forms",
+]
 
-LOCAL_APPS = ["book.apps.BookConfig"]
+LOCAL_APPS = ["book.apps.BookConfig", "chatbot.apps.ChatbotConfig"]
 
 INSTALLED_APPS = DJANGO_APPS + THIRD_PARTY_APPS + LOCAL_APPS
 
@@ -152,3 +157,5 @@ REST_FRAMEWORK = {
     "DEFAULT_PERMISSION_CLASSES": ("rest_framework.permissions.IsAuthenticated",),
     "DEFAULT_FILTER_BACKENDS": ["django_filters.rest_framework.DjangoFilterBackend"],
 }
+
+CRISPY_TEMPLATE_PACK = "bootstrap4"

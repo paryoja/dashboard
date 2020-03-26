@@ -5,13 +5,12 @@ import typing
 
 import requests
 import urllib3
+from book import models
 from bs4 import BeautifulSoup
 from celery import shared_task
 from django.db import models as dj_models
 from django.forms.models import model_to_dict
 from django.http import HttpResponse, HttpResponseBadRequest, JsonResponse
-
-from . import models
 
 logger = logging.getLogger(__name__)
 
@@ -246,7 +245,12 @@ def pokemon_classification_api(request) -> HttpResponse:
 def get_image_directory_list(data_type, url, a_parsed) -> list:
     if data_type == "people":
         json_url = url + a_parsed[0][0] + "/image.json"
-        result = json.loads(requests.get(json_url).text)["image_list"]
+        image_list_text = requests.get(json_url).text
+        try:
+            result = json.loads(image_list_text)["image_list"]
+        except json.JSONDecodeError as e:
+            print(image_list_text)
+            raise e
 
     elif data_type == "pokemon":
         directory_url = url + a_parsed[0][0]

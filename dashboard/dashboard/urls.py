@@ -16,8 +16,7 @@ Including another URLconf
 from django.conf import settings
 from django.contrib import admin
 from django.shortcuts import redirect
-from django.urls import path, include
-from django.urls import reverse
+from django.urls import include, path, reverse
 from django.views import defaults as default_views
 
 
@@ -30,6 +29,7 @@ urlpatterns = [
     path("admin/", admin.site.urls),
     path("accounts/", include("django.contrib.auth.urls")),
     path("", simple_redirect),
+    path("chatbot/", include("chatbot.urls")),
     path("api/", include("dashboard.api_router")),
 ]
 
