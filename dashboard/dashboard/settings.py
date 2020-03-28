@@ -41,7 +41,6 @@ DJANGO_APPS = [
 
 THIRD_PARTY_APPS = [
     "rest_framework",
-    "django_extensions",
     "django_filters",
     "crispy_forms",
     "rest_framework_api_key",
