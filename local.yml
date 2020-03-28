@@ -28,7 +28,7 @@ services:
     ports:
       - "38000:8000"
     command:
-      - /scripts/run_gunicorn.sh
+      - /scripts/run_local.sh
 
   flower:
     <<: *celery
@@ -42,7 +42,6 @@ services:
     ports:
       - "80:80"
     volumes:
-      - /var/www:/usr/share/nginx/html:ro
       - ./config/nginx:/etc/nginx/conf.d
       - ./:/work
       - production_logs:/work/log/nginx

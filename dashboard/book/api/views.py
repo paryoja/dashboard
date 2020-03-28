@@ -1,4 +1,8 @@
-from book.api.serializers import InstagramTextSerializer, PokemonImageSerializer
+from book.api.serializers import (
+    InstagramImageSerializer,
+    InstagramTextSerializer,
+    PokemonImageSerializer,
+)
 from rest_framework import viewsets
 from rest_framework.pagination import PageNumberPagination
 from rest_framework.permissions import IsAuthenticated, IsAuthenticatedOrReadOnly
@@ -28,3 +32,13 @@ class InstagramTextViewSet(viewsets.ModelViewSet):
 
     serializer_class = InstagramTextSerializer
     pagination_class = StandardResultsSetPagination
+
+
+class InstagramImageViewSet(viewsets.ModelViewSet):
+    queryset = models.PeopleImage.objects.order_by("id")
+    permission_classes = [IsAuthenticated]
+
+    serializer_class = InstagramImageSerializer
+    pagination_class = StandardResultsSetPagination
+
+    filterset_fields = ("selected",)

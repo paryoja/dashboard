@@ -30,6 +30,11 @@ def link(request):
     return render(request, "book/link.html", render_dict)
 
 
+def web_stack(request):
+    render_dict = get_render_dict("web_stack")
+    return render(request, "book/web_stack.html", render_dict)
+
+
 def algorithm(request):
     render_dict = get_render_dict("algorithm")
     return render(request, "book/algorithm.html", render_dict)
@@ -590,7 +595,11 @@ def range_date(start, end):
 def corona(request):
     render_dict = get_render_dict("corona")
 
-    start_date = models.Corona.objects.order_by("date")[0].date
+    corona_list = models.Corona.objects.order_by("date")
+    if not corona_list:
+        return render(request, "book/corona.html", render_dict)
+
+    start_date = corona_list[0].date
     end_date = datetime.date.today() + datetime.timedelta(days=10)
 
     labels = []

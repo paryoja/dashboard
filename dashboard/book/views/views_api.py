@@ -251,7 +251,6 @@ def get_image_directory_list(data_type, url, a_parsed) -> list:
         try:
             result = json.loads(image_list_text)["image_list"]
         except json.JSONDecodeError as e:
-            print(image_list_text)
             raise e
 
     elif data_type == "pokemon":
@@ -299,8 +298,8 @@ def add_image_client(a_text, url, category_id, data_type) -> None:
                 else:
                     raise ValueError("Unsupported data_type {}".format(data_type))
                 image_obj.save()
-            except Exception as e:
-                print(e)
+            except Exception:
+                continue
 
 
 @shared_task

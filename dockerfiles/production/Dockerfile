@@ -9,8 +9,8 @@ RUN apt-get purge -y --auto-remove -o APT::AutoRemove::RecommendsImportant=false
 RUN rm -rf /var/lib/apt/lists/*
 
 ADD ./requirements /requirements
-ADD ./requirements.txt /
 RUN python3 -m pip install --upgrade pip setuptools
+ADD ./requirements.txt /
 RUN python3 -m pip install --ignore-installed -r /requirements.txt
 
 ADD ./scripts /scripts
@@ -22,6 +22,7 @@ RUN chmod +x /entrypoint
 
 ENV PYTHONUNBUFFERED 1
 ENV PYTHONIOENCODING utf-8
+
 RUN echo alias python="python3" >> /root/.bashrc
 WORKDIR /work/dashboard
 

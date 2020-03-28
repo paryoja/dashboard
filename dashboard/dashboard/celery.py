@@ -26,8 +26,8 @@ def debug_task(self):
 app.conf.update(
     CELERYBEAT_SCHEDULE={
         "add-image": {
-            "task": "book.views_api.cron_image_add",
-            "schedule": crontab(hour="3", minute="00"),
+            "task": "book.views.views_api.cron_image_add",
+            "schedule": crontab(hour="03", minute="20"),
         },
     }
 )

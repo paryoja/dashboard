@@ -1,0 +1,303 @@
+[
+  {
+    "Navigation": [
+      {
+        "template": "index",
+        "icon": "fe fe-home",
+        "description": "Home"
+      },
+      {
+        "collection": "sbStudy",
+        "icon": "fa fa-chalkboard-teacher",
+        "description": "스터디 정리",
+        "child_info": [
+          {
+            "template": "slide",
+            "icon": "fa fa-file-powerpoint",
+            "description": "슬라이드"
+          },
+          {
+            "template": "paper",
+            "icon": "fa fa-file-pdf",
+            "description": "논문"
+          },
+          {
+            "template": "colab",
+            "icon": "fa fa-file-code",
+            "description": "실습자료"
+          }
+        ]
+      },
+      {
+        "collection": "sbPokemon",
+        "icon": "fa fa-gamepad",
+        "description": "포켓몬",
+        "child_info": [
+          {
+            "template": "pokemon_classification",
+            "icon": "fa fa-check-square",
+            "description": "분류"
+          },
+          {
+            "collection": "sbPokemonResult",
+            "icon": "fa fa-poll",
+            "description": "분류결과",
+            "child_info": [
+              {
+                "template": "pokemon_result",
+                "icon": "fa fa-thumbs-up",
+                "description": "적합",
+                "argument": {
+                  "arg": "yes"
+                },
+                "active_override": "pokemon_result_yes"
+              },
+              {
+                "template": "pokemon_result",
+                "icon": "fa fa-angle-right",
+                "description": "단순 처리",
+                "argument": {
+                  "arg": "little"
+                },
+                "active_override": "pokemon_result_little"
+              },
+              {
+                "template": "pokemon_result",
+                "icon": "fa fa-angle-double-right",
+                "description": "복잡 처리",
+                "argument": {
+                  "arg": "more"
+                },
+                "active_override": "pokemon_result_more"
+              },
+              {
+                "template": "pokemon_result",
+                "icon": "fa fa-thumbs-down",
+                "description": "부적합",
+                "argument": {
+                  "arg": "no"
+                },
+                "active_override": "pokemon_result_no"
+              }
+            ]
+          },
+          {
+            "template": "pokemon_sorted",
+            "icon": "fa fa-sort-numeric-down",
+            "description": "Yes 순 분류"
+          },
+          {
+            "template": "pokemon_relabel",
+            "icon": "fa fa-edit",
+            "description": "분류 수정"
+          }
+        ]
+      },
+      {
+        "template": "corona",
+        "icon": "fa fa-exclamation-triangle",
+        "description": "코로나"
+      },
+      {
+        "template": "chatbot",
+        "icon": "fa fa-comment",
+        "description": "챗봇"
+      },
+      {
+        "collection": "sbLink",
+        "icon": "fe fe-link",
+        "description": "링크",
+        "child_info": [
+          {
+            "template": "link",
+            "icon": "fa fa-bookmark",
+            "description": "북마크"
+          },
+          {
+            "template": "web_stack",
+            "icon": "fa fa-layer-group",
+            "description": "웹스택"
+          }
+        ]
+      },
+      {
+        "collection": "sbInvestment",
+        "icon": "fe fe-dollar-sign",
+        "description": "투자",
+        "child_info": [
+          {
+            "template": "leading_stocks",
+            "icon": "fa fa-money-check-alt",
+            "description": "Leading Stocks"
+          },
+          {
+            "template": "live_currency",
+            "icon": "fa fa-exchange-alt",
+            "description": "Currency History"
+          },
+          {
+            "template": "krx_price_query",
+            "icon": "fa fa-search-dollar",
+            "description": "Price Query"
+          },
+          {
+            "template": "lotto",
+            "icon": "fa fa-money-bill-wave",
+            "description": "Lottery"
+          },
+          {
+            "template": "real_estate",
+            "icon": "fa fa-building",
+            "description": "부동산"
+          },
+          {
+            "template": "recommend_book",
+            "icon": "fa fa-book",
+            "description": "책"
+          }
+        ]
+      },
+      {
+        "collection": "sbOther",
+        "icon": "fe fe-star",
+        "description": "그 외",
+        "child_info": [
+          {
+            "template": "food",
+            "icon": "fa fa-utensils",
+            "description": "맛집"
+          },
+          {
+            "template": "wine",
+            "icon": "fa fa-wine-bottle",
+            "description": "Wine"
+          },
+          {
+            "template": "law_search",
+            "icon": "fa fa-gavel",
+            "description": "법률 검색"
+          },
+          {
+            "template": "todo",
+            "icon": "fa fa-check",
+            "description": "Todo List"
+          },
+          {
+            "collection": "sbPeople",
+            "icon": "fa fa-tags",
+            "description": "분류기",
+            "child_info": [
+              {
+                "template": "people",
+                "icon": "fa fa-users",
+                "description": "미분류"
+              },
+              {
+                "template": "people_result",
+                "icon": "fa fa-user-check",
+                "description": "선택",
+                "active_override": "people_True"
+              },
+              {
+                "template": "people_result",
+                "icon": "fa fa-user-times",
+                "description": "미선택",
+                "active_override": "people_False"
+              },
+              {
+                "template": "people_high_expectation",
+                "icon": "fa fa-user-plus",
+                "description": "예상"
+              },
+              {
+                "template": "people_relabel",
+                "icon": "fa fa-user-edit",
+                "description": "수정"
+              }
+            ]
+          },
+          {
+            "template": "idea",
+            "icon": "fe fe-zap",
+            "description": "아이디어 모음"
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "USER": [
+      {
+        "template": "login",
+        "icon": "fe fe-log-in",
+        "description": "Login",
+        "argument": {
+          "next": "/book"
+        },
+        "login_state": "logout"
+      },
+      {
+        "template": "logout",
+        "icon": "fe fe-log-out",
+        "description": "Logout",
+        "login_state": "login"
+      }
+    ]
+  },
+  {
+    "MANAGEMENT": [
+      {
+        "template": "/admin",
+        "external": true,
+        "icon": "fe fe-clipboard",
+        "description": "Admin",
+        "should_superuser": true
+      },
+      {
+        "template": "/api",
+        "external": true,
+        "icon": "fa fa-cog",
+        "description": "API",
+        "should_superuser": true
+      },
+      {
+        "collection": "sbCloud",
+        "icon": "fe fe-terminal",
+        "description": "Cloud Console",
+        "should_superuser": true,
+        "child_info": [
+          {
+            "template": "https://ap-northeast-2.console.aws.amazon.com/console/home",
+            "external": true,
+            "icon": "fab fa-aws",
+            "description": "AWS"
+          },
+          {
+            "template": "https://portal.azure.com/#home",
+            "external": true,
+            "icon": "fab fa-microsoft",
+            "description": "AZURE"
+          },
+          {
+            "template": "https://console.cloud.google.com/home/dashboard",
+            "external": true,
+            "icon": "fab fa-google",
+            "description": "GCP"
+          }
+        ]
+      },
+      {
+        "template": "https://paryoja.github.io/",
+        "external": true,
+        "icon": "fe fe-github",
+        "description": "Blog"
+      },
+      {
+        "template": "https://github.com/paryoja/dashboard",
+        "external": true,
+        "icon": "fe fe-git-branch",
+        "description": "Changelog"
+      }
+    ]
+  }
+]

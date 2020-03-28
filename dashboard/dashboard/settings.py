@@ -16,7 +16,7 @@ import requests
 ROOT_DIR = (
     environ.Path(__file__) - 2
 )  # (dashboard/dashboard/settings.py - 2 = dashboard/)
-APPS_DIR = ROOT_DIR.path("dashboar")
+APPS_DIR = ROOT_DIR.path("dashboard")
 env = environ.Env()
 
 # Quick-start development settings - unsuitable for production
@@ -75,6 +75,7 @@ TEMPLATES = [
                 "django.template.context_processors.request",
                 "django.contrib.auth.context_processors.auth",
                 "django.contrib.messages.context_processors.messages",
+                "utils.context_processors.settings_context",
             ],
         },
     },
@@ -165,3 +166,5 @@ REST_FRAMEWORK = {
 }
 
 CRISPY_TEMPLATE_PACK = "bootstrap4"
+
+NAV_ITEM_JSON = ROOT_DIR.path("config/sidebar.json")

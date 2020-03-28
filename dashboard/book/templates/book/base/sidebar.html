@@ -1,110 +1,37 @@
 <nav class="navbar navbar-vertical fixed-left navbar-expand-md navbar-light bg-vibrant" id="sidebar">
-    <div class="container-fluid">
-        <button class="navbar-toggler collapsed" type="button" data-toggle="collapse"
-                data-target="#sidebarCollapse" aria-controls="sidebarCollapse" aria-expanded="false"
-                aria-label="Toggle navigation"><span class="navbar-toggler-icon"></span></button>
-        <a class="navbar-brand" href="#">
-            <svg width="36" height="36" xmlns="http://www.w3.org/2000/svg">
-                <g>
-                    <text xml:space="preserve" text-anchor="start" font-family="Oswald, sans-serif" font-size="24"
-                          id="svg_4" y="27.843718" x="3.857184" fill-opacity="null" stroke-opacity="null"
-                          stroke-width="0"
-                          stroke="#000" fill="#000000">YZ</text>
-                </g>
-            </svg>
-        </a>
-        <div class="navbar-user d-md-none">
-
-        </div>
-        <!-- Form -->
-        <div class="navbar-collapse collapse" id="sidebarCollapse" style>
-            <form class="mt-4 mb-3 d-md-none">
-                <div class="input-group input-group-rounded input-group-merge">
-                    <input type="search" class="form-control form-control-rounded form-control-prepended"
-                           placeholder="Search" aria-label="Search">
-                    <div class="input-group-prepend">
-                        <div class="input-group-text">
-                            <span class="fe fe-search"></span>
-                        </div>
-                    </div>
-                </div>
-            </form>
-            <!-- Navigation -->
-            <ul class="navbar-nav">
-                {% for nav_item in nav_list %}
-                    {% if nav_item.collapse %}
-                        {% include 'book/base/sidebar_navitem_collapse.html' %}
-                    {% else %}
-                        {% include 'book/base/sidebar_navitem.html' %}
-                    {% endif %}
-                {% endfor %}
-            </ul>
-
-            <!-- Divider -->
-            <hr class="my-3">
-
-            <!-- Heading -->
-            <h6 class="navbar-heading text-muted">
-                Management
-            </h6>
-
-            <!-- Navigation -->
-            <ul class="navbar-nav mb-md-3">
-                {% if user.is_superuser %}
-                    <li class="nav-item">
-                        <a class="nav-link" href="/admin" target="_blank">
-                            <i class="fe fe-clipboard"></i> Admin
-                        </a>
-                    </li>
-                  <li class="nav-item">
-                        <a class="nav-link" href="/api" target="_blank">
-                            <i class="fa fa-cog"></i> Api
-                        </a>
-                    </li>
-                {% endif %}
-                <li class="nav-item">
-                    <a class="nav-link"
-                       href="https://paryoja.github.io/" target="_blank">
-                        <i class="fab fa-github"></i> Blog
-                    </a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link"
-                       href="https://github.com/paryoja/dashboard" target="_blank">
-                        <i class="fe fe-git-branch"></i> Changelog
-                        <span class="badge badge-primary ml-auto">v{{ version }}</span>
-                    </a>
-                </li>
-            </ul>
-
-            <!-- Divider -->
-            <hr class="my-3">
-
-            <h6 class="navbar-heading text-muted">
-                User
-            </h6>
-
-            <!-- Navigation -->
-            <ul class="navbar-nav mb-md-3">
-                {% if not user.is_active %}
-                    <li class="nav-item">
-                        <a class="nav-link" href="{% url 'book:login' %}?next=/book">
-                            <i class="fe fe-log-in"></i> Login
-                        </a>
-                    </li>
-                {% else %}
-                    <li class="nav-item">
-                        <a class="nav-link" href="{% url 'book:logout' %}">
-                            <i class="fe fe-log-out"></i> Logout
-                        </a>
-                    </li>
-                {% endif %}
-            </ul>
-
-            <!-- Divider -->
-            <hr class="my-3">
-
-        </div>
-
-    </div> <!-- / .container-fluid -->
+  <div class="container-fluid">
+    <button class="navbar-toggler collapsed" type="button" data-toggle="collapse"
+            data-target="#sidebarCollapse" aria-controls="sidebarCollapse" aria-expanded="false"
+            aria-label="Toggle navigation">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+    <a class="navbar-brand" href="#">
+      <svg width="36" height="36" xmlns="http://www.w3.org/2000/svg">
+        <g>
+          <text xml:space="preserve" text-anchor="start" font-family="Oswald, sans-serif" font-size="24"
+                id="svg_4" y="27.843718" x="3.857184" fill-opacity="null" stroke-opacity="null"
+                stroke-width="0" stroke="#000" fill="#000000">YZ</text>
+        </g>
+      </svg>
+    </a>
+    <!-- Form -->
+    <div class="navbar-collapse collapse" id="sidebarCollapse" style>
+      <!-- Navigation -->
+      {% for header, side in sidebar.items %}
+        <h6 class="navbar-heading text-muted">
+          {{ header }}
+        </h6>
+        <ul class="navbar-nav">
+          {% for nav_item in side %}
+            {% if nav_item.has_child %}
+              {% include 'book/base/sidebar/collection.html' %}
+            {% else %}
+              {% include 'book/base/sidebar/terminal.html' %}
+            {% endif %}
+          {% endfor %}
+        </ul>
+        <hr class="my-3">
+      {% endfor %}
+    </div>
+  </div> <!-- / .container-fluid -->
 </nav>

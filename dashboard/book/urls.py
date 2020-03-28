@@ -10,6 +10,7 @@ urlpatterns = [
     path("study/paper/", views.paper, name="paper"),
     path("study/colab/", views.colab, name="colab"),
     path("link/", views.link, name="link"),
+    path("web_stack/", views.web_stack, name="web_stack"),
     path("algorithm/", views.algorithm, name="algorithm"),
     path("law_search/", views.law_search, name="law_search"),
     path("lotto/", views.lotto, name="lotto"),

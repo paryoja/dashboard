@@ -9,6 +9,7 @@ else:
 
 router.register("pokemon", PokemonImageViewSet)
 router.register("instagram", InstagramTextViewSet)
+router.register("instagram_image", InstagramTextViewSet)
 
 app_name = "api"
 urlpatterns = router.urls

@@ -12,3 +12,9 @@ class InstagramTextSerializer(serializers.ModelSerializer):
     class Meta:
         model = PeopleImage
         fields = ("title",)
+
+
+class InstagramImageSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = PeopleImage
+        fields = ("url", "selected")
