@@ -138,12 +138,12 @@ def call_api_server(img, domain: str) -> typing.Optional:
     request_url = "http://{}:{}/{}".format(server.ip, server.port, server.endpoint)
     try:
         result = requests.post(request_url, json=data, headers=headers)
-    except urllib3.exceptions.MaxRetryError:
+    except urllib3.exceptions.MaxRetryError as e:
         logger.warning("Max tries failed {}".format(request_url))
-        return
-    except requests.exceptions.ConnectionError:
+        raise e
+    except requests.exceptions.ConnectionError as e:
         logger.warning("Connection Refused".format(request_url))
-        return
+        raise e
 
     if result.status_code != 200:
         logger.warning(result.text, result.status_code)
