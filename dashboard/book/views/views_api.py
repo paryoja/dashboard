@@ -88,7 +88,10 @@ def get_img_rating(
 
 
 def save_success(
-    domain: str, json_data: dict, target_deep_model: models.DeepLearningModel, int_img_id: int
+    domain: str,
+    json_data: dict,
+    target_deep_model: models.DeepLearningModel,
+    int_img_id: int,
 ) -> None:
     if domain == Domain.People:
         class_names = json_data["class_names"]
@@ -114,7 +117,10 @@ def save_success(
 
 
 def save_failure(
-    domain: str, json_data: dict, target_deep_model: models.DeepLearningModel, int_img_id: int
+    domain: str,
+    json_data: dict,
+    target_deep_model: models.DeepLearningModel,
+    int_img_id: int,
 ) -> None:
     if domain == Domain.People:
         rating = models.Rating(
