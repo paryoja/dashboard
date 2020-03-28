@@ -1,0 +1,7 @@
+book.migrations.0002\_auto\_20200328\_0312 module
+=================================================
+
+.. automodule:: book.migrations.0002_auto_20200328_0312
+   :members:
+   :undoc-members:
+   :show-inheritance:

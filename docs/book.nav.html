@@ -1,0 +1,326 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>book.nav module &mdash; Yozit dashboard  documentation</title>
+  
+
+  
+  
+  
+  
+
+  
+  <script type="text/javascript" src="_static/js/modernizr.min.js"></script>
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
+        <script src="_static/jquery.js"></script>
+        <script src="_static/underscore.js"></script>
+        <script src="_static/doctools.js"></script>
+        <script src="_static/language_data.js"></script>
+    
+    <script type="text/javascript" src="_static/js/theme.js"></script>
+
+    
+
+  
+  <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="book.urls module" href="book.urls.html" />
+    <link rel="prev" title="book.models module" href="book.models.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="index.html" class="icon icon-home"> Yozit dashboard
+          
+
+          
+          </a>
+
+          
+            
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <p class="caption"><span class="caption-text">Contents:</span></p>
+<ul class="current">
+<li class="toctree-l1 current"><a class="reference internal" href="book.html">book package</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="book.html#subpackages">Subpackages</a></li>
+<li class="toctree-l2 current"><a class="reference internal" href="book.html#submodules">Submodules</a><ul class="current">
+<li class="toctree-l3"><a class="reference internal" href="book.admin.html">book.admin module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="book.apps.html">book.apps module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="book.forms.html">book.forms module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="book.models.html">book.models module</a></li>
+<li class="toctree-l3 current"><a class="current reference internal" href="#">book.nav module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="book.urls.html">book.urls module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="book.utils.html">book.utils module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="book.views_user.html">book.views_user module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="book.xml_helper.html">book.xml_helper module</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="book.html#module-book">Module contents</a></li>
+</ul>
+</li>
+</ul>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">Yozit dashboard</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="index.html">Docs</a> &raquo;</li>
+        
+          <li><a href="book.html">book package</a> &raquo;</li>
+        
+      <li>book.nav module</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+            
+            <a href="_sources/book.nav.rst.txt" rel="nofollow"> View page source</a>
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <div class="section" id="module-book.nav">
+<span id="book-nav-module"></span><h1>book.nav module<a class="headerlink" href="#module-book.nav" title="Permalink to this headline">¶</a></h1>
+<dl class="class">
+<dt id="book.nav.NavBase">
+<em class="property">class </em><code class="sig-prename descclassname">book.nav.</code><code class="sig-name descname">NavBase</code><span class="sig-paren">(</span><em class="sig-param">description: str</em>, <em class="sig-param">icon: str</em>, <em class="sig-param">has_child: bool</em>, <em class="sig-param">should_superuser: bool = False</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/book/nav.html#NavBase"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#book.nav.NavBase" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<p>Navigation 항목의 base 가 되는 class</p>
+<dl class="attribute">
+<dt id="book.nav.NavBase.description">
+<code class="sig-name descname">description</code><em class="property">: str</em><em class="property"> = None</em><a class="headerlink" href="#book.nav.NavBase.description" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="book.nav.NavBase.get_active_set">
+<em class="property">abstract </em><code class="sig-name descname">get_active_set</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/book/nav.html#NavBase.get_active_set"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#book.nav.NavBase.get_active_set" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="book.nav.NavBase.icon">
+<code class="sig-name descname">icon</code><em class="property">: str</em><em class="property"> = None</em><a class="headerlink" href="#book.nav.NavBase.icon" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="book.nav.NavBase.is_active">
+<em class="property">abstract </em><code class="sig-name descname">is_active</code><span class="sig-paren">(</span><em class="sig-param">current_page: str</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/book/nav.html#NavBase.is_active"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#book.nav.NavBase.is_active" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="book.nav.NavCollection">
+<em class="property">class </em><code class="sig-prename descclassname">book.nav.</code><code class="sig-name descname">NavCollection</code><span class="sig-paren">(</span><em class="sig-param">description: str</em>, <em class="sig-param">icon: str</em>, <em class="sig-param">collection: str</em>, <em class="sig-param">child_info: dict</em>, <em class="sig-param">should_superuser=False</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/book/nav.html#NavCollection"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#book.nav.NavCollection" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#book.nav.NavBase" title="book.nav.NavBase"><code class="xref py py-class docutils literal notranslate"><span class="pre">book.nav.NavBase</span></code></a></p>
+<p>Child 를 가지는 Navigation</p>
+<dl class="attribute">
+<dt id="book.nav.NavCollection.active_list">
+<code class="sig-name descname">active_list</code><em class="property">: typing.List[str]</em><em class="property"> = None</em><a class="headerlink" href="#book.nav.NavCollection.active_list" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="book.nav.NavCollection.child">
+<code class="sig-name descname">child</code><em class="property">: typing.List[NavBase]</em><em class="property"> = None</em><a class="headerlink" href="#book.nav.NavCollection.child" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="book.nav.NavCollection.collection">
+<code class="sig-name descname">collection</code><em class="property">: str</em><em class="property"> = None</em><a class="headerlink" href="#book.nav.NavCollection.collection" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="book.nav.NavCollection.get_active_set">
+<code class="sig-name descname">get_active_set</code><span class="sig-paren">(</span><span class="sig-paren">)</span> &#x2192; Set[str]<a class="reference internal" href="_modules/book/nav.html#NavCollection.get_active_set"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#book.nav.NavCollection.get_active_set" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="book.nav.NavCollection.is_active">
+<code class="sig-name descname">is_active</code><span class="sig-paren">(</span><em class="sig-param">current_page</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/book/nav.html#NavCollection.is_active"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#book.nav.NavCollection.is_active" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="book.nav.NavItem">
+<em class="property">class </em><code class="sig-prename descclassname">book.nav.</code><code class="sig-name descname">NavItem</code><span class="sig-paren">(</span><em class="sig-param">description: str</em>, <em class="sig-param">icon: str</em>, <em class="sig-param">template: str</em>, <em class="sig-param">argument: Dict[str</em>, <em class="sig-param">str] = None</em>, <em class="sig-param">external: bool = False</em>, <em class="sig-param">should_superuser: bool = False</em>, <em class="sig-param">login_state: str = 'always'</em>, <em class="sig-param">active_override: str = None</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/book/nav.html#NavItem"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#book.nav.NavItem" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#book.nav.NavBase" title="book.nav.NavBase"><code class="xref py py-class docutils literal notranslate"><span class="pre">book.nav.NavBase</span></code></a></p>
+<p>말단 Navigation 노드</p>
+<dl class="method">
+<dt id="book.nav.NavItem.get_active_set">
+<code class="sig-name descname">get_active_set</code><span class="sig-paren">(</span><span class="sig-paren">)</span> &#x2192; Set[str]<a class="reference internal" href="_modules/book/nav.html#NavItem.get_active_set"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#book.nav.NavItem.get_active_set" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="book.nav.NavItem.is_active">
+<code class="sig-name descname">is_active</code><span class="sig-paren">(</span><em class="sig-param">current_page: str</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/book/nav.html#NavItem.is_active"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#book.nav.NavItem.is_active" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="book.nav.NavItem.template">
+<code class="sig-name descname">template</code><em class="property">: str</em><em class="property"> = None</em><a class="headerlink" href="#book.nav.NavItem.template" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="book.nav.NavigationFactory">
+<em class="property">class </em><code class="sig-prename descclassname">book.nav.</code><code class="sig-name descname">NavigationFactory</code><a class="reference internal" href="_modules/book/nav.html#NavigationFactory"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#book.nav.NavigationFactory" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<p>주어진 dictionary 를 적절한 Navigation 노드로 변환한다.</p>
+<dl class="method">
+<dt id="book.nav.NavigationFactory.get_navigation_item">
+<em class="property">static </em><code class="sig-name descname">get_navigation_item</code><span class="sig-paren">(</span><em class="sig-param">info: dict</em><span class="sig-paren">)</span> &#x2192; book.nav.NavBase<a class="reference internal" href="_modules/book/nav.html#NavigationFactory.get_navigation_item"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#book.nav.NavigationFactory.get_navigation_item" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="book.nav.Sidebar">
+<em class="property">class </em><code class="sig-prename descclassname">book.nav.</code><code class="sig-name descname">Sidebar</code><span class="sig-paren">(</span><em class="sig-param">config: List[dict]</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/book/nav.html#Sidebar"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#book.nav.Sidebar" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<p>Navigation 의 모든 정보를 가진 클래스</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="book.nav.get_render_dict">
+<code class="sig-prename descclassname">book.nav.</code><code class="sig-name descname">get_render_dict</code><span class="sig-paren">(</span><em class="sig-param">current_page: str</em><span class="sig-paren">)</span> &#x2192; dict<a class="reference internal" href="_modules/book/nav.html#get_render_dict"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#book.nav.get_render_dict" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</div>
+
+
+           </div>
+           
+          </div>
+          <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+        <a href="book.urls.html" class="btn btn-neutral float-right" title="book.urls module" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
+      
+      
+        <a href="book.models.html" class="btn btn-neutral float-left" title="book.models module" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+      
+    </div>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2020, Yoonjae Park
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>

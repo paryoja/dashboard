@@ -1,0 +1,383 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>book.views.views module &mdash; Yozit dashboard  documentation</title>
+  
+
+  
+  
+  
+  
+
+  
+  <script type="text/javascript" src="_static/js/modernizr.min.js"></script>
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
+        <script src="_static/jquery.js"></script>
+        <script src="_static/underscore.js"></script>
+        <script src="_static/doctools.js"></script>
+        <script src="_static/language_data.js"></script>
+    
+    <script type="text/javascript" src="_static/js/theme.js"></script>
+
+    
+
+  
+  <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="book.views.views_api module" href="book.views.views_api.html" />
+    <link rel="prev" title="book.views.people module" href="book.views.people.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="index.html" class="icon icon-home"> Yozit dashboard
+          
+
+          
+          </a>
+
+          
+            
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <p class="caption"><span class="caption-text">Contents:</span></p>
+<ul class="current">
+<li class="toctree-l1 current"><a class="reference internal" href="book.html">book package</a><ul class="current">
+<li class="toctree-l2 current"><a class="reference internal" href="book.html#subpackages">Subpackages</a><ul class="current">
+<li class="toctree-l3"><a class="reference internal" href="book.api.html">book.api package</a></li>
+<li class="toctree-l3"><a class="reference internal" href="book.migrations.html">book.migrations package</a></li>
+<li class="toctree-l3"><a class="reference internal" href="book.templatetags.html">book.templatetags package</a></li>
+<li class="toctree-l3"><a class="reference internal" href="book.tests.html">book.tests package</a></li>
+<li class="toctree-l3 current"><a class="reference internal" href="book.views.html">book.views package</a><ul class="current">
+<li class="toctree-l4 current"><a class="reference internal" href="book.views.html#submodules">Submodules</a></li>
+<li class="toctree-l4"><a class="reference internal" href="book.views.html#module-book.views">Module contents</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="book.html#submodules">Submodules</a></li>
+<li class="toctree-l2"><a class="reference internal" href="book.html#module-book">Module contents</a></li>
+</ul>
+</li>
+</ul>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">Yozit dashboard</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="index.html">Docs</a> &raquo;</li>
+        
+          <li><a href="book.html">book package</a> &raquo;</li>
+        
+          <li><a href="book.views.html">book.views package</a> &raquo;</li>
+        
+      <li>book.views.views module</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+            
+            <a href="_sources/book.views.views.rst.txt" rel="nofollow"> View page source</a>
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <div class="section" id="module-book.views.views">
+<span id="book-views-views-module"></span><h1>book.views.views module<a class="headerlink" href="#module-book.views.views" title="Permalink to this headline">¶</a></h1>
+<dl class="function">
+<dt id="book.views.views.add_user">
+<code class="sig-prename descclassname">book.views.views.</code><code class="sig-name descname">add_user</code><span class="sig-paren">(</span><em class="sig-param">request</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/book/views/views.html#add_user"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#book.views.views.add_user" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="book.views.views.algorithm">
+<code class="sig-prename descclassname">book.views.views.</code><code class="sig-name descname">algorithm</code><span class="sig-paren">(</span><em class="sig-param">request</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/book/views/views.html#algorithm"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#book.views.views.algorithm" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="book.views.views.chatbot">
+<code class="sig-prename descclassname">book.views.views.</code><code class="sig-name descname">chatbot</code><span class="sig-paren">(</span><em class="sig-param">request</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/book/views/views.html#chatbot"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#book.views.views.chatbot" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="book.views.views.colab">
+<code class="sig-prename descclassname">book.views.views.</code><code class="sig-name descname">colab</code><span class="sig-paren">(</span><em class="sig-param">request</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/book/views/views.html#colab"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#book.views.views.colab" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="book.views.views.compute_expectation">
+<code class="sig-prename descclassname">book.views.views.</code><code class="sig-name descname">compute_expectation</code><span class="sig-paren">(</span><em class="sig-param">x</em>, <em class="sig-param">coeff</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/book/views/views.html#compute_expectation"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#book.views.views.compute_expectation" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="book.views.views.corona">
+<code class="sig-prename descclassname">book.views.views.</code><code class="sig-name descname">corona</code><span class="sig-paren">(</span><em class="sig-param">request</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/book/views/views.html#corona"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#book.views.views.corona" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="book.views.views.export_lotto">
+<code class="sig-prename descclassname">book.views.views.</code><code class="sig-name descname">export_lotto</code><span class="sig-paren">(</span><em class="sig-param">request</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/book/views/views.html#export_lotto"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#book.views.views.export_lotto" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="book.views.views.food">
+<code class="sig-prename descclassname">book.views.views.</code><code class="sig-name descname">food</code><span class="sig-paren">(</span><em class="sig-param">request</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/book/views/views.html#food"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#book.views.views.food" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="book.views.views.idea">
+<code class="sig-prename descclassname">book.views.views.</code><code class="sig-name descname">idea</code><span class="sig-paren">(</span><em class="sig-param">request</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/book/views/views.html#idea"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#book.views.views.idea" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="book.views.views.image">
+<code class="sig-prename descclassname">book.views.views.</code><code class="sig-name descname">image</code><span class="sig-paren">(</span><em class="sig-param">request</em>, <em class="sig-param">data_type='pokemon'</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/book/views/views.html#image"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#book.views.views.image" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="book.views.views.index">
+<code class="sig-prename descclassname">book.views.views.</code><code class="sig-name descname">index</code><span class="sig-paren">(</span><em class="sig-param">request</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/book/views/views.html#index"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#book.views.views.index" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="book.views.views.krx_price_query">
+<code class="sig-prename descclassname">book.views.views.</code><code class="sig-name descname">krx_price_query</code><span class="sig-paren">(</span><em class="sig-param">request</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/book/views/views.html#krx_price_query"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#book.views.views.krx_price_query" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="book.views.views.law_search">
+<code class="sig-prename descclassname">book.views.views.</code><code class="sig-name descname">law_search</code><span class="sig-paren">(</span><em class="sig-param">request</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/book/views/views.html#law_search"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#book.views.views.law_search" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="book.views.views.leading_stocks">
+<code class="sig-prename descclassname">book.views.views.</code><code class="sig-name descname">leading_stocks</code><span class="sig-paren">(</span><em class="sig-param">request</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/book/views/views.html#leading_stocks"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#book.views.views.leading_stocks" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="book.views.views.link">
+<code class="sig-prename descclassname">book.views.views.</code><code class="sig-name descname">link</code><span class="sig-paren">(</span><em class="sig-param">request</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/book/views/views.html#link"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#book.views.views.link" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="book.views.views.live_currency">
+<code class="sig-prename descclassname">book.views.views.</code><code class="sig-name descname">live_currency</code><span class="sig-paren">(</span><em class="sig-param">request</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/book/views/views.html#live_currency"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#book.views.views.live_currency" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="book.views.views.lotto">
+<code class="sig-prename descclassname">book.views.views.</code><code class="sig-name descname">lotto</code><span class="sig-paren">(</span><em class="sig-param">request</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/book/views/views.html#lotto"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#book.views.views.lotto" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="book.views.views.paper">
+<code class="sig-prename descclassname">book.views.views.</code><code class="sig-name descname">paper</code><span class="sig-paren">(</span><em class="sig-param">request</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/book/views/views.html#paper"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#book.views.views.paper" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="book.views.views.pokemon">
+<code class="sig-prename descclassname">book.views.views.</code><code class="sig-name descname">pokemon</code><span class="sig-paren">(</span><em class="sig-param">request</em>, <em class="sig-param">page=1</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/book/views/views.html#pokemon"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#book.views.views.pokemon" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="book.views.views.pokemon_export">
+<code class="sig-prename descclassname">book.views.views.</code><code class="sig-name descname">pokemon_export</code><span class="sig-paren">(</span><em class="sig-param">request</em>, <em class="sig-param">classified='yes'</em>, <em class="sig-param">page=1</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/book/views/views.html#pokemon_export"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#book.views.views.pokemon_export" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="book.views.views.pokemon_relabel">
+<code class="sig-prename descclassname">book.views.views.</code><code class="sig-name descname">pokemon_relabel</code><span class="sig-paren">(</span><em class="sig-param">request</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/book/views/views.html#pokemon_relabel"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#book.views.views.pokemon_relabel" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="book.views.views.pokemon_result">
+<code class="sig-prename descclassname">book.views.views.</code><code class="sig-name descname">pokemon_result</code><span class="sig-paren">(</span><em class="sig-param">request</em>, <em class="sig-param">page=1</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/book/views/views.html#pokemon_result"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#book.views.views.pokemon_result" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="book.views.views.pokemon_sorted">
+<code class="sig-prename descclassname">book.views.views.</code><code class="sig-name descname">pokemon_sorted</code><span class="sig-paren">(</span><em class="sig-param">request</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/book/views/views.html#pokemon_sorted"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#book.views.views.pokemon_sorted" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="book.views.views.query_chatbot">
+<code class="sig-prename descclassname">book.views.views.</code><code class="sig-name descname">query_chatbot</code><span class="sig-paren">(</span><em class="sig-param">request</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/book/views/views.html#query_chatbot"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#book.views.views.query_chatbot" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="book.views.views.range_date">
+<code class="sig-prename descclassname">book.views.views.</code><code class="sig-name descname">range_date</code><span class="sig-paren">(</span><em class="sig-param">start</em>, <em class="sig-param">end</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/book/views/views.html#range_date"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#book.views.views.range_date" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="book.views.views.real_estate">
+<code class="sig-prename descclassname">book.views.views.</code><code class="sig-name descname">real_estate</code><span class="sig-paren">(</span><em class="sig-param">request</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/book/views/views.html#real_estate"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#book.views.views.real_estate" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="book.views.views.recommend_book">
+<code class="sig-prename descclassname">book.views.views.</code><code class="sig-name descname">recommend_book</code><span class="sig-paren">(</span><em class="sig-param">request</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/book/views/views.html#recommend_book"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#book.views.views.recommend_book" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="book.views.views.relabel">
+<code class="sig-prename descclassname">book.views.views.</code><code class="sig-name descname">relabel</code><span class="sig-paren">(</span><em class="sig-param">request</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/book/views/views.html#relabel"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#book.views.views.relabel" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="book.views.views.slide">
+<code class="sig-prename descclassname">book.views.views.</code><code class="sig-name descname">slide</code><span class="sig-paren">(</span><em class="sig-param">request</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/book/views/views.html#slide"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#book.views.views.slide" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="book.views.views.todo">
+<code class="sig-prename descclassname">book.views.views.</code><code class="sig-name descname">todo</code><span class="sig-paren">(</span><em class="sig-param">request</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/book/views/views.html#todo"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#book.views.views.todo" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="book.views.views.web_stack">
+<code class="sig-prename descclassname">book.views.views.</code><code class="sig-name descname">web_stack</code><span class="sig-paren">(</span><em class="sig-param">request</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/book/views/views.html#web_stack"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#book.views.views.web_stack" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="book.views.views.wine">
+<code class="sig-prename descclassname">book.views.views.</code><code class="sig-name descname">wine</code><span class="sig-paren">(</span><em class="sig-param">request</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/book/views/views.html#wine"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#book.views.views.wine" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</div>
+
+
+           </div>
+           
+          </div>
+          <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+        <a href="book.views.views_api.html" class="btn btn-neutral float-right" title="book.views.views_api module" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
+      
+      
+        <a href="book.views.people.html" class="btn btn-neutral float-left" title="book.views.people module" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+      
+    </div>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2020, Yoonjae Park
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>

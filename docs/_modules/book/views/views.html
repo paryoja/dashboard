@@ -1,0 +1,857 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>book.views.views &mdash; Yozit dashboard  documentation</title>
+  
+
+  
+  
+  
+  
+
+  
+  <script type="text/javascript" src="../../../_static/js/modernizr.min.js"></script>
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../../../" src="../../../_static/documentation_options.js"></script>
+        <script src="../../../_static/jquery.js"></script>
+        <script src="../../../_static/underscore.js"></script>
+        <script src="../../../_static/doctools.js"></script>
+        <script src="../../../_static/language_data.js"></script>
+    
+    <script type="text/javascript" src="../../../_static/js/theme.js"></script>
+
+    
+
+  
+  <link rel="stylesheet" href="../../../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
+    <link rel="index" title="Index" href="../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="../../../index.html" class="icon icon-home"> Yozit dashboard
+          
+
+          
+          </a>
+
+          
+            
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <p class="caption"><span class="caption-text">Contents:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../book.html">book package</a></li>
+</ul>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../../index.html">Yozit dashboard</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../../../index.html">Docs</a> &raquo;</li>
+        
+          <li><a href="../../index.html">Module code</a> &raquo;</li>
+        
+      <li>book.views.views</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <h1>Source code for book.views.views</h1><div class="highlight"><pre>
+<span></span><span class="kn">import</span> <span class="nn">datetime</span>
+<span class="kn">import</span> <span class="nn">json</span>
+<span class="kn">import</span> <span class="nn">logging</span>
+<span class="kn">import</span> <span class="nn">math</span>
+<span class="kn">import</span> <span class="nn">traceback</span>
+
+<span class="kn">import</span> <span class="nn">requests</span>
+<span class="kn">from</span> <span class="nn">book</span> <span class="kn">import</span> <span class="n">models</span><span class="p">,</span> <span class="n">utils</span>
+<span class="kn">from</span> <span class="nn">book.nav</span> <span class="kn">import</span> <span class="n">get_render_dict</span>
+<span class="kn">from</span> <span class="nn">book.views</span> <span class="kn">import</span> <span class="n">views_api</span>
+<span class="kn">from</span> <span class="nn">book.xml_helper</span> <span class="kn">import</span> <span class="n">XmlDictConfig</span><span class="p">,</span> <span class="n">get_xml_request</span>
+<span class="kn">from</span> <span class="nn">bs4</span> <span class="kn">import</span> <span class="n">BeautifulSoup</span>
+<span class="kn">from</span> <span class="nn">django.contrib.auth.decorators</span> <span class="kn">import</span> <span class="n">login_required</span><span class="p">,</span> <span class="n">user_passes_test</span>
+<span class="kn">from</span> <span class="nn">django.core</span> <span class="kn">import</span> <span class="n">exceptions</span>
+<span class="kn">from</span> <span class="nn">django.db.models</span> <span class="kn">import</span> <span class="n">Count</span>
+<span class="kn">from</span> <span class="nn">django.http</span> <span class="kn">import</span> <span class="n">HttpResponse</span>
+<span class="kn">from</span> <span class="nn">django.shortcuts</span> <span class="kn">import</span> <span class="n">render</span>
+
+<span class="n">logger</span> <span class="o">=</span> <span class="n">logging</span><span class="o">.</span><span class="n">getLogger</span><span class="p">(</span><span class="vm">__name__</span><span class="p">)</span>
+
+
+<div class="viewcode-block" id="index"><a class="viewcode-back" href="../../../book.views.views.html#book.views.views.index">[docs]</a><span class="k">def</span> <span class="nf">index</span><span class="p">(</span><span class="n">request</span><span class="p">):</span>
+    <span class="n">render_dict</span> <span class="o">=</span> <span class="n">get_render_dict</span><span class="p">(</span><span class="s2">&quot;index&quot;</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">render</span><span class="p">(</span><span class="n">request</span><span class="p">,</span> <span class="s2">&quot;book/index.html&quot;</span><span class="p">,</span> <span class="n">render_dict</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="link"><a class="viewcode-back" href="../../../book.views.views.html#book.views.views.link">[docs]</a><span class="k">def</span> <span class="nf">link</span><span class="p">(</span><span class="n">request</span><span class="p">):</span>
+    <span class="n">render_dict</span> <span class="o">=</span> <span class="n">get_render_dict</span><span class="p">(</span><span class="s2">&quot;link&quot;</span><span class="p">)</span>
+    <span class="n">render_dict</span><span class="p">[</span><span class="s2">&quot;table_content&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">models</span><span class="o">.</span><span class="n">Link</span><span class="o">.</span><span class="n">objects</span><span class="o">.</span><span class="n">all</span><span class="p">()</span>
+    <span class="k">return</span> <span class="n">render</span><span class="p">(</span><span class="n">request</span><span class="p">,</span> <span class="s2">&quot;book/link.html&quot;</span><span class="p">,</span> <span class="n">render_dict</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="web_stack"><a class="viewcode-back" href="../../../book.views.views.html#book.views.views.web_stack">[docs]</a><span class="k">def</span> <span class="nf">web_stack</span><span class="p">(</span><span class="n">request</span><span class="p">):</span>
+    <span class="n">render_dict</span> <span class="o">=</span> <span class="n">get_render_dict</span><span class="p">(</span><span class="s2">&quot;web_stack&quot;</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">render</span><span class="p">(</span><span class="n">request</span><span class="p">,</span> <span class="s2">&quot;book/web_stack.html&quot;</span><span class="p">,</span> <span class="n">render_dict</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="algorithm"><a class="viewcode-back" href="../../../book.views.views.html#book.views.views.algorithm">[docs]</a><span class="k">def</span> <span class="nf">algorithm</span><span class="p">(</span><span class="n">request</span><span class="p">):</span>
+    <span class="n">render_dict</span> <span class="o">=</span> <span class="n">get_render_dict</span><span class="p">(</span><span class="s2">&quot;algorithm&quot;</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">render</span><span class="p">(</span><span class="n">request</span><span class="p">,</span> <span class="s2">&quot;book/algorithm.html&quot;</span><span class="p">,</span> <span class="n">render_dict</span><span class="p">)</span></div>
+
+
+<span class="c1"># investment</span>
+<div class="viewcode-block" id="live_currency"><a class="viewcode-back" href="../../../book.views.views.html#book.views.views.live_currency">[docs]</a><span class="nd">@user_passes_test</span><span class="p">(</span><span class="k">lambda</span> <span class="n">u</span><span class="p">:</span> <span class="n">u</span><span class="o">.</span><span class="n">is_superuser</span><span class="p">)</span>
+<span class="k">def</span> <span class="nf">live_currency</span><span class="p">(</span><span class="n">request</span><span class="p">):</span>
+    <span class="n">render_dict</span> <span class="o">=</span> <span class="n">get_render_dict</span><span class="p">(</span><span class="s2">&quot;live_currency&quot;</span><span class="p">)</span>
+    <span class="n">currency_list</span> <span class="o">=</span> <span class="n">models</span><span class="o">.</span><span class="n">Currency</span><span class="o">.</span><span class="n">objects</span><span class="o">.</span><span class="n">all</span><span class="p">()</span><span class="o">.</span><span class="n">order_by</span><span class="p">(</span><span class="s2">&quot;-date&quot;</span><span class="p">)</span>
+
+    <span class="n">total_from</span> <span class="o">=</span> <span class="mi">0</span>
+    <span class="n">total_to</span> <span class="o">=</span> <span class="mi">0</span>
+
+    <span class="k">for</span> <span class="n">currency</span> <span class="ow">in</span> <span class="n">currency_list</span><span class="p">:</span>
+        <span class="n">total_from</span> <span class="o">+=</span> <span class="n">currency</span><span class="o">.</span><span class="n">from_amount</span>
+        <span class="n">total_to</span> <span class="o">+=</span> <span class="n">currency</span><span class="o">.</span><span class="n">to_amount</span>
+    <span class="n">total</span> <span class="o">=</span> <span class="p">{</span><span class="s2">&quot;from&quot;</span><span class="p">:</span> <span class="n">total_from</span><span class="p">,</span> <span class="s2">&quot;to&quot;</span><span class="p">:</span> <span class="n">total_to</span><span class="p">,</span> <span class="s2">&quot;rate&quot;</span><span class="p">:</span> <span class="n">total_from</span> <span class="o">/</span> <span class="n">total_to</span><span class="p">}</span>
+
+    <span class="n">render_dict</span><span class="p">[</span><span class="s2">&quot;currency_list&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">currency_list</span>
+    <span class="n">render_dict</span><span class="p">[</span><span class="s2">&quot;total&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">total</span>
+
+    <span class="k">return</span> <span class="n">render</span><span class="p">(</span><span class="n">request</span><span class="p">,</span> <span class="s2">&quot;book/investment/live_currency.html&quot;</span><span class="p">,</span> <span class="n">render_dict</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="leading_stocks"><a class="viewcode-back" href="../../../book.views.views.html#book.views.views.leading_stocks">[docs]</a><span class="k">def</span> <span class="nf">leading_stocks</span><span class="p">(</span><span class="n">request</span><span class="p">):</span>
+    <span class="n">render_dict</span> <span class="o">=</span> <span class="n">get_render_dict</span><span class="p">(</span><span class="s2">&quot;leading_stocks&quot;</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">render</span><span class="p">(</span><span class="n">request</span><span class="p">,</span> <span class="s2">&quot;book/investment/leading_stocks.html&quot;</span><span class="p">,</span> <span class="n">render_dict</span><span class="p">)</span></div>
+
+
+<span class="n">krx_price_query_url</span> <span class="o">=</span> <span class="s2">&quot;http://asp1.krx.co.kr/servlet/krx.asp.XMLSise?code=</span><span class="si">{}</span><span class="s2">&quot;</span>
+<span class="n">krx_statement_query_url</span> <span class="o">=</span> <span class="s2">&quot;http://asp1.krx.co.kr/servlet/krx.asp.XMLJemu?code=</span><span class="si">{}</span><span class="s2">&quot;</span>
+<span class="n">balance_order</span> <span class="o">=</span> <span class="p">[</span>
+    <span class="s2">&quot;hangMok&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;year1Money&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;year1GuSungRate&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;year1JungGamRate&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;year2Money&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;year2GuSungRate&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;year2JungGamRate&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;year3Money&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;year3GuSungRate&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;year3JungGamRate&quot;</span><span class="p">,</span>
+<span class="p">]</span>
+<span class="n">cash_order</span> <span class="o">=</span> <span class="p">[</span>
+    <span class="s2">&quot;hangMok&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;year1Money&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;year1JungGamRate&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;year2Money&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;year2JungGamRate&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;year3Money&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;year3JungGamRate&quot;</span><span class="p">,</span>
+<span class="p">]</span>
+
+
+<div class="viewcode-block" id="krx_price_query"><a class="viewcode-back" href="../../../book.views.views.html#book.views.views.krx_price_query">[docs]</a><span class="k">def</span> <span class="nf">krx_price_query</span><span class="p">(</span><span class="n">request</span><span class="p">):</span>
+    <span class="n">render_dict</span> <span class="o">=</span> <span class="n">get_render_dict</span><span class="p">(</span><span class="s2">&quot;krx_price_query&quot;</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">request</span><span class="o">.</span><span class="n">POST</span><span class="p">:</span>
+        <span class="n">query</span> <span class="o">=</span> <span class="n">request</span><span class="o">.</span><span class="n">POST</span><span class="p">[</span><span class="s2">&quot;query&quot;</span><span class="p">]</span>
+        <span class="n">render_dict</span><span class="p">[</span><span class="s2">&quot;query&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">query</span>
+
+        <span class="n">realtime_result</span> <span class="o">=</span> <span class="n">get_xml_request</span><span class="p">(</span><span class="n">krx_price_query_url</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">query</span><span class="p">))</span>
+        <span class="k">if</span> <span class="n">realtime_result</span><span class="p">:</span>
+            <span class="n">realtime_json</span> <span class="o">=</span> <span class="n">XmlDictConfig</span><span class="p">(</span><span class="n">realtime_result</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">find</span><span class="p">(</span><span class="s2">&quot;stockInfo&quot;</span><span class="p">))</span>
+            <span class="n">info_json</span> <span class="o">=</span> <span class="n">XmlDictConfig</span><span class="p">(</span><span class="n">realtime_result</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">find</span><span class="p">(</span><span class="s2">&quot;TBL_StockInfo&quot;</span><span class="p">))</span>
+            <span class="n">render_dict</span><span class="p">[</span><span class="s2">&quot;market_close&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="p">(</span>
+                <span class="n">realtime_json</span><span class="p">[</span><span class="s2">&quot;myJangGubun&quot;</span><span class="p">]</span> <span class="o">==</span> <span class="s2">&quot;장마감&quot;</span>
+                <span class="ow">or</span> <span class="n">realtime_json</span><span class="p">[</span><span class="s2">&quot;myJangGubun&quot;</span><span class="p">]</span> <span class="o">==</span> <span class="s2">&quot;장개시전&quot;</span>
+            <span class="p">)</span>
+            <span class="n">render_dict</span><span class="p">[</span><span class="s2">&quot;realtime_result&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="p">(</span>
+                <span class="n">realtime_json</span><span class="p">,</span>
+                <span class="n">realtime_result</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span>
+                <span class="n">info_json</span><span class="p">,</span>
+            <span class="p">)</span>
+
+            <span class="k">if</span> <span class="s2">&quot;JongName&quot;</span> <span class="ow">in</span> <span class="n">info_json</span> <span class="ow">and</span> <span class="n">info_json</span><span class="p">[</span><span class="s2">&quot;JongName&quot;</span><span class="p">]:</span>
+                <span class="k">try</span><span class="p">:</span>
+                    <span class="n">models</span><span class="o">.</span><span class="n">Stock</span><span class="o">.</span><span class="n">objects</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">code</span><span class="o">=</span><span class="n">query</span><span class="p">)</span>
+                <span class="k">except</span> <span class="n">exceptions</span><span class="o">.</span><span class="n">ObjectDoesNotExist</span><span class="p">:</span>
+                    <span class="n">stock</span> <span class="o">=</span> <span class="n">models</span><span class="o">.</span><span class="n">Stock</span><span class="p">(</span><span class="n">code</span><span class="o">=</span><span class="n">query</span><span class="p">,</span> <span class="n">name</span><span class="o">=</span><span class="n">info_json</span><span class="p">[</span><span class="s2">&quot;JongName&quot;</span><span class="p">])</span>
+                    <span class="n">stock</span><span class="o">.</span><span class="n">save</span><span class="p">()</span>
+
+        <span class="n">statement_result</span> <span class="o">=</span> <span class="n">get_xml_request</span><span class="p">(</span><span class="n">krx_statement_query_url</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">query</span><span class="p">))</span>
+        <span class="k">if</span> <span class="n">statement_result</span><span class="p">:</span>
+            <span class="n">balance_sheet</span> <span class="o">=</span> <span class="n">XmlDictConfig</span><span class="p">(</span><span class="n">statement_result</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">find</span><span class="p">(</span><span class="s2">&quot;TBL_DaeCha&quot;</span><span class="p">))</span>
+            <span class="k">if</span> <span class="s2">&quot;TBL_DaeCha_data&quot;</span> <span class="ow">in</span> <span class="n">balance_sheet</span><span class="p">:</span>
+                <span class="n">hangmok_list</span> <span class="o">=</span> <span class="p">[]</span>
+                <span class="k">for</span> <span class="n">item</span> <span class="ow">in</span> <span class="n">balance_sheet</span><span class="p">[</span><span class="s2">&quot;TBL_DaeCha_data&quot;</span><span class="p">]:</span>
+                    <span class="c1"># 항목 이름 뒤에 숫자를 붙여 둬서 쓰기 어려우므로 제거</span>
+                    <span class="n">item</span> <span class="o">=</span> <span class="p">{</span><span class="n">k</span><span class="p">[:</span><span class="o">-</span><span class="mi">1</span><span class="p">]:</span> <span class="n">v</span> <span class="k">for</span> <span class="n">k</span><span class="p">,</span> <span class="n">v</span> <span class="ow">in</span> <span class="n">item</span><span class="o">.</span><span class="n">items</span><span class="p">()}</span>
+                    <span class="n">hangmok_list</span><span class="o">.</span><span class="n">append</span><span class="p">([</span><span class="n">item</span><span class="p">[</span><span class="n">order</span><span class="p">]</span> <span class="k">for</span> <span class="n">order</span> <span class="ow">in</span> <span class="n">balance_order</span><span class="p">])</span>
+                <span class="n">balance_sheet</span><span class="p">[</span><span class="s2">&quot;TBL_DaeCha_data&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">hangmok_list</span>
+                <span class="n">render_dict</span><span class="p">[</span><span class="s2">&quot;balance_sheet&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">balance_sheet</span>
+
+            <span class="n">income_statement</span> <span class="o">=</span> <span class="n">XmlDictConfig</span><span class="p">(</span><span class="n">statement_result</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">find</span><span class="p">(</span><span class="s2">&quot;TBL_SonIk&quot;</span><span class="p">))</span>
+            <span class="k">if</span> <span class="s2">&quot;TBL_SonIk_data&quot;</span> <span class="ow">in</span> <span class="n">income_statement</span><span class="p">:</span>
+                <span class="n">hangmok_list</span> <span class="o">=</span> <span class="p">[]</span>
+                <span class="k">for</span> <span class="n">item</span> <span class="ow">in</span> <span class="n">income_statement</span><span class="p">[</span><span class="s2">&quot;TBL_SonIk_data&quot;</span><span class="p">]:</span>
+                    <span class="c1"># 항목 이름 뒤에 숫자를 붙여 둬서 쓰기 어려우므로 제거</span>
+                    <span class="n">item</span> <span class="o">=</span> <span class="p">{</span><span class="n">k</span><span class="p">[:</span><span class="o">-</span><span class="mi">1</span><span class="p">]:</span> <span class="n">v</span> <span class="k">for</span> <span class="n">k</span><span class="p">,</span> <span class="n">v</span> <span class="ow">in</span> <span class="n">item</span><span class="o">.</span><span class="n">items</span><span class="p">()}</span>
+                    <span class="n">hangmok_list</span><span class="o">.</span><span class="n">append</span><span class="p">([</span><span class="n">item</span><span class="p">[</span><span class="n">order</span><span class="p">]</span> <span class="k">for</span> <span class="n">order</span> <span class="ow">in</span> <span class="n">balance_order</span><span class="p">])</span>
+                <span class="n">income_statement</span><span class="p">[</span><span class="s2">&quot;TBL_SonIk_data&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">hangmok_list</span>
+                <span class="n">render_dict</span><span class="p">[</span><span class="s2">&quot;income_statement&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">income_statement</span>
+
+            <span class="n">cash_flow</span> <span class="o">=</span> <span class="n">XmlDictConfig</span><span class="p">(</span><span class="n">statement_result</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">find</span><span class="p">(</span><span class="s2">&quot;TBL_CashFlow&quot;</span><span class="p">))</span>
+            <span class="k">if</span> <span class="s2">&quot;TBL_CashFlow_data&quot;</span> <span class="ow">in</span> <span class="n">cash_flow</span><span class="p">:</span>
+                <span class="n">hangmok_list</span> <span class="o">=</span> <span class="p">[]</span>
+                <span class="k">for</span> <span class="n">item</span> <span class="ow">in</span> <span class="n">cash_flow</span><span class="p">[</span><span class="s2">&quot;TBL_CashFlow_data&quot;</span><span class="p">]:</span>
+                    <span class="c1"># 항목 이름 뒤에 숫자를 붙여 둬서 쓰기 어려우므로 제거</span>
+                    <span class="n">item</span> <span class="o">=</span> <span class="p">{</span><span class="n">k</span><span class="p">[:</span><span class="o">-</span><span class="mi">1</span><span class="p">]:</span> <span class="n">v</span> <span class="k">for</span> <span class="n">k</span><span class="p">,</span> <span class="n">v</span> <span class="ow">in</span> <span class="n">item</span><span class="o">.</span><span class="n">items</span><span class="p">()}</span>
+                    <span class="n">hangmok_list</span><span class="o">.</span><span class="n">append</span><span class="p">([</span><span class="n">item</span><span class="p">[</span><span class="n">order</span><span class="p">]</span> <span class="k">for</span> <span class="n">order</span> <span class="ow">in</span> <span class="n">cash_order</span><span class="p">])</span>
+                <span class="n">cash_flow</span><span class="p">[</span><span class="s2">&quot;TBL_CashFlow_data&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">hangmok_list</span>
+                <span class="n">render_dict</span><span class="p">[</span><span class="s2">&quot;cash_flow&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">cash_flow</span>
+            <span class="n">render_dict</span><span class="p">[</span><span class="s2">&quot;statement_result&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">statement_result</span>
+
+    <span class="n">stocks</span> <span class="o">=</span> <span class="n">models</span><span class="o">.</span><span class="n">Stock</span><span class="o">.</span><span class="n">objects</span><span class="o">.</span><span class="n">all</span><span class="p">()</span><span class="o">.</span><span class="n">order_by</span><span class="p">(</span><span class="s2">&quot;code&quot;</span><span class="p">)</span>
+    <span class="n">render_dict</span><span class="p">[</span><span class="s2">&quot;stocks&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">stocks</span>
+    <span class="k">return</span> <span class="n">render</span><span class="p">(</span><span class="n">request</span><span class="p">,</span> <span class="s2">&quot;book/investment/krx_price_query.html&quot;</span><span class="p">,</span> <span class="n">render_dict</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="export_lotto"><a class="viewcode-back" href="../../../book.views.views.html#book.views.views.export_lotto">[docs]</a><span class="k">def</span> <span class="nf">export_lotto</span><span class="p">(</span><span class="n">request</span><span class="p">):</span>
+    <span class="n">max_object</span> <span class="o">=</span> <span class="n">models</span><span class="o">.</span><span class="n">Lotto</span><span class="o">.</span><span class="n">objects</span><span class="o">.</span><span class="n">order_by</span><span class="p">(</span><span class="s2">&quot;-draw_number&quot;</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span>
+
+    <span class="n">max_draw</span> <span class="o">=</span> <span class="n">max_object</span><span class="o">.</span><span class="n">draw_number</span>
+
+    <span class="k">for</span> <span class="n">draw_number</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="n">max_draw</span> <span class="o">+</span> <span class="mi">10</span><span class="p">):</span>
+        <span class="n">result</span><span class="p">,</span> <span class="n">_</span> <span class="o">=</span> <span class="n">utils</span><span class="o">.</span><span class="n">new_lotto</span><span class="p">(</span><span class="n">draw_number</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="n">result</span><span class="p">[</span><span class="s2">&quot;returnValue&quot;</span><span class="p">]</span> <span class="o">==</span> <span class="s2">&quot;fail&quot;</span><span class="p">:</span>
+            <span class="k">break</span>
+
+    <span class="n">all_objects</span> <span class="o">=</span> <span class="n">models</span><span class="o">.</span><span class="n">Lotto</span><span class="o">.</span><span class="n">objects</span><span class="o">.</span><span class="n">order_by</span><span class="p">(</span><span class="s2">&quot;draw_number&quot;</span><span class="p">)</span>
+    <span class="n">result_list</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="k">for</span> <span class="n">obj</span> <span class="ow">in</span> <span class="n">all_objects</span><span class="p">:</span>
+        <span class="n">result_list</span><span class="o">.</span><span class="n">append</span><span class="p">(</span>
+            <span class="s2">&quot;,&quot;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span>
+                <span class="nb">map</span><span class="p">(</span>
+                    <span class="nb">str</span><span class="p">,</span>
+                    <span class="p">[</span>
+                        <span class="n">obj</span><span class="o">.</span><span class="n">draw_number</span><span class="p">,</span>
+                        <span class="n">obj</span><span class="o">.</span><span class="n">numbers</span><span class="p">[</span><span class="s2">&quot;totSellamnt&quot;</span><span class="p">],</span>
+                        <span class="n">obj</span><span class="o">.</span><span class="n">numbers</span><span class="p">[</span><span class="s2">&quot;firstWinamnt&quot;</span><span class="p">],</span>
+                        <span class="n">obj</span><span class="o">.</span><span class="n">numbers</span><span class="p">[</span><span class="s2">&quot;firstPrzwnerCo&quot;</span><span class="p">],</span>
+                        <span class="n">obj</span><span class="o">.</span><span class="n">numbers</span><span class="p">[</span><span class="s2">&quot;drwtNo1&quot;</span><span class="p">],</span>
+                        <span class="n">obj</span><span class="o">.</span><span class="n">numbers</span><span class="p">[</span><span class="s2">&quot;drwtNo2&quot;</span><span class="p">],</span>
+                        <span class="n">obj</span><span class="o">.</span><span class="n">numbers</span><span class="p">[</span><span class="s2">&quot;drwtNo3&quot;</span><span class="p">],</span>
+                        <span class="n">obj</span><span class="o">.</span><span class="n">numbers</span><span class="p">[</span><span class="s2">&quot;drwtNo4&quot;</span><span class="p">],</span>
+                        <span class="n">obj</span><span class="o">.</span><span class="n">numbers</span><span class="p">[</span><span class="s2">&quot;drwtNo5&quot;</span><span class="p">],</span>
+                        <span class="n">obj</span><span class="o">.</span><span class="n">numbers</span><span class="p">[</span><span class="s2">&quot;drwtNo6&quot;</span><span class="p">],</span>
+                    <span class="p">],</span>
+                <span class="p">)</span>
+            <span class="p">)</span>
+        <span class="p">)</span>
+
+    <span class="k">return</span> <span class="n">HttpResponse</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">result_list</span><span class="p">))</span></div>
+
+
+<div class="viewcode-block" id="lotto"><a class="viewcode-back" href="../../../book.views.views.html#book.views.views.lotto">[docs]</a><span class="k">def</span> <span class="nf">lotto</span><span class="p">(</span><span class="n">request</span><span class="p">):</span>
+    <span class="n">render_dict</span> <span class="o">=</span> <span class="n">get_render_dict</span><span class="p">(</span><span class="s2">&quot;lotto&quot;</span><span class="p">)</span>
+
+    <span class="n">result</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span>
+    <span class="k">if</span> <span class="n">request</span><span class="o">.</span><span class="n">POST</span><span class="p">:</span>
+        <span class="n">draw_number</span> <span class="o">=</span> <span class="n">request</span><span class="o">.</span><span class="n">POST</span><span class="p">[</span><span class="s2">&quot;draw_number&quot;</span><span class="p">]</span>
+        <span class="n">render_dict</span><span class="p">[</span><span class="s2">&quot;draw_number&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">draw_number</span>
+
+        <span class="n">result</span><span class="p">,</span> <span class="n">_</span> <span class="o">=</span> <span class="n">utils</span><span class="o">.</span><span class="n">new_lotto</span><span class="p">(</span><span class="n">draw_number</span><span class="p">)</span>
+    <span class="n">all_objects</span> <span class="o">=</span> <span class="n">models</span><span class="o">.</span><span class="n">Lotto</span><span class="o">.</span><span class="n">objects</span><span class="o">.</span><span class="n">order_by</span><span class="p">(</span><span class="s2">&quot;-draw_number&quot;</span><span class="p">)[:</span><span class="mi">30</span><span class="p">]</span>
+    <span class="n">render_dict</span><span class="p">[</span><span class="s2">&quot;result&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">result</span>
+    <span class="n">render_dict</span><span class="p">[</span><span class="s2">&quot;all_objects&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">all_objects</span>
+
+    <span class="k">return</span> <span class="n">render</span><span class="p">(</span><span class="n">request</span><span class="p">,</span> <span class="s2">&quot;book/investment/lotto.html&quot;</span><span class="p">,</span> <span class="n">render_dict</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="wine"><a class="viewcode-back" href="../../../book.views.views.html#book.views.views.wine">[docs]</a><span class="k">def</span> <span class="nf">wine</span><span class="p">(</span><span class="n">request</span><span class="p">):</span>
+    <span class="n">render_dict</span> <span class="o">=</span> <span class="n">get_render_dict</span><span class="p">(</span><span class="s2">&quot;wine&quot;</span><span class="p">)</span>
+
+    <span class="n">wine_list</span> <span class="o">=</span> <span class="n">models</span><span class="o">.</span><span class="n">Wine</span><span class="o">.</span><span class="n">objects</span><span class="o">.</span><span class="n">all</span><span class="p">()</span>
+    <span class="n">render_dict</span><span class="p">[</span><span class="s2">&quot;wine_list&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">wine_list</span>
+    <span class="k">return</span> <span class="n">render</span><span class="p">(</span><span class="n">request</span><span class="p">,</span> <span class="s2">&quot;book/wine.html&quot;</span><span class="p">,</span> <span class="n">render_dict</span><span class="p">)</span></div>
+
+
+<span class="c1"># law_search</span>
+<span class="n">law_query_url</span> <span class="o">=</span> <span class="s2">&quot;http://www.law.go.kr/DRF/lawSearch.do?OC=test&amp;target=law&amp;type=XML&amp;mobileYn=Y&amp;query=</span><span class="si">{}</span><span class="s2">&quot;</span>
+
+
+<div class="viewcode-block" id="law_search"><a class="viewcode-back" href="../../../book.views.views.html#book.views.views.law_search">[docs]</a><span class="k">def</span> <span class="nf">law_search</span><span class="p">(</span><span class="n">request</span><span class="p">):</span>
+    <span class="n">render_dict</span> <span class="o">=</span> <span class="n">get_render_dict</span><span class="p">(</span><span class="s2">&quot;law_search&quot;</span><span class="p">)</span>
+
+    <span class="k">if</span> <span class="n">request</span><span class="o">.</span><span class="n">POST</span><span class="p">:</span>
+        <span class="n">query</span> <span class="o">=</span> <span class="n">request</span><span class="o">.</span><span class="n">POST</span><span class="p">[</span><span class="s2">&quot;query&quot;</span><span class="p">]</span>
+        <span class="n">render_dict</span><span class="p">[</span><span class="s2">&quot;query&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">query</span>
+
+        <span class="n">result</span><span class="p">,</span> <span class="n">tree</span> <span class="o">=</span> <span class="n">get_xml_request</span><span class="p">(</span><span class="n">law_query_url</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">query</span><span class="p">))</span>
+
+        <span class="n">law_list</span> <span class="o">=</span> <span class="p">[</span><span class="n">XmlDictConfig</span><span class="p">(</span><span class="n">node</span><span class="p">)</span> <span class="k">for</span> <span class="n">node</span> <span class="ow">in</span> <span class="n">tree</span><span class="o">.</span><span class="n">findall</span><span class="p">(</span><span class="s2">&quot;law&quot;</span><span class="p">)]</span>
+        <span class="n">render_dict</span><span class="p">[</span><span class="s2">&quot;result&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">result</span>
+        <span class="n">render_dict</span><span class="p">[</span><span class="s2">&quot;law_list&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">law_list</span>
+
+    <span class="k">return</span> <span class="n">render</span><span class="p">(</span><span class="n">request</span><span class="p">,</span> <span class="s2">&quot;book/law_search.html&quot;</span><span class="p">,</span> <span class="n">render_dict</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="todo"><a class="viewcode-back" href="../../../book.views.views.html#book.views.views.todo">[docs]</a><span class="k">def</span> <span class="nf">todo</span><span class="p">(</span><span class="n">request</span><span class="p">):</span>
+    <span class="n">render_dict</span> <span class="o">=</span> <span class="n">get_render_dict</span><span class="p">(</span><span class="s2">&quot;todo&quot;</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">render</span><span class="p">(</span><span class="n">request</span><span class="p">,</span> <span class="s2">&quot;book/todo.html&quot;</span><span class="p">,</span> <span class="n">render_dict</span><span class="p">)</span></div>
+
+
+<span class="c1"># study</span>
+<div class="viewcode-block" id="slide"><a class="viewcode-back" href="../../../book.views.views.html#book.views.views.slide">[docs]</a><span class="k">def</span> <span class="nf">slide</span><span class="p">(</span><span class="n">request</span><span class="p">):</span>
+    <span class="n">render_dict</span> <span class="o">=</span> <span class="n">get_render_dict</span><span class="p">(</span><span class="s2">&quot;slide&quot;</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">render</span><span class="p">(</span><span class="n">request</span><span class="p">,</span> <span class="s2">&quot;book/study/slide.html&quot;</span><span class="p">,</span> <span class="n">render_dict</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="paper"><a class="viewcode-back" href="../../../book.views.views.html#book.views.views.paper">[docs]</a><span class="k">def</span> <span class="nf">paper</span><span class="p">(</span><span class="n">request</span><span class="p">):</span>
+    <span class="n">render_dict</span> <span class="o">=</span> <span class="n">get_render_dict</span><span class="p">(</span><span class="s2">&quot;paper&quot;</span><span class="p">)</span>
+    <span class="n">paper_list</span> <span class="o">=</span> <span class="n">models</span><span class="o">.</span><span class="n">Paper</span><span class="o">.</span><span class="n">objects</span><span class="o">.</span><span class="n">all</span><span class="p">()</span>
+
+    <span class="n">render_dict</span><span class="p">[</span><span class="s2">&quot;paper_list&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">paper_list</span>
+    <span class="k">return</span> <span class="n">render</span><span class="p">(</span><span class="n">request</span><span class="p">,</span> <span class="s2">&quot;book/study/paper.html&quot;</span><span class="p">,</span> <span class="n">render_dict</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="colab"><a class="viewcode-back" href="../../../book.views.views.html#book.views.views.colab">[docs]</a><span class="k">def</span> <span class="nf">colab</span><span class="p">(</span><span class="n">request</span><span class="p">):</span>
+    <span class="n">render_dict</span> <span class="o">=</span> <span class="n">get_render_dict</span><span class="p">(</span><span class="s2">&quot;colab&quot;</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">render</span><span class="p">(</span><span class="n">request</span><span class="p">,</span> <span class="s2">&quot;book/study/colab.html&quot;</span><span class="p">,</span> <span class="n">render_dict</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="idea"><a class="viewcode-back" href="../../../book.views.views.html#book.views.views.idea">[docs]</a><span class="k">def</span> <span class="nf">idea</span><span class="p">(</span><span class="n">request</span><span class="p">):</span>
+    <span class="n">render_dict</span> <span class="o">=</span> <span class="n">get_render_dict</span><span class="p">(</span><span class="s2">&quot;idea&quot;</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">render</span><span class="p">(</span><span class="n">request</span><span class="p">,</span> <span class="s2">&quot;book/idea.html&quot;</span><span class="p">,</span> <span class="n">render_dict</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="chatbot"><a class="viewcode-back" href="../../../book.views.views.html#book.views.views.chatbot">[docs]</a><span class="k">def</span> <span class="nf">chatbot</span><span class="p">(</span><span class="n">request</span><span class="p">):</span>
+    <span class="n">render_dict</span> <span class="o">=</span> <span class="n">get_render_dict</span><span class="p">(</span><span class="s2">&quot;chatbot&quot;</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">render</span><span class="p">(</span><span class="n">request</span><span class="p">,</span> <span class="s2">&quot;book/chatbot/chatbot.html&quot;</span><span class="p">,</span> <span class="n">render_dict</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="query_chatbot"><a class="viewcode-back" href="../../../book.views.views.html#book.views.views.query_chatbot">[docs]</a><span class="k">def</span> <span class="nf">query_chatbot</span><span class="p">(</span><span class="n">request</span><span class="p">):</span>
+    <span class="k">if</span> <span class="n">request</span><span class="o">.</span><span class="n">POST</span><span class="p">:</span>
+        <span class="n">message</span> <span class="o">=</span> <span class="n">request</span><span class="o">.</span><span class="n">POST</span><span class="p">[</span><span class="s2">&quot;message&quot;</span><span class="p">]</span>
+        <span class="n">data</span> <span class="o">=</span> <span class="p">{</span>
+            <span class="s2">&quot;sender&quot;</span><span class="p">:</span> <span class="s2">&quot;Rasa&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;message&quot;</span><span class="p">:</span> <span class="n">message</span><span class="p">,</span>
+        <span class="p">}</span>
+
+        <span class="n">result</span> <span class="o">=</span> <span class="p">{}</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="n">text</span> <span class="o">=</span> <span class="n">json</span><span class="o">.</span><span class="n">loads</span><span class="p">(</span>
+                <span class="n">requests</span><span class="o">.</span><span class="n">post</span><span class="p">(</span><span class="s2">&quot;http://rasa:5005/webhooks/rest/webhook&quot;</span><span class="p">,</span> <span class="n">json</span><span class="o">=</span><span class="n">data</span><span class="p">)</span><span class="o">.</span><span class="n">text</span>
+            <span class="p">)</span>
+            <span class="n">result</span><span class="p">[</span><span class="s2">&quot;text&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">text</span>
+            <span class="n">result</span><span class="p">[</span><span class="s2">&quot;status&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="s2">&quot;success&quot;</span>
+        <span class="k">except</span> <span class="ne">Exception</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+            <span class="n">text</span> <span class="o">=</span> <span class="s2">&quot;Server is not responding&quot;</span>
+            <span class="n">result</span><span class="p">[</span><span class="s2">&quot;text&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="nb">str</span><span class="p">(</span><span class="n">e</span><span class="p">)</span>
+            <span class="n">result</span><span class="p">[</span><span class="s2">&quot;status&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="s2">&quot;failed&quot;</span>
+        <span class="k">return</span> <span class="n">HttpResponse</span><span class="p">(</span><span class="n">json</span><span class="o">.</span><span class="n">dumps</span><span class="p">(</span><span class="n">text</span><span class="p">))</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="k">return</span> <span class="n">HttpResponse</span><span class="p">(</span><span class="s2">&quot;Empty Message&quot;</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="real_estate"><a class="viewcode-back" href="../../../book.views.views.html#book.views.views.real_estate">[docs]</a><span class="k">def</span> <span class="nf">real_estate</span><span class="p">(</span><span class="n">request</span><span class="p">):</span>
+    <span class="n">render_dict</span> <span class="o">=</span> <span class="n">get_render_dict</span><span class="p">(</span><span class="s2">&quot;real_estate&quot;</span><span class="p">)</span>
+
+    <span class="n">price_link</span> <span class="o">=</span> <span class="n">models</span><span class="o">.</span><span class="n">Link</span><span class="o">.</span><span class="n">objects</span><span class="o">.</span><span class="n">filter</span><span class="p">(</span><span class="n">content_type</span><span class="o">=</span><span class="s2">&quot;부동산 시세&quot;</span><span class="p">)</span>
+    <span class="n">useful_link</span> <span class="o">=</span> <span class="n">models</span><span class="o">.</span><span class="n">Link</span><span class="o">.</span><span class="n">objects</span><span class="o">.</span><span class="n">filter</span><span class="p">(</span><span class="n">content_type</span><span class="o">=</span><span class="s2">&quot;부동산&quot;</span><span class="p">)</span>
+
+    <span class="n">check_list</span> <span class="o">=</span> <span class="p">[</span>
+        <span class="s2">&quot;햇빛은 잘 들어오는가?&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;물이 샌(누수) 흔적은 없는가?&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;천장이나 벽, 장판 아래 곰팡이가 핀 곳은 없는가?&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;전기콘센트는 파손된 곳이 없는가?&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;수도는 잘 나오는가?&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;배수는 잘되는가?&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;싱크대, 후드, 수납장 등 파손된 주방시설은 없는가?&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;냉장고를 놓을 수 있는 공간이 있는가?&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;욕실의 변기나 샤워기, 거울 등 파손된 시설은 없는가?&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;세탁기를 놓을 수 있는 공간이 있는가?&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;발코니가 있는가?&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;빨래를 건조할 수 있는 공간이 있는가?&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;방의 높이가 장롱이 들어갈 수 있을 만큼 높은가&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;다용도실 같은 별도의 서비스 공간이 있는가?&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;방충망이나 방범창이 있는가?&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;환기가 잘 되는가?&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;외풍이 심하지 않은가?&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;전기와 수도 계량기는 별도로 사용하는가?&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;주 출입구에 방범시설이 되어 있는가?&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;주차장은 있는가?&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;집 주변에 고물상, 공장 등 혐오시설은 없는가?&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;집 주변에 시장이나 할인마트가 있는가?&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;집 주변에 공원이나 놀이터 등이 있는가?&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;집에서 학교, 어린이집, 학원 등이 가까운가?&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;집에서 병원은 가까운가?&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;지하철역과 버스정류장이 도보로 10분 이내에 있는가?&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;집이 너무 외진 곳에 있지 않은가?&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;저당금액과 총 보증금의 합이 집값의 80%를 넘는가?&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;공부서류들의 내용이 서로 일치하는가?&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;집을 내놓았을 때 잘 나갈 수 있겠는가?&quot;</span><span class="p">,</span>
+    <span class="p">]</span>
+
+    <span class="n">render_dict</span><span class="p">[</span><span class="s2">&quot;price_link&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">price_link</span>
+    <span class="n">render_dict</span><span class="p">[</span><span class="s2">&quot;useful_link&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">useful_link</span>
+    <span class="n">render_dict</span><span class="p">[</span><span class="s2">&quot;check_list&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">check_list</span>
+    <span class="k">return</span> <span class="n">render</span><span class="p">(</span><span class="n">request</span><span class="p">,</span> <span class="s2">&quot;book/real_estate.html&quot;</span><span class="p">,</span> <span class="n">render_dict</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="recommend_book"><a class="viewcode-back" href="../../../book.views.views.html#book.views.views.recommend_book">[docs]</a><span class="k">def</span> <span class="nf">recommend_book</span><span class="p">(</span><span class="n">request</span><span class="p">):</span>
+    <span class="n">render_dict</span> <span class="o">=</span> <span class="n">get_render_dict</span><span class="p">(</span><span class="s2">&quot;recommend_book&quot;</span><span class="p">)</span>
+
+    <span class="n">book_list</span> <span class="o">=</span> <span class="n">models</span><span class="o">.</span><span class="n">Book</span><span class="o">.</span><span class="n">objects</span><span class="o">.</span><span class="n">all</span><span class="p">()</span>
+    <span class="n">render_dict</span><span class="p">[</span><span class="s2">&quot;book_list&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">book_list</span>
+
+    <span class="k">return</span> <span class="n">render</span><span class="p">(</span><span class="n">request</span><span class="p">,</span> <span class="s2">&quot;book/investment/recommend_book.html&quot;</span><span class="p">,</span> <span class="n">render_dict</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="food"><a class="viewcode-back" href="../../../book.views.views.html#book.views.views.food">[docs]</a><span class="k">def</span> <span class="nf">food</span><span class="p">(</span><span class="n">request</span><span class="p">):</span>
+    <span class="n">render_dict</span> <span class="o">=</span> <span class="n">get_render_dict</span><span class="p">(</span><span class="s2">&quot;food&quot;</span><span class="p">)</span>
+
+    <span class="n">restaurant_list</span> <span class="o">=</span> <span class="p">[</span>
+        <span class="p">{</span>
+            <span class="s2">&quot;name&quot;</span><span class="p">:</span> <span class="s2">&quot;고기리막국수&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;famous_for&quot;</span><span class="p">:</span> <span class="s2">&quot;막국수&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;cuisine_type&quot;</span><span class="p">:</span> <span class="s2">&quot;한식&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;address&quot;</span><span class="p">:</span> <span class="s2">&quot;고기리&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;visited&quot;</span><span class="p">:</span> <span class="kc">False</span><span class="p">,</span>
+        <span class="p">},</span>
+        <span class="p">{</span>
+            <span class="s2">&quot;name&quot;</span><span class="p">:</span> <span class="s2">&quot;명동교자&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;famous_for&quot;</span><span class="p">:</span> <span class="s2">&quot;칼국수&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;cuisine_type&quot;</span><span class="p">:</span> <span class="s2">&quot;한식&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;history&quot;</span><span class="p">:</span> <span class="s2">&quot;칼국수, 만두&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;visited&quot;</span><span class="p">:</span> <span class="kc">True</span><span class="p">,</span>
+        <span class="p">},</span>
+        <span class="p">{</span>
+            <span class="s2">&quot;name&quot;</span><span class="p">:</span> <span class="s2">&quot;라모라&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;famous_for&quot;</span><span class="p">:</span> <span class="s2">&quot;파스타&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;cuisine_type&quot;</span><span class="p">:</span> <span class="s2">&quot;양식&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;history&quot;</span><span class="p">:</span> <span class="s2">&quot;트러플 파스타&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;visited&quot;</span><span class="p">:</span> <span class="kc">True</span><span class="p">,</span>
+        <span class="p">},</span>
+        <span class="p">{</span>
+            <span class="s2">&quot;name&quot;</span><span class="p">:</span> <span class="s2">&quot;필동면옥&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;famous_for&quot;</span><span class="p">:</span> <span class="s2">&quot;평양냉면&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;cuisine_type&quot;</span><span class="p">:</span> <span class="s2">&quot;한식&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;history&quot;</span><span class="p">:</span> <span class="s2">&quot;평양냉면&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;visited&quot;</span><span class="p">:</span> <span class="kc">True</span><span class="p">,</span>
+        <span class="p">},</span>
+        <span class="p">{</span>
+            <span class="s2">&quot;name&quot;</span><span class="p">:</span> <span class="s2">&quot;임병주산동손칼국수&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;famous_for&quot;</span><span class="p">:</span> <span class="s2">&quot;칼국수&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;cuisine_type&quot;</span><span class="p">:</span> <span class="s2">&quot;한식&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;history&quot;</span><span class="p">:</span> <span class="s2">&quot;칼국수, 콩국수, 만두&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;visited&quot;</span><span class="p">:</span> <span class="kc">True</span><span class="p">,</span>
+        <span class="p">},</span>
+    <span class="p">]</span>
+
+    <span class="n">render_dict</span><span class="p">[</span><span class="s2">&quot;restaurant_list&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">restaurant_list</span>
+
+    <span class="k">return</span> <span class="n">render</span><span class="p">(</span><span class="n">request</span><span class="p">,</span> <span class="s2">&quot;book/food.html&quot;</span><span class="p">,</span> <span class="n">render_dict</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="image"><a class="viewcode-back" href="../../../book.views.views.html#book.views.views.image">[docs]</a><span class="nd">@login_required</span>
+<span class="k">def</span> <span class="nf">image</span><span class="p">(</span><span class="n">request</span><span class="p">,</span> <span class="n">data_type</span><span class="o">=</span><span class="s2">&quot;pokemon&quot;</span><span class="p">):</span>
+    <span class="k">if</span> <span class="n">data_type</span> <span class="o">==</span> <span class="s2">&quot;pokemon&quot;</span><span class="p">:</span>
+        <span class="n">render_dict</span> <span class="o">=</span> <span class="n">get_render_dict</span><span class="p">(</span><span class="s2">&quot;pokemon&quot;</span><span class="p">)</span>
+    <span class="k">elif</span> <span class="n">data_type</span> <span class="o">==</span> <span class="s2">&quot;people&quot;</span><span class="p">:</span>
+        <span class="n">render_dict</span> <span class="o">=</span> <span class="n">get_render_dict</span><span class="p">(</span><span class="s2">&quot;people&quot;</span><span class="p">)</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="k">raise</span> <span class="ne">KeyError</span><span class="p">(</span><span class="s2">&quot;</span><span class="si">{}</span><span class="s2"> is not valid data_type&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">data_type</span><span class="p">))</span>
+
+    <span class="k">if</span> <span class="n">request</span><span class="o">.</span><span class="n">POST</span><span class="p">:</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="n">url</span> <span class="o">=</span> <span class="n">request</span><span class="o">.</span><span class="n">POST</span><span class="p">[</span><span class="s2">&quot;url&quot;</span><span class="p">]</span>
+            <span class="n">category_id</span> <span class="o">=</span> <span class="n">request</span><span class="o">.</span><span class="n">POST</span><span class="p">[</span><span class="s2">&quot;category&quot;</span><span class="p">]</span>
+
+            <span class="k">if</span> <span class="n">data_type</span> <span class="o">==</span> <span class="s2">&quot;pokemon&quot;</span><span class="p">:</span>
+                <span class="n">result</span> <span class="o">=</span> <span class="n">requests</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">url</span><span class="p">)</span>
+                <span class="n">render_dict</span><span class="p">[</span><span class="s2">&quot;result&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">result</span><span class="o">.</span><span class="n">text</span>
+
+                <span class="n">bs</span> <span class="o">=</span> <span class="n">BeautifulSoup</span><span class="p">(</span><span class="n">result</span><span class="o">.</span><span class="n">text</span><span class="p">,</span> <span class="s2">&quot;html.parser&quot;</span><span class="p">)</span>
+                <span class="c1"># directory list</span>
+                <span class="n">all_a</span> <span class="o">=</span> <span class="n">bs</span><span class="o">.</span><span class="n">findAll</span><span class="p">(</span><span class="s2">&quot;a&quot;</span><span class="p">,</span> <span class="n">text</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+
+                <span class="k">for</span> <span class="n">a</span> <span class="ow">in</span> <span class="n">all_a</span><span class="p">:</span>
+                    <span class="n">views_api</span><span class="o">.</span><span class="n">add_image_client</span><span class="o">.</span><span class="n">delay</span><span class="p">(</span>
+                        <span class="s2">&quot;</span><span class="si">{}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">a</span><span class="p">),</span> <span class="n">url</span><span class="p">,</span> <span class="n">category_id</span><span class="p">,</span> <span class="n">data_type</span>
+                    <span class="p">)</span>
+                <span class="n">render_dict</span><span class="p">[</span><span class="s2">&quot;parsed&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">all_a</span>
+
+            <span class="k">elif</span> <span class="n">data_type</span> <span class="o">==</span> <span class="s2">&quot;people&quot;</span><span class="p">:</span>
+                <span class="n">result</span> <span class="o">=</span> <span class="n">requests</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">url</span><span class="p">)</span>
+                <span class="n">render_dict</span><span class="p">[</span><span class="s2">&quot;result&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">result</span><span class="o">.</span><span class="n">text</span>
+
+                <span class="n">bs</span> <span class="o">=</span> <span class="n">BeautifulSoup</span><span class="p">(</span><span class="n">result</span><span class="o">.</span><span class="n">text</span><span class="p">,</span> <span class="s2">&quot;html.parser&quot;</span><span class="p">)</span>
+                <span class="n">all_a</span> <span class="o">=</span> <span class="n">bs</span><span class="o">.</span><span class="n">findAll</span><span class="p">(</span><span class="s2">&quot;a&quot;</span><span class="p">,</span> <span class="n">text</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+                <span class="n">render_dict</span><span class="p">[</span><span class="s2">&quot;parsed&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">all_a</span>
+
+                <span class="k">for</span> <span class="n">a</span> <span class="ow">in</span> <span class="n">all_a</span><span class="p">:</span>
+                    <span class="n">views_api</span><span class="o">.</span><span class="n">add_image_client</span><span class="o">.</span><span class="n">delay</span><span class="p">(</span>
+                        <span class="s2">&quot;</span><span class="si">{}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">a</span><span class="p">),</span> <span class="n">url</span><span class="p">,</span> <span class="n">category_id</span><span class="p">,</span> <span class="n">data_type</span>
+                    <span class="p">)</span>
+
+        <span class="k">except</span> <span class="ne">KeyError</span><span class="p">:</span>
+            <span class="k">if</span> <span class="s2">&quot;parsed&quot;</span> <span class="ow">in</span> <span class="n">render_dict</span><span class="p">:</span>
+                <span class="n">render_dict</span><span class="p">[</span><span class="s2">&quot;parsed&quot;</span><span class="p">]</span> <span class="o">+=</span> <span class="n">traceback</span><span class="o">.</span><span class="n">format_exc</span><span class="p">()</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="n">render_dict</span><span class="p">[</span><span class="s2">&quot;parsed&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">traceback</span><span class="o">.</span><span class="n">format_exc</span><span class="p">()</span>
+        <span class="k">except</span> <span class="ne">Exception</span><span class="p">:</span>
+            <span class="k">if</span> <span class="s2">&quot;parsed&quot;</span> <span class="ow">in</span> <span class="n">render_dict</span><span class="p">:</span>
+                <span class="n">render_dict</span><span class="p">[</span><span class="s2">&quot;parsed&quot;</span><span class="p">]</span> <span class="o">+=</span> <span class="n">traceback</span><span class="o">.</span><span class="n">format_exc</span><span class="p">()</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="n">render_dict</span><span class="p">[</span><span class="s2">&quot;parsed&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">traceback</span><span class="o">.</span><span class="n">format_exc</span><span class="p">()</span>
+
+    <span class="n">category_list</span> <span class="o">=</span> <span class="n">models</span><span class="o">.</span><span class="n">Category</span><span class="o">.</span><span class="n">objects</span><span class="o">.</span><span class="n">all</span><span class="p">()</span>
+    <span class="n">render_dict</span><span class="p">[</span><span class="s2">&quot;data_type&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">data_type</span>
+    <span class="n">render_dict</span><span class="p">[</span><span class="s2">&quot;category_list&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">category_list</span>
+    <span class="k">return</span> <span class="n">render</span><span class="p">(</span><span class="n">request</span><span class="p">,</span> <span class="s2">&quot;book/add_image.html&quot;</span><span class="p">,</span> <span class="n">render_dict</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="pokemon"><a class="viewcode-back" href="../../../book.views.views.html#book.views.views.pokemon">[docs]</a><span class="nd">@login_required</span>
+<span class="k">def</span> <span class="nf">pokemon</span><span class="p">(</span><span class="n">request</span><span class="p">,</span> <span class="n">page</span><span class="o">=</span><span class="mi">1</span><span class="p">):</span>
+    <span class="n">render_dict</span> <span class="o">=</span> <span class="n">get_render_dict</span><span class="p">(</span><span class="s2">&quot;pokemon_classification&quot;</span><span class="p">)</span>
+
+    <span class="n">query</span> <span class="o">=</span> <span class="n">request</span><span class="o">.</span><span class="n">GET</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;query&quot;</span><span class="p">,</span> <span class="s2">&quot;&quot;</span><span class="p">)</span>
+
+    <span class="n">distinct</span> <span class="o">=</span> <span class="p">(</span>
+        <span class="n">models</span><span class="o">.</span><span class="n">PokemonImage</span><span class="o">.</span><span class="n">objects</span><span class="o">.</span><span class="n">filter</span><span class="p">(</span><span class="n">classified</span><span class="o">=</span><span class="s2">&quot;yes&quot;</span><span class="p">)</span>
+        <span class="o">.</span><span class="n">order_by</span><span class="p">()</span>
+        <span class="o">.</span><span class="n">values</span><span class="p">(</span><span class="s2">&quot;original_label&quot;</span><span class="p">)</span>
+        <span class="o">.</span><span class="n">distinct</span><span class="p">()</span>
+        <span class="o">.</span><span class="n">annotate</span><span class="p">(</span><span class="n">Count</span><span class="p">(</span><span class="s2">&quot;id&quot;</span><span class="p">))</span>
+        <span class="o">.</span><span class="n">order_by</span><span class="p">(</span><span class="s2">&quot;id__count&quot;</span><span class="p">)</span>
+    <span class="p">)</span>
+    <span class="n">distinct</span> <span class="o">=</span> <span class="n">utils</span><span class="o">.</span><span class="n">to_table</span><span class="p">(</span><span class="n">distinct</span><span class="p">,</span> <span class="mi">5</span><span class="p">)</span>
+    <span class="n">render_dict</span><span class="p">[</span><span class="s2">&quot;distinct&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">distinct</span>
+
+    <span class="k">if</span> <span class="n">query</span><span class="p">:</span>
+        <span class="n">image_list</span> <span class="o">=</span> <span class="p">(</span>
+            <span class="n">models</span><span class="o">.</span><span class="n">PokemonImage</span><span class="o">.</span><span class="n">objects</span><span class="o">.</span><span class="n">filter</span><span class="p">(</span><span class="n">original_label__icontains</span><span class="o">=</span><span class="n">query</span><span class="p">)</span>
+            <span class="o">.</span><span class="n">filter</span><span class="p">(</span><span class="n">classified</span><span class="o">=</span><span class="kc">None</span><span class="p">)</span>
+            <span class="o">.</span><span class="n">order_by</span><span class="p">(</span><span class="s2">&quot;?&quot;</span><span class="p">)[:</span><span class="mi">400</span><span class="p">]</span>
+        <span class="p">)</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">image_list</span> <span class="o">=</span> <span class="n">models</span><span class="o">.</span><span class="n">PokemonImage</span><span class="o">.</span><span class="n">objects</span><span class="o">.</span><span class="n">filter</span><span class="p">(</span><span class="n">classified</span><span class="o">=</span><span class="kc">None</span><span class="p">)</span><span class="o">.</span><span class="n">order_by</span><span class="p">(</span><span class="s2">&quot;?&quot;</span><span class="p">)</span>
+
+    <span class="n">p</span><span class="p">,</span> <span class="n">page_info</span> <span class="o">=</span> <span class="n">utils</span><span class="o">.</span><span class="n">get_page_info</span><span class="p">(</span><span class="n">image_list</span><span class="p">,</span> <span class="n">page</span><span class="p">,</span> <span class="mi">20</span><span class="p">)</span>
+    <span class="n">render_dict</span><span class="p">[</span><span class="s2">&quot;image_list&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">p</span>
+    <span class="n">render_dict</span><span class="p">[</span><span class="s2">&quot;page_info&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">page_info</span>
+    <span class="n">render_dict</span><span class="p">[</span><span class="s2">&quot;query&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">query</span>
+
+    <span class="k">return</span> <span class="n">render</span><span class="p">(</span><span class="n">request</span><span class="p">,</span> <span class="s2">&quot;book/pokemon/pokemon.html&quot;</span><span class="p">,</span> <span class="n">render_dict</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="pokemon_sorted"><a class="viewcode-back" href="../../../book.views.views.html#book.views.views.pokemon_sorted">[docs]</a><span class="nd">@login_required</span>
+<span class="k">def</span> <span class="nf">pokemon_sorted</span><span class="p">(</span><span class="n">request</span><span class="p">):</span>
+    <span class="n">render_dict</span> <span class="o">=</span> <span class="n">get_render_dict</span><span class="p">(</span><span class="s2">&quot;pokemon_sorted&quot;</span><span class="p">)</span>
+
+    <span class="n">query</span> <span class="o">=</span> <span class="n">request</span><span class="o">.</span><span class="n">GET</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;query&quot;</span><span class="p">,</span> <span class="s2">&quot;&quot;</span><span class="p">)</span>
+
+    <span class="n">image_list</span> <span class="o">=</span> <span class="n">models</span><span class="o">.</span><span class="n">PokemonRating</span><span class="o">.</span><span class="n">objects</span><span class="o">.</span><span class="n">filter</span><span class="p">(</span><span class="n">deep_model__latest</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span><span class="o">.</span><span class="n">filter</span><span class="p">(</span>
+        <span class="n">image__classified</span><span class="o">=</span><span class="kc">None</span>
+    <span class="p">)</span>
+    <span class="k">if</span> <span class="n">query</span><span class="p">:</span>
+        <span class="n">image_list</span> <span class="o">=</span> <span class="n">image_list</span><span class="o">.</span><span class="n">filter</span><span class="p">(</span><span class="n">image__original_label__icontains</span><span class="o">=</span><span class="n">query</span><span class="p">)</span>
+
+    <span class="n">image_list</span> <span class="o">=</span> <span class="n">image_list</span><span class="o">.</span><span class="n">order_by</span><span class="p">(</span><span class="s2">&quot;-positive&quot;</span><span class="p">)[:</span><span class="mi">50</span><span class="p">]</span>
+
+    <span class="n">render_dict</span><span class="p">[</span><span class="s2">&quot;image_list&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="p">[</span><span class="n">rating</span><span class="o">.</span><span class="n">image</span> <span class="k">for</span> <span class="n">rating</span> <span class="ow">in</span> <span class="n">image_list</span><span class="p">]</span>
+    <span class="n">render_dict</span><span class="p">[</span><span class="s2">&quot;query&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">query</span>
+
+    <span class="k">return</span> <span class="n">render</span><span class="p">(</span><span class="n">request</span><span class="p">,</span> <span class="s2">&quot;book/pokemon/pokemon.html&quot;</span><span class="p">,</span> <span class="n">render_dict</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="pokemon_result"><a class="viewcode-back" href="../../../book.views.views.html#book.views.views.pokemon_result">[docs]</a><span class="nd">@login_required</span>
+<span class="k">def</span> <span class="nf">pokemon_result</span><span class="p">(</span><span class="n">request</span><span class="p">,</span> <span class="n">page</span><span class="o">=</span><span class="mi">1</span><span class="p">):</span>
+    <span class="n">classified</span> <span class="o">=</span> <span class="n">request</span><span class="o">.</span><span class="n">GET</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;arg&quot;</span><span class="p">,</span> <span class="s2">&quot;yes&quot;</span><span class="p">)</span>
+    <span class="n">render_dict</span> <span class="o">=</span> <span class="n">get_render_dict</span><span class="p">(</span><span class="s2">&quot;pokemon_result_</span><span class="si">{}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">classified</span><span class="p">))</span>
+
+    <span class="n">query</span> <span class="o">=</span> <span class="n">request</span><span class="o">.</span><span class="n">GET</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;query&quot;</span><span class="p">,</span> <span class="s2">&quot;&quot;</span><span class="p">)</span>
+    <span class="n">image_list</span> <span class="o">=</span> <span class="n">models</span><span class="o">.</span><span class="n">PokemonImage</span><span class="o">.</span><span class="n">objects</span><span class="o">.</span><span class="n">filter</span><span class="p">(</span><span class="n">classified</span><span class="o">=</span><span class="n">classified</span><span class="p">)</span>
+
+    <span class="n">distinct</span> <span class="o">=</span> <span class="p">(</span>
+        <span class="n">image_list</span><span class="o">.</span><span class="n">order_by</span><span class="p">()</span>
+        <span class="o">.</span><span class="n">values</span><span class="p">(</span><span class="s2">&quot;original_label&quot;</span><span class="p">)</span>
+        <span class="o">.</span><span class="n">distinct</span><span class="p">()</span>
+        <span class="o">.</span><span class="n">annotate</span><span class="p">(</span><span class="n">Count</span><span class="p">(</span><span class="s2">&quot;id&quot;</span><span class="p">))</span>
+        <span class="o">.</span><span class="n">order_by</span><span class="p">(</span><span class="s2">&quot;id__count&quot;</span><span class="p">)</span>
+    <span class="p">)</span>
+    <span class="n">distinct</span> <span class="o">=</span> <span class="n">utils</span><span class="o">.</span><span class="n">to_table</span><span class="p">(</span><span class="n">distinct</span><span class="p">,</span> <span class="mi">5</span><span class="p">)</span>
+
+    <span class="k">if</span> <span class="n">query</span><span class="p">:</span>
+        <span class="n">image_list</span> <span class="o">=</span> <span class="n">image_list</span><span class="o">.</span><span class="n">filter</span><span class="p">(</span><span class="n">original_label</span><span class="o">=</span><span class="n">query</span><span class="p">)</span>
+    <span class="n">p</span><span class="p">,</span> <span class="n">page_info</span> <span class="o">=</span> <span class="n">utils</span><span class="o">.</span><span class="n">get_page_info</span><span class="p">(</span><span class="n">image_list</span><span class="p">,</span> <span class="n">page</span><span class="p">,</span> <span class="mi">100</span><span class="p">)</span>
+
+    <span class="n">render_dict</span><span class="p">[</span><span class="s2">&quot;distinct&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">distinct</span>
+    <span class="n">render_dict</span><span class="p">[</span><span class="s2">&quot;image_list&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">p</span>
+    <span class="n">render_dict</span><span class="p">[</span><span class="s2">&quot;page_info&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">page_info</span>
+    <span class="n">render_dict</span><span class="p">[</span><span class="s2">&quot;arg&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">classified</span>
+
+    <span class="n">verified_count</span> <span class="o">=</span> <span class="n">image_list</span><span class="o">.</span><span class="n">count</span><span class="p">()</span>
+    <span class="n">row_count</span> <span class="o">=</span> <span class="mi">10</span>
+    <span class="n">verified_table</span> <span class="o">=</span> <span class="n">utils</span><span class="o">.</span><span class="n">to_table</span><span class="p">(</span><span class="n">p</span><span class="p">,</span> <span class="n">row_count</span><span class="p">)</span>
+    <span class="n">render_dict</span><span class="p">[</span><span class="s2">&quot;query&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">query</span>
+    <span class="n">render_dict</span><span class="p">[</span><span class="s2">&quot;verified_table&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">verified_table</span>
+    <span class="n">render_dict</span><span class="p">[</span><span class="s2">&quot;verified_count&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">verified_count</span>
+
+    <span class="k">return</span> <span class="n">render</span><span class="p">(</span><span class="n">request</span><span class="p">,</span> <span class="s2">&quot;book/pokemon/pokemon_result.html&quot;</span><span class="p">,</span> <span class="n">render_dict</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="pokemon_export"><a class="viewcode-back" href="../../../book.views.views.html#book.views.views.pokemon_export">[docs]</a><span class="nd">@login_required</span>
+<span class="k">def</span> <span class="nf">pokemon_export</span><span class="p">(</span><span class="n">request</span><span class="p">,</span> <span class="n">classified</span><span class="o">=</span><span class="s2">&quot;yes&quot;</span><span class="p">,</span> <span class="n">page</span><span class="o">=</span><span class="mi">1</span><span class="p">):</span>
+    <span class="n">count</span> <span class="o">=</span> <span class="mi">1000</span>
+    <span class="n">image_list</span> <span class="o">=</span> <span class="n">models</span><span class="o">.</span><span class="n">PokemonImage</span><span class="o">.</span><span class="n">objects</span><span class="o">.</span><span class="n">filter</span><span class="p">(</span><span class="n">classified</span><span class="o">=</span><span class="n">classified</span><span class="p">)</span>
+
+    <span class="k">return</span> <span class="n">utils</span><span class="o">.</span><span class="n">get_compressed_result</span><span class="p">(</span><span class="n">image_list</span><span class="p">,</span> <span class="n">count</span><span class="p">,</span> <span class="n">page</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="pokemon_relabel"><a class="viewcode-back" href="../../../book.views.views.html#book.views.views.pokemon_relabel">[docs]</a><span class="nd">@login_required</span>
+<span class="k">def</span> <span class="nf">pokemon_relabel</span><span class="p">(</span><span class="n">request</span><span class="p">):</span>
+    <span class="n">render_dict</span> <span class="o">=</span> <span class="n">get_render_dict</span><span class="p">(</span><span class="s2">&quot;pokemon_relabel&quot;</span><span class="p">)</span>
+    <span class="n">query</span> <span class="o">=</span> <span class="n">request</span><span class="o">.</span><span class="n">GET</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;query&quot;</span><span class="p">,</span> <span class="s2">&quot;&quot;</span><span class="p">)</span>
+
+    <span class="k">if</span> <span class="n">query</span><span class="p">:</span>
+        <span class="n">objects</span> <span class="o">=</span> <span class="n">models</span><span class="o">.</span><span class="n">PokemonImage</span><span class="o">.</span><span class="n">objects</span><span class="o">.</span><span class="n">filter</span><span class="p">(</span><span class="n">url__endswith</span><span class="o">=</span><span class="n">query</span><span class="p">)</span>
+
+        <span class="n">rating_list</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="k">for</span> <span class="n">obj</span> <span class="ow">in</span> <span class="n">objects</span><span class="p">:</span>
+            <span class="n">rating_list</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">models</span><span class="o">.</span><span class="n">PokemonRating</span><span class="o">.</span><span class="n">objects</span><span class="o">.</span><span class="n">filter</span><span class="p">(</span><span class="n">image</span><span class="o">=</span><span class="n">obj</span><span class="p">))</span>
+        <span class="n">render_dict</span><span class="p">[</span><span class="s2">&quot;objects&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="nb">zip</span><span class="p">(</span><span class="n">objects</span><span class="p">,</span> <span class="n">rating_list</span><span class="p">)</span>
+
+    <span class="n">render_dict</span><span class="p">[</span><span class="s2">&quot;query&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">query</span>
+
+    <span class="k">return</span> <span class="n">render</span><span class="p">(</span><span class="n">request</span><span class="p">,</span> <span class="s2">&quot;book/pokemon/pokemon_relabel.html&quot;</span><span class="p">,</span> <span class="n">render_dict</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="compute_expectation"><a class="viewcode-back" href="../../../book.views.views.html#book.views.views.compute_expectation">[docs]</a><span class="k">def</span> <span class="nf">compute_expectation</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">coeff</span><span class="p">):</span>
+    <span class="n">value</span> <span class="o">=</span> <span class="n">coeff</span><span class="p">[</span><span class="s2">&quot;a&quot;</span><span class="p">]</span> <span class="o">/</span> <span class="p">(</span><span class="mi">1</span> <span class="o">+</span> <span class="n">math</span><span class="o">.</span><span class="n">exp</span><span class="p">(</span><span class="o">-</span><span class="p">(</span><span class="n">x</span> <span class="o">-</span> <span class="n">coeff</span><span class="p">[</span><span class="s2">&quot;x0&quot;</span><span class="p">])</span> <span class="o">/</span> <span class="n">coeff</span><span class="p">[</span><span class="s2">&quot;b&quot;</span><span class="p">]))</span>
+    <span class="k">return</span> <span class="n">value</span></div>
+
+
+<span class="n">corona_constant</span> <span class="o">=</span> <span class="p">{</span>
+    <span class="s2">&quot;Korea&quot;</span><span class="p">:</span> <span class="p">{</span>
+        <span class="s2">&quot;confirmed&quot;</span><span class="p">:</span> <span class="p">{</span><span class="s2">&quot;a&quot;</span><span class="p">:</span> <span class="mf">6591.4785</span><span class="p">,</span> <span class="s2">&quot;b&quot;</span><span class="p">:</span> <span class="mf">2.7211623</span><span class="p">,</span> <span class="s2">&quot;x0&quot;</span><span class="p">:</span> <span class="mf">36.688503</span><span class="p">},</span>
+        <span class="s2">&quot;death&quot;</span><span class="p">:</span> <span class="p">{</span><span class="s2">&quot;a&quot;</span><span class="p">:</span> <span class="mf">17.149622</span><span class="p">,</span> <span class="s2">&quot;b&quot;</span><span class="p">:</span> <span class="mf">1.7989516</span><span class="p">,</span> <span class="s2">&quot;x0&quot;</span><span class="p">:</span> <span class="mf">31.290888</span><span class="p">},</span>
+    <span class="p">},</span>
+    <span class="s2">&quot;China&quot;</span><span class="p">:</span> <span class="p">{</span>
+        <span class="s2">&quot;confirmed&quot;</span><span class="p">:</span> <span class="p">{</span><span class="s2">&quot;a&quot;</span><span class="p">:</span> <span class="mf">80307.234</span><span class="p">,</span> <span class="s2">&quot;b&quot;</span><span class="p">:</span> <span class="mf">4.234807</span><span class="p">,</span> <span class="s2">&quot;x0&quot;</span><span class="p">:</span> <span class="mf">18.250608</span><span class="p">},</span>
+        <span class="s2">&quot;death&quot;</span><span class="p">:</span> <span class="p">{</span><span class="s2">&quot;a&quot;</span><span class="p">:</span> <span class="mf">3089.586</span><span class="p">,</span> <span class="s2">&quot;b&quot;</span><span class="p">:</span> <span class="mf">6.176563</span><span class="p">,</span> <span class="s2">&quot;x0&quot;</span><span class="p">:</span> <span class="mf">24.240225</span><span class="p">},</span>
+    <span class="p">},</span>
+<span class="p">}</span>
+
+
+<div class="viewcode-block" id="range_date"><a class="viewcode-back" href="../../../book.views.views.html#book.views.views.range_date">[docs]</a><span class="k">def</span> <span class="nf">range_date</span><span class="p">(</span><span class="n">start</span><span class="p">,</span> <span class="n">end</span><span class="p">):</span>
+    <span class="n">diff</span> <span class="o">=</span> <span class="p">(</span><span class="n">end</span> <span class="o">-</span> <span class="n">start</span><span class="p">)</span><span class="o">.</span><span class="n">days</span>
+
+    <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">diff</span><span class="p">):</span>
+        <span class="k">yield</span> <span class="n">start</span> <span class="o">+</span> <span class="n">datetime</span><span class="o">.</span><span class="n">timedelta</span><span class="p">(</span><span class="n">days</span><span class="o">=</span><span class="n">i</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="corona"><a class="viewcode-back" href="../../../book.views.views.html#book.views.views.corona">[docs]</a><span class="k">def</span> <span class="nf">corona</span><span class="p">(</span><span class="n">request</span><span class="p">):</span>
+    <span class="n">render_dict</span> <span class="o">=</span> <span class="n">get_render_dict</span><span class="p">(</span><span class="s2">&quot;corona&quot;</span><span class="p">)</span>
+
+    <span class="n">corona_list</span> <span class="o">=</span> <span class="n">models</span><span class="o">.</span><span class="n">Corona</span><span class="o">.</span><span class="n">objects</span><span class="o">.</span><span class="n">order_by</span><span class="p">(</span><span class="s2">&quot;date&quot;</span><span class="p">)</span>
+    <span class="k">if</span> <span class="ow">not</span> <span class="n">corona_list</span><span class="p">:</span>
+        <span class="k">return</span> <span class="n">render</span><span class="p">(</span><span class="n">request</span><span class="p">,</span> <span class="s2">&quot;book/corona.html&quot;</span><span class="p">,</span> <span class="n">render_dict</span><span class="p">)</span>
+
+    <span class="n">start_date</span> <span class="o">=</span> <span class="n">corona_list</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">date</span>
+    <span class="n">end_date</span> <span class="o">=</span> <span class="n">datetime</span><span class="o">.</span><span class="n">date</span><span class="o">.</span><span class="n">today</span><span class="p">()</span> <span class="o">+</span> <span class="n">datetime</span><span class="o">.</span><span class="n">timedelta</span><span class="p">(</span><span class="n">days</span><span class="o">=</span><span class="mi">10</span><span class="p">)</span>
+
+    <span class="n">labels</span> <span class="o">=</span> <span class="p">[]</span>
+
+    <span class="k">for</span> <span class="n">date</span> <span class="ow">in</span> <span class="n">range_date</span><span class="p">(</span><span class="n">start_date</span><span class="p">,</span> <span class="n">end_date</span><span class="p">):</span>
+        <span class="n">labels</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">date</span><span class="p">)</span>
+
+    <span class="n">render_dict</span><span class="p">[</span><span class="s2">&quot;labels&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">labels</span>
+
+    <span class="n">country_list</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="k">for</span> <span class="n">country</span> <span class="ow">in</span> <span class="p">[</span><span class="s2">&quot;China&quot;</span><span class="p">,</span> <span class="s2">&quot;Korea&quot;</span><span class="p">]:</span>
+        <span class="n">counts</span> <span class="o">=</span> <span class="n">models</span><span class="o">.</span><span class="n">Corona</span><span class="o">.</span><span class="n">objects</span><span class="o">.</span><span class="n">filter</span><span class="p">(</span><span class="n">country</span><span class="o">=</span><span class="n">country</span><span class="p">)</span><span class="o">.</span><span class="n">order_by</span><span class="p">(</span><span class="s2">&quot;date&quot;</span><span class="p">)</span>
+
+        <span class="n">actual_start_date</span> <span class="o">=</span> <span class="n">counts</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">date</span>
+
+        <span class="n">count_list</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="k">for</span> <span class="n">count_type</span> <span class="ow">in</span> <span class="p">[</span><span class="s2">&quot;confirmed&quot;</span><span class="p">,</span> <span class="s2">&quot;death&quot;</span><span class="p">]:</span>
+            <span class="n">actual</span> <span class="o">=</span> <span class="p">[]</span>
+            <span class="k">for</span> <span class="n">_</span> <span class="ow">in</span> <span class="n">range_date</span><span class="p">(</span><span class="n">start_date</span><span class="p">,</span> <span class="n">actual_start_date</span><span class="p">):</span>
+                <span class="n">actual</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="s2">&quot;NaN&quot;</span><span class="p">)</span>
+
+            <span class="k">for</span> <span class="n">count</span> <span class="ow">in</span> <span class="n">counts</span><span class="p">:</span>
+                <span class="n">actual</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="nb">getattr</span><span class="p">(</span><span class="n">count</span><span class="p">,</span> <span class="n">count_type</span><span class="p">))</span>
+
+            <span class="n">expected</span> <span class="o">=</span> <span class="p">[]</span>
+            <span class="n">param</span> <span class="o">=</span> <span class="n">corona_constant</span><span class="p">[</span><span class="n">country</span><span class="p">][</span><span class="n">count_type</span><span class="p">]</span>
+
+            <span class="c1"># for _ in range_date(start_date, actual_end_date):</span>
+            <span class="c1">#     expected.append(&quot;NaN&quot;)</span>
+
+            <span class="k">for</span> <span class="n">date</span> <span class="ow">in</span> <span class="n">range_date</span><span class="p">(</span><span class="n">start_date</span><span class="p">,</span> <span class="n">end_date</span><span class="p">):</span>
+                <span class="n">off</span> <span class="o">=</span> <span class="p">(</span><span class="n">date</span> <span class="o">-</span> <span class="n">start_date</span><span class="p">)</span><span class="o">.</span><span class="n">days</span> <span class="o">+</span> <span class="mi">1</span>
+                <span class="k">if</span> <span class="n">country</span> <span class="o">==</span> <span class="s2">&quot;Korea&quot;</span><span class="p">:</span>
+                    <span class="n">off</span> <span class="o">=</span> <span class="n">off</span> <span class="o">-</span> <span class="mi">3</span>
+                <span class="n">value</span> <span class="o">=</span> <span class="n">compute_expectation</span><span class="p">(</span><span class="n">off</span><span class="p">,</span> <span class="n">param</span><span class="p">)</span>
+                <span class="n">expected</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">value</span><span class="p">)</span>
+
+            <span class="n">count_list</span><span class="o">.</span><span class="n">append</span><span class="p">((</span><span class="n">count_type</span><span class="p">,</span> <span class="n">actual</span><span class="p">,</span> <span class="n">expected</span><span class="p">))</span>
+        <span class="n">country_list</span><span class="o">.</span><span class="n">append</span><span class="p">((</span><span class="n">country</span><span class="p">,</span> <span class="n">count_list</span><span class="p">))</span>
+
+    <span class="n">render_dict</span><span class="p">[</span><span class="s2">&quot;country_list&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">country_list</span>
+    <span class="k">return</span> <span class="n">render</span><span class="p">(</span><span class="n">request</span><span class="p">,</span> <span class="s2">&quot;book/corona.html&quot;</span><span class="p">,</span> <span class="n">render_dict</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="add_user"><a class="viewcode-back" href="../../../book.views.views.html#book.views.views.add_user">[docs]</a><span class="nd">@user_passes_test</span><span class="p">(</span><span class="k">lambda</span> <span class="n">u</span><span class="p">:</span> <span class="n">u</span><span class="o">.</span><span class="n">is_superuser</span><span class="p">)</span>
+<span class="k">def</span> <span class="nf">add_user</span><span class="p">(</span><span class="n">request</span><span class="p">):</span>
+    <span class="n">user</span> <span class="o">=</span> <span class="n">request</span><span class="o">.</span><span class="n">GET</span><span class="p">[</span><span class="s2">&quot;username&quot;</span><span class="p">]</span>
+    <span class="n">checked</span> <span class="o">=</span> <span class="n">request</span><span class="o">.</span><span class="n">GET</span><span class="p">[</span><span class="s2">&quot;checked&quot;</span><span class="p">]</span>
+
+    <span class="n">obj</span> <span class="o">=</span> <span class="n">models</span><span class="o">.</span><span class="n">User</span><span class="o">.</span><span class="n">objects</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">username</span><span class="o">=</span><span class="n">user</span><span class="p">)</span>
+    <span class="n">obj</span><span class="o">.</span><span class="n">checked</span> <span class="o">=</span> <span class="n">checked</span>
+    <span class="n">obj</span><span class="o">.</span><span class="n">save</span><span class="p">()</span>
+
+    <span class="k">return</span> <span class="n">HttpResponse</span><span class="p">(</span><span class="s2">&quot;1&quot;</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="relabel"><a class="viewcode-back" href="../../../book.views.views.html#book.views.views.relabel">[docs]</a><span class="nd">@user_passes_test</span><span class="p">(</span><span class="k">lambda</span> <span class="n">u</span><span class="p">:</span> <span class="n">u</span><span class="o">.</span><span class="n">is_superuser</span><span class="p">)</span>
+<span class="k">def</span> <span class="nf">relabel</span><span class="p">(</span><span class="n">request</span><span class="p">):</span>
+    <span class="n">render_dict</span> <span class="o">=</span> <span class="n">get_render_dict</span><span class="p">(</span><span class="s2">&quot;people_relabel&quot;</span><span class="p">)</span>
+    <span class="n">query</span> <span class="o">=</span> <span class="n">request</span><span class="o">.</span><span class="n">GET</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;query&quot;</span><span class="p">,</span> <span class="s2">&quot;&quot;</span><span class="p">)</span>
+
+    <span class="k">if</span> <span class="n">query</span><span class="p">:</span>
+        <span class="n">objects</span> <span class="o">=</span> <span class="n">models</span><span class="o">.</span><span class="n">PeopleImage</span><span class="o">.</span><span class="n">objects</span><span class="o">.</span><span class="n">filter</span><span class="p">(</span><span class="n">url__endswith</span><span class="o">=</span><span class="n">query</span><span class="p">)</span>
+        <span class="n">render_dict</span><span class="p">[</span><span class="s2">&quot;objects&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">objects</span>
+    <span class="n">render_dict</span><span class="p">[</span><span class="s2">&quot;query&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">query</span>
+
+    <span class="k">return</span> <span class="n">render</span><span class="p">(</span><span class="n">request</span><span class="p">,</span> <span class="s2">&quot;book/people/people_relabel.html&quot;</span><span class="p">,</span> <span class="n">render_dict</span><span class="p">)</span></div>
+</pre></div>
+
+           </div>
+           
+          </div>
+          <footer>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2020, Yoonjae Park
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>

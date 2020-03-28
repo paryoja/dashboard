@@ -1,0 +1,508 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>book.views.views_api &mdash; Yozit dashboard  documentation</title>
+  
+
+  
+  
+  
+  
+
+  
+  <script type="text/javascript" src="../../../_static/js/modernizr.min.js"></script>
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../../../" src="../../../_static/documentation_options.js"></script>
+        <script src="../../../_static/jquery.js"></script>
+        <script src="../../../_static/underscore.js"></script>
+        <script src="../../../_static/doctools.js"></script>
+        <script src="../../../_static/language_data.js"></script>
+    
+    <script type="text/javascript" src="../../../_static/js/theme.js"></script>
+
+    
+
+  
+  <link rel="stylesheet" href="../../../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
+    <link rel="index" title="Index" href="../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="../../../index.html" class="icon icon-home"> Yozit dashboard
+          
+
+          
+          </a>
+
+          
+            
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <p class="caption"><span class="caption-text">Contents:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../book.html">book package</a></li>
+</ul>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../../index.html">Yozit dashboard</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../../../index.html">Docs</a> &raquo;</li>
+        
+          <li><a href="../../index.html">Module code</a> &raquo;</li>
+        
+      <li>book.views.views_api</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <h1>Source code for book.views.views_api</h1><div class="highlight"><pre>
+<span></span><span class="kn">import</span> <span class="nn">json</span>
+<span class="kn">import</span> <span class="nn">logging</span>
+<span class="kn">import</span> <span class="nn">re</span>
+<span class="kn">import</span> <span class="nn">typing</span>
+
+<span class="kn">import</span> <span class="nn">requests</span>
+<span class="kn">import</span> <span class="nn">urllib3</span>
+<span class="kn">from</span> <span class="nn">book</span> <span class="kn">import</span> <span class="n">models</span>
+<span class="kn">from</span> <span class="nn">bs4</span> <span class="kn">import</span> <span class="n">BeautifulSoup</span>
+<span class="kn">from</span> <span class="nn">celery</span> <span class="kn">import</span> <span class="n">shared_task</span>
+<span class="kn">from</span> <span class="nn">django.db</span> <span class="kn">import</span> <span class="n">models</span> <span class="k">as</span> <span class="n">dj_models</span>
+<span class="kn">from</span> <span class="nn">django.forms.models</span> <span class="kn">import</span> <span class="n">model_to_dict</span>
+<span class="kn">from</span> <span class="nn">django.http</span> <span class="kn">import</span> <span class="n">HttpResponse</span><span class="p">,</span> <span class="n">HttpResponseBadRequest</span><span class="p">,</span> <span class="n">JsonResponse</span>
+
+<span class="n">logger</span> <span class="o">=</span> <span class="n">logging</span><span class="o">.</span><span class="n">getLogger</span><span class="p">(</span><span class="vm">__name__</span><span class="p">)</span>
+
+<span class="n">a_pattern</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">compile</span><span class="p">(</span><span class="s1">&#39;&lt;a href=&quot;(.+?)&quot;&gt;(.+?)&lt;/a&gt;&#39;</span><span class="p">)</span>
+
+
+<div class="viewcode-block" id="Domain"><a class="viewcode-back" href="../../../book.views.views_api.html#book.views.views_api.Domain">[docs]</a><span class="k">class</span> <span class="nc">Domain</span><span class="p">:</span>
+    <span class="n">People</span> <span class="o">=</span> <span class="s2">&quot;people&quot;</span>
+    <span class="n">Pokemon</span> <span class="o">=</span> <span class="s2">&quot;pokemon&quot;</span></div>
+
+
+<div class="viewcode-block" id="image"><a class="viewcode-back" href="../../../book.views.views_api.html#book.views.views_api.image">[docs]</a><span class="k">def</span> <span class="nf">image</span><span class="p">(</span><span class="n">request</span><span class="p">,</span> <span class="n">method</span><span class="p">,</span> <span class="n">image_type</span><span class="o">=</span><span class="s2">&quot;People&quot;</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">HttpResponse</span><span class="p">:</span>
+    <span class="n">image_id</span> <span class="o">=</span> <span class="n">request</span><span class="o">.</span><span class="n">POST</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;image_id&quot;</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">image_id</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="k">return</span> <span class="n">HttpResponseBadRequest</span><span class="p">(</span><span class="s2">&quot;Empty Image Id&quot;</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">image_type</span> <span class="o">==</span> <span class="s2">&quot;People&quot;</span><span class="p">:</span>
+        <span class="n">img</span> <span class="o">=</span> <span class="n">models</span><span class="o">.</span><span class="n">PeopleImage</span><span class="o">.</span><span class="n">objects</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="nb">id</span><span class="o">=</span><span class="nb">int</span><span class="p">(</span><span class="n">image_id</span><span class="p">))</span>
+    <span class="k">elif</span> <span class="n">image_type</span> <span class="o">==</span> <span class="s2">&quot;Pokemon&quot;</span><span class="p">:</span>
+        <span class="n">img</span> <span class="o">=</span> <span class="n">models</span><span class="o">.</span><span class="n">PokemonImage</span><span class="o">.</span><span class="n">objects</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="nb">id</span><span class="o">=</span><span class="nb">int</span><span class="p">(</span><span class="n">image_id</span><span class="p">))</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;Unknown image type </span><span class="si">{}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">image_type</span><span class="p">))</span>
+
+    <span class="k">if</span> <span class="n">method</span> <span class="o">==</span> <span class="s2">&quot;DELETE&quot;</span><span class="p">:</span>
+        <span class="n">img</span><span class="o">.</span><span class="n">delete</span><span class="p">()</span>
+        <span class="k">return</span> <span class="n">HttpResponse</span><span class="p">(</span><span class="s2">&quot;Done&quot;</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">method</span> <span class="o">==</span> <span class="s2">&quot;GET&quot;</span><span class="p">:</span>
+        <span class="k">return</span> <span class="n">JsonResponse</span><span class="p">(</span><span class="n">model_to_dict</span><span class="p">(</span><span class="n">img</span><span class="p">))</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="k">return</span> <span class="n">HttpResponseBadRequest</span><span class="p">(</span><span class="s2">&quot;Unknown Method&quot;</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="set_rating"><a class="viewcode-back" href="../../../book.views.views_api.html#book.views.views_api.set_rating">[docs]</a><span class="k">def</span> <span class="nf">set_rating</span><span class="p">(</span><span class="n">request</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">HttpResponse</span><span class="p">:</span>
+    <span class="n">img_id</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">request</span><span class="o">.</span><span class="n">POST</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;image_id&quot;</span><span class="p">))</span>
+    <span class="n">data_type</span> <span class="o">=</span> <span class="n">request</span><span class="o">.</span><span class="n">POST</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;data_type&quot;</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">data_type</span> <span class="o">==</span> <span class="n">Domain</span><span class="o">.</span><span class="n">Pokemon</span><span class="p">:</span>
+        <span class="n">img</span> <span class="o">=</span> <span class="n">models</span><span class="o">.</span><span class="n">PokemonImage</span><span class="o">.</span><span class="n">objects</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="nb">id</span><span class="o">=</span><span class="n">img_id</span><span class="p">)</span>
+        <span class="n">img</span><span class="o">.</span><span class="n">classified</span> <span class="o">=</span> <span class="n">request</span><span class="o">.</span><span class="n">POST</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;selected&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span>
+    <span class="k">elif</span> <span class="n">data_type</span> <span class="o">==</span> <span class="n">Domain</span><span class="o">.</span><span class="n">People</span><span class="p">:</span>
+        <span class="n">img</span> <span class="o">=</span> <span class="n">models</span><span class="o">.</span><span class="n">PeopleImage</span><span class="o">.</span><span class="n">objects</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="nb">id</span><span class="o">=</span><span class="n">img_id</span><span class="p">)</span>
+        <span class="n">selected</span> <span class="o">=</span> <span class="n">request</span><span class="o">.</span><span class="n">POST</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;selected&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span>
+        <span class="n">img</span><span class="o">.</span><span class="n">selected</span> <span class="o">=</span> <span class="n">selected</span> <span class="o">==</span> <span class="s2">&quot;true&quot;</span> <span class="ow">or</span> <span class="n">selected</span> <span class="o">==</span> <span class="s2">&quot;yes&quot;</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="k">return</span> <span class="n">HttpResponseBadRequest</span><span class="p">(</span><span class="s2">&quot;Not Supported data_type </span><span class="si">{}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">data_type</span><span class="p">))</span>
+
+    <span class="n">img</span><span class="o">.</span><span class="n">save</span><span class="p">()</span>
+    <span class="k">return</span> <span class="n">HttpResponse</span><span class="p">(</span><span class="n">request</span><span class="o">.</span><span class="n">POST</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;selected&quot;</span><span class="p">))</span></div>
+
+
+<div class="viewcode-block" id="get_id"><a class="viewcode-back" href="../../../book.views.views_api.html#book.views.views_api.get_id">[docs]</a><span class="k">def</span> <span class="nf">get_id</span><span class="p">(</span><span class="n">request</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">HttpResponse</span><span class="p">:</span>
+    <span class="n">query</span> <span class="o">=</span> <span class="n">request</span><span class="o">.</span><span class="n">POST</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;query&quot;</span><span class="p">)</span>
+    <span class="n">image_obj</span> <span class="o">=</span> <span class="n">models</span><span class="o">.</span><span class="n">PeopleImage</span><span class="o">.</span><span class="n">objects</span><span class="o">.</span><span class="n">filter</span><span class="p">(</span><span class="n">url__endswith</span><span class="o">=</span><span class="n">query</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span>
+    <span class="k">return</span> <span class="n">HttpResponse</span><span class="p">(</span><span class="n">image_obj</span><span class="o">.</span><span class="n">id</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="get_img_rating"><a class="viewcode-back" href="../../../book.views.views_api.html#book.views.views_api.get_img_rating">[docs]</a><span class="k">def</span> <span class="nf">get_img_rating</span><span class="p">(</span>
+    <span class="n">domain</span><span class="p">,</span> <span class="n">int_img_id</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="n">typing</span><span class="o">.</span><span class="n">Tuple</span><span class="p">[</span>
+    <span class="n">typing</span><span class="o">.</span><span class="n">Union</span><span class="p">[</span><span class="n">models</span><span class="o">.</span><span class="n">PokemonImage</span><span class="p">,</span> <span class="n">models</span><span class="o">.</span><span class="n">PokemonImage</span><span class="p">],</span> <span class="n">dj_models</span><span class="o">.</span><span class="n">query</span><span class="o">.</span><span class="n">QuerySet</span>
+<span class="p">]:</span>
+    <span class="k">if</span> <span class="n">domain</span> <span class="o">==</span> <span class="n">Domain</span><span class="o">.</span><span class="n">People</span><span class="p">:</span>
+        <span class="n">img</span> <span class="o">=</span> <span class="n">models</span><span class="o">.</span><span class="n">PeopleImage</span><span class="o">.</span><span class="n">objects</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="nb">id</span><span class="o">=</span><span class="n">int_img_id</span><span class="p">)</span>
+        <span class="n">existing_rating</span> <span class="o">=</span> <span class="n">models</span><span class="o">.</span><span class="n">Rating</span><span class="o">.</span><span class="n">objects</span><span class="o">.</span><span class="n">filter</span><span class="p">(</span>
+            <span class="n">image_id</span><span class="o">=</span><span class="n">int_img_id</span><span class="p">,</span> <span class="n">deep_model__domain</span><span class="o">=</span><span class="n">domain</span><span class="p">,</span> <span class="n">deep_model__latest</span><span class="o">=</span><span class="kc">True</span>
+        <span class="p">)</span>
+    <span class="k">elif</span> <span class="n">domain</span> <span class="o">==</span> <span class="n">Domain</span><span class="o">.</span><span class="n">Pokemon</span><span class="p">:</span>
+        <span class="n">img</span> <span class="o">=</span> <span class="n">models</span><span class="o">.</span><span class="n">PokemonImage</span><span class="o">.</span><span class="n">objects</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="nb">id</span><span class="o">=</span><span class="n">int_img_id</span><span class="p">)</span>
+        <span class="n">existing_rating</span> <span class="o">=</span> <span class="n">models</span><span class="o">.</span><span class="n">PokemonRating</span><span class="o">.</span><span class="n">objects</span><span class="o">.</span><span class="n">filter</span><span class="p">(</span>
+            <span class="n">image_id</span><span class="o">=</span><span class="n">int_img_id</span><span class="p">,</span> <span class="n">deep_model__domain</span><span class="o">=</span><span class="n">domain</span><span class="p">,</span> <span class="n">deep_model__latest</span><span class="o">=</span><span class="kc">True</span>
+        <span class="p">)</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">message</span> <span class="o">=</span> <span class="s2">&quot;Domain </span><span class="si">{}</span><span class="s2"> unknown&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">domain</span><span class="p">)</span>
+        <span class="n">logger</span><span class="o">.</span><span class="n">warning</span><span class="p">(</span><span class="n">message</span><span class="p">)</span>
+        <span class="k">raise</span> <span class="ne">KeyError</span><span class="p">(</span><span class="n">message</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">img</span><span class="p">,</span> <span class="n">existing_rating</span></div>
+
+
+<div class="viewcode-block" id="save_success"><a class="viewcode-back" href="../../../book.views.views_api.html#book.views.views_api.save_success">[docs]</a><span class="k">def</span> <span class="nf">save_success</span><span class="p">(</span>
+    <span class="n">domain</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">json_data</span><span class="p">:</span> <span class="nb">dict</span><span class="p">,</span> <span class="n">target_deep_model</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">int_img_id</span><span class="p">:</span> <span class="nb">int</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+    <span class="k">if</span> <span class="n">domain</span> <span class="o">==</span> <span class="n">Domain</span><span class="o">.</span><span class="n">People</span><span class="p">:</span>
+        <span class="n">class_names</span> <span class="o">=</span> <span class="n">json_data</span><span class="p">[</span><span class="s2">&quot;class_names&quot;</span><span class="p">]</span>
+        <span class="n">positive</span> <span class="o">=</span> <span class="n">json_data</span><span class="p">[</span><span class="s2">&quot;classification&quot;</span><span class="p">][</span><span class="n">class_names</span><span class="p">[</span><span class="s2">&quot;True&quot;</span><span class="p">]]</span>
+        <span class="n">rating</span> <span class="o">=</span> <span class="n">models</span><span class="o">.</span><span class="n">Rating</span><span class="p">(</span>
+            <span class="n">deep_model</span><span class="o">=</span><span class="n">target_deep_model</span><span class="p">,</span>
+            <span class="n">image_id</span><span class="o">=</span><span class="n">int_img_id</span><span class="p">,</span>
+            <span class="n">data</span><span class="o">=</span><span class="n">json_data</span><span class="p">,</span>
+            <span class="n">positive</span><span class="o">=</span><span class="n">positive</span><span class="p">,</span>
+        <span class="p">)</span>
+        <span class="n">rating</span><span class="o">.</span><span class="n">save</span><span class="p">()</span>
+
+    <span class="k">elif</span> <span class="n">domain</span> <span class="o">==</span> <span class="n">Domain</span><span class="o">.</span><span class="n">Pokemon</span><span class="p">:</span>
+        <span class="n">class_names</span> <span class="o">=</span> <span class="n">json_data</span><span class="p">[</span><span class="s2">&quot;class_names&quot;</span><span class="p">]</span>
+        <span class="n">positive</span> <span class="o">=</span> <span class="n">json_data</span><span class="p">[</span><span class="s2">&quot;classification&quot;</span><span class="p">][</span><span class="n">class_names</span><span class="p">[</span><span class="s2">&quot;yes&quot;</span><span class="p">]]</span>
+        <span class="n">rating</span> <span class="o">=</span> <span class="n">models</span><span class="o">.</span><span class="n">PokemonRating</span><span class="p">(</span>
+            <span class="n">deep_model</span><span class="o">=</span><span class="n">target_deep_model</span><span class="p">,</span>
+            <span class="n">image_id</span><span class="o">=</span><span class="n">int_img_id</span><span class="p">,</span>
+            <span class="n">data</span><span class="o">=</span><span class="n">json_data</span><span class="p">,</span>
+            <span class="n">positive</span><span class="o">=</span><span class="n">positive</span><span class="p">,</span>
+        <span class="p">)</span>
+        <span class="n">rating</span><span class="o">.</span><span class="n">save</span><span class="p">()</span></div>
+
+
+<div class="viewcode-block" id="save_failure"><a class="viewcode-back" href="../../../book.views.views_api.html#book.views.views_api.save_failure">[docs]</a><span class="k">def</span> <span class="nf">save_failure</span><span class="p">(</span>
+    <span class="n">domain</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">json_data</span><span class="p">:</span> <span class="nb">dict</span><span class="p">,</span> <span class="n">target_deep_model</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">int_img_id</span><span class="p">:</span> <span class="nb">int</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+    <span class="k">if</span> <span class="n">domain</span> <span class="o">==</span> <span class="n">Domain</span><span class="o">.</span><span class="n">People</span><span class="p">:</span>
+        <span class="n">rating</span> <span class="o">=</span> <span class="n">models</span><span class="o">.</span><span class="n">Rating</span><span class="p">(</span>
+            <span class="n">deep_model</span><span class="o">=</span><span class="n">target_deep_model</span><span class="p">,</span> <span class="n">image_id</span><span class="o">=</span><span class="n">int_img_id</span><span class="p">,</span> <span class="n">data</span><span class="o">=</span><span class="n">json_data</span>
+        <span class="p">)</span>
+        <span class="n">rating</span><span class="o">.</span><span class="n">save</span><span class="p">()</span>
+
+    <span class="k">elif</span> <span class="n">domain</span> <span class="o">==</span> <span class="n">Domain</span><span class="o">.</span><span class="n">Pokemon</span><span class="p">:</span>
+        <span class="n">rating</span> <span class="o">=</span> <span class="n">models</span><span class="o">.</span><span class="n">PokemonRating</span><span class="p">(</span>
+            <span class="n">deep_model</span><span class="o">=</span><span class="n">target_deep_model</span><span class="p">,</span> <span class="n">image_id</span><span class="o">=</span><span class="n">int_img_id</span><span class="p">,</span> <span class="n">data</span><span class="o">=</span><span class="n">json_data</span>
+        <span class="p">)</span>
+        <span class="n">rating</span><span class="o">.</span><span class="n">save</span><span class="p">()</span></div>
+
+
+<div class="viewcode-block" id="call_api_server"><a class="viewcode-back" href="../../../book.views.views_api.html#book.views.views_api.call_api_server">[docs]</a><span class="k">def</span> <span class="nf">call_api_server</span><span class="p">(</span><span class="n">img</span><span class="p">,</span> <span class="n">domain</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">typing</span><span class="o">.</span><span class="n">Optional</span><span class="p">:</span>
+    <span class="n">data</span> <span class="o">=</span> <span class="p">{</span><span class="s2">&quot;requested_url&quot;</span><span class="p">:</span> <span class="n">img</span><span class="o">.</span><span class="n">url</span><span class="p">}</span>
+    <span class="n">headers</span> <span class="o">=</span> <span class="p">{</span><span class="s2">&quot;Content-Type&quot;</span><span class="p">:</span> <span class="s2">&quot;application/json&quot;</span><span class="p">}</span>
+
+    <span class="n">server</span> <span class="o">=</span> <span class="n">models</span><span class="o">.</span><span class="n">APIServers</span><span class="o">.</span><span class="n">objects</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">title</span><span class="o">=</span><span class="n">domain</span><span class="p">)</span>
+
+    <span class="n">request_url</span> <span class="o">=</span> <span class="s2">&quot;http://</span><span class="si">{}</span><span class="s2">:</span><span class="si">{}</span><span class="s2">/</span><span class="si">{}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">server</span><span class="o">.</span><span class="n">ip</span><span class="p">,</span> <span class="n">server</span><span class="o">.</span><span class="n">port</span><span class="p">,</span> <span class="n">server</span><span class="o">.</span><span class="n">endpoint</span><span class="p">)</span>
+    <span class="k">try</span><span class="p">:</span>
+        <span class="n">result</span> <span class="o">=</span> <span class="n">requests</span><span class="o">.</span><span class="n">post</span><span class="p">(</span><span class="n">request_url</span><span class="p">,</span> <span class="n">json</span><span class="o">=</span><span class="n">data</span><span class="p">,</span> <span class="n">headers</span><span class="o">=</span><span class="n">headers</span><span class="p">)</span>
+    <span class="k">except</span> <span class="n">urllib3</span><span class="o">.</span><span class="n">exceptions</span><span class="o">.</span><span class="n">MaxRetryError</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+        <span class="n">logger</span><span class="o">.</span><span class="n">warning</span><span class="p">(</span><span class="s2">&quot;Max tries failed </span><span class="si">{}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">request_url</span><span class="p">))</span>
+        <span class="k">raise</span> <span class="n">e</span>
+    <span class="k">except</span> <span class="n">requests</span><span class="o">.</span><span class="n">exceptions</span><span class="o">.</span><span class="n">ConnectionError</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+        <span class="n">logger</span><span class="o">.</span><span class="n">warning</span><span class="p">(</span><span class="s2">&quot;Connection Refused&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">request_url</span><span class="p">))</span>
+        <span class="k">raise</span> <span class="n">e</span>
+
+    <span class="k">if</span> <span class="n">result</span><span class="o">.</span><span class="n">status_code</span> <span class="o">!=</span> <span class="mi">200</span><span class="p">:</span>
+        <span class="n">logger</span><span class="o">.</span><span class="n">warning</span><span class="p">(</span><span class="n">result</span><span class="o">.</span><span class="n">text</span><span class="p">,</span> <span class="n">result</span><span class="o">.</span><span class="n">status_code</span><span class="p">)</span>
+        <span class="k">return</span>
+    <span class="k">return</span> <span class="n">result</span></div>
+
+
+<span class="nd">@shared_task</span>
+<span class="k">def</span> <span class="nf">get_classification_result</span><span class="p">(</span><span class="n">domain</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">int_img_id</span><span class="p">:</span> <span class="nb">int</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+    <span class="n">img</span><span class="p">,</span> <span class="n">existing_rating</span> <span class="o">=</span> <span class="n">get_img_rating</span><span class="p">(</span><span class="n">domain</span><span class="p">,</span> <span class="n">int_img_id</span><span class="p">)</span>
+
+    <span class="c1"># 이미 가져온건지 다시 확인 -&gt; 작업 추가시에 중복되어 있을 수 있음</span>
+    <span class="k">if</span> <span class="n">existing_rating</span><span class="o">.</span><span class="n">count</span><span class="p">()</span> <span class="o">!=</span> <span class="mi">0</span><span class="p">:</span>
+        <span class="k">return</span>
+
+    <span class="n">result</span> <span class="o">=</span> <span class="n">call_api_server</span><span class="p">(</span><span class="n">img</span><span class="p">,</span> <span class="n">domain</span><span class="p">)</span>
+    <span class="k">if</span> <span class="ow">not</span> <span class="n">result</span><span class="p">:</span>
+        <span class="k">return</span>
+    <span class="n">json_data</span> <span class="o">=</span> <span class="n">json</span><span class="o">.</span><span class="n">loads</span><span class="p">(</span><span class="n">result</span><span class="o">.</span><span class="n">text</span><span class="p">)</span>
+
+    <span class="c1"># 신규 모델인지 확인</span>
+    <span class="n">deep_model_filter</span> <span class="o">=</span> <span class="n">models</span><span class="o">.</span><span class="n">DeepLearningModel</span><span class="o">.</span><span class="n">objects</span><span class="o">.</span><span class="n">filter</span><span class="p">(</span><span class="n">domain</span><span class="o">=</span><span class="n">domain</span><span class="p">)</span>
+
+    <span class="n">new_model</span> <span class="o">=</span> <span class="kc">True</span>
+    <span class="n">target_deep_model</span> <span class="o">=</span> <span class="kc">None</span>
+    <span class="k">for</span> <span class="n">deep_model</span> <span class="ow">in</span> <span class="n">deep_model_filter</span><span class="p">:</span>
+        <span class="k">if</span> <span class="n">deep_model</span><span class="o">.</span><span class="n">version</span> <span class="o">==</span> <span class="n">json_data</span><span class="p">[</span><span class="s2">&quot;version&quot;</span><span class="p">]:</span>
+            <span class="n">new_model</span> <span class="o">=</span> <span class="kc">False</span>
+            <span class="n">target_deep_model</span> <span class="o">=</span> <span class="n">deep_model</span>
+            <span class="k">break</span>
+
+    <span class="c1"># 신규 모델 생성</span>
+    <span class="k">if</span> <span class="n">new_model</span><span class="p">:</span>
+        <span class="k">for</span> <span class="n">deep_model</span> <span class="ow">in</span> <span class="n">deep_model_filter</span><span class="p">:</span>
+            <span class="n">deep_model</span><span class="o">.</span><span class="n">latest</span> <span class="o">=</span> <span class="kc">False</span>
+            <span class="n">deep_model</span><span class="o">.</span><span class="n">save</span><span class="p">()</span>
+        <span class="n">target_deep_model</span> <span class="o">=</span> <span class="n">models</span><span class="o">.</span><span class="n">DeepLearningModel</span><span class="p">(</span>
+            <span class="n">domain</span><span class="o">=</span><span class="n">domain</span><span class="p">,</span> <span class="n">version</span><span class="o">=</span><span class="n">json_data</span><span class="p">[</span><span class="s2">&quot;version&quot;</span><span class="p">]</span>
+        <span class="p">)</span>
+        <span class="n">target_deep_model</span><span class="o">.</span><span class="n">save</span><span class="p">()</span>
+
+    <span class="k">if</span> <span class="n">json_data</span><span class="p">[</span><span class="s2">&quot;status&quot;</span><span class="p">]</span> <span class="o">==</span> <span class="s2">&quot;success&quot;</span><span class="p">:</span>
+        <span class="n">save_success</span><span class="p">(</span><span class="n">domain</span><span class="p">,</span> <span class="n">json_data</span><span class="p">,</span> <span class="n">target_deep_model</span><span class="p">,</span> <span class="n">int_img_id</span><span class="p">)</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">save_failure</span><span class="p">(</span><span class="n">domain</span><span class="p">,</span> <span class="n">json_data</span><span class="p">,</span> <span class="n">target_deep_model</span><span class="p">,</span> <span class="n">int_img_id</span><span class="p">)</span>
+
+
+<div class="viewcode-block" id="get_response"><a class="viewcode-back" href="../../../book.views.views_api.html#book.views.views_api.get_response">[docs]</a><span class="k">def</span> <span class="nf">get_response</span><span class="p">(</span><span class="n">img_id</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">domain</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">dict</span><span class="p">:</span>
+    <span class="n">int_img_id</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">img_id</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s2">&quot;_&quot;</span><span class="p">)[</span><span class="mi">1</span><span class="p">])</span>
+
+    <span class="c1"># 이미 존재하는지 체크</span>
+    <span class="k">if</span> <span class="n">domain</span> <span class="o">==</span> <span class="n">Domain</span><span class="o">.</span><span class="n">People</span><span class="p">:</span>
+        <span class="n">existing_rating</span> <span class="o">=</span> <span class="n">models</span><span class="o">.</span><span class="n">Rating</span><span class="o">.</span><span class="n">objects</span><span class="o">.</span><span class="n">filter</span><span class="p">(</span>
+            <span class="n">image_id</span><span class="o">=</span><span class="n">int_img_id</span><span class="p">,</span> <span class="n">deep_model__domain</span><span class="o">=</span><span class="n">domain</span><span class="p">,</span> <span class="n">deep_model__latest</span><span class="o">=</span><span class="kc">True</span>
+        <span class="p">)</span>
+    <span class="k">elif</span> <span class="n">domain</span> <span class="o">==</span> <span class="n">Domain</span><span class="o">.</span><span class="n">Pokemon</span><span class="p">:</span>
+        <span class="n">existing_rating</span> <span class="o">=</span> <span class="n">models</span><span class="o">.</span><span class="n">PokemonRating</span><span class="o">.</span><span class="n">objects</span><span class="o">.</span><span class="n">filter</span><span class="p">(</span>
+            <span class="n">image_id</span><span class="o">=</span><span class="n">int_img_id</span><span class="p">,</span> <span class="n">deep_model__domain</span><span class="o">=</span><span class="n">domain</span><span class="p">,</span> <span class="n">deep_model__latest</span><span class="o">=</span><span class="kc">True</span>
+        <span class="p">)</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="k">raise</span> <span class="ne">KeyError</span><span class="p">(</span><span class="s2">&quot;Unknown domain </span><span class="si">{}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">domain</span><span class="p">))</span>
+
+    <span class="n">need_to_request</span> <span class="o">=</span> <span class="kc">True</span>
+
+    <span class="n">json_data</span> <span class="o">=</span> <span class="kc">None</span>
+    <span class="k">if</span> <span class="n">existing_rating</span><span class="o">.</span><span class="n">count</span><span class="p">()</span> <span class="o">!=</span> <span class="mi">0</span><span class="p">:</span>
+        <span class="c1"># 존재함 -&gt; 최신 모델인지 확인</span>
+        <span class="k">for</span> <span class="n">rating</span> <span class="ow">in</span> <span class="n">existing_rating</span><span class="p">:</span>
+            <span class="k">if</span> <span class="n">rating</span><span class="o">.</span><span class="n">deep_model</span><span class="o">.</span><span class="n">latest</span><span class="p">:</span>
+                <span class="n">need_to_request</span> <span class="o">=</span> <span class="kc">False</span>
+                <span class="n">json_data</span> <span class="o">=</span> <span class="n">rating</span><span class="o">.</span><span class="n">data</span>
+                <span class="k">break</span>
+
+    <span class="k">if</span> <span class="n">need_to_request</span><span class="p">:</span>
+        <span class="c1"># 미존재 혹은 최신 평가치 없음 -&gt; 평가 요청</span>
+        <span class="n">get_classification_result</span><span class="o">.</span><span class="n">delay</span><span class="p">(</span><span class="n">domain</span><span class="p">,</span> <span class="n">int_img_id</span><span class="p">)</span>
+        <span class="n">json_data</span> <span class="o">=</span> <span class="p">{</span><span class="s2">&quot;status&quot;</span><span class="p">:</span> <span class="s2">&quot;requested&quot;</span><span class="p">,</span> <span class="s2">&quot;classification&quot;</span><span class="p">:</span> <span class="p">[</span><span class="s2">&quot;?&quot;</span><span class="p">,</span> <span class="s2">&quot;?&quot;</span><span class="p">],</span> <span class="s2">&quot;label&quot;</span><span class="p">:</span> <span class="s2">&quot;?&quot;</span><span class="p">}</span>
+
+    <span class="n">response</span> <span class="o">=</span> <span class="p">{</span><span class="s2">&quot;img_id&quot;</span><span class="p">:</span> <span class="n">img_id</span><span class="p">,</span> <span class="s2">&quot;classification&quot;</span><span class="p">:</span> <span class="n">json_data</span><span class="p">}</span>
+
+    <span class="k">return</span> <span class="n">response</span></div>
+
+
+<div class="viewcode-block" id="people_classification_api"><a class="viewcode-back" href="../../../book.views.views_api.html#book.views.views_api.people_classification_api">[docs]</a><span class="k">def</span> <span class="nf">people_classification_api</span><span class="p">(</span><span class="n">request</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">HttpResponse</span><span class="p">:</span>
+    <span class="n">img_id</span> <span class="o">=</span> <span class="n">request</span><span class="o">.</span><span class="n">POST</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;image_id&quot;</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">img_id</span><span class="p">:</span>
+        <span class="n">response</span> <span class="o">=</span> <span class="n">get_response</span><span class="p">(</span><span class="n">img_id</span><span class="p">,</span> <span class="n">domain</span><span class="o">=</span><span class="n">Domain</span><span class="o">.</span><span class="n">People</span><span class="p">)</span>
+
+        <span class="k">return</span> <span class="n">JsonResponse</span><span class="p">(</span><span class="n">response</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">HttpResponseBadRequest</span><span class="p">(</span><span class="s2">&quot;No Image Id&quot;</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="pokemon_classification_api"><a class="viewcode-back" href="../../../book.views.views_api.html#book.views.views_api.pokemon_classification_api">[docs]</a><span class="k">def</span> <span class="nf">pokemon_classification_api</span><span class="p">(</span><span class="n">request</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">HttpResponse</span><span class="p">:</span>
+    <span class="n">img_id</span> <span class="o">=</span> <span class="n">request</span><span class="o">.</span><span class="n">POST</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;image_id&quot;</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">img_id</span><span class="p">:</span>
+        <span class="n">response</span> <span class="o">=</span> <span class="n">get_response</span><span class="p">(</span><span class="n">img_id</span><span class="p">,</span> <span class="n">domain</span><span class="o">=</span><span class="n">Domain</span><span class="o">.</span><span class="n">Pokemon</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">JsonResponse</span><span class="p">(</span><span class="n">response</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">HttpResponseBadRequest</span><span class="p">(</span><span class="s2">&quot;No Image Id&quot;</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="get_image_directory_list"><a class="viewcode-back" href="../../../book.views.views_api.html#book.views.views_api.get_image_directory_list">[docs]</a><span class="k">def</span> <span class="nf">get_image_directory_list</span><span class="p">(</span><span class="n">data_type</span><span class="p">,</span> <span class="n">url</span><span class="p">,</span> <span class="n">a_parsed</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">list</span><span class="p">:</span>
+    <span class="k">if</span> <span class="n">data_type</span> <span class="o">==</span> <span class="s2">&quot;people&quot;</span><span class="p">:</span>
+        <span class="n">json_url</span> <span class="o">=</span> <span class="n">url</span> <span class="o">+</span> <span class="n">a_parsed</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span> <span class="o">+</span> <span class="s2">&quot;/image.json&quot;</span>
+        <span class="n">image_list_text</span> <span class="o">=</span> <span class="n">requests</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">json_url</span><span class="p">)</span><span class="o">.</span><span class="n">text</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="n">result</span> <span class="o">=</span> <span class="n">json</span><span class="o">.</span><span class="n">loads</span><span class="p">(</span><span class="n">image_list_text</span><span class="p">)[</span><span class="s2">&quot;image_list&quot;</span><span class="p">]</span>
+        <span class="k">except</span> <span class="n">json</span><span class="o">.</span><span class="n">JSONDecodeError</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="n">e</span>
+
+    <span class="k">elif</span> <span class="n">data_type</span> <span class="o">==</span> <span class="s2">&quot;pokemon&quot;</span><span class="p">:</span>
+        <span class="n">directory_url</span> <span class="o">=</span> <span class="n">url</span> <span class="o">+</span> <span class="n">a_parsed</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span>
+        <span class="n">image_result</span> <span class="o">=</span> <span class="n">requests</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">directory_url</span><span class="p">)</span>
+        <span class="n">bs</span> <span class="o">=</span> <span class="n">BeautifulSoup</span><span class="p">(</span><span class="n">image_result</span><span class="o">.</span><span class="n">text</span><span class="p">,</span> <span class="s2">&quot;html.parser&quot;</span><span class="p">)</span>
+
+        <span class="n">all_a</span> <span class="o">=</span> <span class="n">bs</span><span class="o">.</span><span class="n">findAll</span><span class="p">(</span><span class="s2">&quot;a&quot;</span><span class="p">,</span> <span class="n">text</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+        <span class="n">result</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="k">for</span> <span class="n">a</span> <span class="ow">in</span> <span class="n">all_a</span><span class="p">:</span>
+            <span class="n">image_a_parsed</span> <span class="o">=</span> <span class="n">a_pattern</span><span class="o">.</span><span class="n">findall</span><span class="p">(</span><span class="s2">&quot;</span><span class="si">{}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">a</span><span class="p">))</span>
+            <span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="n">image_a_parsed</span><span class="p">)</span>
+            <span class="k">if</span> <span class="ow">not</span> <span class="n">image_a_parsed</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">startswith</span><span class="p">(</span><span class="s2">&quot;../&quot;</span><span class="p">):</span>
+                <span class="n">result</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">directory_url</span> <span class="o">+</span> <span class="n">image_a_parsed</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="mi">0</span><span class="p">])</span>
+
+    <span class="k">else</span><span class="p">:</span>
+        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;Unsupported data_type </span><span class="si">{}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">data_type</span><span class="p">))</span>
+
+    <span class="k">return</span> <span class="n">result</span></div>
+
+
+<span class="nd">@shared_task</span>
+<span class="k">def</span> <span class="nf">add_image_client</span><span class="p">(</span><span class="n">a_text</span><span class="p">,</span> <span class="n">url</span><span class="p">,</span> <span class="n">category_id</span><span class="p">,</span> <span class="n">data_type</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+    <span class="n">a_parsed</span> <span class="o">=</span> <span class="n">a_pattern</span><span class="o">.</span><span class="n">findall</span><span class="p">(</span><span class="n">a_text</span><span class="p">)</span>
+
+    <span class="k">if</span> <span class="ow">not</span> <span class="n">a_parsed</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">startswith</span><span class="p">(</span><span class="s2">&quot;../&quot;</span><span class="p">):</span>
+        <span class="n">result</span> <span class="o">=</span> <span class="n">get_image_directory_list</span><span class="p">(</span><span class="n">data_type</span><span class="p">,</span> <span class="n">url</span><span class="p">,</span> <span class="n">a_parsed</span><span class="p">)</span>
+        <span class="k">for</span> <span class="n">img</span> <span class="ow">in</span> <span class="n">result</span><span class="p">:</span>
+            <span class="k">try</span><span class="p">:</span>
+                <span class="k">if</span> <span class="n">data_type</span> <span class="o">==</span> <span class="s2">&quot;people&quot;</span><span class="p">:</span>
+                    <span class="n">image_obj</span> <span class="o">=</span> <span class="n">models</span><span class="o">.</span><span class="n">PeopleImage</span><span class="p">(</span>
+                        <span class="n">url</span><span class="o">=</span><span class="n">url</span> <span class="o">+</span> <span class="n">a_parsed</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span> <span class="o">+</span> <span class="n">img</span><span class="p">[</span><span class="s2">&quot;local&quot;</span><span class="p">],</span>
+                        <span class="n">title</span><span class="o">=</span><span class="n">img</span><span class="p">[</span><span class="s2">&quot;alt&quot;</span><span class="p">][:</span><span class="mi">500</span><span class="p">],</span>
+                        <span class="n">category_id</span><span class="o">=</span><span class="n">category_id</span><span class="p">,</span>
+                        <span class="n">page</span><span class="o">=</span><span class="n">img</span><span class="p">[</span><span class="s2">&quot;a&quot;</span><span class="p">],</span>
+                    <span class="p">)</span>
+                <span class="k">elif</span> <span class="n">data_type</span> <span class="o">==</span> <span class="s2">&quot;pokemon&quot;</span><span class="p">:</span>
+                    <span class="n">path</span> <span class="o">=</span> <span class="n">img</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s2">&quot;/&quot;</span><span class="p">)</span>
+                    <span class="n">image_obj</span> <span class="o">=</span> <span class="n">models</span><span class="o">.</span><span class="n">PokemonImage</span><span class="p">(</span>
+                        <span class="n">url</span><span class="o">=</span><span class="n">img</span><span class="p">,</span>
+                        <span class="n">title</span><span class="o">=</span><span class="n">path</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">],</span>
+                        <span class="n">category_id</span><span class="o">=</span><span class="n">category_id</span><span class="p">,</span>
+                        <span class="n">original_label</span><span class="o">=</span><span class="n">path</span><span class="p">[</span><span class="o">-</span><span class="mi">2</span><span class="p">],</span>
+                    <span class="p">)</span>
+                <span class="k">else</span><span class="p">:</span>
+                    <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;Unsupported data_type </span><span class="si">{}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">data_type</span><span class="p">))</span>
+                <span class="n">image_obj</span><span class="o">.</span><span class="n">save</span><span class="p">()</span>
+            <span class="k">except</span> <span class="ne">Exception</span><span class="p">:</span>
+                <span class="k">continue</span>
+
+
+<span class="nd">@shared_task</span>
+<span class="k">def</span> <span class="nf">cron_image_add</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+    <span class="k">try</span><span class="p">:</span>
+        <span class="n">category_id</span> <span class="o">=</span> <span class="s2">&quot;people&quot;</span>
+        <span class="n">data_type</span> <span class="o">=</span> <span class="s2">&quot;people&quot;</span>
+        <span class="n">url</span> <span class="o">=</span> <span class="n">models</span><span class="o">.</span><span class="n">APIServers</span><span class="o">.</span><span class="n">objects</span><span class="o">.</span><span class="n">filter</span><span class="p">(</span><span class="n">title</span><span class="o">=</span><span class="s2">&quot;people_image&quot;</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span>
+        <span class="n">url_text</span> <span class="o">=</span> <span class="s2">&quot;http://</span><span class="si">{}</span><span class="s2">:</span><span class="si">{}</span><span class="s2">/</span><span class="si">{}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">url</span><span class="o">.</span><span class="n">ip</span><span class="p">,</span> <span class="n">url</span><span class="o">.</span><span class="n">port</span><span class="p">,</span> <span class="n">url</span><span class="o">.</span><span class="n">endpoint</span><span class="p">)</span>
+        <span class="n">result</span> <span class="o">=</span> <span class="n">requests</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">url_text</span><span class="p">)</span>
+        <span class="n">bs</span> <span class="o">=</span> <span class="n">BeautifulSoup</span><span class="p">(</span><span class="n">result</span><span class="o">.</span><span class="n">text</span><span class="p">,</span> <span class="s2">&quot;html.parser&quot;</span><span class="p">)</span>
+        <span class="n">all_a</span> <span class="o">=</span> <span class="n">bs</span><span class="o">.</span><span class="n">findAll</span><span class="p">(</span><span class="s2">&quot;a&quot;</span><span class="p">,</span> <span class="n">text</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+
+        <span class="k">for</span> <span class="n">a</span> <span class="ow">in</span> <span class="n">all_a</span><span class="p">:</span>
+            <span class="n">add_image_client</span><span class="o">.</span><span class="n">delay</span><span class="p">(</span><span class="s2">&quot;</span><span class="si">{}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">a</span><span class="p">),</span> <span class="n">url_text</span><span class="p">,</span> <span class="n">category_id</span><span class="p">,</span> <span class="n">data_type</span><span class="p">)</span>
+
+    <span class="k">except</span> <span class="ne">Exception</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+        <span class="k">raise</span> <span class="s2">&quot;Error </span><span class="si">{}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">e</span><span class="p">)</span>
+</pre></div>
+
+           </div>
+           
+          </div>
+          <footer>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2020, Yoonjae Park
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>
