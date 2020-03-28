@@ -3,8 +3,7 @@ import json
 
 import lz4.frame
 import requests
-from django.core import exceptions
-from django.core import serializers
+from django.core import exceptions, serializers
 from django.core.paginator import Paginator
 from django.http import HttpResponse
 
@@ -67,12 +66,15 @@ def get_compressed_result(image_list, count, page):
 
 def to_table(contents, row_count):
     table = []
-    row = None
+    row = []
     for count, img in enumerate(contents):
+        row.append(img)
+        count += 1
+
         if count % row_count == 0:
             row = []
             table.append(row)
-        row.append(img)
-        count += 1
+    if row:
+        table.append(row)
 
     return table

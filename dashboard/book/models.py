@@ -125,8 +125,8 @@ class User(models.Model):
     username = models.CharField(max_length=30, unique=True)
     checked = models.BooleanField(default=None, null=True, blank=True)
 
-    def __str__(self):
-        return "{}".format(self.username, self.checked)
+    def __str__(self) -> str:
+        return "{} {}".format(self.username, self.checked)
 
 
 class PokemonImage(models.Model):

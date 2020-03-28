@@ -50,7 +50,7 @@ class NavCollection(NavBase):
 
     collection: str
     child: typing.List[NavBase]
-    active_list: typing.List[str]
+    active_set: typing.Set[str]
 
     def __init__(
         self,
@@ -93,6 +93,7 @@ class NavItem(NavBase):
     """
 
     template: str
+    suffix: typing.Optional[str]
 
     def __init__(
         self,

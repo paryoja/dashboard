@@ -110,12 +110,12 @@
         "child_info": [
           {
             "template": "link",
-            "icon": "far fa-bookmark",
+            "icon": "fa fa-bookmark",
             "description": "북마크"
           },
           {
             "template": "web_stack",
-            "icon": "far fa-layer-group",
+            "icon": "fa fa-layer-group",
             "description": "웹스택"
           }
         ]

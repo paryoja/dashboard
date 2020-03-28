@@ -46,8 +46,8 @@ def live_currency(request):
     render_dict = get_render_dict("live_currency")
     currency_list = models.Currency.objects.all().order_by("-date")
 
-    total_from = 0
-    total_to = 0
+    total_from = 0.0
+    total_to = 0.0
 
     for currency in currency_list:
         total_from += currency.from_amount

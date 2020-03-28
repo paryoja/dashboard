@@ -88,7 +88,7 @@ def get_img_rating(
 
 
 def save_success(
-    domain: str, json_data: dict, target_deep_model: str, int_img_id: int
+    domain: str, json_data: dict, target_deep_model: models.DeepLearningModel, int_img_id: int
 ) -> None:
     if domain == Domain.People:
         class_names = json_data["class_names"]
@@ -114,7 +114,7 @@ def save_success(
 
 
 def save_failure(
-    domain: str, json_data: dict, target_deep_model: str, int_img_id: int
+    domain: str, json_data: dict, target_deep_model: models.DeepLearningModel, int_img_id: int
 ) -> None:
     if domain == Domain.People:
         rating = models.Rating(
@@ -129,7 +129,7 @@ def save_failure(
         rating.save()
 
 
-def call_api_server(img, domain: str) -> typing.Optional:
+def call_api_server(img, domain: str) -> typing.Optional[requests.Response]:
     data = {"requested_url": img.url}
     headers = {"Content-Type": "application/json"}
 
@@ -142,12 +142,12 @@ def call_api_server(img, domain: str) -> typing.Optional:
         logger.warning("Max tries failed {}".format(request_url))
         raise e
     except requests.exceptions.ConnectionError as e:
-        logger.warning("Connection Refused".format(request_url))
+        logger.warning("Connection Refused {}".format(request_url))
         raise e
 
     if result.status_code != 200:
         logger.warning(result.text, result.status_code)
-        return
+        return None
     return result
 
 
@@ -317,4 +317,4 @@ def cron_image_add() -> None:
             add_image_client.delay("{}".format(a), url_text, category_id, data_type)
 
     except Exception as e:
-        raise "Error {}".format(e)
+        raise Exception("Error {}".format(e))
