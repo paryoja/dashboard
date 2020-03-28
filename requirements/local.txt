@@ -18,3 +18,8 @@ mypy==0.770
 
 # git pre-commit
 pre-commit==2.2.0
+
+# documents
+Sphinx==2.4.4
+sphinx-rtd-theme==0.4.3
+
