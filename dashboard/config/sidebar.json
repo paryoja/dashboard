@@ -110,12 +110,12 @@
         "child_info": [
           {
             "template": "link",
-            "icon": "fa fa-bookmark",
+            "icon": "far fa-bookmark",
             "description": "북마크"
           },
           {
             "template": "web_stack",
-            "icon": "fa fa-layer-group",
+            "icon": "far fa-layer-group",
             "description": "웹스택"
           }
         ]
@@ -285,6 +285,12 @@
             "description": "GCP"
           }
         ]
+      },
+      {
+        "template": "https://paryoja.github.io/dashboard/index.html",
+        "external": true,
+        "icon": "far fa-file-alt",
+        "description": "API Document"
       },
       {
         "template": "https://paryoja.github.io/",
