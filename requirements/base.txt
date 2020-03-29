@@ -6,7 +6,7 @@ urllib3==1.25.8
 beautifulsoup4==4.8.2
 
 # task worker
-flower==0.9.3
+flower==0.9.4
 celery==4.4.2
 
 # html request

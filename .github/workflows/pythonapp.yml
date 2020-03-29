@@ -37,6 +37,7 @@ jobs:
         ./get_wait-for-it.sh > /dev/null
         chmod 777 wait-for-it.sh
         cd ..
+        docker-compose -f local.yml build --quiet postgres django  2>&1 > /dev/null
         docker-compose -f local.yml up -d postgres  2>&1 > /dev/null
         docker-compose -f local.yml run --rm django bash -c "python3 manage.py makemigrations"
         docker-compose -f local.yml run --rm django bash -c "python3 manage.py migrate"
