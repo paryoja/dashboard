@@ -9,7 +9,7 @@ django-debug-toolbar==2.2
 pylint_django==2.0.14
 pylint_celery==0.3
 flake8
-flake8-isort==2.9.0  # https://github.com/gforcada/flake8-isort
+flake8-isort==2.9.1  # https://github.com/gforcada/flake8-isort
 
 # testing
 pytest-django==3.8.0
