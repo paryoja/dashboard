@@ -19,3 +19,4 @@ env.sh
 .envs/*
 !.envs/.local/
 **/.mypy_cache/
+**/_build/*

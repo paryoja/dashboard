@@ -1,0 +1,244 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>book.migrations.0001_initial module &mdash; Yozit dashboard  documentation</title>
+  
+
+  
+  
+  
+  
+
+  
+  <script type="text/javascript" src="_static/js/modernizr.min.js"></script>
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
+        <script src="_static/jquery.js"></script>
+        <script src="_static/underscore.js"></script>
+        <script src="_static/doctools.js"></script>
+        <script src="_static/language_data.js"></script>
+    
+    <script type="text/javascript" src="_static/js/theme.js"></script>
+
+    
+
+  
+  <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="book.migrations.0002_auto_20200328_0312 module" href="book.migrations.0002_auto_20200328_0312.html" />
+    <link rel="prev" title="book.migrations package" href="book.migrations.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="index.html" class="icon icon-home"> Yozit dashboard
+          
+
+          
+          </a>
+
+          
+            
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <p class="caption"><span class="caption-text">Contents:</span></p>
+<ul class="current">
+<li class="toctree-l1 current"><a class="reference internal" href="book.html">book package</a><ul class="current">
+<li class="toctree-l2 current"><a class="reference internal" href="book.html#subpackages">Subpackages</a><ul class="current">
+<li class="toctree-l3"><a class="reference internal" href="book.api.html">book.api package</a></li>
+<li class="toctree-l3 current"><a class="reference internal" href="book.migrations.html">book.migrations package</a><ul class="current">
+<li class="toctree-l4 current"><a class="reference internal" href="book.migrations.html#submodules">Submodules</a></li>
+<li class="toctree-l4"><a class="reference internal" href="book.migrations.html#module-book.migrations">Module contents</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="book.templatetags.html">book.templatetags package</a></li>
+<li class="toctree-l3"><a class="reference internal" href="book.tests.html">book.tests package</a></li>
+<li class="toctree-l3"><a class="reference internal" href="book.views.html">book.views package</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="book.html#submodules">Submodules</a></li>
+<li class="toctree-l2"><a class="reference internal" href="book.html#module-book">Module contents</a></li>
+</ul>
+</li>
+</ul>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">Yozit dashboard</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="index.html">Docs</a> &raquo;</li>
+        
+          <li><a href="book.html">book package</a> &raquo;</li>
+        
+          <li><a href="book.migrations.html">book.migrations package</a> &raquo;</li>
+        
+      <li>book.migrations.0001_initial module</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+            
+            <a href="_sources/book.migrations.0001_initial.rst.txt" rel="nofollow"> View page source</a>
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <div class="section" id="module-book.migrations.0001_initial">
+<span id="book-migrations-0001-initial-module"></span><h1>book.migrations.0001_initial module<a class="headerlink" href="#module-book.migrations.0001_initial" title="Permalink to this headline">¶</a></h1>
+<dl class="class">
+<dt id="book.migrations.0001_initial.Migration">
+<em class="property">class </em><code class="sig-prename descclassname">book.migrations.0001_initial.</code><code class="sig-name descname">Migration</code><span class="sig-paren">(</span><em class="sig-param">name</em>, <em class="sig-param">app_label</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/book/migrations/0001_initial.html#Migration"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#book.migrations.0001_initial.Migration" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">django.db.migrations.migration.Migration</span></code></p>
+<dl class="attribute">
+<dt id="book.migrations.0001_initial.Migration.dependencies">
+<code class="sig-name descname">dependencies</code><em class="property"> = []</em><a class="headerlink" href="#book.migrations.0001_initial.Migration.dependencies" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="book.migrations.0001_initial.Migration.initial">
+<code class="sig-name descname">initial</code><em class="property"> = True</em><a class="headerlink" href="#book.migrations.0001_initial.Migration.initial" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="book.migrations.0001_initial.Migration.operations">
+<code class="sig-name descname">operations</code><em class="property"> = [&lt;CreateModel  name='APIServers', fields=[('id', &lt;django.db.models.fields.AutoField&gt;), ('ip', &lt;django.db.models.fields.CharField&gt;), ('title', &lt;django.db.models.fields.CharField&gt;), ('endpoint', &lt;django.db.models.fields.CharField&gt;), ('port', &lt;django.db.models.fields.IntegerField&gt;)]&gt;, &lt;CreateModel  name='AuthUser', fields=[('id', &lt;django.db.models.fields.AutoField&gt;), ('password', &lt;django.db.models.fields.CharField&gt;), ('last_login', &lt;django.db.models.fields.DateTimeField&gt;), ('is_superuser', &lt;django.db.models.fields.IntegerField&gt;), ('username', &lt;django.db.models.fields.CharField&gt;), ('email', &lt;django.db.models.fields.CharField&gt;), ('date_joined', &lt;django.db.models.fields.DateTimeField&gt;), ('is_staff', &lt;django.db.models.fields.IntegerField&gt;), ('is_active', &lt;django.db.models.fields.IntegerField&gt;), ('first_name', &lt;django.db.models.fields.CharField&gt;), ('phone', &lt;django.db.models.fields.CharField&gt;), ('date_of_birth', &lt;django.db.models.fields.DateTimeField&gt;)], options={'db_table': 'book_auth_user'}&gt;, &lt;CreateModel  name='BoardCategories', fields=[('id', &lt;django.db.models.fields.AutoField&gt;), ('category_type', &lt;django.db.models.fields.CharField&gt;), ('category_code', &lt;django.db.models.fields.CharField&gt;), ('category_name', &lt;django.db.models.fields.CharField&gt;), ('category_desc', &lt;django.db.models.fields.CharField&gt;), ('list_count', &lt;django.db.models.fields.IntegerField&gt;), ('authority', &lt;django.db.models.fields.IntegerField&gt;), ('creation_date', &lt;django.db.models.fields.DateTimeField&gt;), ('last_update_date', &lt;django.db.models.fields.DateTimeField&gt;)], options={'db_table': 'board_categories'}&gt;, &lt;CreateModel  name='Book', fields=[('id', &lt;django.db.models.fields.AutoField&gt;), ('name', &lt;django.db.models.fields.TextField&gt;), ('author', &lt;django.db.models.fields.CharField&gt;), ('year', &lt;django.db.models.fields.IntegerField&gt;)]&gt;, &lt;CreateModel  name='Category', fields=[('id', &lt;django.db.models.fields.AutoField&gt;), ('name', &lt;django.db.models.fields.CharField&gt;)]&gt;, &lt;CreateModel  name='Corona', fields=[('id', &lt;django.db.models.fields.AutoField&gt;), ('date', &lt;django.db.models.fields.DateField&gt;), ('confirmed', &lt;django.db.models.fields.IntegerField&gt;), ('death', &lt;django.db.models.fields.IntegerField&gt;), ('country', &lt;django.db.models.fields.CharField&gt;)]&gt;, &lt;CreateModel  name='Currency', fields=[('id', &lt;django.db.models.fields.AutoField&gt;), ('date', &lt;django.db.models.fields.DateField&gt;), ('from_currency', &lt;django.db.models.fields.CharField&gt;), ('to_currency', &lt;django.db.models.fields.CharField&gt;), ('currency_rate', &lt;django.db.models.fields.FloatField&gt;), ('from_amount', &lt;django.db.models.fields.FloatField&gt;), ('to_amount', &lt;django.db.models.fields.FloatField&gt;)]&gt;, &lt;CreateModel  name='DeepLearningModel', fields=[('id', &lt;django.db.models.fields.AutoField&gt;), ('domain', &lt;django.db.models.fields.TextField&gt;), ('version', &lt;django.db.models.fields.TextField&gt;), ('latest', &lt;django.db.models.fields.BooleanField&gt;)]&gt;, &lt;CreateModel  name='Link', fields=[('id', &lt;django.db.models.fields.AutoField&gt;), ('added_date', &lt;django.db.models.fields.DateTimeField&gt;), ('url', &lt;django.db.models.fields.URLField&gt;), ('content_type', &lt;django.db.models.fields.CharField&gt;), ('description', &lt;django.db.models.fields.CharField&gt;), ('visit_count', &lt;django.db.models.fields.IntegerField&gt;)]&gt;, &lt;CreateModel  name='Lotto', fields=[('id', &lt;django.db.models.fields.AutoField&gt;), ('draw_number', &lt;django.db.models.fields.IntegerField&gt;), ('numbers', &lt;django.contrib.postgres.fields.jsonb.JSONField&gt;)]&gt;, &lt;CreateModel  name='Paper', fields=[('id', &lt;django.db.models.fields.AutoField&gt;), ('title', &lt;django.db.models.fields.CharField&gt;), ('link', &lt;django.db.models.fields.URLField&gt;), ('file', &lt;django.db.models.fields.files.FileField&gt;), ('slide', &lt;django.db.models.fields.URLField&gt;), ('authors', &lt;django.contrib.postgres.fields.array.ArrayField&gt;)]&gt;, &lt;CreateModel  name='PeopleImage', fields=[('id', &lt;django.db.models.fields.AutoField&gt;), ('url', &lt;django.db.models.fields.URLField&gt;), ('title', &lt;django.db.models.fields.TextField&gt;), ('page', &lt;django.db.models.fields.CharField&gt;), ('selected', &lt;django.db.models.fields.BooleanField&gt;), ('user_id', &lt;django.db.models.fields.CharField&gt;), ('category', &lt;django.db.models.fields.related.ForeignKey&gt;)]&gt;, &lt;CreateModel  name='PokemonImage', fields=[('id', &lt;django.db.models.fields.AutoField&gt;), ('url', &lt;django.db.models.fields.URLField&gt;), ('title', &lt;django.db.models.fields.CharField&gt;), ('original_label', &lt;django.db.models.fields.CharField&gt;), ('modified_label', &lt;django.db.models.fields.CharField&gt;), ('classified', &lt;django.db.models.fields.CharField&gt;), ('category', &lt;django.db.models.fields.related.ForeignKey&gt;)]&gt;, &lt;CreateModel  name='Stock', fields=[('id', &lt;django.db.models.fields.AutoField&gt;), ('code', &lt;django.db.models.fields.CharField&gt;), ('name', &lt;django.db.models.fields.CharField&gt;)]&gt;, &lt;CreateModel  name='TodoItem', fields=[('id', &lt;django.db.models.fields.AutoField&gt;), ('title', &lt;django.db.models.fields.CharField&gt;), ('added_date', &lt;django.db.models.fields.DateTimeField&gt;), ('modified_date', &lt;django.db.models.fields.DateTimeField&gt;)]&gt;, &lt;CreateModel  name='User', fields=[('id', &lt;django.db.models.fields.AutoField&gt;), ('username', &lt;django.db.models.fields.CharField&gt;), ('checked', &lt;django.db.models.fields.BooleanField&gt;)]&gt;, &lt;CreateModel  name='Wine', fields=[('id', &lt;django.db.models.fields.AutoField&gt;), ('name', &lt;django.db.models.fields.TextField&gt;), ('rating', &lt;django.db.models.fields.SmallIntegerField&gt;), ('price', &lt;django.db.models.fields.IntegerField&gt;), ('comments', &lt;django.db.models.fields.TextField&gt;), ('image_url', &lt;django.db.models.fields.URLField&gt;)]&gt;, &lt;CreateModel  name='Rating', fields=[('id', &lt;django.db.models.fields.AutoField&gt;), ('data', &lt;django.contrib.postgres.fields.jsonb.JSONField&gt;), ('positive', &lt;django.db.models.fields.FloatField&gt;), ('deep_model', &lt;django.db.models.fields.related.ForeignKey&gt;), ('image', &lt;django.db.models.fields.related.ForeignKey&gt;)]&gt;, &lt;CreateModel  name='PokemonRating', fields=[('id', &lt;django.db.models.fields.AutoField&gt;), ('data', &lt;django.contrib.postgres.fields.jsonb.JSONField&gt;), ('positive', &lt;django.db.models.fields.FloatField&gt;), ('deep_model', &lt;django.db.models.fields.related.ForeignKey&gt;), ('image', &lt;django.db.models.fields.related.ForeignKey&gt;)]&gt;, &lt;CreateModel  name='Image', fields=[('id', &lt;django.db.models.fields.AutoField&gt;), ('url', &lt;django.db.models.fields.URLField&gt;), ('title', &lt;django.db.models.fields.CharField&gt;), ('category', &lt;django.db.models.fields.related.ForeignKey&gt;)]&gt;, &lt;CreateModel  name='Boards', fields=[('id', &lt;django.db.models.fields.AutoField&gt;), ('title', &lt;django.db.models.fields.CharField&gt;), ('content', &lt;django.db.models.fields.TextField&gt;), ('registered_date', &lt;django.db.models.fields.DateTimeField&gt;), ('last_update_date', &lt;django.db.models.fields.DateTimeField&gt;), ('view_count', &lt;django.db.models.fields.IntegerField&gt;), ('image', &lt;django.db.models.fields.CharField&gt;), ('category', &lt;django.db.models.fields.related.ForeignKey&gt;), ('user', &lt;django.db.models.fields.related.ForeignKey&gt;)], options={'db_table': 'boards'}&gt;, &lt;CreateModel  name='BestPhoto', fields=[('id', &lt;django.db.models.fields.AutoField&gt;), ('url', &lt;django.db.models.fields.URLField&gt;), ('img', &lt;django.db.models.fields.related.ForeignKey&gt;)]&gt;]</em><a class="headerlink" href="#book.migrations.0001_initial.Migration.operations" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+</div>
+
+
+           </div>
+           
+          </div>
+          <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+        <a href="book.migrations.0002_auto_20200328_0312.html" class="btn btn-neutral float-right" title="book.migrations.0002_auto_20200328_0312 module" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
+      
+      
+        <a href="book.migrations.html" class="btn btn-neutral float-left" title="book.migrations package" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+      
+    </div>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2020, Yoonjae Park
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>

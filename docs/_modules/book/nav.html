@@ -1,0 +1,361 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>book.nav &mdash; Yozit dashboard  documentation</title>
+  
+
+  
+  
+  
+  
+
+  
+  <script type="text/javascript" src="../../_static/js/modernizr.min.js"></script>
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../../" src="../../_static/documentation_options.js"></script>
+        <script src="../../_static/jquery.js"></script>
+        <script src="../../_static/underscore.js"></script>
+        <script src="../../_static/doctools.js"></script>
+        <script src="../../_static/language_data.js"></script>
+    
+    <script type="text/javascript" src="../../_static/js/theme.js"></script>
+
+    
+
+  
+  <link rel="stylesheet" href="../../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="../../index.html" class="icon icon-home"> Yozit dashboard
+          
+
+          
+          </a>
+
+          
+            
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <p class="caption"><span class="caption-text">Contents:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../book.html">book package</a></li>
+</ul>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../index.html">Yozit dashboard</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../../index.html">Docs</a> &raquo;</li>
+        
+          <li><a href="../index.html">Module code</a> &raquo;</li>
+        
+      <li>book.nav</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <h1>Source code for book.nav</h1><div class="highlight"><pre>
+<span></span><span class="kn">import</span> <span class="nn">abc</span>
+<span class="kn">import</span> <span class="nn">json</span>
+<span class="kn">import</span> <span class="nn">typing</span>
+
+<span class="kn">from</span> <span class="nn">django.conf</span> <span class="kn">import</span> <span class="n">settings</span>
+
+<span class="n">VERSION</span> <span class="o">=</span> <span class="nb">getattr</span><span class="p">(</span><span class="n">settings</span><span class="p">,</span> <span class="s2">&quot;VERSION&quot;</span><span class="p">,</span> <span class="s2">&quot;0.0.1&quot;</span><span class="p">)</span>
+<span class="n">NAV_ITEM_JSON</span> <span class="o">=</span> <span class="nb">getattr</span><span class="p">(</span><span class="n">settings</span><span class="p">,</span> <span class="s2">&quot;NAV_ITEM_JSON&quot;</span><span class="p">,</span> <span class="kc">None</span><span class="p">)</span>
+<span class="k">if</span> <span class="n">NAV_ITEM_JSON</span><span class="p">:</span>
+    <span class="n">nav_config</span> <span class="o">=</span> <span class="n">json</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="nb">open</span><span class="p">(</span><span class="n">NAV_ITEM_JSON</span><span class="p">,</span> <span class="n">encoding</span><span class="o">=</span><span class="s2">&quot;utf-8&quot;</span><span class="p">))</span>
+<span class="k">else</span><span class="p">:</span>
+    <span class="n">nav_config</span> <span class="o">=</span> <span class="kc">None</span>
+
+
+<div class="viewcode-block" id="NavBase"><a class="viewcode-back" href="../../book.nav.html#book.nav.NavBase">[docs]</a><span class="k">class</span> <span class="nc">NavBase</span><span class="p">:</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Navigation 항목의 base 가 되는 class</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="n">description</span><span class="p">:</span> <span class="nb">str</span>
+    <span class="n">icon</span><span class="p">:</span> <span class="nb">str</span>
+
+    <span class="n">__metaclass__</span> <span class="o">=</span> <span class="n">abc</span><span class="o">.</span><span class="n">ABCMeta</span>
+
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">,</span>
+        <span class="n">description</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
+        <span class="n">icon</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
+        <span class="n">has_child</span><span class="p">:</span> <span class="nb">bool</span><span class="p">,</span>
+        <span class="n">should_superuser</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">,</span>
+    <span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">description</span> <span class="o">=</span> <span class="n">description</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">icon</span> <span class="o">=</span> <span class="n">icon</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">has_child</span> <span class="o">=</span> <span class="n">has_child</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">should_superuser</span> <span class="o">=</span> <span class="n">should_superuser</span>
+
+<div class="viewcode-block" id="NavBase.is_active"><a class="viewcode-back" href="../../book.nav.html#book.nav.NavBase.is_active">[docs]</a>    <span class="nd">@abc</span><span class="o">.</span><span class="n">abstractmethod</span>
+    <span class="k">def</span> <span class="nf">is_active</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">current_page</span><span class="p">:</span> <span class="nb">str</span><span class="p">):</span>
+        <span class="k">pass</span></div>
+
+<div class="viewcode-block" id="NavBase.get_active_set"><a class="viewcode-back" href="../../book.nav.html#book.nav.NavBase.get_active_set">[docs]</a>    <span class="nd">@abc</span><span class="o">.</span><span class="n">abstractmethod</span>
+    <span class="k">def</span> <span class="nf">get_active_set</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">pass</span></div></div>
+
+
+<div class="viewcode-block" id="NavCollection"><a class="viewcode-back" href="../../book.nav.html#book.nav.NavCollection">[docs]</a><span class="k">class</span> <span class="nc">NavCollection</span><span class="p">(</span><span class="n">NavBase</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Child 를 가지는 Navigation</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="n">collection</span><span class="p">:</span> <span class="nb">str</span>
+    <span class="n">child</span><span class="p">:</span> <span class="n">typing</span><span class="o">.</span><span class="n">List</span><span class="p">[</span><span class="n">NavBase</span><span class="p">]</span>
+    <span class="n">active_list</span><span class="p">:</span> <span class="n">typing</span><span class="o">.</span><span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span>
+
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">,</span>
+        <span class="n">description</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
+        <span class="n">icon</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
+        <span class="n">collection</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
+        <span class="n">child_info</span><span class="p">:</span> <span class="nb">dict</span><span class="p">,</span>
+        <span class="n">should_superuser</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+    <span class="p">):</span>
+        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span>
+            <span class="n">description</span><span class="o">=</span><span class="n">description</span><span class="p">,</span>
+            <span class="n">icon</span><span class="o">=</span><span class="n">icon</span><span class="p">,</span>
+            <span class="n">has_child</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+            <span class="n">should_superuser</span><span class="o">=</span><span class="n">should_superuser</span><span class="p">,</span>
+        <span class="p">)</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">collection</span> <span class="o">=</span> <span class="n">collection</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">child</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">active_set</span> <span class="o">=</span> <span class="nb">set</span><span class="p">()</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">_set_child</span><span class="p">(</span><span class="n">child_info</span><span class="p">)</span>
+
+<div class="viewcode-block" id="NavCollection.get_active_set"><a class="viewcode-back" href="../../book.nav.html#book.nav.NavCollection.get_active_set">[docs]</a>    <span class="k">def</span> <span class="nf">get_active_set</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">typing</span><span class="o">.</span><span class="n">Set</span><span class="p">[</span><span class="nb">str</span><span class="p">]:</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">active_set</span><span class="p">:</span>
+            <span class="k">for</span> <span class="n">child</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">child</span><span class="p">:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">active_set</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="n">child</span><span class="o">.</span><span class="n">get_active_set</span><span class="p">())</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">active_set</span></div>
+
+    <span class="k">def</span> <span class="nf">_set_child</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">child_info</span><span class="p">:</span> <span class="nb">dict</span><span class="p">):</span>
+        <span class="k">for</span> <span class="n">child</span> <span class="ow">in</span> <span class="n">child_info</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">child</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">NavigationFactory</span><span class="o">.</span><span class="n">get_navigation_item</span><span class="p">(</span><span class="n">child</span><span class="p">))</span>
+
+<div class="viewcode-block" id="NavCollection.is_active"><a class="viewcode-back" href="../../book.nav.html#book.nav.NavCollection.is_active">[docs]</a>    <span class="k">def</span> <span class="nf">is_active</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">current_page</span><span class="p">):</span>
+        <span class="k">return</span> <span class="n">current_page</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_active_set</span><span class="p">()</span></div></div>
+
+
+<div class="viewcode-block" id="NavItem"><a class="viewcode-back" href="../../book.nav.html#book.nav.NavItem">[docs]</a><span class="k">class</span> <span class="nc">NavItem</span><span class="p">(</span><span class="n">NavBase</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    말단 Navigation 노드</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="n">template</span><span class="p">:</span> <span class="nb">str</span>
+
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">,</span>
+        <span class="n">description</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
+        <span class="n">icon</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
+        <span class="n">template</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
+        <span class="n">argument</span><span class="p">:</span> <span class="n">typing</span><span class="o">.</span><span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+        <span class="n">external</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">,</span>
+        <span class="n">should_superuser</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">,</span>
+        <span class="n">login_state</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;always&quot;</span><span class="p">,</span>
+        <span class="n">active_override</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+    <span class="p">):</span>
+        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span>
+            <span class="n">description</span><span class="o">=</span><span class="n">description</span><span class="p">,</span>
+            <span class="n">icon</span><span class="o">=</span><span class="n">icon</span><span class="p">,</span>
+            <span class="n">has_child</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+            <span class="n">should_superuser</span><span class="o">=</span><span class="n">should_superuser</span><span class="p">,</span>
+        <span class="p">)</span>
+
+        <span class="k">if</span> <span class="n">external</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">template</span> <span class="o">=</span> <span class="n">template</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">active</span> <span class="o">=</span> <span class="p">{</span><span class="s2">&quot;&quot;</span><span class="p">}</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">template</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot;book:</span><span class="si">{</span><span class="n">template</span><span class="si">}</span><span class="s2">&quot;</span>
+            <span class="k">if</span> <span class="n">active_override</span><span class="p">:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">active</span> <span class="o">=</span> <span class="p">{</span><span class="n">active_override</span><span class="p">}</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">active</span> <span class="o">=</span> <span class="p">{</span><span class="n">template</span><span class="p">}</span>
+
+        <span class="k">if</span> <span class="n">argument</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">suffix</span> <span class="o">=</span> <span class="s2">&quot;?&quot;</span> <span class="o">+</span> <span class="s2">&quot;&amp;&quot;</span><span class="o">.</span><span class="n">join</span><span class="p">([</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">k</span><span class="si">}</span><span class="s2">=</span><span class="si">{</span><span class="n">v</span><span class="si">}</span><span class="s2">&quot;</span> <span class="k">for</span> <span class="n">k</span><span class="p">,</span> <span class="n">v</span> <span class="ow">in</span> <span class="n">argument</span><span class="o">.</span><span class="n">items</span><span class="p">()])</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">suffix</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">argument</span> <span class="o">=</span> <span class="n">argument</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">external</span> <span class="o">=</span> <span class="n">external</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">login_state</span> <span class="o">=</span> <span class="n">login_state</span>
+
+<div class="viewcode-block" id="NavItem.is_active"><a class="viewcode-back" href="../../book.nav.html#book.nav.NavItem.is_active">[docs]</a>    <span class="k">def</span> <span class="nf">is_active</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">current_page</span><span class="p">:</span> <span class="nb">str</span><span class="p">):</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">template</span> <span class="o">==</span> <span class="n">current_page</span></div>
+
+<div class="viewcode-block" id="NavItem.get_active_set"><a class="viewcode-back" href="../../book.nav.html#book.nav.NavItem.get_active_set">[docs]</a>    <span class="k">def</span> <span class="nf">get_active_set</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">typing</span><span class="o">.</span><span class="n">Set</span><span class="p">[</span><span class="nb">str</span><span class="p">]:</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">active</span></div></div>
+
+
+<div class="viewcode-block" id="NavigationFactory"><a class="viewcode-back" href="../../book.nav.html#book.nav.NavigationFactory">[docs]</a><span class="k">class</span> <span class="nc">NavigationFactory</span><span class="p">:</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    주어진 dictionary 를 적절한 Navigation 노드로 변환한다.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+<div class="viewcode-block" id="NavigationFactory.get_navigation_item"><a class="viewcode-back" href="../../book.nav.html#book.nav.NavigationFactory.get_navigation_item">[docs]</a>    <span class="nd">@staticmethod</span>
+    <span class="k">def</span> <span class="nf">get_navigation_item</span><span class="p">(</span><span class="n">info</span><span class="p">:</span> <span class="nb">dict</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">NavBase</span><span class="p">:</span>
+        <span class="k">if</span> <span class="s2">&quot;collection&quot;</span> <span class="ow">in</span> <span class="n">info</span><span class="p">:</span>
+            <span class="k">return</span> <span class="n">NavCollection</span><span class="p">(</span><span class="o">**</span><span class="n">info</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">return</span> <span class="n">NavItem</span><span class="p">(</span><span class="o">**</span><span class="n">info</span><span class="p">)</span></div></div>
+
+
+<div class="viewcode-block" id="Sidebar"><a class="viewcode-back" href="../../book.nav.html#book.nav.Sidebar">[docs]</a><span class="k">class</span> <span class="nc">Sidebar</span><span class="p">:</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Navigation 의 모든 정보를 가진 클래스</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">config</span><span class="p">:</span> <span class="n">typing</span><span class="o">.</span><span class="n">List</span><span class="p">[</span><span class="nb">dict</span><span class="p">]):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">items</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="k">for</span> <span class="n">block_config</span> <span class="ow">in</span> <span class="n">config</span><span class="p">:</span>
+            <span class="k">for</span> <span class="n">k</span><span class="p">,</span> <span class="n">v</span> <span class="ow">in</span> <span class="n">block_config</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
+                <span class="n">nav_items</span> <span class="o">=</span> <span class="p">[]</span>
+                <span class="k">for</span> <span class="n">nav_item</span> <span class="ow">in</span> <span class="n">v</span><span class="p">:</span>
+                    <span class="n">nav_items</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">NavigationFactory</span><span class="o">.</span><span class="n">get_navigation_item</span><span class="p">(</span><span class="n">nav_item</span><span class="p">))</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">items</span><span class="o">.</span><span class="n">append</span><span class="p">((</span><span class="n">k</span><span class="p">,</span> <span class="n">nav_items</span><span class="p">))</span></div>
+
+
+<span class="n">sidebar</span> <span class="o">=</span> <span class="n">Sidebar</span><span class="p">(</span><span class="n">nav_config</span><span class="p">)</span>
+
+
+<div class="viewcode-block" id="get_render_dict"><a class="viewcode-back" href="../../book.nav.html#book.nav.get_render_dict">[docs]</a><span class="k">def</span> <span class="nf">get_render_dict</span><span class="p">(</span><span class="n">current_page</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">dict</span><span class="p">:</span>
+    <span class="n">render_dict</span> <span class="o">=</span> <span class="p">{</span><span class="s2">&quot;current_page&quot;</span><span class="p">:</span> <span class="n">current_page</span><span class="p">}</span>
+    <span class="k">return</span> <span class="n">render_dict</span></div>
+</pre></div>
+
+           </div>
+           
+          </div>
+          <footer>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2020, Yoonjae Park
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>

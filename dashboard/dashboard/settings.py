@@ -16,7 +16,7 @@ import requests
 ROOT_DIR = (
     environ.Path(__file__) - 2
 )  # (dashboard/dashboard/settings.py - 2 = dashboard/)
-APPS_DIR = ROOT_DIR.path("dashboar")
+APPS_DIR = ROOT_DIR.path("dashboard")
 env = environ.Env()
 
 # Quick-start development settings - unsuitable for production
@@ -39,9 +39,15 @@ DJANGO_APPS = [
     "django.contrib.humanize",
 ]
 
-THIRD_PARTY_APPS = ["rest_framework", "django_extensions", "django_filters"]
+THIRD_PARTY_APPS = [
+    "rest_framework",
+    "django_filters",
+    "crispy_forms",
+    "rest_framework_api_key",
+    "rest_framework.authtoken",
+]
 
-LOCAL_APPS = ["book.apps.BookConfig"]
+LOCAL_APPS = ["book.apps.BookConfig", "chatbot.apps.ChatbotConfig"]
 
 INSTALLED_APPS = DJANGO_APPS + THIRD_PARTY_APPS + LOCAL_APPS
 
@@ -68,6 +74,7 @@ TEMPLATES = [
                 "django.template.context_processors.request",
                 "django.contrib.auth.context_processors.auth",
                 "django.contrib.messages.context_processors.messages",
+                "utils.context_processors.settings_context",
             ],
         },
     },
@@ -149,6 +156,14 @@ REST_FRAMEWORK = {
         "rest_framework.authentication.SessionAuthentication",
         "rest_framework.authentication.TokenAuthentication",
     ),
-    "DEFAULT_PERMISSION_CLASSES": ("rest_framework.permissions.IsAuthenticated",),
+    "DEFAULT_PERMISSION_CLASSES": (
+        "rest_framework.permissions.IsAuthenticated",
+        "rest_framework_api_key.permissions.HasAPIKey",
+        "rest_framework.permissions.IsAuthenticatedOrReadOnly",
+    ),
     "DEFAULT_FILTER_BACKENDS": ["django_filters.rest_framework.DjangoFilterBackend"],
 }
+
+CRISPY_TEMPLATE_PACK = "bootstrap4"
+
+NAV_ITEM_JSON = ROOT_DIR.path("config/sidebar.json")

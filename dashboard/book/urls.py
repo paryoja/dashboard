@@ -1,8 +1,7 @@
 from django.urls import path
 
-from . import views
-from . import views_api
 from . import views_user
+from .views import people, views, views_api
 
 app_name = "book"
 urlpatterns = [
@@ -11,6 +10,7 @@ urlpatterns = [
     path("study/paper/", views.paper, name="paper"),
     path("study/colab/", views.colab, name="colab"),
     path("link/", views.link, name="link"),
+    path("web_stack/", views.web_stack, name="web_stack"),
     path("algorithm/", views.algorithm, name="algorithm"),
     path("law_search/", views.law_search, name="law_search"),
     path("lotto/", views.lotto, name="lotto"),
@@ -23,20 +23,20 @@ urlpatterns = [
     path("idea/", views.idea, name="idea"),
     path("chatbot/", views.chatbot, name="chatbot"),
     path("query_chatbot/", views.query_chatbot, name="query_chatbot"),
-    path("people/", views.people, name="people"),
-    path("people_result/", views.people_result, name="people_result"),
-    path("people_result/<int:page>", views.people_result, name="people_result"),
+    path("people/", people.people, name="people"),
+    path("people_result/", people.people_result, name="people_result"),
+    path("people_result/<int:page>", people.people_result, name="people_result"),
     path(
         "people_result/download/<str:selected>/<int:page>",
-        views.people_result_download,
+        people.people_result_download,
         name="people_result_download",
     ),
     path(
         "people/high_expectation/",
-        views.people_high_expectation,
+        people.people_high_expectation,
         name="people_high_expectation",
     ),
-    path("people/people_links/", views.people_links, name="people_links"),
+    path("people/people_links/", people.people_links, name="people_links"),
     path("people/relabel", views.relabel, name="people_relabel"),
     path("real_estate/", views.real_estate, name="real_estate"),
     path("recommend_book/", views.recommend_book, name="recommend_book"),

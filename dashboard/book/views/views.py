@@ -5,17 +5,16 @@ import math
 import traceback
 
 import requests
+from book import models, utils
+from book.nav import get_render_dict
+from book.views import views_api
+from book.xml_helper import XmlDictConfig, get_xml_request
 from bs4 import BeautifulSoup
 from django.contrib.auth.decorators import login_required, user_passes_test
 from django.core import exceptions
 from django.db.models import Count
 from django.http import HttpResponse
 from django.shortcuts import render
-
-from . import models, utils, views_api
-from .nav import get_render_dict
-from .templatetags import book_extras
-from .xml_helper import XmlDictConfig, get_xml_request
 
 logger = logging.getLogger(__name__)
 
@@ -31,6 +30,11 @@ def link(request):
     return render(request, "book/link.html", render_dict)
 
 
+def web_stack(request):
+    render_dict = get_render_dict("web_stack")
+    return render(request, "book/web_stack.html", render_dict)
+
+
 def algorithm(request):
     render_dict = get_render_dict("algorithm")
     return render(request, "book/algorithm.html", render_dict)
@@ -42,8 +46,8 @@ def live_currency(request):
     render_dict = get_render_dict("live_currency")
     currency_list = models.Currency.objects.all().order_by("-date")
 
-    total_from = 0
-    total_to = 0
+    total_from = 0.0
+    total_to = 0.0
 
     for currency in currency_list:
         total_from += currency.from_amount
@@ -290,165 +294,6 @@ def query_chatbot(request):
         return HttpResponse("Empty Message")
 
 
-@user_passes_test(lambda u: u.is_superuser)
-def people(request):
-    render_dict = get_render_dict("people")
-
-    query = request.GET.get("query", "")
-
-    unclassified = models.PeopleImage.objects.filter(selected=None, rating=None)
-    unclassified_count = unclassified.count()
-
-    distinct = (
-        unclassified.order_by()
-        .values("user_id")
-        .distinct()
-        .annotate(Count("id"))
-        .order_by("id__count")
-    )
-    distinct = utils.to_table(distinct, 5)
-
-    render_dict["distinct"] = distinct
-
-    query_count = unclassified.filter(title__contains=query).count()
-    image_list = unclassified.filter(title__contains=query).order_by("?")[:100]
-
-    render_dict["unclassified_count"] = unclassified_count
-    render_dict["query_count"] = query_count
-    render_dict["distinct"] = distinct
-
-    if query:
-        id_select = unclassified.filter(url__contains=query)
-        render_dict["query_count"] += id_select.count()
-        render_dict["image_list"] = id_select[:50].values() | image_list.values()
-    else:
-        render_dict["image_list"] = image_list.values()
-    render_dict["query"] = query
-
-    return render(request, "book/people/people.html", render_dict)
-
-
-@user_passes_test(lambda u: u.is_superuser)
-def people_result(request, page=1):
-    selected = request.GET.get("arg", "True")
-    render_dict = get_render_dict("people_result_{}".format(selected))
-    render_dict["arg"] = selected
-
-    selected = selected == "True"
-    query = request.GET.get("query", "")
-    selected_list = models.PeopleImage.objects.filter(selected=selected)
-
-    distinct = (
-        selected_list.order_by()
-        .values("user_id")
-        .distinct()
-        .annotate(Count("id"))
-        .order_by("-id__count")
-    )
-    distinct = utils.to_table(distinct, 5)
-    render_dict["distinct"] = distinct
-
-    if query:
-        queried_list = selected_list.filter(url__contains=query)
-        selected_list = queried_list | selected_list.filter(title__contains=query)
-    else:
-        selected_list = models.PeopleImage.objects.filter(selected=selected)
-    selected_list = selected_list.order_by("-id")
-    p, page_info = utils.get_page_info(selected_list, page, 120)
-
-    row_count = 6
-    people_table = utils.to_table(p, row_count)
-
-    render_dict["people_table"] = people_table
-    render_dict["page_info"] = page_info
-    render_dict["query"] = query
-
-    return render(request, "book/people/people_result.html", render_dict)
-
-
-@user_passes_test(lambda u: u.is_superuser)
-def people_high_expectation(request):
-    render_dict = get_render_dict("people_high_expectation")
-
-    query = request.GET.get("query", "")
-    order = request.GET.get("order", "decreasing")
-
-    selected_list = models.Rating.objects.filter(
-        image__selected=None, deep_model__latest=True
-    )
-    render_dict["unclassified_count"] = selected_list.count()
-
-    if query:
-        queried_list = selected_list.filter(image__url__contains=query)[:100]
-        selected_list = (
-            queried_list | selected_list.filter(image__title__contains=query)[:100]
-        )
-
-    render_dict["query_count"] = selected_list.count()
-
-    if order == "decreasing":
-        selected_list = selected_list.order_by("-positive")[:100]
-    elif order == "increasing":
-        selected_list = selected_list.order_by("positive")[:100]
-    else:
-        selected_list = selected_list.order_by("?")[:100]
-
-    unclassified = [rating.image for rating in selected_list]
-
-    render_dict["rating"] = selected_list
-
-    render_dict["image_list"] = unclassified
-    render_dict["query"] = query
-
-    return render(request, "book/people/people.html", render_dict)
-
-
-@user_passes_test(lambda u: u.is_superuser)
-def people_links(request):
-    render_dict = get_render_dict("people_result")
-
-    selected_list = models.PeopleImage.objects.filter(title__contains="@").order_by("?")
-
-    new_id = 0
-    user_names = set()
-    stop = False
-    for selected_image in selected_list:
-        names = book_extras.user_pattern.findall(selected_image.title)
-        for name in names:
-            if not models.User.objects.filter(username=name).exists():
-                user_names.add(name)
-                new_id += 1
-
-                if new_id == 10:
-                    stop = True
-                    break
-        if stop:
-            break
-
-    verified = set()
-
-    while user_names:
-        user = user_names.pop()
-        r = requests.get("https://www.instagram.com/" + user)
-        if r.status_code == 200:
-            verified.add(user)
-        else:
-            models.User(username=user, checked=False).save()
-
-    render_dict["user_names"] = verified
-    return render(request, "book/people/people_links.html", render_dict)
-
-
-@user_passes_test(lambda u: u.is_superuser)
-def people_result_download(request, selected, page):
-    image_list = models.PeopleImage.objects.filter(selected=selected).only(
-        "url", "selected", "page"
-    )
-
-    count = 1000
-    return utils.get_compressed_result(image_list, count, page)
-
-
 def real_estate(request):
     render_dict = get_render_dict("real_estate")
 
@@ -590,6 +435,11 @@ def image(request, data_type="pokemon"):
                         "{}".format(a), url, category_id, data_type
                     )
 
+        except KeyError:
+            if "parsed" in render_dict:
+                render_dict["parsed"] += traceback.format_exc()
+            else:
+                render_dict["parsed"] = traceback.format_exc()
         except Exception:
             if "parsed" in render_dict:
                 render_dict["parsed"] += traceback.format_exc()
@@ -745,7 +595,11 @@ def range_date(start, end):
 def corona(request):
     render_dict = get_render_dict("corona")
 
-    start_date = models.Corona.objects.order_by("date")[0].date
+    corona_list = models.Corona.objects.order_by("date")
+    if not corona_list:
+        return render(request, "book/corona.html", render_dict)
+
+    start_date = corona_list[0].date
     end_date = datetime.date.today() + datetime.timedelta(days=10)
 
     labels = []
@@ -795,7 +649,8 @@ def add_user(request):
     user = request.GET["username"]
     checked = request.GET["checked"]
 
-    obj = models.User(username=user, checked=checked)
+    obj = models.User.objects.get(username=user)
+    obj.checked = checked
     obj.save()
 
     return HttpResponse("1")

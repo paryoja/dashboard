@@ -1,20 +1,98 @@
 {% extends 'book/base/base.html' %}
 
 {% block body %}
-    {% load book_extras %}
-    <table>
-        {% for name in user_names %}
-            <tr>
-                <td><a href="https://www.instagram.com/{{ name }}" target="_blank">{{ name }}</a></td>
-                <td>
-                    <a class="btn btn-sm btn-primary"
-                       href="{% url 'book:add_user' %}?username={{ name }}&checked=True">True</a>
-                </td>
-                <td>
-                    <a class="btn btn-sm btn-primary"
-                       href="{% url 'book:add_user' %}?username={{ name }}&checked=False">False</a>
-                </td>
-            </tr>
-        {% endfor %}
-    </table>
+  {% load book_extras %}
+  <table>
+    {% for user in user_names %}
+      <tr>
+        <td>
+          {#          <a role="button" href="#" data-toggle="modal" data-target="#exampleModal"#}
+          {#             data-whatever="{{ user.username }}">{{ user.username }}</a>#}
+          <a href="https://instagram.com/{{ user.username }}" target="_blank">{{ user.username }}</a>
+        </td>
+        <td>
+          <button class="btn btn-sm btn-primary"
+                  data-whatever="?username={{ user.username }}&checked=True">True
+          </button>
+        </td>
+        <td>
+          <button class="btn btn-sm btn-primary"
+                  data-whatever="?username={{ user.username }}&checked=False">False
+          </button>
+        </td>
+      </tr>
+    {% endfor %}
+  </table>
+
+  <!-- modal -->
+  <div class="modal fade bd-example-modal-lg" id="exampleModal" tabindex="-1" role="dialog"
+       aria-labelledby="exampleModalLabel"
+       aria-hidden="true">
+    <div class="modal-dialog" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h4 class="modal-title" id="image_id"></h4>
+          <h4 class="modal-title" id="exampleModalLabel"> 이미지 정보 수정</h4>
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        <div class="modal-body">
+          <!--<img src="" width="100%">-->
+          <div id="classification">
+            <form>
+              <div class="form-group row">
+                <div class="col">
+                  <button type="submit" class="btn btn-primary mb-2">True</button>
+                  <button type="submit" class="btn btn-primary mb-2">False</button>
+                </div>
+              </div>
+            </form>
+          </div>
+          <div id="instagram"></div>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+        </div>
+      </div>
+    </div>
+  </div>
+{% endblock %}
+{% block scripts %}
+  <script src="https://cdn.jsdelivr.net/npm/js-cookie@2/src/js.cookie.min.js"></script>
+  <script async src="https://www.instagram.com/embed.js"></script>
+  <script>
+    $('#exampleModal').on('show.bs.modal', function (event) {
+      let button = $(event.relatedTarget); // Button that triggered the modal
+      let username = button.data('whatever'); // Extract info from data-* attributes
+
+      let url = `https://instagram.com/${username}`;
+      let api_url = `https://api.instagram.com/oembed/?url=${url}&hidecaption=1&omitscript=1`;
+      fetch(api_url).then(function (res) {
+        return res.json();
+      }).then(function (res) {
+        let instagram_div = $('#instagram');
+        instagram_div.html(res.html);
+      }).then(function () {
+        window.instgrm.Embeds.process();
+      });
+    });
+
+    $('button[class="btn btn-sm btn-primary"]').click(function (e) {
+      e.stopPropagation();
+      e.preventDefault();
+      let button = $(e.target);
+      let data = button.attr('data-whatever');
+
+      console.log(data);
+
+      fetch(`{% url 'book:add_user' %}${data}`, {
+        method: 'GET',
+        credentials: 'same-origin'
+      });
+
+      let closest_tr = $(e.target).closest('tr');
+      closest_tr.remove();
+    });
+  </script>
 {% endblock %}

@@ -5,13 +5,12 @@ import typing
 
 import requests
 import urllib3
+from book import models
 from bs4 import BeautifulSoup
 from celery import shared_task
 from django.db import models as dj_models
 from django.forms.models import model_to_dict
 from django.http import HttpResponse, HttpResponseBadRequest, JsonResponse
-
-from . import models
 
 logger = logging.getLogger(__name__)
 
@@ -25,6 +24,8 @@ class Domain:
 
 def image(request, method, image_type="People") -> HttpResponse:
     image_id = request.POST.get("image_id")
+    if image_id is None:
+        return HttpResponseBadRequest("Empty Image Id")
     if image_type == "People":
         img = models.PeopleImage.objects.get(id=int(image_id))
     elif image_type == "Pokemon":
@@ -87,7 +88,10 @@ def get_img_rating(
 
 
 def save_success(
-    domain: str, json_data: dict, target_deep_model: str, int_img_id: int
+    domain: str,
+    json_data: dict,
+    target_deep_model: models.DeepLearningModel,
+    int_img_id: int,
 ) -> None:
     if domain == Domain.People:
         class_names = json_data["class_names"]
@@ -113,7 +117,10 @@ def save_success(
 
 
 def save_failure(
-    domain: str, json_data: dict, target_deep_model: str, int_img_id: int
+    domain: str,
+    json_data: dict,
+    target_deep_model: models.DeepLearningModel,
+    int_img_id: int,
 ) -> None:
     if domain == Domain.People:
         rating = models.Rating(
@@ -128,7 +135,7 @@ def save_failure(
         rating.save()
 
 
-def call_api_server(img, domain: str) -> typing.Optional:
+def call_api_server(img, domain: str) -> typing.Optional[requests.Response]:
     data = {"requested_url": img.url}
     headers = {"Content-Type": "application/json"}
 
@@ -137,16 +144,16 @@ def call_api_server(img, domain: str) -> typing.Optional:
     request_url = "http://{}:{}/{}".format(server.ip, server.port, server.endpoint)
     try:
         result = requests.post(request_url, json=data, headers=headers)
-    except urllib3.exceptions.MaxRetryError:
+    except urllib3.exceptions.MaxRetryError as e:
         logger.warning("Max tries failed {}".format(request_url))
-        return
-    except requests.exceptions.ConnectionError:
-        logger.warning("Connection Refused".format(request_url))
-        return
+        raise e
+    except requests.exceptions.ConnectionError as e:
+        logger.warning("Connection Refused {}".format(request_url))
+        raise e
 
     if result.status_code != 200:
         logger.warning(result.text, result.status_code)
-        return
+        return None
     return result
 
 
@@ -246,7 +253,11 @@ def pokemon_classification_api(request) -> HttpResponse:
 def get_image_directory_list(data_type, url, a_parsed) -> list:
     if data_type == "people":
         json_url = url + a_parsed[0][0] + "/image.json"
-        result = json.loads(requests.get(json_url).text)["image_list"]
+        image_list_text = requests.get(json_url).text
+        try:
+            result = json.loads(image_list_text)["image_list"]
+        except json.JSONDecodeError as e:
+            raise e
 
     elif data_type == "pokemon":
         directory_url = url + a_parsed[0][0]
@@ -293,8 +304,8 @@ def add_image_client(a_text, url, category_id, data_type) -> None:
                 else:
                     raise ValueError("Unsupported data_type {}".format(data_type))
                 image_obj.save()
-            except Exception as e:
-                print(e)
+            except Exception:
+                continue
 
 
 @shared_task
@@ -312,4 +323,4 @@ def cron_image_add() -> None:
             add_image_client.delay("{}".format(a), url_text, category_id, data_type)
 
     except Exception as e:
-        raise "Error {}".format(e)
+        raise Exception("Error {}".format(e))

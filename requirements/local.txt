@@ -1,12 +1,24 @@
 -r ./base.txt
 
+# debug
+Werkzeug==1.0.0
+django-extensions==2.2.9  # https://github.com/django-extensions/django-extensions
+django-debug-toolbar==2.2
+
+# linting
 pylint_django==2.0.14
 pylint_celery==0.3
+flake8==3.7.9
+flake8-isort==2.9.1  # https://github.com/gforcada/flake8-isort
 
-pytest-django
+# testing
+pytest-django==3.8.0
 django-stubs==1.5.0  # https://github.com/typeddjango/django-stubs
 mypy==0.770
+
+# git pre-commit
 pre-commit==2.2.0
 
-flake8==3.7.9
-flake8-isort==2.9.0  # https://github.com/gforcada/flake8-isort
+# documents
+Sphinx==2.4.4
+sphinx-rtd-theme==0.4.3

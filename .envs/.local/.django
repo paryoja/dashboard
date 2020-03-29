@@ -2,6 +2,7 @@
 # ------------------------------------------------------------------------------
 DJANGO_SECRET_KEY=0&t6c0yk4p_v
 DJANGO_ALLOWED_HOSTS=localhost
+USE_DOCKER=yes
 
 DEBUG=True
 

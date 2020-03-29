@@ -16,8 +16,7 @@ Including another URLconf
 from django.conf import settings
 from django.contrib import admin
 from django.shortcuts import redirect
-from django.urls import path, include
-from django.urls import reverse
+from django.urls import include, path, reverse
 from django.views import defaults as default_views
 
 
@@ -26,11 +25,13 @@ def simple_redirect(_):
 
 
 urlpatterns = [
+    path("", simple_redirect),
     path("book/", include("book.urls")),
     path("admin/", admin.site.urls),
     path("accounts/", include("django.contrib.auth.urls")),
-    path("", simple_redirect),
+    path("chatbot/", include("chatbot.urls")),
     path("api/", include("dashboard.api_router")),
+    path("api-auth/", include("rest_framework.urls")),
 ]
 
 if settings.DEBUG:
@@ -52,3 +53,9 @@ if settings.DEBUG:
         ),
         path("500/", default_views.server_error),
     ]
+
+    if "debug_toolbar" in settings.INSTALLED_APPS:
+        # noinspection PyPackageRequirements
+        import debug_toolbar
+
+        urlpatterns = [path("__debug__/", include(debug_toolbar.urls))] + urlpatterns

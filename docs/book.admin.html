@@ -1,0 +1,466 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>book.admin module &mdash; Yozit dashboard  documentation</title>
+  
+
+  
+  
+  
+  
+
+  
+  <script type="text/javascript" src="_static/js/modernizr.min.js"></script>
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
+        <script src="_static/jquery.js"></script>
+        <script src="_static/underscore.js"></script>
+        <script src="_static/doctools.js"></script>
+        <script src="_static/language_data.js"></script>
+    
+    <script type="text/javascript" src="_static/js/theme.js"></script>
+
+    
+
+  
+  <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="book.apps module" href="book.apps.html" />
+    <link rel="prev" title="book.views.views_api module" href="book.views.views_api.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="index.html" class="icon icon-home"> Yozit dashboard
+          
+
+          
+          </a>
+
+          
+            
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <p class="caption"><span class="caption-text">Contents:</span></p>
+<ul class="current">
+<li class="toctree-l1 current"><a class="reference internal" href="book.html">book package</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="book.html#subpackages">Subpackages</a></li>
+<li class="toctree-l2 current"><a class="reference internal" href="book.html#submodules">Submodules</a><ul class="current">
+<li class="toctree-l3 current"><a class="current reference internal" href="#">book.admin module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="book.apps.html">book.apps module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="book.forms.html">book.forms module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="book.models.html">book.models module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="book.nav.html">book.nav module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="book.urls.html">book.urls module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="book.utils.html">book.utils module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="book.views_user.html">book.views_user module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="book.xml_helper.html">book.xml_helper module</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="book.html#module-book">Module contents</a></li>
+</ul>
+</li>
+</ul>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">Yozit dashboard</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="index.html">Docs</a> &raquo;</li>
+        
+          <li><a href="book.html">book package</a> &raquo;</li>
+        
+      <li>book.admin module</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+            
+            <a href="_sources/book.admin.rst.txt" rel="nofollow"> View page source</a>
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <div class="section" id="module-book.admin">
+<span id="book-admin-module"></span><h1>book.admin module<a class="headerlink" href="#module-book.admin" title="Permalink to this headline">¶</a></h1>
+<dl class="class">
+<dt id="book.admin.APIServerAdmin">
+<em class="property">class </em><code class="sig-prename descclassname">book.admin.</code><code class="sig-name descname">APIServerAdmin</code><span class="sig-paren">(</span><em class="sig-param">model</em>, <em class="sig-param">admin_site</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/book/admin.html#APIServerAdmin"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#book.admin.APIServerAdmin" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">django.contrib.admin.options.ModelAdmin</span></code></p>
+<dl class="attribute">
+<dt id="book.admin.APIServerAdmin.list_display">
+<code class="sig-name descname">list_display</code><em class="property"> = ('title', 'ip', 'port', 'endpoint')</em><a class="headerlink" href="#book.admin.APIServerAdmin.list_display" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="book.admin.APIServerAdmin.media">
+<em class="property">property </em><code class="sig-name descname">media</code><a class="headerlink" href="#book.admin.APIServerAdmin.media" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="book.admin.BookAdmin">
+<em class="property">class </em><code class="sig-prename descclassname">book.admin.</code><code class="sig-name descname">BookAdmin</code><span class="sig-paren">(</span><em class="sig-param">model</em>, <em class="sig-param">admin_site</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/book/admin.html#BookAdmin"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#book.admin.BookAdmin" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">django.contrib.admin.options.ModelAdmin</span></code></p>
+<dl class="attribute">
+<dt id="book.admin.BookAdmin.list_display">
+<code class="sig-name descname">list_display</code><em class="property"> = ('name', 'author', 'year')</em><a class="headerlink" href="#book.admin.BookAdmin.list_display" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="book.admin.BookAdmin.media">
+<em class="property">property </em><code class="sig-name descname">media</code><a class="headerlink" href="#book.admin.BookAdmin.media" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="book.admin.CoronaAdmin">
+<em class="property">class </em><code class="sig-prename descclassname">book.admin.</code><code class="sig-name descname">CoronaAdmin</code><span class="sig-paren">(</span><em class="sig-param">model</em>, <em class="sig-param">admin_site</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/book/admin.html#CoronaAdmin"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#book.admin.CoronaAdmin" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">django.contrib.admin.options.ModelAdmin</span></code></p>
+<dl class="attribute">
+<dt id="book.admin.CoronaAdmin.list_display">
+<code class="sig-name descname">list_display</code><em class="property"> = ('date', 'confirmed', 'death', 'country')</em><a class="headerlink" href="#book.admin.CoronaAdmin.list_display" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="book.admin.CoronaAdmin.media">
+<em class="property">property </em><code class="sig-name descname">media</code><a class="headerlink" href="#book.admin.CoronaAdmin.media" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="book.admin.CurrencyAdmin">
+<em class="property">class </em><code class="sig-prename descclassname">book.admin.</code><code class="sig-name descname">CurrencyAdmin</code><span class="sig-paren">(</span><em class="sig-param">model</em>, <em class="sig-param">admin_site</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/book/admin.html#CurrencyAdmin"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#book.admin.CurrencyAdmin" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">django.contrib.admin.options.ModelAdmin</span></code></p>
+<dl class="attribute">
+<dt id="book.admin.CurrencyAdmin.fieldsets">
+<code class="sig-name descname">fieldsets</code><em class="property"> = [('Date information', {'fields': ['date']}), ('From', {'fields': ['from_currency', 'from_amount']}), ('To', {'fields': ['to_currency', 'to_amount']}), ('Rate', {'fields': ['currency_rate']})]</em><a class="headerlink" href="#book.admin.CurrencyAdmin.fieldsets" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="book.admin.CurrencyAdmin.list_display">
+<code class="sig-name descname">list_display</code><em class="property"> = ('date', 'from_amount', 'to_amount', 'currency_rate')</em><a class="headerlink" href="#book.admin.CurrencyAdmin.list_display" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="book.admin.CurrencyAdmin.media">
+<em class="property">property </em><code class="sig-name descname">media</code><a class="headerlink" href="#book.admin.CurrencyAdmin.media" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="book.admin.DeepLearningModelAdmin">
+<em class="property">class </em><code class="sig-prename descclassname">book.admin.</code><code class="sig-name descname">DeepLearningModelAdmin</code><span class="sig-paren">(</span><em class="sig-param">model</em>, <em class="sig-param">admin_site</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/book/admin.html#DeepLearningModelAdmin"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#book.admin.DeepLearningModelAdmin" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">django.contrib.admin.options.ModelAdmin</span></code></p>
+<dl class="attribute">
+<dt id="book.admin.DeepLearningModelAdmin.list_display">
+<code class="sig-name descname">list_display</code><em class="property"> = ('domain', 'version', 'latest')</em><a class="headerlink" href="#book.admin.DeepLearningModelAdmin.list_display" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="book.admin.DeepLearningModelAdmin.media">
+<em class="property">property </em><code class="sig-name descname">media</code><a class="headerlink" href="#book.admin.DeepLearningModelAdmin.media" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="book.admin.ImageAdmin">
+<em class="property">class </em><code class="sig-prename descclassname">book.admin.</code><code class="sig-name descname">ImageAdmin</code><span class="sig-paren">(</span><em class="sig-param">model</em>, <em class="sig-param">admin_site</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/book/admin.html#ImageAdmin"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#book.admin.ImageAdmin" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">django.contrib.admin.options.ModelAdmin</span></code></p>
+<dl class="attribute">
+<dt id="book.admin.ImageAdmin.list_display">
+<code class="sig-name descname">list_display</code><em class="property"> = ('url', 'title')</em><a class="headerlink" href="#book.admin.ImageAdmin.list_display" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="book.admin.ImageAdmin.media">
+<em class="property">property </em><code class="sig-name descname">media</code><a class="headerlink" href="#book.admin.ImageAdmin.media" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="book.admin.LinkAdmin">
+<em class="property">class </em><code class="sig-prename descclassname">book.admin.</code><code class="sig-name descname">LinkAdmin</code><span class="sig-paren">(</span><em class="sig-param">model</em>, <em class="sig-param">admin_site</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/book/admin.html#LinkAdmin"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#book.admin.LinkAdmin" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">django.contrib.admin.options.ModelAdmin</span></code></p>
+<dl class="attribute">
+<dt id="book.admin.LinkAdmin.list_display">
+<code class="sig-name descname">list_display</code><em class="property"> = ('added_date', 'url', 'description', 'content_type')</em><a class="headerlink" href="#book.admin.LinkAdmin.list_display" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="book.admin.LinkAdmin.media">
+<em class="property">property </em><code class="sig-name descname">media</code><a class="headerlink" href="#book.admin.LinkAdmin.media" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="book.admin.LottoAdmin">
+<em class="property">class </em><code class="sig-prename descclassname">book.admin.</code><code class="sig-name descname">LottoAdmin</code><span class="sig-paren">(</span><em class="sig-param">model</em>, <em class="sig-param">admin_site</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/book/admin.html#LottoAdmin"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#book.admin.LottoAdmin" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">django.contrib.admin.options.ModelAdmin</span></code></p>
+<dl class="attribute">
+<dt id="book.admin.LottoAdmin.list_display">
+<code class="sig-name descname">list_display</code><em class="property"> = ('draw_number', 'numbers')</em><a class="headerlink" href="#book.admin.LottoAdmin.list_display" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="book.admin.LottoAdmin.media">
+<em class="property">property </em><code class="sig-name descname">media</code><a class="headerlink" href="#book.admin.LottoAdmin.media" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="book.admin.PaperAdmin">
+<em class="property">class </em><code class="sig-prename descclassname">book.admin.</code><code class="sig-name descname">PaperAdmin</code><span class="sig-paren">(</span><em class="sig-param">model</em>, <em class="sig-param">admin_site</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/book/admin.html#PaperAdmin"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#book.admin.PaperAdmin" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">django.contrib.admin.options.ModelAdmin</span></code></p>
+<dl class="attribute">
+<dt id="book.admin.PaperAdmin.list_display">
+<code class="sig-name descname">list_display</code><em class="property"> = ('title', 'link', 'file', 'slide', 'authors')</em><a class="headerlink" href="#book.admin.PaperAdmin.list_display" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="book.admin.PaperAdmin.media">
+<em class="property">property </em><code class="sig-name descname">media</code><a class="headerlink" href="#book.admin.PaperAdmin.media" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="book.admin.PeopleImageAdmin">
+<em class="property">class </em><code class="sig-prename descclassname">book.admin.</code><code class="sig-name descname">PeopleImageAdmin</code><span class="sig-paren">(</span><em class="sig-param">model</em>, <em class="sig-param">admin_site</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/book/admin.html#PeopleImageAdmin"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#book.admin.PeopleImageAdmin" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">django.contrib.admin.options.ModelAdmin</span></code></p>
+<dl class="attribute">
+<dt id="book.admin.PeopleImageAdmin.list_display">
+<code class="sig-name descname">list_display</code><em class="property"> = ('url', 'title', 'selected')</em><a class="headerlink" href="#book.admin.PeopleImageAdmin.list_display" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="book.admin.PeopleImageAdmin.media">
+<em class="property">property </em><code class="sig-name descname">media</code><a class="headerlink" href="#book.admin.PeopleImageAdmin.media" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="book.admin.PokemonImageAdmin">
+<em class="property">class </em><code class="sig-prename descclassname">book.admin.</code><code class="sig-name descname">PokemonImageAdmin</code><span class="sig-paren">(</span><em class="sig-param">model</em>, <em class="sig-param">admin_site</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/book/admin.html#PokemonImageAdmin"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#book.admin.PokemonImageAdmin" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">django.contrib.admin.options.ModelAdmin</span></code></p>
+<dl class="attribute">
+<dt id="book.admin.PokemonImageAdmin.list_display">
+<code class="sig-name descname">list_display</code><em class="property"> = ('url', 'title', 'original_label', 'classified')</em><a class="headerlink" href="#book.admin.PokemonImageAdmin.list_display" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="book.admin.PokemonImageAdmin.media">
+<em class="property">property </em><code class="sig-name descname">media</code><a class="headerlink" href="#book.admin.PokemonImageAdmin.media" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="book.admin.PokemonRatingAdmin">
+<em class="property">class </em><code class="sig-prename descclassname">book.admin.</code><code class="sig-name descname">PokemonRatingAdmin</code><span class="sig-paren">(</span><em class="sig-param">model</em>, <em class="sig-param">admin_site</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/book/admin.html#PokemonRatingAdmin"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#book.admin.PokemonRatingAdmin" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">django.contrib.admin.options.ModelAdmin</span></code></p>
+<dl class="method">
+<dt id="book.admin.PokemonRatingAdmin.media">
+<em class="property">property </em><code class="sig-name descname">media</code><a class="headerlink" href="#book.admin.PokemonRatingAdmin.media" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="book.admin.PokemonRatingAdmin.raw_id_fields">
+<code class="sig-name descname">raw_id_fields</code><em class="property"> = ('image',)</em><a class="headerlink" href="#book.admin.PokemonRatingAdmin.raw_id_fields" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="book.admin.RatingAdmin">
+<em class="property">class </em><code class="sig-prename descclassname">book.admin.</code><code class="sig-name descname">RatingAdmin</code><span class="sig-paren">(</span><em class="sig-param">model</em>, <em class="sig-param">admin_site</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/book/admin.html#RatingAdmin"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#book.admin.RatingAdmin" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">django.contrib.admin.options.ModelAdmin</span></code></p>
+<dl class="method">
+<dt id="book.admin.RatingAdmin.media">
+<em class="property">property </em><code class="sig-name descname">media</code><a class="headerlink" href="#book.admin.RatingAdmin.media" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="book.admin.RatingAdmin.raw_id_fields">
+<code class="sig-name descname">raw_id_fields</code><em class="property"> = ('image',)</em><a class="headerlink" href="#book.admin.RatingAdmin.raw_id_fields" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="book.admin.StockAdmin">
+<em class="property">class </em><code class="sig-prename descclassname">book.admin.</code><code class="sig-name descname">StockAdmin</code><span class="sig-paren">(</span><em class="sig-param">model</em>, <em class="sig-param">admin_site</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/book/admin.html#StockAdmin"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#book.admin.StockAdmin" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">django.contrib.admin.options.ModelAdmin</span></code></p>
+<dl class="attribute">
+<dt id="book.admin.StockAdmin.list_display">
+<code class="sig-name descname">list_display</code><em class="property"> = ('code', 'name')</em><a class="headerlink" href="#book.admin.StockAdmin.list_display" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="book.admin.StockAdmin.media">
+<em class="property">property </em><code class="sig-name descname">media</code><a class="headerlink" href="#book.admin.StockAdmin.media" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="book.admin.UserAdmin">
+<em class="property">class </em><code class="sig-prename descclassname">book.admin.</code><code class="sig-name descname">UserAdmin</code><span class="sig-paren">(</span><em class="sig-param">model</em>, <em class="sig-param">admin_site</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/book/admin.html#UserAdmin"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#book.admin.UserAdmin" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">django.contrib.admin.options.ModelAdmin</span></code></p>
+<dl class="attribute">
+<dt id="book.admin.UserAdmin.list_display">
+<code class="sig-name descname">list_display</code><em class="property"> = ('username', 'checked')</em><a class="headerlink" href="#book.admin.UserAdmin.list_display" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="book.admin.UserAdmin.media">
+<em class="property">property </em><code class="sig-name descname">media</code><a class="headerlink" href="#book.admin.UserAdmin.media" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+</div>
+
+
+           </div>
+           
+          </div>
+          <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+        <a href="book.apps.html" class="btn btn-neutral float-right" title="book.apps module" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
+      
+      
+        <a href="book.views.views_api.html" class="btn btn-neutral float-left" title="book.views.views_api module" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+      
+    </div>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2020, Yoonjae Park
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>

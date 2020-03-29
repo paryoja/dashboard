@@ -1,6 +1,6 @@
 from django.contrib.auth import views as auth_views
 
-from . import views
+from .views import views
 
 
 class BookLoginView(auth_views.LoginView):
@@ -9,8 +9,7 @@ class BookLoginView(auth_views.LoginView):
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-
-        context.update({**views.get_render_dict("")})
+        context.update({**views.get_render_dict("login")})
         return context
 
 
@@ -20,5 +19,5 @@ class BookLogoutView(auth_views.LogoutView):
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
 
-        context.update({"logged_out": True, **views.get_render_dict("")})
+        context.update({"logged_out": True, **views.get_render_dict("logout")})
         return context

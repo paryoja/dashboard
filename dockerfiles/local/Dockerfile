@@ -21,7 +21,11 @@ RUN chmod +x /entrypoint
 
 ENV PYTHONUNBUFFERED 1
 ENV PYTHONIOENCODING utf-8
+
 RUN echo alias python="python3" >> /root/.bashrc
 WORKDIR /work/dashboard
+
+# FOR LOCAL SETTINGS
+ENV DJANGO_SETTINGS_MODULE=dashboard.my_settings.local
 
 ENTRYPOINT ["/entrypoint"]

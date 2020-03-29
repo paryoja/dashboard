@@ -1,174 +1,174 @@
+import abc
+import json
+import typing
+
 from django.conf import settings
 
 VERSION = getattr(settings, "VERSION", "0.0.1")
+NAV_ITEM_JSON = getattr(settings, "NAV_ITEM_JSON", None)
+if NAV_ITEM_JSON:
+    nav_config = json.load(open(NAV_ITEM_JSON, encoding="utf-8"))
+else:
+    nav_config = None
 
 
-def get_nav_collapse(child_list, button_url, icon, description) -> dict:
-    active = ""
-    for item in child_list:
-        if item["active"]:
-            active = "active"
+class NavBase:
+    """
+    Navigation 항목의 base 가 되는 class
+    """
 
-    return {
-        "collapse": True,
-        "button_url": button_url,
-        "icon": icon,
-        "description": description,
-        "child_list": child_list,
-        "active": active,
-    }
+    description: str
+    icon: str
 
+    __metaclass__ = abc.ABCMeta
 
-def get_nav_item(template, icon, description, current_page, arg=None) -> dict:
-    if arg:
-        active_page = "{}_{}".format(template, arg)
-    else:
-        active_page = template
+    def __init__(
+        self,
+        description: str,
+        icon: str,
+        has_child: bool,
+        should_superuser: bool = False,
+    ):
+        self.description = description
+        self.icon = icon
+        self.has_child = has_child
+        self.should_superuser = should_superuser
 
-    return {
-        "collapse": False,
-        "template": "book:{}".format(template),
-        "arg": arg,
-        "icon": icon,
-        "description": description,
-        "active": "active" if active_page == current_page else "",
-    }
+    @abc.abstractmethod
+    def is_active(self, current_page: str):
+        pass
 
-
-def get_study_sub_list(current_page: str) -> dict:
-    study_list = list()
-    study_list.append(
-        get_nav_item("slide", "fa fa-file-powerpoint", "슬라이드", current_page)
-    )
-    study_list.append(get_nav_item("paper", "fa fa-file-pdf", "논문", current_page))
-    study_list.append(get_nav_item("colab", "fa fa-file-code", "실습자료", current_page))
-
-    collapse = get_nav_collapse(
-        study_list, "sidebarLecture", "fa fa-chalkboard-teacher", "스터디 정리"
-    )
-    return collapse
+    @abc.abstractmethod
+    def get_active_set(self):
+        pass
 
 
-def get_pokemon_sub_list(current_page: str) -> dict:
-    pokemon_result_list = list()
-    pokemon_result_list.append(
-        get_nav_item("pokemon_result", "far fa-thumbs-up", "적합", current_page, "yes")
-    )
-    pokemon_result_list.append(
-        get_nav_item(
-            "pokemon_result", "fa fa-angle-right", "단순 처리", current_page, "little"
+class NavCollection(NavBase):
+    """
+    Child 를 가지는 Navigation
+    """
+
+    collection: str
+    child: typing.List[NavBase]
+    active_set: typing.Set[str]
+
+    def __init__(
+        self,
+        description: str,
+        icon: str,
+        collection: str,
+        child_info: dict,
+        should_superuser=False,
+    ):
+        super().__init__(
+            description=description,
+            icon=icon,
+            has_child=True,
+            should_superuser=should_superuser,
         )
-    )
-    pokemon_result_list.append(
-        get_nav_item(
-            "pokemon_result", "fa fa-angle-double-right", "복잡 처리", current_page, "more"
+
+        self.collection = collection
+        self.child = []
+        self.active_set = set()
+
+        self._set_child(child_info)
+
+    def get_active_set(self) -> typing.Set[str]:
+        if not self.active_set:
+            for child in self.child:
+                self.active_set.update(child.get_active_set())
+        return self.active_set
+
+    def _set_child(self, child_info: dict):
+        for child in child_info:
+            self.child.append(NavigationFactory.get_navigation_item(child))
+
+    def is_active(self, current_page):
+        return current_page in self.get_active_set()
+
+
+class NavItem(NavBase):
+    """
+    말단 Navigation 노드
+    """
+
+    template: str
+    suffix: typing.Optional[str]
+
+    def __init__(
+        self,
+        description: str,
+        icon: str,
+        template: str,
+        argument: typing.Dict[str, str] = None,
+        external: bool = False,
+        should_superuser: bool = False,
+        login_state: str = "always",
+        active_override: str = None,
+    ):
+        super().__init__(
+            description=description,
+            icon=icon,
+            has_child=False,
+            should_superuser=should_superuser,
         )
-    )
-    pokemon_result_list.append(
-        get_nav_item("pokemon_result", "far fa-thumbs-down", "부적합", current_page, "no")
-    )
 
-    pokemon_list = list()
-    pokemon_list.append(
-        get_nav_item("pokemon_classification", "fa fa-check-square", "분류", current_page)
-    )
-    pokemon_list.append(
-        get_nav_collapse(
-            pokemon_result_list, "sidebarPokemonResult", "fa fa-poll", "분류결과"
-        )
-    )
-    pokemon_list.append(
-        get_nav_item(
-            "pokemon_sorted", "fa fa-sort-numeric-down", "Yes 순 분류", current_page
-        )
-    )
-    pokemon_list.append(
-        get_nav_item("pokemon_relabel", "fa fa-edit", "분류 수정", current_page)
-    )
+        if external:
+            self.template = template
+            self.active = {""}
+        else:
+            self.template = f"book:{template}"
+            if active_override:
+                self.active = {active_override}
+            else:
+                self.active = {template}
 
-    collapse = get_nav_collapse(pokemon_list, "sidebarPokemon", "fa fa-gamepad", "포켓몬")
-    return collapse
+        if argument:
+            self.suffix = "?" + "&".join([f"{k}={v}" for k, v in argument.items()])
+        else:
+            self.suffix = None
+        self.argument = argument
+        self.external = external
+        self.login_state = login_state
 
+    def is_active(self, current_page: str):
+        return self.template == current_page
 
-def get_invest_sub_list(current_page: str) -> dict:
-    invest_list = list()
-    invest_list.append(
-        get_nav_item(
-            "leading_stocks", "fa fa-money-check-alt", "Leading Stocks", current_page
-        )
-    )
-    invest_list.append(
-        get_nav_item(
-            "live_currency", "fa fa-exchange-alt", "Currency History", current_page
-        )
-    )
-    invest_list.append(
-        get_nav_item(
-            "krx_price_query", "fa fa-search-dollar", "Price Query", current_page
-        )
-    )
-    invest_list.append(
-        get_nav_item("lotto", "fa fa-money-bill-wave", "Lottery", current_page)
-    )
-    invest_list.append(
-        get_nav_item("real_estate", "fa fa-building", "부동산", current_page)
-    )
-    invest_list.append(get_nav_item("recommend_book", "fa fa-book", "책", current_page))
-
-    collapse = get_nav_collapse(invest_list, "sidebarInvest", "fe fe-dollar-sign", "투자")
-    return collapse
+    def get_active_set(self) -> typing.Set[str]:
+        return self.active
 
 
-def get_other_sub_list(current_page: str) -> dict:
-    classifier_list = list()
-    classifier_list.append(get_nav_item("people", "fa fa-users", "미분류", current_page))
-    classifier_list.append(
-        get_nav_item("people_result", "fa fa-user-check", "선택", current_page, "True")
-    )
-    classifier_list.append(
-        get_nav_item("people_result", "fa fa-user-times", "미선택", current_page, "False")
-    )
-    classifier_list.append(
-        get_nav_item("people_high_expectation", "fa fa-user-plus", "예상", current_page)
-    )
-    classifier_list.append(
-        get_nav_item("people_relabel", "fa fa-user-edit", "수정", current_page)
-    )
+class NavigationFactory:
+    """
+    주어진 dictionary 를 적절한 Navigation 노드로 변환한다.
+    """
 
-    other_list = list()
-    other_list.append(get_nav_item("food", "fa fa-utensils", "맛집", current_page))
-    other_list.append(get_nav_item("wine", "fa fa-wine-bottle", "Wine", current_page))
-    other_list.append(get_nav_item("law_search", "fa fa-gavel", "법률 검색", current_page))
-    other_list.append(get_nav_item("todo", "fa fa-check", "Todo List", current_page))
-    other_list.append(get_nav_item("algorithm", "fe fe-video", "비디오", current_page))
-    other_list.append(
-        get_nav_collapse(classifier_list, "sidebarClassifier", "fa fa-tags", "분류기")
-    )
-    other_list.append(get_nav_item("idea", "fe fe-zap", "아이디어 모음", current_page))
-    collapse = get_nav_collapse(other_list, "sidebarOther", "fe fe-star", "그 외")
-    return collapse
+    @staticmethod
+    def get_navigation_item(info: dict) -> NavBase:
+        if "collection" in info:
+            return NavCollection(**info)
+        else:
+            return NavItem(**info)
+
+
+class Sidebar:
+    """
+    Navigation 의 모든 정보를 가진 클래스
+    """
+
+    def __init__(self, config: typing.List[dict]):
+        self.items = []
+        for block_config in config:
+            for k, v in block_config.items():
+                nav_items = []
+                for nav_item in v:
+                    nav_items.append(NavigationFactory.get_navigation_item(nav_item))
+                self.items.append((k, nav_items))
+
+
+sidebar = Sidebar(nav_config)
 
 
 def get_render_dict(current_page: str) -> dict:
-    render_dict = {}
-
-    study_list = get_study_sub_list(current_page)
-    pokemon_list = get_pokemon_sub_list(current_page)
-    invest_list = get_invest_sub_list(current_page)
-    other_list = get_other_sub_list(current_page)
-
-    nav_list = list()
-    nav_list.append(get_nav_item("index", "fe fe-home", "Home", current_page))
-    nav_list.append(study_list)
-    nav_list.append(pokemon_list)
-    nav_list.append(
-        get_nav_item("corona", "fa fa-exclamation-triangle", "코로나", current_page)
-    )
-    nav_list.append(get_nav_item("chatbot", "fa fa-comments", "챗봇", current_page))
-    nav_list.append(get_nav_item("link", "fe fe-link", "링크", current_page))
-    nav_list.append(invest_list)
-    nav_list.append(other_list)
-
-    render_dict["nav_list"] = nav_list
-    render_dict["version"] = VERSION
+    render_dict = {"current_page": current_page}
     return render_dict

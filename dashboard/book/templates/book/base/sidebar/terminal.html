@@ -1,0 +1,20 @@
+<li class="nav-item">
+  {% if not nav_item.should_superuser or user.is_superuser %}
+    {% if nav_item.login_state == "always" or nav_item.login_state == "login" and user.is_active or nav_item.login_state == "logout" and not user.is_active %}
+      {% if nav_item.external %}
+        <a class="nav-link" href="{{ nav_item.template }}" target="_blank">
+          <i class="{{ nav_item.icon }}"></i> {{ nav_item.description }}
+        </a>
+      {% else %}
+        <a class="nav-link {% if current_page in nav_item.get_active_set %}active{% endif %}"
+                {% if nav_item.suffix %}
+           href="{% url nav_item.template %}{{ nav_item.suffix }}"
+                {% else %}
+           href="{% url nav_item.template %}"
+                {% endif %}>
+          <i class="{{ nav_item.icon }}"></i> {{ nav_item.description | safe }}
+        </a>
+      {% endif %}
+    {% endif %}
+  {% endif %}
+</li>

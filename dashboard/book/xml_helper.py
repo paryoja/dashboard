@@ -5,6 +5,7 @@ import requests
 
 class XmlListConfig(list):
     def __init__(self, a_list):
+        super().__init__()
         for element in a_list:
             if element:
                 # treat like dict
@@ -28,7 +29,7 @@ class XmlDictConfig(dict):
     >>> xmldict = XmlDictConfig(root)
 
     Or, if you want to use an XML string:
-
+    >>> xml_string = "<test>Hello World</test>"
     >>> root = ElementTree.XML(xml_string)
     >>> xmldict = XmlDictConfig(root)
 
@@ -36,6 +37,7 @@ class XmlDictConfig(dict):
     """
 
     def __init__(self, parent_element):
+        super().__init__()
         if parent_element.items():
             self.update(dict(parent_element.items()))
         for element in parent_element:
