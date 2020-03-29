@@ -15,6 +15,7 @@ flake8-isort==2.9.1  # https://github.com/gforcada/flake8-isort
 pytest-django==3.8.0
 django-stubs==1.5.0  # https://github.com/typeddjango/django-stubs
 mypy==0.770
+coverage==5.0.4  # https://github.com/nedbat/coveragepy
 
 # git pre-commit
 pre-commit==2.2.0
