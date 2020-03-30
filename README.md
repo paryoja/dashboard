@@ -4,6 +4,7 @@ Yozit Homepage
 잡다한 것들 통합 뷰어
 
 ![Language](https://img.shields.io/github/languages/count/paryoja/dashboard)
+[![Updates](https://pyup.io/repos/github/paryoja/dashboard/shield.svg)](https://pyup.io/repos/github/paryoja/dashboard/)
 ![Unittest](https://github.com/paryoja/dashboard/workflows/Unittest/badge.svg?branch=master)
 ![Codestyle](https://img.shields.io/badge/code%20style-black-000000.svg)
 [![CircleCI](https://circleci.com/gh/paryoja/dashboard.svg?style=svg)](https://circleci.com/gh/paryoja/dashboard)
