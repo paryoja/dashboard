@@ -65,15 +65,15 @@ def get_compressed_result(image_list, count, page):
 
 
 def to_table(contents, row_count):
-    table = []
     row = []
+    table = []
     for count, img in enumerate(contents):
         row.append(img)
         count += 1
 
         if count % row_count == 0:
-            row = []
             table.append(row)
+            row = []
     if row:
         table.append(row)
 

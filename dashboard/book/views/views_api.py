@@ -257,7 +257,9 @@ def get_image_directory_list(data_type, url, a_parsed) -> list:
         try:
             result = json.loads(image_list_text)["image_list"]
         except json.JSONDecodeError as e:
-            raise e
+            print(json_url)
+            print(image_list_text)
+            raise Exception(f"{json_url} {image_list_text} {e}")
 
     elif data_type == "pokemon":
         directory_url = url + a_parsed[0][0]
