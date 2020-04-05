@@ -5,6 +5,8 @@ MAINTAINER Yoonjae Park <yj0604.park@gmail.com>
 RUN apt-get update
 RUN apt-get dist-upgrade -y
 RUN apt-get install -y --fix-missing python3 python3-pip postgresql-client-common postgresql-client
+# For curl and make
+RUN apt-get install -y --fix-missing curl build-essential
 RUN apt-get purge -y --auto-remove -o APT::AutoRemove::RecommendsImportant=false
 RUN rm -rf /var/lib/apt/lists/*
 
