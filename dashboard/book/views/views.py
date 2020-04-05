@@ -19,27 +19,6 @@ from django.shortcuts import render
 logger = logging.getLogger(__name__)
 
 
-def index(request):
-    render_dict = get_render_dict("index")
-    return render(request, "book/index.html", render_dict)
-
-
-def link(request):
-    render_dict = get_render_dict("link")
-    render_dict["table_content"] = models.Link.objects.all()
-    return render(request, "book/link.html", render_dict)
-
-
-def web_stack(request):
-    render_dict = get_render_dict("web_stack")
-    return render(request, "book/web_stack.html", render_dict)
-
-
-def algorithm(request):
-    render_dict = get_render_dict("algorithm")
-    return render(request, "book/algorithm.html", render_dict)
-
-
 # investment
 @user_passes_test(lambda u: u.is_superuser)
 def live_currency(request):
@@ -52,17 +31,15 @@ def live_currency(request):
     for currency in currency_list:
         total_from += currency.from_amount
         total_to += currency.to_amount
-    total = {"from": total_from, "to": total_to, "rate": total_from / total_to}
+    if total_to != 0.0:
+        total = {"from": total_from, "to": total_to, "rate": total_from / total_to}
+    else:
+        total = {"from": total_from, "to": total_to, "rate": 0.0}
 
     render_dict["currency_list"] = currency_list
     render_dict["total"] = total
 
     return render(request, "book/investment/live_currency.html", render_dict)
-
-
-def leading_stocks(request):
-    render_dict = get_render_dict("leading_stocks")
-    return render(request, "book/investment/leading_stocks.html", render_dict)
 
 
 krx_price_query_url = "http://asp1.krx.co.kr/servlet/krx.asp.XMLSise?code={}"
@@ -208,14 +185,6 @@ def lotto(request):
     return render(request, "book/investment/lotto.html", render_dict)
 
 
-def wine(request):
-    render_dict = get_render_dict("wine")
-
-    wine_list = models.Wine.objects.all()
-    render_dict["wine_list"] = wine_list
-    return render(request, "book/wine.html", render_dict)
-
-
 # law_search
 law_query_url = "http://www.law.go.kr/DRF/lawSearch.do?OC=test&target=law&type=XML&mobileYn=Y&query={}"
 
@@ -339,15 +308,6 @@ def real_estate(request):
     return render(request, "book/real_estate.html", render_dict)
 
 
-def recommend_book(request):
-    render_dict = get_render_dict("recommend_book")
-
-    book_list = models.Book.objects.all()
-    render_dict["book_list"] = book_list
-
-    return render(request, "book/investment/recommend_book.html", render_dict)
-
-
 def food(request):
     render_dict = get_render_dict("food")
 
@@ -436,11 +396,6 @@ def image(request, data_type="pokemon"):
                     )
 
         except KeyError:
-            if "parsed" in render_dict:
-                render_dict["parsed"] += traceback.format_exc()
-            else:
-                render_dict["parsed"] = traceback.format_exc()
-        except Exception:
             if "parsed" in render_dict:
                 render_dict["parsed"] += traceback.format_exc()
             else:

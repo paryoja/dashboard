@@ -15,10 +15,16 @@ else:
 class NavBase:
     """
     Navigation 항목의 base 가 되는 class
+    Attributes:
+        description (str): Navigation bar 에 나타날 string
+        icon (str): Navigation bar 에 나타날 icon
+        has_child (bool): Nav Element 의 하위 항목 존재 여부
+        should_superuser (bool): Superuser 에게만 보이게 설정
     """
 
     description: str
     icon: str
+    has_child = bool
 
     __metaclass__ = abc.ABCMeta
 
@@ -35,37 +41,34 @@ class NavBase:
         self.should_superuser = should_superuser
 
     @abc.abstractmethod
-    def is_active(self, current_page: str):
+    def is_active(self, current_page: str) -> bool:
+        """
+        :param current_page: 현재 page 이름
+        :return: 현재 page 에 관련 있으면 True, 없으면 False
+        """
         pass
 
     @abc.abstractmethod
-    def get_active_set(self):
+    def get_active_set(self) -> typing.Set[str]:
         pass
 
 
 class NavCollection(NavBase):
     """
     Child 를 가지는 Navigation
+
+    Attributes:
+        collection (str): Collapse 를 동작 시킬 때 collection 을 구별할 변수
+        child (typing.List[NavBase]): child element
+        active_set (typing.Set[str]): active 로 표시될 current page 의 set
     """
 
     collection: str
     child: typing.List[NavBase]
     active_set: typing.Set[str]
 
-    def __init__(
-        self,
-        description: str,
-        icon: str,
-        collection: str,
-        child_info: dict,
-        should_superuser=False,
-    ):
-        super().__init__(
-            description=description,
-            icon=icon,
-            has_child=True,
-            should_superuser=should_superuser,
-        )
+    def __init__(self, collection: str, child_info: dict, **kwargs):
+        super().__init__(has_child=True, **kwargs)
 
         self.collection = collection
         self.child = []
@@ -79,17 +82,20 @@ class NavCollection(NavBase):
                 self.active_set.update(child.get_active_set())
         return self.active_set
 
-    def _set_child(self, child_info: dict):
+    def _set_child(self, child_info: dict) -> None:
         for child in child_info:
             self.child.append(NavigationFactory.get_navigation_item(child))
 
-    def is_active(self, current_page):
+    def is_active(self, current_page) -> bool:
         return current_page in self.get_active_set()
 
 
 class NavItem(NavBase):
     """
     말단 Navigation 노드
+    Attributes:
+        template (str): Link 눌렀을 때 이동할 link
+        suffix (typing.Optional[str]): Get Argument 로 적을 내용
     """
 
     template: str
@@ -97,24 +103,26 @@ class NavItem(NavBase):
 
     def __init__(
         self,
-        description: str,
-        icon: str,
         template: str,
         argument: typing.Dict[str, str] = None,
         external: bool = False,
-        should_superuser: bool = False,
         login_state: str = "always",
         active_override: str = None,
+        **kwargs,
     ):
-        super().__init__(
-            description=description,
-            icon=icon,
-            has_child=False,
-            should_superuser=should_superuser,
-        )
+        """
+        :param template: template 명 혹은 url 링크
+        :param argument: template 에 argument 를 전달하기 위함
+        :param external: 외부 링크 여부, 내부인 경우 "book" namespace 사용
+        :param login_state: Login 에 따라 보여줄 지 말지 선택 옵션은 "always", "login", "logout"
+        :param active_override: active 를 기본적으로는 template 과 같은지를 보지만,
+                                argument 에 따라서 선택 할 수 있도록 override
+        """
+        super().__init__(has_child=False, **kwargs)
 
         if external:
             self.template = template
+            # external link 의 경우 active 한 state 가 없음
             self.active = {""}
         else:
             self.template = f"book:{template}"
@@ -145,6 +153,11 @@ class NavigationFactory:
 
     @staticmethod
     def get_navigation_item(info: dict) -> NavBase:
+        """
+
+        :param info: navigation item 을 구성할 정보
+        :return: collection element 를 이용하여 Collection 인지, 말단 node 인지 구분
+        """
         if "collection" in info:
             return NavCollection(**info)
         else:
@@ -154,7 +167,12 @@ class NavigationFactory:
 class Sidebar:
     """
     Navigation 의 모든 정보를 가진 클래스
+
+    Attributes:
+        items (typing.List[typing.Tuple]): Navigation 정보를 가진 List, 각 항목당 horizontal line 으로 구분 됨
     """
+
+    items: typing.List[typing.Tuple]
 
     def __init__(self, config: typing.List[dict]):
         self.items = []

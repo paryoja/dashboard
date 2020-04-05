@@ -2,10 +2,13 @@
   <dictionary name="paryoja">
     <words>
       <w>addon</w>
+      <w>amqp</w>
       <w>cagr</w>
       <w>chatbot</w>
+      <w>colab</w>
       <w>datasets</w>
       <w>jsdelivr</w>
+      <w>noqa</w>
     </words>
   </dictionary>
 </component>

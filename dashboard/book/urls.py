@@ -1,23 +1,32 @@
 from django.urls import path
 
 from . import views_user
-from .views import people, views, views_api
+from .views import people, views, views_api, views_class
 
 app_name = "book"
 urlpatterns = [
-    path("", views.index, name="index"),
-    path("study/slide/", views.slide, name="slide"),
-    path("study/paper/", views.paper, name="paper"),
-    path("study/colab/", views.colab, name="colab"),
-    path("link/", views.link, name="link"),
-    path("web_stack/", views.web_stack, name="web_stack"),
-    path("algorithm/", views.algorithm, name="algorithm"),
+    path("", views_class.IndexTemplateView.as_view(), name="index",),
+    path("algorithm/", views_class.AlgorithmTemplateView.as_view(), name="algorithm",),
+    path(
+        "investment/leading_stocks/",
+        views_class.LeadingStockTemplateView.as_view(),
+        name="leading_stocks",
+    ),
+    path("wine/", views_class.WineListView.as_view(), name="wine",),
+    path("link/", views_class.BookmarkListView.as_view(), name="link",),
+    path("web_stack/", views_class.WebStackListView.as_view(), name="web_stack",),
+    path(
+        "recommend_book/",
+        views_class.RecommendBookListView.as_view(),
+        name="recommend_book",
+    ),
+    path("study/slide/", views.slide, name="slide",),
+    path("study/paper/", views.paper, name="paper",),
+    path("study/colab/", views.colab, name="colab",),
     path("law_search/", views.law_search, name="law_search"),
     path("lotto/", views.lotto, name="lotto"),
     path("export_lotto/", views.export_lotto, name="export_lotto"),
-    path("wine/", views.wine, name="wine"),
     path("todo/", views.todo, name="todo"),
-    path("investment/leading_stocks/", views.leading_stocks, name="leading_stocks"),
     path("investment/live_currency/", views.live_currency, name="live_currency"),
     path("investment/krx_price_query/", views.krx_price_query, name="krx_price_query"),
     path("idea/", views.idea, name="idea"),
@@ -39,7 +48,6 @@ urlpatterns = [
     path("people/people_links/", people.people_links, name="people_links"),
     path("people/relabel", views.relabel, name="people_relabel"),
     path("real_estate/", views.real_estate, name="real_estate"),
-    path("recommend_book/", views.recommend_book, name="recommend_book"),
     path("food/", views.food, name="food"),
     # pokemon
     path("pokemon/", views.pokemon, name="pokemon_classification"),

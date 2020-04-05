@@ -1,99 +1,99 @@
 {% extends 'book/base/base.html' %}
 
 {% block body %}
-    <table class="table table-sm table-hover">
-        <thead>
-        <tr>
-            <th>제목</th>
-            <th>저자</th>
-            <th>연도</th>
-            <th>링크</th>
-        </tr>
-        </thead>
-        <tbody>
-        {% for book in book_list %}
-            <tr>
-                <td>{{ book.name }}</td>
-                <td>{{ book.author }}</td>
-                <td>{{ book.year }}</td>
-                <td>
-                    <a href="https://search.kyobobook.co.kr/web/search?vPstrKeyWord={{ book.name }}" target="_blank">
-                        <i class="fa fa-book"></i>
-                    </a>
-                </td>
-            </tr>
-        {% endfor %}
-        </tbody>
-    </table>
+  <table class="table table-sm table-hover">
+    <thead>
+    <tr>
+      <th>제목</th>
+      <th>저자</th>
+      <th>연도</th>
+      <th>링크</th>
+    </tr>
+    </thead>
+    <tbody>
+    {% for book in object_list %}
+      <tr>
+        <td>{{ book.name }}</td>
+        <td>{{ book.author }}</td>
+        <td>{{ book.year }}</td>
+        <td>
+          <a href="https://search.kyobobook.co.kr/web/search?vPstrKeyWord={{ book.name }}" target="_blank">
+            <i class="fa fa-book"></i>
+          </a>
+        </td>
+      </tr>
+    {% endfor %}
+    </tbody>
+  </table>
 
-    <ul>
-        <li>시가총액
-            <ul>
-                <li>시가총액=주가 \(\times\) 주식 수</li>
-                <li>소형주: 시가총액 하위 20%</li>
-                <li>대형주: 상위 200위</li>
-            </ul>
-        </li>
-        <li>CAGR
-            <ul>
-                <li>연복리 수익률</li>
-                <li>Compound Annual Growth Rate</li>
-                <li>\(CAGR=\left(\frac{EB}{BB}\right)^{(\frac{1}{n})}\)-1</li>
-                <li>\(EB\): Ending balance</li>
-                <li>\(BB\): Beginning balance</li>
-                <li>\(n\): Number of years</li>
-            </ul>
-        </li>
-    </ul>
-    <form id="cagr_compute">
-        <div class="form-row">
-            <div class="form-group col-md-3">
-                <label for="CAGR">CAGR</label>
-                <input type="text" class="form-control" name="CAGR" id="CAGR" disabled>
-            </div>
-            <div class="form-group col-md-3">
-                <label for="EB">EB</label>
-                <input type="number" class="form-control" name="EB" id="EB" value="1.95">
-            </div>
-            <div class="form-group col-md-3">
-                <label for="BB">BB</label>
-                <input type="number" class="form-control" name="BB" id="BB" value="1">
-            </div>
-            <div class="form-group col-md-3">
-                <label for="n">n</label>
-                <div class="input-group">
-                    <input type="number" class="form-control" name="n" id="n" value="3">
-                    <div class="input-group-append">
-                        <button type="submit" class="btn btn-primary">계산</button>
-                    </div>
-                </div>
-            </div>
+  <ul>
+    <li>시가총액
+      <ul>
+        <li>시가총액=주가 \(\times\) 주식 수</li>
+        <li>소형주: 시가총액 하위 20%</li>
+        <li>대형주: 상위 200위</li>
+      </ul>
+    </li>
+    <li>CAGR
+      <ul>
+        <li>연복리 수익률</li>
+        <li>Compound Annual Growth Rate</li>
+        <li>\(CAGR=\left(\frac{EB}{BB}\right)^{(\frac{1}{n})}\)-1</li>
+        <li>\(EB\): Ending balance</li>
+        <li>\(BB\): Beginning balance</li>
+        <li>\(n\): Number of years</li>
+      </ul>
+    </li>
+  </ul>
+  <form id="cagr_compute">
+    <div class="form-row">
+      <div class="form-group col-md-3">
+        <label for="CAGR">CAGR</label>
+        <input type="text" class="form-control" name="CAGR" id="CAGR" disabled>
+      </div>
+      <div class="form-group col-md-3">
+        <label for="EB">EB</label>
+        <input type="number" class="form-control" name="EB" id="EB" value="1.95">
+      </div>
+      <div class="form-group col-md-3">
+        <label for="BB">BB</label>
+        <input type="number" class="form-control" name="BB" id="BB" value="1">
+      </div>
+      <div class="form-group col-md-3">
+        <label for="n">n</label>
+        <div class="input-group">
+          <input type="number" class="form-control" name="n" id="n" value="3">
+          <div class="input-group-append">
+            <button type="submit" class="btn btn-primary">계산</button>
+          </div>
         </div>
-    </form>
-    <ul>
-        <li>MDD
-            <ul>
-                <li>최대 낙폭</li>
-                <li>Maximum Drawdown</li>
-                <li>\(MDD=\frac{P-L}{P}\)</li>
-                <li>\(P\): Peak value before largest drop</li>
-                <li>\(L\): Lowest value before new high established</li>
-            </ul>
-        </li>
-    </ul>
+      </div>
+    </div>
+  </form>
+  <ul>
+    <li>MDD
+      <ul>
+        <li>최대 낙폭</li>
+        <li>Maximum Drawdown</li>
+        <li>\(MDD=\frac{P-L}{P}\)</li>
+        <li>\(P\): Peak value before largest drop</li>
+        <li>\(L\): Lowest value before new high established</li>
+      </ul>
+    </li>
+  </ul>
 {% endblock %}
 
 {% block scripts %}
-    <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
-    <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
-    <script>
-        $("#cagr_compute").submit(function (e) {
-            e.preventDefault();
-            let eb = $("#EB").val();
-            let bb = $("#BB").val();
-            let n = $("#n").val();
+  <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+  <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+  <script>
+    $("#cagr_compute").submit(function (e) {
+      e.preventDefault();
+      let eb = $("#EB").val();
+      let bb = $("#BB").val();
+      let n = $("#n").val();
 
-            $("#CAGR").val(Math.pow(eb / bb, 1 / n) - 1);
-        })
-    </script>
+      $("#CAGR").val(Math.pow(eb / bb, 1 / n) - 1);
+    })
+  </script>
 {% endblock %}

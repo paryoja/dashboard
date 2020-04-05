@@ -196,13 +196,19 @@
                 "template": "people_result",
                 "icon": "fa fa-user-check",
                 "description": "선택",
-                "active_override": "people_True"
+                "active_override": "people_result_True",
+                "argument": {
+                  "arg": "True"
+                }
               },
               {
                 "template": "people_result",
                 "icon": "fa fa-user-times",
                 "description": "미선택",
-                "active_override": "people_False"
+                "active_override": "people_result_False",
+                "argument": {
+                  "arg": "False"
+                }
               },
               {
                 "template": "people_high_expectation",

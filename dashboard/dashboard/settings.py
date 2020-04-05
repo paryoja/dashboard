@@ -39,6 +39,7 @@ DJANGO_APPS = [
     "django.contrib.humanize",
 ]
 
+# noinspection SpellCheckingInspection
 THIRD_PARTY_APPS = [
     "rest_framework",
     "django_filters",
@@ -117,6 +118,7 @@ USE_TZ = True
 STATIC_URL = "/static/"
 STATIC_ROOT = "./.static_root"
 
+# noinspection SpellCheckingInspection
 LOGGING = {
     "version": 1,
     "disable_existing_loggers": False,
@@ -139,6 +141,7 @@ LOGGING = {
 }
 LOGIN_URL = "/book/login"
 
+# noinspection SpellCheckingInspection
 CELERY_BROKER_URL = env.url("CELERY_BROKER_URL", "amqp://rabbitmq:5672/myvhost")
 
 try:
