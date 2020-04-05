@@ -161,6 +161,7 @@
 <div class="viewcode-block" id="NavBase"><a class="viewcode-back" href="../../book.nav.html#book.nav.NavBase">[docs]</a><span class="k">class</span> <span class="nc">NavBase</span><span class="p">:</span>
     <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Navigation 항목의 base 가 되는 class</span>
+
 <span class="sd">    :param description: Navigation bar 에 나타날 string</span>
 <span class="sd">    :type description: str</span>
 <span class="sd">    :param icon: Navigation bar 에 나타날 icon</span>
@@ -245,6 +246,7 @@
 <div class="viewcode-block" id="NavItem"><a class="viewcode-back" href="../../book.nav.html#book.nav.NavItem">[docs]</a><span class="k">class</span> <span class="nc">NavItem</span><span class="p">(</span><span class="n">NavBase</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    말단 Navigation 노드</span>
+
 <span class="sd">    :param template: Link 눌렀을 때 이동할 link</span>
 <span class="sd">    :type template: str</span>
 <span class="sd">    :param suffix: Get Argument 로 적을 내용</span>
@@ -321,13 +323,16 @@
     <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Navigation 의 모든 정보를 가진 클래스</span>
 
-<span class="sd">    Attributes:</span>
-<span class="sd">        items (typing.List[typing.Tuple]): Navigation 정보를 가진 List, 각 항목당 horizontal line 으로 구분 됨</span>
+<span class="sd">    :param items: Navigation 정보를 가진 List, 각 항목당 horizontal line 으로 구분 됨</span>
+<span class="sd">    :type  items: typing.List[typing.Tuple]</span>
 <span class="sd">    &quot;&quot;&quot;</span>
 
     <span class="n">items</span><span class="p">:</span> <span class="n">typing</span><span class="o">.</span><span class="n">List</span><span class="p">[</span><span class="n">typing</span><span class="o">.</span><span class="n">Tuple</span><span class="p">]</span>
 
     <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">config</span><span class="p">:</span> <span class="n">typing</span><span class="o">.</span><span class="n">List</span><span class="p">[</span><span class="nb">dict</span><span class="p">]):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        :param config: Navigation 설정</span>
+<span class="sd">        &quot;&quot;&quot;</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">items</span> <span class="o">=</span> <span class="p">[]</span>
         <span class="k">for</span> <span class="n">block_config</span> <span class="ow">in</span> <span class="n">config</span><span class="p">:</span>
             <span class="k">for</span> <span class="n">k</span><span class="p">,</span> <span class="n">v</span> <span class="ow">in</span> <span class="n">block_config</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
@@ -341,6 +346,13 @@
 
 
 <div class="viewcode-block" id="get_render_dict"><a class="viewcode-back" href="../../book.nav.html#book.nav.get_render_dict">[docs]</a><span class="k">def</span> <span class="nf">get_render_dict</span><span class="p">(</span><span class="n">current_page</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">dict</span><span class="p">:</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    context 에 current_page 를 만들어 주는 함수</span>
+
+<span class="sd">    :param current_page: 현재 page string</span>
+<span class="sd">    :type current_page: str</span>
+<span class="sd">    :return:</span>
+<span class="sd">    &quot;&quot;&quot;</span>
     <span class="n">render_dict</span> <span class="o">=</span> <span class="p">{</span><span class="s2">&quot;current_page&quot;</span><span class="p">:</span> <span class="n">current_page</span><span class="p">}</span>
     <span class="k">return</span> <span class="n">render_dict</span></div>
 </pre></div>

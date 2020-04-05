@@ -82,7 +82,7 @@
             
               <p class="caption"><span class="caption-text">Contents:</span></p>
 <ul class="current">
-<li class="toctree-l1 current"><a class="reference internal" href="book.html">book package</a><ul class="current">
+<li class="toctree-l1 current"><a class="reference internal" href="book.html">Yozit book package</a><ul class="current">
 <li class="toctree-l2"><a class="reference internal" href="book.html#subpackages">Subpackages</a></li>
 <li class="toctree-l2 current"><a class="reference internal" href="book.html#submodules">Submodules</a><ul class="current">
 <li class="toctree-l3"><a class="reference internal" href="book.admin.html">book.admin module</a></li>
@@ -144,7 +144,7 @@
     
       <li><a href="index.html">Docs</a> &raquo;</li>
         
-          <li><a href="book.html">book package</a> &raquo;</li>
+          <li><a href="book.html">Yozit book package</a> &raquo;</li>
         
       <li>book.nav module</li>
     
@@ -171,15 +171,17 @@
 <dt id="book.nav.NavBase">
 <em class="property">class </em><code class="sig-prename descclassname">book.nav.</code><code class="sig-name descname">NavBase</code><span class="sig-paren">(</span><em class="sig-param">description: str</em>, <em class="sig-param">icon: str</em>, <em class="sig-param">has_child: bool</em>, <em class="sig-param">should_superuser: bool = False</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/book/nav.html#NavBase"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#book.nav.NavBase" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
-<p>Navigation 항목의 base 가 되는 class
-:param description: Navigation bar 에 나타날 string
-:type description: str
-:param icon: Navigation bar 에 나타날 icon
-:type icon: str
-:param has_child: Nav Element 의 하위 항목 존재 여부
-:type has_child: str
-:param should_superuser: Superuser 에게만 보이게 설정
-:type should_superuser: bool</p>
+<p>Navigation 항목의 base 가 되는 class</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>description</strong> (<em>str</em>) – Navigation bar 에 나타날 string</p></li>
+<li><p><strong>icon</strong> (<em>str</em>) – Navigation bar 에 나타날 icon</p></li>
+<li><p><strong>has_child</strong> (<em>str</em>) – Nav Element 의 하위 항목 존재 여부</p></li>
+<li><p><strong>should_superuser</strong> (<em>bool</em>) – Superuser 에게만 보이게 설정</p></li>
+</ul>
+</dd>
+</dl>
 <dl class="attribute">
 <dt id="book.nav.NavBase.description">
 <code class="sig-name descname">description</code><em class="property">: str</em><em class="property"> = None</em><a class="headerlink" href="#book.nav.NavBase.description" title="Permalink to this definition">¶</a></dt>
@@ -273,11 +275,15 @@
 <dt id="book.nav.NavItem">
 <em class="property">class </em><code class="sig-prename descclassname">book.nav.</code><code class="sig-name descname">NavItem</code><span class="sig-paren">(</span><em class="sig-param">template: str</em>, <em class="sig-param">argument: Dict[str</em>, <em class="sig-param">str] = None</em>, <em class="sig-param">external: bool = False</em>, <em class="sig-param">login_state: str = 'always'</em>, <em class="sig-param">active_override: str = None</em>, <em class="sig-param">**kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/book/nav.html#NavItem"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#book.nav.NavItem" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <a class="reference internal" href="#book.nav.NavBase" title="book.nav.NavBase"><code class="xref py py-class docutils literal notranslate"><span class="pre">book.nav.NavBase</span></code></a></p>
-<p>말단 Navigation 노드
-:param template: Link 눌렀을 때 이동할 link
-:type template: str
-:param suffix: Get Argument 로 적을 내용
-:type suffix: typing.Optional[str]</p>
+<p>말단 Navigation 노드</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>template</strong> (<em>str</em>) – Link 눌렀을 때 이동할 link</p></li>
+<li><p><strong>suffix</strong> (<em>typing.Optional</em><em>[</em><em>str</em><em>]</em>) – Get Argument 로 적을 내용</p></li>
+</ul>
+</dd>
+</dl>
 <dl class="method">
 <dt id="book.nav.NavItem.get_active_set">
 <code class="sig-name descname">get_active_set</code><span class="sig-paren">(</span><span class="sig-paren">)</span> &#x2192; Set[str]<a class="reference internal" href="_modules/book/nav.html#NavItem.get_active_set"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#book.nav.NavItem.get_active_set" title="Permalink to this definition">¶</a></dt>
@@ -333,8 +339,9 @@
 <em class="property">class </em><code class="sig-prename descclassname">book.nav.</code><code class="sig-name descname">Sidebar</code><span class="sig-paren">(</span><em class="sig-param">config: List[dict]</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/book/nav.html#Sidebar"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#book.nav.Sidebar" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
 <p>Navigation 의 모든 정보를 가진 클래스</p>
-<dl class="simple">
-<dt>Attributes:</dt><dd><p>items (typing.List[typing.Tuple]): Navigation 정보를 가진 List, 각 항목당 horizontal line 으로 구분 됨</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>items</strong> (<em>typing.List</em><em>[</em><em>typing.Tuple</em><em>]</em>) – Navigation 정보를 가진 List, 각 항목당 horizontal line 으로 구분 됨</p>
 </dd>
 </dl>
 <dl class="attribute">
@@ -347,7 +354,16 @@
 <dl class="function">
 <dt id="book.nav.get_render_dict">
 <code class="sig-prename descclassname">book.nav.</code><code class="sig-name descname">get_render_dict</code><span class="sig-paren">(</span><em class="sig-param">current_page: str</em><span class="sig-paren">)</span> &#x2192; dict<a class="reference internal" href="_modules/book/nav.html#get_render_dict"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#book.nav.get_render_dict" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
+<dd><p>context 에 current_page 를 만들어 주는 함수</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>current_page</strong> (<em>str</em>) – 현재 page string</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p></p>
+</dd>
+</dl>
+</dd></dl>
 
 </div>
 

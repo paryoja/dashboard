@@ -15,6 +15,7 @@ else:
 class NavBase:
     """
     Navigation 항목의 base 가 되는 class
+
     :param description: Navigation bar 에 나타날 string
     :type description: str
     :param icon: Navigation bar 에 나타날 icon
@@ -99,6 +100,7 @@ class NavCollection(NavBase):
 class NavItem(NavBase):
     """
     말단 Navigation 노드
+
     :param template: Link 눌렀을 때 이동할 link
     :type template: str
     :param suffix: Get Argument 로 적을 내용
@@ -175,13 +177,16 @@ class Sidebar:
     """
     Navigation 의 모든 정보를 가진 클래스
 
-    Attributes:
-        items (typing.List[typing.Tuple]): Navigation 정보를 가진 List, 각 항목당 horizontal line 으로 구분 됨
+    :param items: Navigation 정보를 가진 List, 각 항목당 horizontal line 으로 구분 됨
+    :type  items: typing.List[typing.Tuple]
     """
 
     items: typing.List[typing.Tuple]
 
     def __init__(self, config: typing.List[dict]):
+        """
+        :param config: Navigation 설정
+        """
         self.items = []
         for block_config in config:
             for k, v in block_config.items():
@@ -195,5 +200,12 @@ sidebar = Sidebar(nav_config)
 
 
 def get_render_dict(current_page: str) -> dict:
+    """
+    context 에 current_page 를 만들어 주는 함수
+
+    :param current_page: 현재 page string
+    :type current_page: str
+    :return:
+    """
     render_dict = {"current_page": current_page}
     return render_dict

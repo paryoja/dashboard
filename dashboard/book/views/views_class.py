@@ -5,6 +5,12 @@ from django.views.generic import ListView, TemplateView
 
 
 class CurrentPageListView(ListView):
+    """
+    Navbar 에서 current_page 를 세팅하는 view
+
+    :param current_page
+    """
+
     current_page = None
 
     def get_context_data(self, **kwargs: Any) -> Dict[str, Any]:
