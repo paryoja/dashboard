@@ -33,6 +33,7 @@ class XmlDictConfig(dict):
     >>> xmldict = XmlDictConfig(root)
 
     Or, if you want to use an XML string:
+
     >>> xml_string = "<test>Hello World</test>"
     >>> root = ElementTree.XML(xml_string)
     >>> xmldict = XmlDictConfig(root)
