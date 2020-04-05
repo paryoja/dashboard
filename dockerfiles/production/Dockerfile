@@ -24,6 +24,7 @@ ENV PYTHONUNBUFFERED 1
 ENV PYTHONIOENCODING utf-8
 
 RUN echo alias python="python3" >> /root/.bashrc
+RUN echo "source /entrypoint" >> /root/.bashrc
 WORKDIR /work/dashboard
 
 ENTRYPOINT ["/entrypoint"]

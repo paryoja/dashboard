@@ -131,7 +131,7 @@
             "description": "Leading Stocks"
           },
           {
-            "template": "live_currency",
+            "template": "currency_change",
             "icon": "fa fa-exchange-alt",
             "description": "Currency History"
           },

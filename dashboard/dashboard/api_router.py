@@ -1,3 +1,5 @@
+"""API Router 등록."""
+
 from book.api.views import InstagramTextViewSet, PokemonImageViewSet
 from django.conf import settings
 from rest_framework.routers import DefaultRouter, SimpleRouter

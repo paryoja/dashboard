@@ -7,6 +7,7 @@ Submodules
 .. toctree::
 
    book.views.people
+   book.views.krx
    book.views.views
    book.views.views_api
    book.views.views_class

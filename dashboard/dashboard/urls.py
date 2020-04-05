@@ -1,4 +1,4 @@
-"""dashboard URL Configuration
+"""dashboard URL Configuration.
 
 The `urlpatterns` list routes URLs to views. For more information please see:
     https://docs.djangoproject.com/en/2.2/topics/http/urls/
@@ -21,6 +21,12 @@ from django.views import defaults as default_views
 
 
 def simple_redirect(_):
+    """
+    Index 페이지로 Redirect.
+
+    :param _:
+    :return:
+    """
     return redirect(reverse("book:index"))
 
 

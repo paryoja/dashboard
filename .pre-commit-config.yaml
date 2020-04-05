@@ -16,5 +16,5 @@ repos:
         entry: flake8
         language: python
         types: [python]
-        args: ['--config=setup.cfg']
+        args: ['--config=setup.cfg','--ignore=D105,D107', '--statistics']
 

@@ -1,5 +1,7 @@
-# noinspection PyUnresolvedReferences
+"""Local 테스트 환경."""
+
 from ..settings import *  # noqa F401
+# noinspection PyUnresolvedReferences
 from ..settings import env
 
 SECRET_KEY = env.str(

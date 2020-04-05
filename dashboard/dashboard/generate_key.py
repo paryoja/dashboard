@@ -1,3 +1,5 @@
+"""Private Key 생성을 위한 함수."""
+
 import os
 import random
 import string

@@ -26,3 +26,6 @@ djangorestframework-api-key==1.4.1
 
 # wsgi
 gunicorn==20.0.4
+
+# static
+whitenoise==5.0.1

@@ -1,3 +1,4 @@
+"""인스타그램 내용 파싱."""
 import requests
 from book import models, utils
 from book.nav import get_render_dict
@@ -10,6 +11,12 @@ from django.shortcuts import render
 
 @user_passes_test(lambda u: u.is_superuser)
 def people(request):
+    """
+    이미지 제공.
+
+    :param request:
+    :return:
+    """
     render_dict = get_render_dict("people")
 
     query = request.GET.get("query", "")
@@ -48,6 +55,7 @@ def people(request):
 
 @user_passes_test(lambda u: u.is_superuser)
 def people_result(request, page=1):
+    """분류 결과 선택."""
     selected = request.GET.get("arg", "True")
     render_dict = get_render_dict("people_result_{}".format(selected))
     render_dict["arg"] = selected
@@ -86,6 +94,7 @@ def people_result(request, page=1):
 
 @user_passes_test(lambda u: u.is_superuser)
 def people_high_expectation(request):
+    """우선순위 순으로 보여줌."""
     render_dict = get_render_dict("people_high_expectation")
 
     query = request.GET.get("query", "")
@@ -123,6 +132,11 @@ def people_high_expectation(request):
 
 @shared_task
 def get_new_people_links():
+    """
+    인스타그램 text 속에 있는 user link 추출 후 링크 제공.
+
+    :return:
+    """
     selected_list = models.PeopleImage.objects.filter(title__contains="@").filter(
         content_parsed=None
     )[:100]
@@ -150,6 +164,7 @@ def get_new_people_links():
 
 @user_passes_test(lambda u: u.is_superuser)
 def people_links(request):
+    """링크 제공."""
     render_dict = get_render_dict("people_result")
 
     get_new_people_links.delay()
@@ -161,6 +176,7 @@ def people_links(request):
 
 @user_passes_test(lambda u: u.is_superuser)
 def people_result_download(_, selected, page):
+    """이미지 통합 다운로드."""
     image_list = models.PeopleImage.objects.filter(selected=selected).only(
         "url", "selected", "page"
     )

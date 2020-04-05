@@ -1,3 +1,5 @@
+"""API로 사용할 함수 모음."""
+
 import json
 import logging
 import re
@@ -18,17 +20,28 @@ a_pattern = re.compile('<a href="(.+?)">(.+?)</a>')
 
 
 class Domain:
+    """이미지 제공 도메인."""
+
     People = "people"
     Pokemon = "pokemon"
 
 
 def image(request, method, image_type="People") -> HttpResponse:
+    """
+    이미지 정보를 받거나 제거.
+
+    :param request:
+    :param method: DELETE 나 GET
+    :param image_type: People 이거나 Pokemon
+    :return:
+    """
+    image_type = image_type.lower()
     image_id = request.POST.get("image_id")
     if image_id is None:
         return HttpResponseBadRequest("Empty Image Id")
-    if image_type == "People":
+    if image_type == Domain.People:
         img = models.PeopleImage.objects.get(id=int(image_id))
-    elif image_type == "Pokemon":
+    elif image_type == Domain.Pokemon:
         img = models.PokemonImage.objects.get(id=int(image_id))
     else:
         raise ValueError("Unknown image type {}".format(image_type))
@@ -43,6 +56,7 @@ def image(request, method, image_type="People") -> HttpResponse:
 
 
 def set_rating(request) -> HttpResponse:
+    """이미지의 분류 정보 등록."""
     img_id = int(request.POST.get("image_id"))
     data_type = request.POST.get("data_type")
     if data_type == Domain.Pokemon:
@@ -60,6 +74,7 @@ def set_rating(request) -> HttpResponse:
 
 
 def get_id(request) -> HttpResponse:
+    """이미지 id 가져옴."""
     query = request.POST.get("query")
     image_obj = models.PeopleImage.objects.filter(url__endswith=query)[0]
     return HttpResponse(image_obj.id)
@@ -70,6 +85,7 @@ def get_img_rating(
 ) -> typing.Tuple[
     typing.Union[models.PokemonImage, models.PokemonImage], dj_models.query.QuerySet
 ]:
+    """Image 분류 결과 가져옴."""
     if domain == Domain.People:
         img = models.PeopleImage.objects.get(id=int_img_id)
         existing_rating = models.Rating.objects.filter(
@@ -93,6 +109,7 @@ def save_success(
     target_deep_model: models.DeepLearningModel,
     int_img_id: int,
 ) -> None:
+    """분류 결과 예측 저장."""
     if domain == Domain.People:
         class_names = json_data["class_names"]
         positive = json_data["classification"][class_names["True"]]
@@ -122,6 +139,15 @@ def save_failure(
     target_deep_model: models.DeepLearningModel,
     int_img_id: int,
 ) -> None:
+    """
+    분류 결과 실패시 실패정보 저장.
+
+    :param domain:
+    :param json_data:
+    :param target_deep_model:
+    :param int_img_id:
+    :return:
+    """
     if domain == Domain.People:
         rating = models.Rating(
             deep_model=target_deep_model, image_id=int_img_id, data=json_data
@@ -136,6 +162,7 @@ def save_failure(
 
 
 def call_api_server(img, domain: str) -> typing.Optional[requests.Response]:
+    """분류를 위한 API 서버를 호출."""
     data = {"requested_url": img.url}
     headers = {"Content-Type": "application/json"}
 
@@ -159,6 +186,7 @@ def call_api_server(img, domain: str) -> typing.Optional[requests.Response]:
 
 @shared_task
 def get_classification_result(domain: str, int_img_id: int) -> None:
+    """예측 결과 가져옴. 없으면 예측."""
     img, existing_rating = get_img_rating(domain, int_img_id)
 
     # 이미 가져온건지 다시 확인 -> 작업 추가시에 중복되어 있을 수 있음
@@ -198,6 +226,7 @@ def get_classification_result(domain: str, int_img_id: int) -> None:
 
 
 def get_response(img_id: str, domain: str) -> dict:
+    """예측 결과 가져옴. 없으면 예측."""
     int_img_id = int(img_id.split("_")[1])
 
     # 이미 존재하는지 체크
@@ -234,6 +263,7 @@ def get_response(img_id: str, domain: str) -> dict:
 
 
 def people_classification_api(request) -> HttpResponse:
+    """이미지 분류 결과."""
     img_id = request.POST.get("image_id")
     if img_id:
         response = get_response(img_id, domain=Domain.People)
@@ -243,6 +273,7 @@ def people_classification_api(request) -> HttpResponse:
 
 
 def pokemon_classification_api(request) -> HttpResponse:
+    """포켓몬 분류 결과."""
     img_id = request.POST.get("image_id")
     if img_id:
         response = get_response(img_id, domain=Domain.Pokemon)
@@ -251,6 +282,7 @@ def pokemon_classification_api(request) -> HttpResponse:
 
 
 def get_image_directory_list(data_type, url, a_parsed) -> list:
+    """이미지 directory 정보 파싱."""
     if data_type == "people":
         json_url = url + a_parsed[0][0] + "/image.json"
         image_list_text = requests.get(json_url).text
@@ -282,6 +314,7 @@ def get_image_directory_list(data_type, url, a_parsed) -> list:
 
 @shared_task
 def add_image_client(a_text, url, category_id, data_type) -> None:
+    """이미지 등록 API."""
     a_parsed = a_pattern.findall(a_text)
 
     if not a_parsed[0][0].startswith("../"):
@@ -312,6 +345,7 @@ def add_image_client(a_text, url, category_id, data_type) -> None:
 
 @shared_task
 def cron_image_add() -> None:
+    """주기적으로 이미지 등록."""
     try:
         category_id = "people"
         data_type = "people"

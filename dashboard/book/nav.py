@@ -1,3 +1,5 @@
+"""Navigation Bar Helper."""
+
 import abc
 import json
 import typing
@@ -14,7 +16,7 @@ else:
 
 class NavBase:
     """
-    Navigation 항목의 base 가 되는 class
+    Navigation 항목의 base 가 되는 class.
 
     :param description: Navigation bar 에 나타날 string
     :type description: str
@@ -40,6 +42,18 @@ class NavBase:
         has_child: bool,
         should_superuser: bool = False,
     ):
+        """
+        초기화.
+
+        :param description: Navigation bar 에 나타날 string
+        :type description: str
+        :param icon: Navigation bar 에 나타날 icon
+        :type icon: str
+        :param has_child: Nav Element 의 하위 항목 존재 여부
+        :type has_child: str
+        :param should_superuser: Superuser 에게만 보이게 설정
+        :type should_superuser: bool
+        """
         self.description = description
         self.icon = icon
         self.has_child = has_child
@@ -48,6 +62,8 @@ class NavBase:
     @abc.abstractmethod
     def is_active(self, current_page: str) -> bool:
         """
+        Nav 에서 active 표현할지를 알려주는 함수.
+
         :param current_page: 현재 page 이름
         :return: 현재 page 에 관련 있으면 True, 없으면 False
         """
@@ -55,12 +71,13 @@ class NavBase:
 
     @abc.abstractmethod
     def get_active_set(self) -> typing.Set[str]:
+        """Active 로 표시할 current page set."""
         pass
 
 
 class NavCollection(NavBase):
     """
-    Child 를 가지는 Navigation
+    Child 를 가지는 Navigation.
 
     :param collection: Collapse 를 동작 시킬 때 collection 을 구별할 변수
     :type collection: str
@@ -75,6 +92,13 @@ class NavCollection(NavBase):
     active_set: typing.Set[str]
 
     def __init__(self, collection: str, child_info: dict, **kwargs):
+        """
+        Child 를 가지고 있는 Navigation Item.
+
+        :param collection:
+        :param child_info:
+        :param kwargs:
+        """
         super().__init__(has_child=True, **kwargs)
 
         self.collection = collection
@@ -84,22 +108,34 @@ class NavCollection(NavBase):
         self._set_child(child_info)
 
     def get_active_set(self) -> typing.Set[str]:
+        """
+        Child 의 Active 할 page 명 리스트.
+
+        :return: page 리스트
+        """
         if not self.active_set:
             for child in self.child:
                 self.active_set.update(child.get_active_set())
         return self.active_set
 
     def _set_child(self, child_info: dict) -> None:
+        """
+        Child 세팅.
+
+        :param child_info:
+        :return:
+        """
         for child in child_info:
             self.child.append(NavigationFactory.get_navigation_item(child))
 
     def is_active(self, current_page) -> bool:
+        """Navigation 에서 active 로 표시 할 지 여부."""
         return current_page in self.get_active_set()
 
 
 class NavItem(NavBase):
     """
-    말단 Navigation 노드
+    말단 Navigation 노드.
 
     :param template: Link 눌렀을 때 이동할 link
     :type template: str
@@ -120,6 +156,8 @@ class NavItem(NavBase):
         **kwargs,
     ):
         """
+        초기화.
+
         :param template: template 명 혹은 url 링크
         :param argument: template 에 argument 를 전달하기 위함
         :param external: 외부 링크 여부, 내부인 경우 "book" namespace 사용
@@ -149,20 +187,21 @@ class NavItem(NavBase):
         self.login_state = login_state
 
     def is_active(self, current_page: str):
+        """Active 여부."""
         return self.template == current_page
 
     def get_active_set(self) -> typing.Set[str]:
+        """Template 명 제공."""
         return self.active
 
 
 class NavigationFactory:
-    """
-    주어진 dictionary 를 적절한 Navigation 노드로 변환한다.
-    """
+    """주어진 dictionary 를 적절한 Navigation 노드로 변환한다."""
 
     @staticmethod
     def get_navigation_item(info: dict) -> NavBase:
         """
+        Navigation Item 가져옴.
 
         :param info: navigation item 을 구성할 정보
         :return: collection element 를 이용하여 Collection 인지, 말단 node 인지 구분
@@ -175,7 +214,7 @@ class NavigationFactory:
 
 class Sidebar:
     """
-    Navigation 의 모든 정보를 가진 클래스
+    Navigation 의 모든 정보를 가진 클래스.
 
     :param items: Navigation 정보를 가진 List, 각 항목당 horizontal line 으로 구분 됨
     :type  items: typing.List[typing.Tuple]
@@ -185,6 +224,8 @@ class Sidebar:
 
     def __init__(self, config: typing.List[dict]):
         """
+        초기화.
+
         :param config: Navigation 설정
         """
         self.items = []
@@ -201,7 +242,7 @@ sidebar = Sidebar(nav_config)
 
 def get_render_dict(current_page: str) -> dict:
     """
-    context 에 current_page 를 만들어 주는 함수
+    Context 에 current_page 를 만들어 주는 함수.
 
     :param current_page: 현재 page string
     :type current_page: str

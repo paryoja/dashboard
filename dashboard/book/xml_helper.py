@@ -1,9 +1,13 @@
+"""XML 파싱 Helper."""
+
 from xml.etree import cElementTree as ElementTree
 
 import requests
 
 
 class XmlListConfig(list):
+    """Xml 을 List 로 가져옴."""
+
     def __init__(self, a_list):
         super().__init__()
         for element in a_list:
@@ -22,7 +26,7 @@ class XmlListConfig(list):
 
 class XmlDictConfig(dict):
     """
-    Example usage:
+    Example usage.
 
     >>> tree = ElementTree.parse('your_file.xml')
     >>> root = tree.getroot()
@@ -37,6 +41,11 @@ class XmlDictConfig(dict):
     """
 
     def __init__(self, parent_element):
+        """
+        초기화.
+
+        :param parent_element:
+        """
         super().__init__()
         if parent_element.items():
             self.update(dict(parent_element.items()))
@@ -77,7 +86,13 @@ class XmlDictConfig(dict):
                 self.update({element.tag: element.text})
 
 
-def get_xml_request(url):
+def get_xml_request(url: str):
+    """
+    XML 을 리턴하는 URL 을 받아서 파싱된 결과를 리턴.
+
+    :param url: API URL
+    :return:
+    """
     result = requests.post(url).text.strip()
     tree = ElementTree.ElementTree(ElementTree.fromstring(result))
 

@@ -1,9 +1,13 @@
+"""Book 모델."""
+
 from django.contrib.postgres import fields
 from django.db import models
 from django.utils.translation import gettext_lazy as _
 
 
 class Link(models.Model):
+    """유용한 Link."""
+
     added_date = models.DateTimeField("date added", auto_now_add=True)
     url = models.URLField()
 
@@ -11,66 +15,28 @@ class Link(models.Model):
     description = models.CharField(max_length=128, null=True, blank=True)
     visit_count = models.IntegerField(default=0)
 
-    def __str__(self):
-        return self.description
-
-
-class AuthUser(models.Model):
-    password = models.CharField(max_length=128)
-    last_login = models.DateTimeField(blank=True, null=True)
-    is_superuser = models.IntegerField()
-    username = models.CharField(unique=True, max_length=150)
-    email = models.CharField(max_length=254)
-    date_joined = models.DateTimeField()
-    is_staff = models.IntegerField(blank=True, null=True)
-    is_active = models.IntegerField(blank=True, null=True)
-    first_name = models.CharField(max_length=30, blank=True, null=True)
-    phone = models.CharField(max_length=45)
-    date_of_birth = models.DateTimeField()
-
-    class Meta:
-        db_table = "book_auth_user"
-
-
-class Boards(models.Model):
-    category = models.ForeignKey("BoardCategories", models.DO_NOTHING)
-    user = models.ForeignKey("AuthUser", models.DO_NOTHING)
-    title = models.CharField(max_length=300)
-    content = models.TextField()
-    registered_date = models.DateTimeField(blank=True, null=True)
-    last_update_date = models.DateTimeField(blank=True, null=True)
-    view_count = models.IntegerField(blank=True, null=True)
-    image = models.CharField(max_length=255, blank=True, null=True)
-
-    class Meta:
-        db_table = "boards"
-
-
-class BoardCategories(models.Model):
-    category_type = models.CharField(max_length=45)
-    category_code = models.CharField(max_length=100)
-    category_name = models.CharField(max_length=100)
-    category_desc = models.CharField(max_length=200)
-    list_count = models.IntegerField(blank=True, null=True)
-    authority = models.IntegerField(blank=True, null=True)
-    creation_date = models.DateTimeField(blank=True, null=True)
-    last_update_date = models.DateTimeField(blank=True, null=True)
-
-    class Meta:
-        db_table = "board_categories"
+    def __str__(self) -> str:
+        """설명만 제공."""
+        return str(self.description)
 
 
 class Lotto(models.Model):
+    """로또 정보."""
+
     draw_number = models.IntegerField()
     numbers = fields.JSONField()
 
 
 class Stock(models.Model):
+    """주식 정보."""
+
     code = models.CharField(max_length=10)
     name = models.CharField(max_length=30)
 
 
 class Paper(models.Model):
+    """논문 정보."""
+
     title = models.CharField(max_length=200, blank=True, null=True)
     link = models.URLField(blank=True, null=True)
     file = models.FileField(blank=True, null=True)
@@ -78,26 +44,35 @@ class Paper(models.Model):
     authors = fields.ArrayField(models.CharField(max_length=20), blank=True, null=True)
 
     def __str__(self):
+        """Title 만 제공."""
         return str(self.title)
 
 
 class Book(models.Model):
+    """읽을 만한 책."""
+
     name = models.TextField()
     author = models.CharField(max_length=20)
     year = models.IntegerField(blank=True, null=True)
 
-    def __str__(self):
+    def __str__(self) -> str:
+        """제목과 저자 정보."""
         return "{}: 저자 {}".format(self.name, self.author)
 
 
 class Category(models.Model):
+    """이미지 카테고리."""
+
     name = models.CharField(max_length=200)
 
     def __str__(self):
-        return "{}".format(self.name)
+        """이미지 카테고리명."""
+        return str(self.name)
 
 
 class PeopleImage(models.Model):
+    """이미지."""
+
     url = models.URLField(unique=True, max_length=400)
     title = models.TextField(max_length=500)
     category = models.ForeignKey(
@@ -109,19 +84,23 @@ class PeopleImage(models.Model):
     content_parsed = models.BooleanField(null=True, blank=True, default=None)
 
     def get_user_id(self):
+        """URL 의 5번째 항목."""
         return self.url.split("/")[5]
 
     def save(
         self, force_insert=False, force_update=False, using=None, update_fields=None
     ):
+        """저장시 user_id 세팅."""
         self.user_id = self.get_user_id()
         super().save(force_insert, force_update, using, update_fields)
 
     def __str__(self):
-        return "{}".format(self.url)
+        return str(self.url)
 
 
 class User(models.Model):
+    """User 정보."""
+
     username = models.CharField(max_length=30, unique=True)
     checked = models.BooleanField(default=None, null=True, blank=True)
 
@@ -130,6 +109,8 @@ class User(models.Model):
 
 
 class PokemonImage(models.Model):
+    """포켓몬 이미지."""
+
     url = models.URLField(unique=True, max_length=400)
     title = models.CharField(max_length=200)
     category = models.ForeignKey(
@@ -144,6 +125,8 @@ class PokemonImage(models.Model):
 
 
 class Image(models.Model):
+    """Image Base."""
+
     url = models.URLField(unique=True, max_length=400)
     title = models.CharField(max_length=200)
     category = models.ForeignKey(
@@ -155,6 +138,8 @@ class Image(models.Model):
 
 
 class APIServers(models.Model):
+    """API 서버 위치."""
+
     ip = models.CharField(max_length=200, unique=False)
     title = models.CharField(max_length=20, unique=True)
     endpoint = models.CharField(max_length=100)
@@ -165,6 +150,8 @@ class APIServers(models.Model):
 
 
 class DeepLearningModel(models.Model):
+    """딥러닝 모델."""
+
     domain = models.TextField(max_length=20)
     version = models.TextField(max_length=10)
     latest = models.BooleanField(default=True)
@@ -174,6 +161,8 @@ class DeepLearningModel(models.Model):
 
 
 class Rating(models.Model):
+    """이미지 선택 정보."""
+
     deep_model = models.ForeignKey(DeepLearningModel, on_delete=models.CASCADE)
     image = models.ForeignKey(PeopleImage, on_delete=models.CASCADE)
     data = fields.JSONField()
@@ -184,6 +173,8 @@ class Rating(models.Model):
 
 
 class PokemonRating(models.Model):
+    """포켓몬 이미지 분류 정보."""
+
     deep_model = models.ForeignKey(DeepLearningModel, on_delete=models.CASCADE)
     image = models.ForeignKey(PokemonImage, on_delete=models.CASCADE)
     data = fields.JSONField()
@@ -193,6 +184,7 @@ class PokemonRating(models.Model):
         return "{} {} {}".format(self.id, self.positive, self.image.title)
 
     def get_prob(self):
+        """Class 별 확률 값 가져옴."""
         if "classification" in self.data and "class_names" in self.data:
             result_list = []
             if isinstance(self.data["classification"], list):
@@ -204,7 +196,11 @@ class PokemonRating(models.Model):
 
 
 class Currency(models.Model):
+    """환전 내역."""
+
     class CurrencyChoices(models.TextChoices):
+        """환전."""
+
         USD = "USD", _("USD")
         KRW = "KRW", _("KRW")
 
@@ -221,11 +217,16 @@ class Currency(models.Model):
     to_amount = models.FloatField()
 
     def get_currency_rate(self):
+        """환율 계산."""
         return self.from_amount / self.to_amount
 
 
 class Wine(models.Model):
+    """와인 정보."""
+
     class RatingChoices(models.IntegerChoices):
+        """와인 평가 등급."""
+
         one = 1
         two = 2
         three = 3
@@ -240,6 +241,8 @@ class Wine(models.Model):
 
 
 class Corona(models.Model):
+    """코로나 정보."""
+
     date = models.DateField()
     confirmed = models.IntegerField()
     death = models.IntegerField()
@@ -247,12 +250,18 @@ class Corona(models.Model):
 
 
 class BestPhoto(models.Model):
+    """Best Photo 선택 정보."""
+
     img = models.ForeignKey(PeopleImage, on_delete=models.CASCADE)
     url = models.URLField(unique=True, max_length=400)
 
 
 class TodoItem(models.Model):
+    """할일 정보."""
+
     class StatusChoices(models.TextChoices):
+        """할일의 status."""
+
         DONE = "Done", _("Done")
         TODO = "Todo", _("Todo")
         IN_PROGRESS = "In Progress", _("In Progress")

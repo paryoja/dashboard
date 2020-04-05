@@ -1,3 +1,5 @@
+"""API Views."""
+
 from book.api.serializers import (
     InstagramImageSerializer,
     InstagramTextSerializer,
@@ -11,12 +13,16 @@ from .. import models
 
 
 class StandardResultsSetPagination(PageNumberPagination):
+    """100개 단위로 Pagination 수행."""
+
     page_size = 100
     page_size_query_param = "page_size"
     max_page_size = 1000
 
 
 class PokemonImageViewSet(viewsets.ModelViewSet):
+    """Pokemon 이미지 제공."""
+
     queryset = models.PokemonImage.objects.filter(classified="little").order_by("id")
     permission_classes = [IsAuthenticatedOrReadOnly]
 
@@ -27,6 +33,8 @@ class PokemonImageViewSet(viewsets.ModelViewSet):
 
 
 class InstagramTextViewSet(viewsets.ModelViewSet):
+    """Instagram Text 제공."""
+
     queryset = models.PeopleImage.objects.order_by("id")
     permission_classes = [IsAuthenticated]
 
@@ -35,6 +43,8 @@ class InstagramTextViewSet(viewsets.ModelViewSet):
 
 
 class InstagramImageViewSet(viewsets.ModelViewSet):
+    """Instagram 이미지 제공."""
+
     queryset = models.PeopleImage.objects.order_by("id")
     permission_classes = [IsAuthenticated]
 

@@ -1,3 +1,4 @@
+"""Celery 설정."""
 import os
 
 from celery import Celery
@@ -20,6 +21,7 @@ app.autodiscover_tasks()
 
 @app.task(bind=True)
 def debug_task(self):
+    """디버깅용 celery 테스크."""
     print("Request: {0!r}".format(self.request))
 
 

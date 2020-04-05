@@ -1,5 +1,8 @@
+"""유틸 함수."""
+
 import base64
 import json
+import typing
 
 import lz4.frame
 import requests
@@ -11,6 +14,7 @@ from .models import Lotto
 
 
 def new_lotto(draw_number):
+    """로또 정보."""
     is_new = False
     try:
         obj = Lotto.objects.get(draw_number=draw_number)
@@ -34,11 +38,12 @@ def new_lotto(draw_number):
 
 
 def get_page_info(object_list, page, count):
-    pagenator = Paginator(object_list, count)
-    p = pagenator.page(page)
+    """페이지 정보."""
+    paginator = Paginator(object_list, count)
+    p = paginator.page(page)
 
     start_10 = (page - 1) // 10 * 10 + 1
-    end_10 = min(start_10 + 9, pagenator.num_pages)
+    end_10 = min(start_10 + 9, paginator.num_pages)
 
     page_list = [i for i in range(start_10, end_10 + 1)]
 
@@ -53,6 +58,7 @@ def get_page_info(object_list, page, count):
 
 
 def get_compressed_result(image_list, count, page):
+    """데이터 압축해서 제공."""
     paginator = Paginator(image_list, count)
     p = paginator.page(page)
 
@@ -64,7 +70,14 @@ def get_compressed_result(image_list, count, page):
     return HttpResponse(base64.b85encode(compressed))
 
 
-def to_table(contents, row_count):
+def to_table(contents: typing.List, row_count: int) -> typing.List[typing.List]:
+    """
+    테이블 형태로 grouping.
+
+    :param contents: list 형태의 데이터.
+    :param row_count: 한줄에 포함될 element 개수
+    :return: grouping 된 테이블
+    """
     row = []
     table = []
     for count, img in enumerate(contents):

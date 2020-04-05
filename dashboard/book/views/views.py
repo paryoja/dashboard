@@ -1,8 +1,10 @@
+"""기본 뷰."""
 import datetime
 import json
 import logging
 import math
 import traceback
+import typing
 
 import requests
 from book import models, utils
@@ -11,7 +13,6 @@ from book.views import views_api
 from book.xml_helper import XmlDictConfig, get_xml_request
 from bs4 import BeautifulSoup
 from django.contrib.auth.decorators import login_required, user_passes_test
-from django.core import exceptions
 from django.db.models import Count
 from django.http import HttpResponse
 from django.shortcuts import render
@@ -21,8 +22,14 @@ logger = logging.getLogger(__name__)
 
 # investment
 @user_passes_test(lambda u: u.is_superuser)
-def live_currency(request):
-    render_dict = get_render_dict("live_currency")
+def currency_change(request):
+    """
+    환전 내용.
+
+    :param request:
+    :return:
+    """
+    render_dict = get_render_dict("currency_change")
     currency_list = models.Currency.objects.all().order_by("-date")
 
     total_from = 0.0
@@ -39,100 +46,16 @@ def live_currency(request):
     render_dict["currency_list"] = currency_list
     render_dict["total"] = total
 
-    return render(request, "book/investment/live_currency.html", render_dict)
-
-
-krx_price_query_url = "http://asp1.krx.co.kr/servlet/krx.asp.XMLSise?code={}"
-krx_statement_query_url = "http://asp1.krx.co.kr/servlet/krx.asp.XMLJemu?code={}"
-balance_order = [
-    "hangMok",
-    "year1Money",
-    "year1GuSungRate",
-    "year1JungGamRate",
-    "year2Money",
-    "year2GuSungRate",
-    "year2JungGamRate",
-    "year3Money",
-    "year3GuSungRate",
-    "year3JungGamRate",
-]
-cash_order = [
-    "hangMok",
-    "year1Money",
-    "year1JungGamRate",
-    "year2Money",
-    "year2JungGamRate",
-    "year3Money",
-    "year3JungGamRate",
-]
-
-
-def krx_price_query(request):
-    render_dict = get_render_dict("krx_price_query")
-    if request.POST:
-        query = request.POST["query"]
-        render_dict["query"] = query
-
-        realtime_result = get_xml_request(krx_price_query_url.format(query))
-        if realtime_result:
-            realtime_json = XmlDictConfig(realtime_result[1].find("stockInfo"))
-            info_json = XmlDictConfig(realtime_result[1].find("TBL_StockInfo"))
-            render_dict["market_close"] = (
-                realtime_json["myJangGubun"] == "장마감"
-                or realtime_json["myJangGubun"] == "장개시전"
-            )
-            render_dict["realtime_result"] = (
-                realtime_json,
-                realtime_result[0],
-                info_json,
-            )
-
-            if "JongName" in info_json and info_json["JongName"]:
-                try:
-                    models.Stock.objects.get(code=query)
-                except exceptions.ObjectDoesNotExist:
-                    stock = models.Stock(code=query, name=info_json["JongName"])
-                    stock.save()
-
-        statement_result = get_xml_request(krx_statement_query_url.format(query))
-        if statement_result:
-            balance_sheet = XmlDictConfig(statement_result[1].find("TBL_DaeCha"))
-            if "TBL_DaeCha_data" in balance_sheet:
-                hangmok_list = []
-                for item in balance_sheet["TBL_DaeCha_data"]:
-                    # 항목 이름 뒤에 숫자를 붙여 둬서 쓰기 어려우므로 제거
-                    item = {k[:-1]: v for k, v in item.items()}
-                    hangmok_list.append([item[order] for order in balance_order])
-                balance_sheet["TBL_DaeCha_data"] = hangmok_list
-                render_dict["balance_sheet"] = balance_sheet
-
-            income_statement = XmlDictConfig(statement_result[1].find("TBL_SonIk"))
-            if "TBL_SonIk_data" in income_statement:
-                hangmok_list = []
-                for item in income_statement["TBL_SonIk_data"]:
-                    # 항목 이름 뒤에 숫자를 붙여 둬서 쓰기 어려우므로 제거
-                    item = {k[:-1]: v for k, v in item.items()}
-                    hangmok_list.append([item[order] for order in balance_order])
-                income_statement["TBL_SonIk_data"] = hangmok_list
-                render_dict["income_statement"] = income_statement
-
-            cash_flow = XmlDictConfig(statement_result[1].find("TBL_CashFlow"))
-            if "TBL_CashFlow_data" in cash_flow:
-                hangmok_list = []
-                for item in cash_flow["TBL_CashFlow_data"]:
-                    # 항목 이름 뒤에 숫자를 붙여 둬서 쓰기 어려우므로 제거
-                    item = {k[:-1]: v for k, v in item.items()}
-                    hangmok_list.append([item[order] for order in cash_order])
-                cash_flow["TBL_CashFlow_data"] = hangmok_list
-                render_dict["cash_flow"] = cash_flow
-            render_dict["statement_result"] = statement_result
-
-    stocks = models.Stock.objects.all().order_by("code")
-    render_dict["stocks"] = stocks
-    return render(request, "book/investment/krx_price_query.html", render_dict)
+    return render(request, "book/investment/currency_change.html", render_dict)
 
 
 def export_lotto(request):
+    """
+    로또 정보 Export.
+
+    :param request:
+    :return:
+    """
     max_object = models.Lotto.objects.order_by("-draw_number")[0]
 
     max_draw = max_object.draw_number
@@ -170,6 +93,12 @@ def export_lotto(request):
 
 
 def lotto(request):
+    """
+    Lotto 정보 제공.
+
+    :param request:
+    :return:
+    """
     render_dict = get_render_dict("lotto")
 
     result = ""
@@ -190,6 +119,7 @@ law_query_url = "http://www.law.go.kr/DRF/lawSearch.do?OC=test&target=law&type=X
 
 
 def law_search(request):
+    """법률 검색."""
     render_dict = get_render_dict("law_search")
 
     if request.POST:
@@ -205,41 +135,8 @@ def law_search(request):
     return render(request, "book/law_search.html", render_dict)
 
 
-def todo(request):
-    render_dict = get_render_dict("todo")
-    return render(request, "book/todo.html", render_dict)
-
-
-# study
-def slide(request):
-    render_dict = get_render_dict("slide")
-    return render(request, "book/study/slide.html", render_dict)
-
-
-def paper(request):
-    render_dict = get_render_dict("paper")
-    paper_list = models.Paper.objects.all()
-
-    render_dict["paper_list"] = paper_list
-    return render(request, "book/study/paper.html", render_dict)
-
-
-def colab(request):
-    render_dict = get_render_dict("colab")
-    return render(request, "book/study/colab.html", render_dict)
-
-
-def idea(request):
-    render_dict = get_render_dict("idea")
-    return render(request, "book/idea.html", render_dict)
-
-
-def chatbot(request):
-    render_dict = get_render_dict("chatbot")
-    return render(request, "book/chatbot/chatbot.html", render_dict)
-
-
 def query_chatbot(request):
+    """챗봇."""
     if request.POST:
         message = request.POST["message"]
         data = {
@@ -264,6 +161,7 @@ def query_chatbot(request):
 
 
 def real_estate(request):
+    """부동산 유용 정보."""
     render_dict = get_render_dict("real_estate")
 
     price_link = models.Link.objects.filter(content_type="부동산 시세")
@@ -309,6 +207,7 @@ def real_estate(request):
 
 
 def food(request):
+    """맛집 정보."""
     render_dict = get_render_dict("food")
 
     restaurant_list = [
@@ -356,11 +255,9 @@ def food(request):
 
 @login_required
 def image(request, data_type="pokemon"):
-    if data_type == "pokemon":
-        render_dict = get_render_dict("pokemon")
-    elif data_type == "people":
-        render_dict = get_render_dict("people")
-    else:
+    """이미지 등록."""
+    render_dict = get_render_dict(data_type)
+    if data_type != "pokemon" and data_type != "people":
         raise KeyError("{} is not valid data_type".format(data_type))
 
     if request.POST:
@@ -409,6 +306,7 @@ def image(request, data_type="pokemon"):
 
 @login_required
 def pokemon(request, page=1):
+    """포켓몬 분류 페이지."""
     render_dict = get_render_dict("pokemon_classification")
 
     query = request.GET.get("query", "")
@@ -443,6 +341,7 @@ def pokemon(request, page=1):
 
 @login_required
 def pokemon_sorted(request):
+    """Yes 순 정렬 페이지."""
     render_dict = get_render_dict("pokemon_sorted")
 
     query = request.GET.get("query", "")
@@ -463,6 +362,7 @@ def pokemon_sorted(request):
 
 @login_required
 def pokemon_result(request, page=1):
+    """포켓몬 분류 결과."""
     classified = request.GET.get("arg", "yes")
     render_dict = get_render_dict("pokemon_result_{}".format(classified))
 
@@ -499,6 +399,7 @@ def pokemon_result(request, page=1):
 
 @login_required
 def pokemon_export(request, classified="yes", page=1):
+    """포켓몬 분류 결과 출력."""
     count = 1000
     image_list = models.PokemonImage.objects.filter(classified=classified)
 
@@ -507,6 +408,7 @@ def pokemon_export(request, classified="yes", page=1):
 
 @login_required
 def pokemon_relabel(request):
+    """포켓몬 분류 결과 수정."""
     render_dict = get_render_dict("pokemon_relabel")
     query = request.GET.get("query", "")
 
@@ -524,6 +426,7 @@ def pokemon_relabel(request):
 
 
 def compute_expectation(x, coeff):
+    """코로나 예상치 계산."""
     value = coeff["a"] / (1 + math.exp(-(x - coeff["x0"]) / coeff["b"]))
     return value
 
@@ -540,7 +443,8 @@ corona_constant = {
 }
 
 
-def range_date(start, end):
+def range_date(start: datetime.date, end: datetime.date) -> typing.List[datetime.date]:
+    """시작부터 끝까지 Date Range."""
     diff = (end - start).days
 
     for i in range(diff):
@@ -548,6 +452,7 @@ def range_date(start, end):
 
 
 def corona(request):
+    """코로나 그래프."""
     render_dict = get_render_dict("corona")
 
     corona_list = models.Corona.objects.order_by("date")
@@ -601,6 +506,7 @@ def corona(request):
 
 @user_passes_test(lambda u: u.is_superuser)
 def add_user(request):
+    """신규 인스타 유저 등록."""
     user = request.GET["username"]
     checked = request.GET["checked"]
 
@@ -613,6 +519,7 @@ def add_user(request):
 
 @user_passes_test(lambda u: u.is_superuser)
 def relabel(request):
+    """레이블 수정."""
     render_dict = get_render_dict("people_relabel")
     query = request.GET.get("query", "")
 

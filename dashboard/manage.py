@@ -5,6 +5,7 @@ import sys
 
 
 def main():
+    """Show Management Features."""
     os.environ.setdefault("DJANGO_SETTINGS_MODULE", "dashboard.my_settings.production")
     try:
         from django.core.management import execute_from_command_line
