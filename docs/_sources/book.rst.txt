@@ -1,5 +1,5 @@
-book package
-============
+Yozit book package
+==================
 
 Subpackages
 -----------
@@ -7,7 +7,6 @@ Subpackages
 .. toctree::
 
    book.api
-   book.migrations
    book.templatetags
    book.tests
    book.views

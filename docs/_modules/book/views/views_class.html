@@ -1,0 +1,249 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>book.views.views_class &mdash; Yozit dashboard  documentation</title>
+  
+
+  
+  
+  
+  
+
+  
+  <script type="text/javascript" src="../../../_static/js/modernizr.min.js"></script>
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../../../" src="../../../_static/documentation_options.js"></script>
+        <script src="../../../_static/jquery.js"></script>
+        <script src="../../../_static/underscore.js"></script>
+        <script src="../../../_static/doctools.js"></script>
+        <script src="../../../_static/language_data.js"></script>
+    
+    <script type="text/javascript" src="../../../_static/js/theme.js"></script>
+
+    
+
+  
+  <link rel="stylesheet" href="../../../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
+    <link rel="index" title="Index" href="../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="../../../index.html" class="icon icon-home"> Yozit dashboard
+          
+
+          
+          </a>
+
+          
+            
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <p class="caption"><span class="caption-text">Contents:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../book.html">Yozit book package</a></li>
+</ul>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../../index.html">Yozit dashboard</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../../../index.html">Docs</a> &raquo;</li>
+        
+          <li><a href="../../index.html">Module code</a> &raquo;</li>
+        
+      <li>book.views.views_class</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <h1>Source code for book.views.views_class</h1><div class="highlight"><pre>
+<span></span><span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">Any</span><span class="p">,</span> <span class="n">Dict</span>
+
+<span class="kn">from</span> <span class="nn">book</span> <span class="kn">import</span> <span class="n">models</span>
+<span class="kn">from</span> <span class="nn">django.views.generic</span> <span class="kn">import</span> <span class="n">ListView</span><span class="p">,</span> <span class="n">TemplateView</span>
+
+
+<div class="viewcode-block" id="CurrentPageListView"><a class="viewcode-back" href="../../../book.views.views_class.html#book.views.views_class.CurrentPageListView">[docs]</a><span class="k">class</span> <span class="nc">CurrentPageListView</span><span class="p">(</span><span class="n">ListView</span><span class="p">):</span>
+    <span class="n">current_page</span> <span class="o">=</span> <span class="kc">None</span>
+
+<div class="viewcode-block" id="CurrentPageListView.get_context_data"><a class="viewcode-back" href="../../../book.views.views_class.html#book.views.views_class.CurrentPageListView.get_context_data">[docs]</a>    <span class="k">def</span> <span class="nf">get_context_data</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">:</span> <span class="n">Any</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">]:</span>
+        <span class="n">context</span> <span class="o">=</span> <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="n">get_context_data</span><span class="p">(</span><span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+        <span class="n">context</span><span class="p">[</span><span class="s2">&quot;current_page&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">current_page</span>
+        <span class="k">return</span> <span class="n">context</span></div></div>
+
+
+<div class="viewcode-block" id="CurrentPageTemplateView"><a class="viewcode-back" href="../../../book.views.views_class.html#book.views.views_class.CurrentPageTemplateView">[docs]</a><span class="k">class</span> <span class="nc">CurrentPageTemplateView</span><span class="p">(</span><span class="n">TemplateView</span><span class="p">):</span>
+    <span class="n">current_page</span> <span class="o">=</span> <span class="kc">None</span>
+
+<div class="viewcode-block" id="CurrentPageTemplateView.get_context_data"><a class="viewcode-back" href="../../../book.views.views_class.html#book.views.views_class.CurrentPageTemplateView.get_context_data">[docs]</a>    <span class="k">def</span> <span class="nf">get_context_data</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">:</span> <span class="n">Any</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">]:</span>
+        <span class="n">context</span> <span class="o">=</span> <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="n">get_context_data</span><span class="p">(</span><span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+        <span class="n">context</span><span class="p">[</span><span class="s2">&quot;current_page&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">current_page</span>
+        <span class="k">return</span> <span class="n">context</span></div></div>
+
+
+<div class="viewcode-block" id="WebStackListView"><a class="viewcode-back" href="../../../book.views.views_class.html#book.views.views_class.WebStackListView">[docs]</a><span class="k">class</span> <span class="nc">WebStackListView</span><span class="p">(</span><span class="n">CurrentPageListView</span><span class="p">):</span>
+    <span class="n">current_page</span> <span class="o">=</span> <span class="s2">&quot;web_stack&quot;</span>
+    <span class="n">template_name</span> <span class="o">=</span> <span class="s2">&quot;book/link/web_stack.html&quot;</span>
+    <span class="n">queryset</span> <span class="o">=</span> <span class="n">models</span><span class="o">.</span><span class="n">Link</span><span class="o">.</span><span class="n">objects</span><span class="o">.</span><span class="n">filter</span><span class="p">(</span><span class="n">content_type</span><span class="o">=</span><span class="s2">&quot;Web&quot;</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="BookmarkListView"><a class="viewcode-back" href="../../../book.views.views_class.html#book.views.views_class.BookmarkListView">[docs]</a><span class="k">class</span> <span class="nc">BookmarkListView</span><span class="p">(</span><span class="n">CurrentPageListView</span><span class="p">):</span>
+    <span class="n">current_page</span> <span class="o">=</span> <span class="s2">&quot;link&quot;</span>
+    <span class="n">template_name</span> <span class="o">=</span> <span class="s2">&quot;book/link/link.html&quot;</span>
+    <span class="n">queryset</span> <span class="o">=</span> <span class="n">models</span><span class="o">.</span><span class="n">Link</span><span class="o">.</span><span class="n">objects</span><span class="o">.</span><span class="n">exclude</span><span class="p">(</span><span class="n">content_type</span><span class="o">=</span><span class="s2">&quot;Web&quot;</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="WineListView"><a class="viewcode-back" href="../../../book.views.views_class.html#book.views.views_class.WineListView">[docs]</a><span class="k">class</span> <span class="nc">WineListView</span><span class="p">(</span><span class="n">CurrentPageListView</span><span class="p">):</span>
+    <span class="n">current_page</span> <span class="o">=</span> <span class="s2">&quot;wine&quot;</span>
+    <span class="n">template_name</span> <span class="o">=</span> <span class="s2">&quot;book/wine.html&quot;</span>
+    <span class="n">model</span> <span class="o">=</span> <span class="n">models</span><span class="o">.</span><span class="n">Wine</span></div>
+
+
+<div class="viewcode-block" id="RecommendBookListView"><a class="viewcode-back" href="../../../book.views.views_class.html#book.views.views_class.RecommendBookListView">[docs]</a><span class="k">class</span> <span class="nc">RecommendBookListView</span><span class="p">(</span><span class="n">CurrentPageListView</span><span class="p">):</span>
+    <span class="n">current_page</span> <span class="o">=</span> <span class="s2">&quot;recommend_book&quot;</span>
+    <span class="n">template_name</span> <span class="o">=</span> <span class="s2">&quot;book/investment/recommend_book.html&quot;</span>
+    <span class="n">model</span> <span class="o">=</span> <span class="n">models</span><span class="o">.</span><span class="n">Book</span></div>
+
+
+<div class="viewcode-block" id="IndexTemplateView"><a class="viewcode-back" href="../../../book.views.views_class.html#book.views.views_class.IndexTemplateView">[docs]</a><span class="k">class</span> <span class="nc">IndexTemplateView</span><span class="p">(</span><span class="n">CurrentPageTemplateView</span><span class="p">):</span>
+    <span class="n">current_page</span> <span class="o">=</span> <span class="s2">&quot;index&quot;</span>
+    <span class="n">template_name</span> <span class="o">=</span> <span class="s2">&quot;book/index.html&quot;</span></div>
+
+
+<div class="viewcode-block" id="AlgorithmTemplateView"><a class="viewcode-back" href="../../../book.views.views_class.html#book.views.views_class.AlgorithmTemplateView">[docs]</a><span class="k">class</span> <span class="nc">AlgorithmTemplateView</span><span class="p">(</span><span class="n">CurrentPageTemplateView</span><span class="p">):</span>
+    <span class="n">current_page</span> <span class="o">=</span> <span class="s2">&quot;algorithm&quot;</span>
+    <span class="n">template_name</span> <span class="o">=</span> <span class="s2">&quot;book/algorithm.html&quot;</span></div>
+
+
+<div class="viewcode-block" id="LeadingStockTemplateView"><a class="viewcode-back" href="../../../book.views.views_class.html#book.views.views_class.LeadingStockTemplateView">[docs]</a><span class="k">class</span> <span class="nc">LeadingStockTemplateView</span><span class="p">(</span><span class="n">CurrentPageTemplateView</span><span class="p">):</span>
+    <span class="n">current_page</span> <span class="o">=</span> <span class="s2">&quot;leading_stocks&quot;</span>
+    <span class="n">template_name</span> <span class="o">=</span> <span class="s2">&quot;book/investment/leading_stocks.html&quot;</span></div>
+</pre></div>
+
+           </div>
+           
+          </div>
+          <footer>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2020, Yoonjae Park
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>

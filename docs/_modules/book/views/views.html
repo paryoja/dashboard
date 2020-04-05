@@ -80,7 +80,7 @@
             
               <p class="caption"><span class="caption-text">Contents:</span></p>
 <ul>
-<li class="toctree-l1"><a class="reference internal" href="../../../book.html">book package</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../book.html">Yozit book package</a></li>
 </ul>
 
             
@@ -165,50 +165,27 @@
 <span class="n">logger</span> <span class="o">=</span> <span class="n">logging</span><span class="o">.</span><span class="n">getLogger</span><span class="p">(</span><span class="vm">__name__</span><span class="p">)</span>
 
 
-<div class="viewcode-block" id="index"><a class="viewcode-back" href="../../../book.views.views.html#book.views.views.index">[docs]</a><span class="k">def</span> <span class="nf">index</span><span class="p">(</span><span class="n">request</span><span class="p">):</span>
-    <span class="n">render_dict</span> <span class="o">=</span> <span class="n">get_render_dict</span><span class="p">(</span><span class="s2">&quot;index&quot;</span><span class="p">)</span>
-    <span class="k">return</span> <span class="n">render</span><span class="p">(</span><span class="n">request</span><span class="p">,</span> <span class="s2">&quot;book/index.html&quot;</span><span class="p">,</span> <span class="n">render_dict</span><span class="p">)</span></div>
-
-
-<div class="viewcode-block" id="link"><a class="viewcode-back" href="../../../book.views.views.html#book.views.views.link">[docs]</a><span class="k">def</span> <span class="nf">link</span><span class="p">(</span><span class="n">request</span><span class="p">):</span>
-    <span class="n">render_dict</span> <span class="o">=</span> <span class="n">get_render_dict</span><span class="p">(</span><span class="s2">&quot;link&quot;</span><span class="p">)</span>
-    <span class="n">render_dict</span><span class="p">[</span><span class="s2">&quot;table_content&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">models</span><span class="o">.</span><span class="n">Link</span><span class="o">.</span><span class="n">objects</span><span class="o">.</span><span class="n">all</span><span class="p">()</span>
-    <span class="k">return</span> <span class="n">render</span><span class="p">(</span><span class="n">request</span><span class="p">,</span> <span class="s2">&quot;book/link.html&quot;</span><span class="p">,</span> <span class="n">render_dict</span><span class="p">)</span></div>
-
-
-<div class="viewcode-block" id="web_stack"><a class="viewcode-back" href="../../../book.views.views.html#book.views.views.web_stack">[docs]</a><span class="k">def</span> <span class="nf">web_stack</span><span class="p">(</span><span class="n">request</span><span class="p">):</span>
-    <span class="n">render_dict</span> <span class="o">=</span> <span class="n">get_render_dict</span><span class="p">(</span><span class="s2">&quot;web_stack&quot;</span><span class="p">)</span>
-    <span class="k">return</span> <span class="n">render</span><span class="p">(</span><span class="n">request</span><span class="p">,</span> <span class="s2">&quot;book/web_stack.html&quot;</span><span class="p">,</span> <span class="n">render_dict</span><span class="p">)</span></div>
-
-
-<div class="viewcode-block" id="algorithm"><a class="viewcode-back" href="../../../book.views.views.html#book.views.views.algorithm">[docs]</a><span class="k">def</span> <span class="nf">algorithm</span><span class="p">(</span><span class="n">request</span><span class="p">):</span>
-    <span class="n">render_dict</span> <span class="o">=</span> <span class="n">get_render_dict</span><span class="p">(</span><span class="s2">&quot;algorithm&quot;</span><span class="p">)</span>
-    <span class="k">return</span> <span class="n">render</span><span class="p">(</span><span class="n">request</span><span class="p">,</span> <span class="s2">&quot;book/algorithm.html&quot;</span><span class="p">,</span> <span class="n">render_dict</span><span class="p">)</span></div>
-
-
 <span class="c1"># investment</span>
 <div class="viewcode-block" id="live_currency"><a class="viewcode-back" href="../../../book.views.views.html#book.views.views.live_currency">[docs]</a><span class="nd">@user_passes_test</span><span class="p">(</span><span class="k">lambda</span> <span class="n">u</span><span class="p">:</span> <span class="n">u</span><span class="o">.</span><span class="n">is_superuser</span><span class="p">)</span>
 <span class="k">def</span> <span class="nf">live_currency</span><span class="p">(</span><span class="n">request</span><span class="p">):</span>
     <span class="n">render_dict</span> <span class="o">=</span> <span class="n">get_render_dict</span><span class="p">(</span><span class="s2">&quot;live_currency&quot;</span><span class="p">)</span>
     <span class="n">currency_list</span> <span class="o">=</span> <span class="n">models</span><span class="o">.</span><span class="n">Currency</span><span class="o">.</span><span class="n">objects</span><span class="o">.</span><span class="n">all</span><span class="p">()</span><span class="o">.</span><span class="n">order_by</span><span class="p">(</span><span class="s2">&quot;-date&quot;</span><span class="p">)</span>
 
-    <span class="n">total_from</span> <span class="o">=</span> <span class="mi">0</span>
-    <span class="n">total_to</span> <span class="o">=</span> <span class="mi">0</span>
+    <span class="n">total_from</span> <span class="o">=</span> <span class="mf">0.0</span>
+    <span class="n">total_to</span> <span class="o">=</span> <span class="mf">0.0</span>
 
     <span class="k">for</span> <span class="n">currency</span> <span class="ow">in</span> <span class="n">currency_list</span><span class="p">:</span>
         <span class="n">total_from</span> <span class="o">+=</span> <span class="n">currency</span><span class="o">.</span><span class="n">from_amount</span>
         <span class="n">total_to</span> <span class="o">+=</span> <span class="n">currency</span><span class="o">.</span><span class="n">to_amount</span>
-    <span class="n">total</span> <span class="o">=</span> <span class="p">{</span><span class="s2">&quot;from&quot;</span><span class="p">:</span> <span class="n">total_from</span><span class="p">,</span> <span class="s2">&quot;to&quot;</span><span class="p">:</span> <span class="n">total_to</span><span class="p">,</span> <span class="s2">&quot;rate&quot;</span><span class="p">:</span> <span class="n">total_from</span> <span class="o">/</span> <span class="n">total_to</span><span class="p">}</span>
+    <span class="k">if</span> <span class="n">total_to</span> <span class="o">!=</span> <span class="mf">0.0</span><span class="p">:</span>
+        <span class="n">total</span> <span class="o">=</span> <span class="p">{</span><span class="s2">&quot;from&quot;</span><span class="p">:</span> <span class="n">total_from</span><span class="p">,</span> <span class="s2">&quot;to&quot;</span><span class="p">:</span> <span class="n">total_to</span><span class="p">,</span> <span class="s2">&quot;rate&quot;</span><span class="p">:</span> <span class="n">total_from</span> <span class="o">/</span> <span class="n">total_to</span><span class="p">}</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">total</span> <span class="o">=</span> <span class="p">{</span><span class="s2">&quot;from&quot;</span><span class="p">:</span> <span class="n">total_from</span><span class="p">,</span> <span class="s2">&quot;to&quot;</span><span class="p">:</span> <span class="n">total_to</span><span class="p">,</span> <span class="s2">&quot;rate&quot;</span><span class="p">:</span> <span class="mf">0.0</span><span class="p">}</span>
 
     <span class="n">render_dict</span><span class="p">[</span><span class="s2">&quot;currency_list&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">currency_list</span>
     <span class="n">render_dict</span><span class="p">[</span><span class="s2">&quot;total&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">total</span>
 
     <span class="k">return</span> <span class="n">render</span><span class="p">(</span><span class="n">request</span><span class="p">,</span> <span class="s2">&quot;book/investment/live_currency.html&quot;</span><span class="p">,</span> <span class="n">render_dict</span><span class="p">)</span></div>
-
-
-<div class="viewcode-block" id="leading_stocks"><a class="viewcode-back" href="../../../book.views.views.html#book.views.views.leading_stocks">[docs]</a><span class="k">def</span> <span class="nf">leading_stocks</span><span class="p">(</span><span class="n">request</span><span class="p">):</span>
-    <span class="n">render_dict</span> <span class="o">=</span> <span class="n">get_render_dict</span><span class="p">(</span><span class="s2">&quot;leading_stocks&quot;</span><span class="p">)</span>
-    <span class="k">return</span> <span class="n">render</span><span class="p">(</span><span class="n">request</span><span class="p">,</span> <span class="s2">&quot;book/investment/leading_stocks.html&quot;</span><span class="p">,</span> <span class="n">render_dict</span><span class="p">)</span></div>
 
 
 <span class="n">krx_price_query_url</span> <span class="o">=</span> <span class="s2">&quot;http://asp1.krx.co.kr/servlet/krx.asp.XMLSise?code=</span><span class="si">{}</span><span class="s2">&quot;</span>
@@ -354,14 +331,6 @@
     <span class="k">return</span> <span class="n">render</span><span class="p">(</span><span class="n">request</span><span class="p">,</span> <span class="s2">&quot;book/investment/lotto.html&quot;</span><span class="p">,</span> <span class="n">render_dict</span><span class="p">)</span></div>
 
 
-<div class="viewcode-block" id="wine"><a class="viewcode-back" href="../../../book.views.views.html#book.views.views.wine">[docs]</a><span class="k">def</span> <span class="nf">wine</span><span class="p">(</span><span class="n">request</span><span class="p">):</span>
-    <span class="n">render_dict</span> <span class="o">=</span> <span class="n">get_render_dict</span><span class="p">(</span><span class="s2">&quot;wine&quot;</span><span class="p">)</span>
-
-    <span class="n">wine_list</span> <span class="o">=</span> <span class="n">models</span><span class="o">.</span><span class="n">Wine</span><span class="o">.</span><span class="n">objects</span><span class="o">.</span><span class="n">all</span><span class="p">()</span>
-    <span class="n">render_dict</span><span class="p">[</span><span class="s2">&quot;wine_list&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">wine_list</span>
-    <span class="k">return</span> <span class="n">render</span><span class="p">(</span><span class="n">request</span><span class="p">,</span> <span class="s2">&quot;book/wine.html&quot;</span><span class="p">,</span> <span class="n">render_dict</span><span class="p">)</span></div>
-
-
 <span class="c1"># law_search</span>
 <span class="n">law_query_url</span> <span class="o">=</span> <span class="s2">&quot;http://www.law.go.kr/DRF/lawSearch.do?OC=test&amp;target=law&amp;type=XML&amp;mobileYn=Y&amp;query=</span><span class="si">{}</span><span class="s2">&quot;</span>
 
@@ -485,15 +454,6 @@
     <span class="k">return</span> <span class="n">render</span><span class="p">(</span><span class="n">request</span><span class="p">,</span> <span class="s2">&quot;book/real_estate.html&quot;</span><span class="p">,</span> <span class="n">render_dict</span><span class="p">)</span></div>
 
 
-<div class="viewcode-block" id="recommend_book"><a class="viewcode-back" href="../../../book.views.views.html#book.views.views.recommend_book">[docs]</a><span class="k">def</span> <span class="nf">recommend_book</span><span class="p">(</span><span class="n">request</span><span class="p">):</span>
-    <span class="n">render_dict</span> <span class="o">=</span> <span class="n">get_render_dict</span><span class="p">(</span><span class="s2">&quot;recommend_book&quot;</span><span class="p">)</span>
-
-    <span class="n">book_list</span> <span class="o">=</span> <span class="n">models</span><span class="o">.</span><span class="n">Book</span><span class="o">.</span><span class="n">objects</span><span class="o">.</span><span class="n">all</span><span class="p">()</span>
-    <span class="n">render_dict</span><span class="p">[</span><span class="s2">&quot;book_list&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">book_list</span>
-
-    <span class="k">return</span> <span class="n">render</span><span class="p">(</span><span class="n">request</span><span class="p">,</span> <span class="s2">&quot;book/investment/recommend_book.html&quot;</span><span class="p">,</span> <span class="n">render_dict</span><span class="p">)</span></div>
-
-
 <div class="viewcode-block" id="food"><a class="viewcode-back" href="../../../book.views.views.html#book.views.views.food">[docs]</a><span class="k">def</span> <span class="nf">food</span><span class="p">(</span><span class="n">request</span><span class="p">):</span>
     <span class="n">render_dict</span> <span class="o">=</span> <span class="n">get_render_dict</span><span class="p">(</span><span class="s2">&quot;food&quot;</span><span class="p">)</span>
 
@@ -582,11 +542,6 @@
                     <span class="p">)</span>
 
         <span class="k">except</span> <span class="ne">KeyError</span><span class="p">:</span>
-            <span class="k">if</span> <span class="s2">&quot;parsed&quot;</span> <span class="ow">in</span> <span class="n">render_dict</span><span class="p">:</span>
-                <span class="n">render_dict</span><span class="p">[</span><span class="s2">&quot;parsed&quot;</span><span class="p">]</span> <span class="o">+=</span> <span class="n">traceback</span><span class="o">.</span><span class="n">format_exc</span><span class="p">()</span>
-            <span class="k">else</span><span class="p">:</span>
-                <span class="n">render_dict</span><span class="p">[</span><span class="s2">&quot;parsed&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">traceback</span><span class="o">.</span><span class="n">format_exc</span><span class="p">()</span>
-        <span class="k">except</span> <span class="ne">Exception</span><span class="p">:</span>
             <span class="k">if</span> <span class="s2">&quot;parsed&quot;</span> <span class="ow">in</span> <span class="n">render_dict</span><span class="p">:</span>
                 <span class="n">render_dict</span><span class="p">[</span><span class="s2">&quot;parsed&quot;</span><span class="p">]</span> <span class="o">+=</span> <span class="n">traceback</span><span class="o">.</span><span class="n">format_exc</span><span class="p">()</span>
             <span class="k">else</span><span class="p">:</span>

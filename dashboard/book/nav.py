@@ -15,16 +15,20 @@ else:
 class NavBase:
     """
     Navigation 항목의 base 가 되는 class
-    Attributes:
-        description (str): Navigation bar 에 나타날 string
-        icon (str): Navigation bar 에 나타날 icon
-        has_child (bool): Nav Element 의 하위 항목 존재 여부
-        should_superuser (bool): Superuser 에게만 보이게 설정
+    :param description: Navigation bar 에 나타날 string
+    :type description: str
+    :param icon: Navigation bar 에 나타날 icon
+    :type icon: str
+    :param has_child: Nav Element 의 하위 항목 존재 여부
+    :type has_child: str
+    :param should_superuser: Superuser 에게만 보이게 설정
+    :type should_superuser: bool
     """
 
     description: str
     icon: str
-    has_child = bool
+    has_child: bool
+    should_superuser: bool
 
     __metaclass__ = abc.ABCMeta
 
@@ -57,10 +61,12 @@ class NavCollection(NavBase):
     """
     Child 를 가지는 Navigation
 
-    Attributes:
-        collection (str): Collapse 를 동작 시킬 때 collection 을 구별할 변수
-        child (typing.List[NavBase]): child element
-        active_set (typing.Set[str]): active 로 표시될 current page 의 set
+    :param collection: Collapse 를 동작 시킬 때 collection 을 구별할 변수
+    :type collection: str
+    :param child: child element
+    :type child: List[NavBase]
+    :param active_set: active 로 표시될 current page 의 set
+    :type active_set: typing.Set[str]
     """
 
     collection: str
@@ -93,9 +99,10 @@ class NavCollection(NavBase):
 class NavItem(NavBase):
     """
     말단 Navigation 노드
-    Attributes:
-        template (str): Link 눌렀을 때 이동할 link
-        suffix (typing.Optional[str]): Get Argument 로 적을 내용
+    :param template: Link 눌렀을 때 이동할 link
+    :type template: str
+    :param suffix: Get Argument 로 적을 내용
+    :type suffix: typing.Optional[str]
     """
 
     template: str
