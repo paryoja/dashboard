@@ -82,14 +82,13 @@
             
               <p class="caption"><span class="caption-text">Contents:</span></p>
 <ul class="current">
-<li class="toctree-l1 current"><a class="reference internal" href="book.html">book package</a><ul class="current">
+<li class="toctree-l1 current"><a class="reference internal" href="book.html">Yozit book package</a><ul class="current">
 <li class="toctree-l2 current"><a class="reference internal" href="book.html#subpackages">Subpackages</a><ul class="current">
 <li class="toctree-l3 current"><a class="reference internal" href="book.api.html">book.api package</a><ul class="current">
 <li class="toctree-l4 current"><a class="reference internal" href="book.api.html#submodules">Submodules</a></li>
 <li class="toctree-l4"><a class="reference internal" href="book.api.html#module-book.api">Module contents</a></li>
 </ul>
 </li>
-<li class="toctree-l3"><a class="reference internal" href="book.migrations.html">book.migrations package</a></li>
 <li class="toctree-l3"><a class="reference internal" href="book.templatetags.html">book.templatetags package</a></li>
 <li class="toctree-l3"><a class="reference internal" href="book.tests.html">book.tests package</a></li>
 <li class="toctree-l3"><a class="reference internal" href="book.views.html">book.views package</a></li>
@@ -144,7 +143,7 @@
     
       <li><a href="index.html">Docs</a> &raquo;</li>
         
-          <li><a href="book.html">book package</a> &raquo;</li>
+          <li><a href="book.html">Yozit book package</a> &raquo;</li>
         
           <li><a href="book.api.html">book.api package</a> &raquo;</li>
         
@@ -169,14 +168,17 @@
             
   <div class="section" id="module-book.api.serializers">
 <span id="book-api-serializers-module"></span><h1>book.api.serializers module<a class="headerlink" href="#module-book.api.serializers" title="Permalink to this headline">¶</a></h1>
+<p>DRF Serializer.</p>
 <dl class="class">
 <dt id="book.api.serializers.InstagramImageSerializer">
 <em class="property">class </em><code class="sig-prename descclassname">book.api.serializers.</code><code class="sig-name descname">InstagramImageSerializer</code><span class="sig-paren">(</span><em class="sig-param">instance=None</em>, <em class="sig-param">data=&lt;class 'rest_framework.fields.empty'&gt;</em>, <em class="sig-param">**kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/book/api/serializers.html#InstagramImageSerializer"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#book.api.serializers.InstagramImageSerializer" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">rest_framework.serializers.ModelSerializer</span></code></p>
+<p>인스타그램 이미지 Serializer.</p>
 <dl class="class">
 <dt id="book.api.serializers.InstagramImageSerializer.Meta">
 <em class="property">class </em><code class="sig-name descname">Meta</code><a class="reference internal" href="_modules/book/api/serializers.html#InstagramImageSerializer.Meta"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#book.api.serializers.InstagramImageSerializer.Meta" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<p>Fields 설정.</p>
 <dl class="attribute">
 <dt id="book.api.serializers.InstagramImageSerializer.Meta.fields">
 <code class="sig-name descname">fields</code><em class="property"> = ('url', 'selected')</em><a class="headerlink" href="#book.api.serializers.InstagramImageSerializer.Meta.fields" title="Permalink to this definition">¶</a></dt>
@@ -196,10 +198,12 @@
 <dt id="book.api.serializers.InstagramTextSerializer">
 <em class="property">class </em><code class="sig-prename descclassname">book.api.serializers.</code><code class="sig-name descname">InstagramTextSerializer</code><span class="sig-paren">(</span><em class="sig-param">instance=None</em>, <em class="sig-param">data=&lt;class 'rest_framework.fields.empty'&gt;</em>, <em class="sig-param">**kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/book/api/serializers.html#InstagramTextSerializer"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#book.api.serializers.InstagramTextSerializer" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">rest_framework.serializers.ModelSerializer</span></code></p>
+<p>인스타그램 Text Serializer.</p>
 <dl class="class">
 <dt id="book.api.serializers.InstagramTextSerializer.Meta">
 <em class="property">class </em><code class="sig-name descname">Meta</code><a class="reference internal" href="_modules/book/api/serializers.html#InstagramTextSerializer.Meta"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#book.api.serializers.InstagramTextSerializer.Meta" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<p>Fields 설정.</p>
 <dl class="attribute">
 <dt id="book.api.serializers.InstagramTextSerializer.Meta.fields">
 <code class="sig-name descname">fields</code><em class="property"> = ('title',)</em><a class="headerlink" href="#book.api.serializers.InstagramTextSerializer.Meta.fields" title="Permalink to this definition">¶</a></dt>
@@ -219,10 +223,12 @@
 <dt id="book.api.serializers.PokemonImageSerializer">
 <em class="property">class </em><code class="sig-prename descclassname">book.api.serializers.</code><code class="sig-name descname">PokemonImageSerializer</code><span class="sig-paren">(</span><em class="sig-param">instance=None</em>, <em class="sig-param">data=&lt;class 'rest_framework.fields.empty'&gt;</em>, <em class="sig-param">**kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/book/api/serializers.html#PokemonImageSerializer"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#book.api.serializers.PokemonImageSerializer" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">rest_framework.serializers.ModelSerializer</span></code></p>
+<p>Pokemon 이미지 Serializer.</p>
 <dl class="class">
 <dt id="book.api.serializers.PokemonImageSerializer.Meta">
 <em class="property">class </em><code class="sig-name descname">Meta</code><a class="reference internal" href="_modules/book/api/serializers.html#PokemonImageSerializer.Meta"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#book.api.serializers.PokemonImageSerializer.Meta" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<p>Fields 설정.</p>
 <dl class="attribute">
 <dt id="book.api.serializers.PokemonImageSerializer.Meta.fields">
 <code class="sig-name descname">fields</code><em class="property"> = ('url', 'title', 'original_label', 'classified')</em><a class="headerlink" href="#book.api.serializers.PokemonImageSerializer.Meta.fields" title="Permalink to this definition">¶</a></dt>

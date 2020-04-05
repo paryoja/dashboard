@@ -144,7 +144,8 @@
            <div itemprop="articleBody">
             
   <h1>Source code for book.templatetags.book_extras</h1><div class="highlight"><pre>
-<span></span><span class="kn">import</span> <span class="nn">re</span>
+<span></span><span class="sd">&quot;&quot;&quot;템플릿에서 필요한 함수.&quot;&quot;&quot;</span>
+<span class="kn">import</span> <span class="nn">re</span>
 
 <span class="kn">from</span> <span class="nn">django</span> <span class="kn">import</span> <span class="n">template</span>
 
@@ -155,7 +156,7 @@
 
 <div class="viewcode-block" id="highlight_user"><a class="viewcode-back" href="../../../book.templatetags.book_extras.html#book.templatetags.book_extras.highlight_user">[docs]</a><span class="nd">@register</span><span class="o">.</span><span class="n">filter</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="s2">&quot;highlight_user&quot;</span><span class="p">)</span>
 <span class="k">def</span> <span class="nf">highlight_user</span><span class="p">(</span><span class="n">value</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot;Removes all values of arg from the given string&quot;&quot;&quot;</span>
+    <span class="sd">&quot;&quot;&quot;Remove all values of arg from the given string.&quot;&quot;&quot;</span>
     <span class="n">user_highlight</span> <span class="o">=</span> <span class="n">user_pattern</span><span class="o">.</span><span class="n">sub</span><span class="p">(</span><span class="sa">r</span><span class="s2">&quot;https://www.instagram.com/\1&quot;</span><span class="p">,</span> <span class="n">value</span><span class="p">)</span>
 
     <span class="k">return</span> <span class="n">user_highlight</span></div>
@@ -163,6 +164,7 @@
 
 <div class="viewcode-block" id="get_split"><a class="viewcode-back" href="../../../book.templatetags.book_extras.html#book.templatetags.book_extras.get_split">[docs]</a><span class="nd">@register</span><span class="o">.</span><span class="n">filter</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="s2">&quot;get_split&quot;</span><span class="p">)</span>
 <span class="k">def</span> <span class="nf">get_split</span><span class="p">(</span><span class="n">value</span><span class="p">,</span> <span class="n">index</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;슬래시로 나눈 sub-string 가져옴.&quot;&quot;&quot;</span>
     <span class="k">try</span><span class="p">:</span>
         <span class="k">return</span> <span class="n">value</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s2">&quot;/&quot;</span><span class="p">)[</span><span class="n">index</span><span class="p">]</span>
     <span class="k">except</span> <span class="ne">IndexError</span><span class="p">:</span>

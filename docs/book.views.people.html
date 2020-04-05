@@ -35,7 +35,7 @@
   <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
-    <link rel="next" title="book.views.views module" href="book.views.views.html" />
+    <link rel="next" title="book.views.krx module" href="book.views.krx.html" />
     <link rel="prev" title="book.views package" href="book.views.html" /> 
 </head>
 
@@ -82,10 +82,9 @@
             
               <p class="caption"><span class="caption-text">Contents:</span></p>
 <ul class="current">
-<li class="toctree-l1 current"><a class="reference internal" href="book.html">book package</a><ul class="current">
+<li class="toctree-l1 current"><a class="reference internal" href="book.html">Yozit book package</a><ul class="current">
 <li class="toctree-l2 current"><a class="reference internal" href="book.html#subpackages">Subpackages</a><ul class="current">
 <li class="toctree-l3"><a class="reference internal" href="book.api.html">book.api package</a></li>
-<li class="toctree-l3"><a class="reference internal" href="book.migrations.html">book.migrations package</a></li>
 <li class="toctree-l3"><a class="reference internal" href="book.templatetags.html">book.templatetags package</a></li>
 <li class="toctree-l3"><a class="reference internal" href="book.tests.html">book.tests package</a></li>
 <li class="toctree-l3 current"><a class="reference internal" href="book.views.html">book.views package</a><ul class="current">
@@ -144,7 +143,7 @@
     
       <li><a href="index.html">Docs</a> &raquo;</li>
         
-          <li><a href="book.html">book package</a> &raquo;</li>
+          <li><a href="book.html">Yozit book package</a> &raquo;</li>
         
           <li><a href="book.views.html">book.views package</a> &raquo;</li>
         
@@ -169,30 +168,44 @@
             
   <div class="section" id="module-book.views.people">
 <span id="book-views-people-module"></span><h1>book.views.people module<a class="headerlink" href="#module-book.views.people" title="Permalink to this headline">¶</a></h1>
+<p>인스타그램 내용 파싱.</p>
 <dl class="function">
 <dt id="book.views.people.people">
 <code class="sig-prename descclassname">book.views.people.</code><code class="sig-name descname">people</code><span class="sig-paren">(</span><em class="sig-param">request</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/book/views/people.html#people"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#book.views.people.people" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
+<dd><p>이미지 제공.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>request</strong> – </p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p></p>
+</dd>
+</dl>
+</dd></dl>
 
 <dl class="function">
 <dt id="book.views.people.people_high_expectation">
 <code class="sig-prename descclassname">book.views.people.</code><code class="sig-name descname">people_high_expectation</code><span class="sig-paren">(</span><em class="sig-param">request</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/book/views/people.html#people_high_expectation"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#book.views.people.people_high_expectation" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
+<dd><p>우선순위 순으로 보여줌.</p>
+</dd></dl>
 
 <dl class="function">
 <dt id="book.views.people.people_links">
 <code class="sig-prename descclassname">book.views.people.</code><code class="sig-name descname">people_links</code><span class="sig-paren">(</span><em class="sig-param">request</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/book/views/people.html#people_links"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#book.views.people.people_links" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
+<dd><p>링크 제공.</p>
+</dd></dl>
 
 <dl class="function">
 <dt id="book.views.people.people_result">
 <code class="sig-prename descclassname">book.views.people.</code><code class="sig-name descname">people_result</code><span class="sig-paren">(</span><em class="sig-param">request</em>, <em class="sig-param">page=1</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/book/views/people.html#people_result"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#book.views.people.people_result" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
+<dd><p>분류 결과 선택.</p>
+</dd></dl>
 
 <dl class="function">
 <dt id="book.views.people.people_result_download">
 <code class="sig-prename descclassname">book.views.people.</code><code class="sig-name descname">people_result_download</code><span class="sig-paren">(</span><em class="sig-param">_</em>, <em class="sig-param">selected</em>, <em class="sig-param">page</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/book/views/people.html#people_result_download"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#book.views.people.people_result_download" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
+<dd><p>이미지 통합 다운로드.</p>
+</dd></dl>
 
 </div>
 
@@ -204,7 +217,7 @@
   
     <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
       
-        <a href="book.views.views.html" class="btn btn-neutral float-right" title="book.views.views module" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
+        <a href="book.views.krx.html" class="btn btn-neutral float-right" title="book.views.krx module" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
       
       
         <a href="book.views.html" class="btn btn-neutral float-left" title="book.views package" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>

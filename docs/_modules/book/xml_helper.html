@@ -144,12 +144,16 @@
            <div itemprop="articleBody">
             
   <h1>Source code for book.xml_helper</h1><div class="highlight"><pre>
-<span></span><span class="kn">from</span> <span class="nn">xml.etree</span> <span class="kn">import</span> <span class="n">cElementTree</span> <span class="k">as</span> <span class="n">ElementTree</span>
+<span></span><span class="sd">&quot;&quot;&quot;XML 파싱 Helper.&quot;&quot;&quot;</span>
+
+<span class="kn">from</span> <span class="nn">xml.etree</span> <span class="kn">import</span> <span class="n">cElementTree</span> <span class="k">as</span> <span class="n">ElementTree</span>
 
 <span class="kn">import</span> <span class="nn">requests</span>
 
 
 <div class="viewcode-block" id="XmlListConfig"><a class="viewcode-back" href="../../book.xml_helper.html#book.xml_helper.XmlListConfig">[docs]</a><span class="k">class</span> <span class="nc">XmlListConfig</span><span class="p">(</span><span class="nb">list</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Xml 을 List 로 가져옴.&quot;&quot;&quot;</span>
+
     <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">a_list</span><span class="p">):</span>
         <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">()</span>
         <span class="k">for</span> <span class="n">element</span> <span class="ow">in</span> <span class="n">a_list</span><span class="p">:</span>
@@ -168,7 +172,7 @@
 
 <div class="viewcode-block" id="XmlDictConfig"><a class="viewcode-back" href="../../book.xml_helper.html#book.xml_helper.XmlDictConfig">[docs]</a><span class="k">class</span> <span class="nc">XmlDictConfig</span><span class="p">(</span><span class="nb">dict</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">    Example usage:</span>
+<span class="sd">    Example usage.</span>
 
 <span class="sd">    &gt;&gt;&gt; tree = ElementTree.parse(&#39;your_file.xml&#39;)</span>
 <span class="sd">    &gt;&gt;&gt; root = tree.getroot()</span>
@@ -183,6 +187,11 @@
 <span class="sd">    &quot;&quot;&quot;</span>
 
     <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">parent_element</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        초기화.</span>
+
+<span class="sd">        :param parent_element:</span>
+<span class="sd">        &quot;&quot;&quot;</span>
         <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">()</span>
         <span class="k">if</span> <span class="n">parent_element</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="nb">dict</span><span class="p">(</span><span class="n">parent_element</span><span class="o">.</span><span class="n">items</span><span class="p">()))</span>
@@ -223,7 +232,13 @@
                 <span class="bp">self</span><span class="o">.</span><span class="n">update</span><span class="p">({</span><span class="n">element</span><span class="o">.</span><span class="n">tag</span><span class="p">:</span> <span class="n">element</span><span class="o">.</span><span class="n">text</span><span class="p">})</span></div>
 
 
-<div class="viewcode-block" id="get_xml_request"><a class="viewcode-back" href="../../book.xml_helper.html#book.xml_helper.get_xml_request">[docs]</a><span class="k">def</span> <span class="nf">get_xml_request</span><span class="p">(</span><span class="n">url</span><span class="p">):</span>
+<div class="viewcode-block" id="get_xml_request"><a class="viewcode-back" href="../../book.xml_helper.html#book.xml_helper.get_xml_request">[docs]</a><span class="k">def</span> <span class="nf">get_xml_request</span><span class="p">(</span><span class="n">url</span><span class="p">:</span> <span class="nb">str</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    XML 을 리턴하는 URL 을 받아서 파싱된 결과를 리턴.</span>
+
+<span class="sd">    :param url: API URL</span>
+<span class="sd">    :return:</span>
+<span class="sd">    &quot;&quot;&quot;</span>
     <span class="n">result</span> <span class="o">=</span> <span class="n">requests</span><span class="o">.</span><span class="n">post</span><span class="p">(</span><span class="n">url</span><span class="p">)</span><span class="o">.</span><span class="n">text</span><span class="o">.</span><span class="n">strip</span><span class="p">()</span>
     <span class="n">tree</span> <span class="o">=</span> <span class="n">ElementTree</span><span class="o">.</span><span class="n">ElementTree</span><span class="p">(</span><span class="n">ElementTree</span><span class="o">.</span><span class="n">fromstring</span><span class="p">(</span><span class="n">result</span><span class="p">))</span>
 

@@ -167,11 +167,12 @@
             
   <div class="section" id="module-book.nav">
 <span id="book-nav-module"></span><h1>book.nav module<a class="headerlink" href="#module-book.nav" title="Permalink to this headline">¶</a></h1>
+<p>Navigation Bar Helper.</p>
 <dl class="class">
 <dt id="book.nav.NavBase">
 <em class="property">class </em><code class="sig-prename descclassname">book.nav.</code><code class="sig-name descname">NavBase</code><span class="sig-paren">(</span><em class="sig-param">description: str</em>, <em class="sig-param">icon: str</em>, <em class="sig-param">has_child: bool</em>, <em class="sig-param">should_superuser: bool = False</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/book/nav.html#NavBase"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#book.nav.NavBase" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
-<p>Navigation 항목의 base 가 되는 class</p>
+<p>Navigation 항목의 base 가 되는 class.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
@@ -190,7 +191,8 @@
 <dl class="method">
 <dt id="book.nav.NavBase.get_active_set">
 <em class="property">abstract </em><code class="sig-name descname">get_active_set</code><span class="sig-paren">(</span><span class="sig-paren">)</span> &#x2192; Set[str]<a class="reference internal" href="_modules/book/nav.html#NavBase.get_active_set"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#book.nav.NavBase.get_active_set" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
+<dd><p>Active 로 표시할 current page set.</p>
+</dd></dl>
 
 <dl class="attribute">
 <dt id="book.nav.NavBase.has_child">
@@ -205,7 +207,8 @@
 <dl class="method">
 <dt id="book.nav.NavBase.is_active">
 <em class="property">abstract </em><code class="sig-name descname">is_active</code><span class="sig-paren">(</span><em class="sig-param">current_page: str</em><span class="sig-paren">)</span> &#x2192; bool<a class="reference internal" href="_modules/book/nav.html#NavBase.is_active"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#book.nav.NavBase.is_active" title="Permalink to this definition">¶</a></dt>
-<dd><dl class="field-list simple">
+<dd><p>Nav 에서 active 표현할지를 알려주는 함수.</p>
+<dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><p><strong>current_page</strong> – 현재 page 이름</p>
 </dd>
@@ -226,7 +229,7 @@
 <dt id="book.nav.NavCollection">
 <em class="property">class </em><code class="sig-prename descclassname">book.nav.</code><code class="sig-name descname">NavCollection</code><span class="sig-paren">(</span><em class="sig-param">collection: str</em>, <em class="sig-param">child_info: dict</em>, <em class="sig-param">**kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/book/nav.html#NavCollection"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#book.nav.NavCollection" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <a class="reference internal" href="#book.nav.NavBase" title="book.nav.NavBase"><code class="xref py py-class docutils literal notranslate"><span class="pre">book.nav.NavBase</span></code></a></p>
-<p>Child 를 가지는 Navigation</p>
+<p>Child 를 가지는 Navigation.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
@@ -254,19 +257,18 @@
 <dl class="method">
 <dt id="book.nav.NavCollection.get_active_set">
 <code class="sig-name descname">get_active_set</code><span class="sig-paren">(</span><span class="sig-paren">)</span> &#x2192; Set[str]<a class="reference internal" href="_modules/book/nav.html#NavCollection.get_active_set"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#book.nav.NavCollection.get_active_set" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
+<dd><p>Child 의 Active 할 page 명 리스트.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>page 리스트</p>
+</dd>
+</dl>
+</dd></dl>
 
 <dl class="method">
 <dt id="book.nav.NavCollection.is_active">
 <code class="sig-name descname">is_active</code><span class="sig-paren">(</span><em class="sig-param">current_page</em><span class="sig-paren">)</span> &#x2192; bool<a class="reference internal" href="_modules/book/nav.html#NavCollection.is_active"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#book.nav.NavCollection.is_active" title="Permalink to this definition">¶</a></dt>
-<dd><dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><p><strong>current_page</strong> – 현재 page 이름</p>
-</dd>
-<dt class="field-even">Returns</dt>
-<dd class="field-even"><p>현재 page 에 관련 있으면 True, 없으면 False</p>
-</dd>
-</dl>
+<dd><p>Navigation 에서 active 로 표시 할 지 여부.</p>
 </dd></dl>
 
 </dd></dl>
@@ -275,7 +277,7 @@
 <dt id="book.nav.NavItem">
 <em class="property">class </em><code class="sig-prename descclassname">book.nav.</code><code class="sig-name descname">NavItem</code><span class="sig-paren">(</span><em class="sig-param">template: str</em>, <em class="sig-param">argument: Dict[str</em>, <em class="sig-param">str] = None</em>, <em class="sig-param">external: bool = False</em>, <em class="sig-param">login_state: str = 'always'</em>, <em class="sig-param">active_override: str = None</em>, <em class="sig-param">**kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/book/nav.html#NavItem"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#book.nav.NavItem" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <a class="reference internal" href="#book.nav.NavBase" title="book.nav.NavBase"><code class="xref py py-class docutils literal notranslate"><span class="pre">book.nav.NavBase</span></code></a></p>
-<p>말단 Navigation 노드</p>
+<p>말단 Navigation 노드.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
@@ -287,19 +289,13 @@
 <dl class="method">
 <dt id="book.nav.NavItem.get_active_set">
 <code class="sig-name descname">get_active_set</code><span class="sig-paren">(</span><span class="sig-paren">)</span> &#x2192; Set[str]<a class="reference internal" href="_modules/book/nav.html#NavItem.get_active_set"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#book.nav.NavItem.get_active_set" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
+<dd><p>Template 명 제공.</p>
+</dd></dl>
 
 <dl class="method">
 <dt id="book.nav.NavItem.is_active">
 <code class="sig-name descname">is_active</code><span class="sig-paren">(</span><em class="sig-param">current_page: str</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/book/nav.html#NavItem.is_active"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#book.nav.NavItem.is_active" title="Permalink to this definition">¶</a></dt>
-<dd><dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><p><strong>current_page</strong> – 현재 page 이름</p>
-</dd>
-<dt class="field-even">Returns</dt>
-<dd class="field-even"><p>현재 page 에 관련 있으면 True, 없으면 False</p>
-</dd>
-</dl>
+<dd><p>Active 여부.</p>
 </dd></dl>
 
 <dl class="attribute">
@@ -322,7 +318,8 @@
 <dl class="method">
 <dt id="book.nav.NavigationFactory.get_navigation_item">
 <em class="property">static </em><code class="sig-name descname">get_navigation_item</code><span class="sig-paren">(</span><em class="sig-param">info: dict</em><span class="sig-paren">)</span> &#x2192; book.nav.NavBase<a class="reference internal" href="_modules/book/nav.html#NavigationFactory.get_navigation_item"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#book.nav.NavigationFactory.get_navigation_item" title="Permalink to this definition">¶</a></dt>
-<dd><dl class="field-list simple">
+<dd><p>Navigation Item 가져옴.</p>
+<dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><p><strong>info</strong> – navigation item 을 구성할 정보</p>
 </dd>
@@ -338,7 +335,7 @@
 <dt id="book.nav.Sidebar">
 <em class="property">class </em><code class="sig-prename descclassname">book.nav.</code><code class="sig-name descname">Sidebar</code><span class="sig-paren">(</span><em class="sig-param">config: List[dict]</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/book/nav.html#Sidebar"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#book.nav.Sidebar" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
-<p>Navigation 의 모든 정보를 가진 클래스</p>
+<p>Navigation 의 모든 정보를 가진 클래스.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><p><strong>items</strong> (<em>typing.List</em><em>[</em><em>typing.Tuple</em><em>]</em>) – Navigation 정보를 가진 List, 각 항목당 horizontal line 으로 구분 됨</p>
@@ -354,7 +351,7 @@
 <dl class="function">
 <dt id="book.nav.get_render_dict">
 <code class="sig-prename descclassname">book.nav.</code><code class="sig-name descname">get_render_dict</code><span class="sig-paren">(</span><em class="sig-param">current_page: str</em><span class="sig-paren">)</span> &#x2192; dict<a class="reference internal" href="_modules/book/nav.html#get_render_dict"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#book.nav.get_render_dict" title="Permalink to this definition">¶</a></dt>
-<dd><p>context 에 current_page 를 만들어 주는 함수</p>
+<dd><p>Context 에 current_page 를 만들어 주는 함수.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><p><strong>current_page</strong> (<em>str</em>) – 현재 page string</p>

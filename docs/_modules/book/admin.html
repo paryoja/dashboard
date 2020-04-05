@@ -144,52 +144,69 @@
            <div itemprop="articleBody">
             
   <h1>Source code for book.admin</h1><div class="highlight"><pre>
-<span></span><span class="kn">from</span> <span class="nn">django.contrib</span> <span class="kn">import</span> <span class="n">admin</span>
+<span></span><span class="sd">&quot;&quot;&quot;Book Admin.&quot;&quot;&quot;</span>
+<span class="kn">from</span> <span class="nn">django.contrib</span> <span class="kn">import</span> <span class="n">admin</span>
 
 <span class="kn">from</span> <span class="nn">.</span> <span class="kn">import</span> <span class="n">models</span>
 
-<span class="n">admin</span><span class="o">.</span><span class="n">site</span><span class="o">.</span><span class="n">register</span><span class="p">(</span><span class="n">models</span><span class="o">.</span><span class="n">AuthUser</span><span class="p">)</span>
+<span class="n">admin</span><span class="o">.</span><span class="n">site</span><span class="o">.</span><span class="n">register</span><span class="p">(</span><span class="n">models</span><span class="o">.</span><span class="n">TodoItem</span><span class="p">)</span>
 <span class="n">admin</span><span class="o">.</span><span class="n">site</span><span class="o">.</span><span class="n">register</span><span class="p">(</span><span class="n">models</span><span class="o">.</span><span class="n">Category</span><span class="p">)</span>
 <span class="n">admin</span><span class="o">.</span><span class="n">site</span><span class="o">.</span><span class="n">register</span><span class="p">(</span><span class="n">models</span><span class="o">.</span><span class="n">Wine</span><span class="p">)</span>
 
 
 <div class="viewcode-block" id="PaperAdmin"><a class="viewcode-back" href="../../book.admin.html#book.admin.PaperAdmin">[docs]</a><span class="nd">@admin</span><span class="o">.</span><span class="n">register</span><span class="p">(</span><span class="n">models</span><span class="o">.</span><span class="n">Paper</span><span class="p">)</span>
 <span class="k">class</span> <span class="nc">PaperAdmin</span><span class="p">(</span><span class="n">admin</span><span class="o">.</span><span class="n">ModelAdmin</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;논문정보.&quot;&quot;&quot;</span>
+
     <span class="n">list_display</span> <span class="o">=</span> <span class="p">(</span><span class="s2">&quot;title&quot;</span><span class="p">,</span> <span class="s2">&quot;link&quot;</span><span class="p">,</span> <span class="s2">&quot;file&quot;</span><span class="p">,</span> <span class="s2">&quot;slide&quot;</span><span class="p">,</span> <span class="s2">&quot;authors&quot;</span><span class="p">)</span></div>
 
 
 <div class="viewcode-block" id="UserAdmin"><a class="viewcode-back" href="../../book.admin.html#book.admin.UserAdmin">[docs]</a><span class="nd">@admin</span><span class="o">.</span><span class="n">register</span><span class="p">(</span><span class="n">models</span><span class="o">.</span><span class="n">User</span><span class="p">)</span>
 <span class="k">class</span> <span class="nc">UserAdmin</span><span class="p">(</span><span class="n">admin</span><span class="o">.</span><span class="n">ModelAdmin</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;인스타 사용자 정보.&quot;&quot;&quot;</span>
+
     <span class="n">list_display</span> <span class="o">=</span> <span class="p">(</span><span class="s2">&quot;username&quot;</span><span class="p">,</span> <span class="s2">&quot;checked&quot;</span><span class="p">)</span></div>
 
 
 <div class="viewcode-block" id="LottoAdmin"><a class="viewcode-back" href="../../book.admin.html#book.admin.LottoAdmin">[docs]</a><span class="nd">@admin</span><span class="o">.</span><span class="n">register</span><span class="p">(</span><span class="n">models</span><span class="o">.</span><span class="n">Lotto</span><span class="p">)</span>
 <span class="k">class</span> <span class="nc">LottoAdmin</span><span class="p">(</span><span class="n">admin</span><span class="o">.</span><span class="n">ModelAdmin</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;로또 정보.&quot;&quot;&quot;</span>
+
     <span class="n">list_display</span> <span class="o">=</span> <span class="p">(</span><span class="s2">&quot;draw_number&quot;</span><span class="p">,</span> <span class="s2">&quot;numbers&quot;</span><span class="p">)</span></div>
 
 
 <div class="viewcode-block" id="StockAdmin"><a class="viewcode-back" href="../../book.admin.html#book.admin.StockAdmin">[docs]</a><span class="nd">@admin</span><span class="o">.</span><span class="n">register</span><span class="p">(</span><span class="n">models</span><span class="o">.</span><span class="n">Stock</span><span class="p">)</span>
 <span class="k">class</span> <span class="nc">StockAdmin</span><span class="p">(</span><span class="n">admin</span><span class="o">.</span><span class="n">ModelAdmin</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;주식 정보.&quot;&quot;&quot;</span>
+
     <span class="n">list_display</span> <span class="o">=</span> <span class="p">(</span><span class="s2">&quot;code&quot;</span><span class="p">,</span> <span class="s2">&quot;name&quot;</span><span class="p">)</span></div>
 
 
 <div class="viewcode-block" id="LinkAdmin"><a class="viewcode-back" href="../../book.admin.html#book.admin.LinkAdmin">[docs]</a><span class="nd">@admin</span><span class="o">.</span><span class="n">register</span><span class="p">(</span><span class="n">models</span><span class="o">.</span><span class="n">Link</span><span class="p">)</span>
 <span class="k">class</span> <span class="nc">LinkAdmin</span><span class="p">(</span><span class="n">admin</span><span class="o">.</span><span class="n">ModelAdmin</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;링크 정보.&quot;&quot;&quot;</span>
+
     <span class="n">list_display</span> <span class="o">=</span> <span class="p">(</span><span class="s2">&quot;added_date&quot;</span><span class="p">,</span> <span class="s2">&quot;url&quot;</span><span class="p">,</span> <span class="s2">&quot;description&quot;</span><span class="p">,</span> <span class="s2">&quot;content_type&quot;</span><span class="p">)</span></div>
 
 
 <div class="viewcode-block" id="BookAdmin"><a class="viewcode-back" href="../../book.admin.html#book.admin.BookAdmin">[docs]</a><span class="nd">@admin</span><span class="o">.</span><span class="n">register</span><span class="p">(</span><span class="n">models</span><span class="o">.</span><span class="n">Book</span><span class="p">)</span>
 <span class="k">class</span> <span class="nc">BookAdmin</span><span class="p">(</span><span class="n">admin</span><span class="o">.</span><span class="n">ModelAdmin</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;책 정보.&quot;&quot;&quot;</span>
+
     <span class="n">list_display</span> <span class="o">=</span> <span class="p">(</span><span class="s2">&quot;name&quot;</span><span class="p">,</span> <span class="s2">&quot;author&quot;</span><span class="p">,</span> <span class="s2">&quot;year&quot;</span><span class="p">)</span></div>
 
 
 <div class="viewcode-block" id="APIServerAdmin"><a class="viewcode-back" href="../../book.admin.html#book.admin.APIServerAdmin">[docs]</a><span class="nd">@admin</span><span class="o">.</span><span class="n">register</span><span class="p">(</span><span class="n">models</span><span class="o">.</span><span class="n">APIServers</span><span class="p">)</span>
 <span class="k">class</span> <span class="nc">APIServerAdmin</span><span class="p">(</span><span class="n">admin</span><span class="o">.</span><span class="n">ModelAdmin</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;API 서버 정보.&quot;&quot;&quot;</span>
+
     <span class="n">list_display</span> <span class="o">=</span> <span class="p">(</span><span class="s2">&quot;title&quot;</span><span class="p">,</span> <span class="s2">&quot;ip&quot;</span><span class="p">,</span> <span class="s2">&quot;port&quot;</span><span class="p">,</span> <span class="s2">&quot;endpoint&quot;</span><span class="p">)</span></div>
 
 
 <div class="viewcode-block" id="CurrencyAdmin"><a class="viewcode-back" href="../../book.admin.html#book.admin.CurrencyAdmin">[docs]</a><span class="nd">@admin</span><span class="o">.</span><span class="n">register</span><span class="p">(</span><span class="n">models</span><span class="o">.</span><span class="n">Currency</span><span class="p">)</span>
 <span class="k">class</span> <span class="nc">CurrencyAdmin</span><span class="p">(</span><span class="n">admin</span><span class="o">.</span><span class="n">ModelAdmin</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;환전 정보.&quot;&quot;&quot;</span>
+
     <span class="n">fieldsets</span> <span class="o">=</span> <span class="p">[</span>
         <span class="p">(</span><span class="s2">&quot;Date information&quot;</span><span class="p">,</span> <span class="p">{</span><span class="s2">&quot;fields&quot;</span><span class="p">:</span> <span class="p">[</span><span class="s2">&quot;date&quot;</span><span class="p">]}),</span>
         <span class="p">(</span><span class="s2">&quot;From&quot;</span><span class="p">,</span> <span class="p">{</span><span class="s2">&quot;fields&quot;</span><span class="p">:</span> <span class="p">[</span><span class="s2">&quot;from_currency&quot;</span><span class="p">,</span> <span class="s2">&quot;from_amount&quot;</span><span class="p">]}),</span>
@@ -201,36 +218,50 @@
 
 <div class="viewcode-block" id="DeepLearningModelAdmin"><a class="viewcode-back" href="../../book.admin.html#book.admin.DeepLearningModelAdmin">[docs]</a><span class="nd">@admin</span><span class="o">.</span><span class="n">register</span><span class="p">(</span><span class="n">models</span><span class="o">.</span><span class="n">DeepLearningModel</span><span class="p">)</span>
 <span class="k">class</span> <span class="nc">DeepLearningModelAdmin</span><span class="p">(</span><span class="n">admin</span><span class="o">.</span><span class="n">ModelAdmin</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;딥러닝 모델 정보.&quot;&quot;&quot;</span>
+
     <span class="n">list_display</span> <span class="o">=</span> <span class="p">(</span><span class="s2">&quot;domain&quot;</span><span class="p">,</span> <span class="s2">&quot;version&quot;</span><span class="p">,</span> <span class="s2">&quot;latest&quot;</span><span class="p">)</span></div>
 
 
 <div class="viewcode-block" id="ImageAdmin"><a class="viewcode-back" href="../../book.admin.html#book.admin.ImageAdmin">[docs]</a><span class="nd">@admin</span><span class="o">.</span><span class="n">register</span><span class="p">(</span><span class="n">models</span><span class="o">.</span><span class="n">Image</span><span class="p">)</span>
 <span class="k">class</span> <span class="nc">ImageAdmin</span><span class="p">(</span><span class="n">admin</span><span class="o">.</span><span class="n">ModelAdmin</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;이미지 정보.&quot;&quot;&quot;</span>
+
     <span class="n">list_display</span> <span class="o">=</span> <span class="p">(</span><span class="s2">&quot;url&quot;</span><span class="p">,</span> <span class="s2">&quot;title&quot;</span><span class="p">)</span></div>
 
 
 <div class="viewcode-block" id="PeopleImageAdmin"><a class="viewcode-back" href="../../book.admin.html#book.admin.PeopleImageAdmin">[docs]</a><span class="nd">@admin</span><span class="o">.</span><span class="n">register</span><span class="p">(</span><span class="n">models</span><span class="o">.</span><span class="n">PeopleImage</span><span class="p">)</span>
 <span class="k">class</span> <span class="nc">PeopleImageAdmin</span><span class="p">(</span><span class="n">admin</span><span class="o">.</span><span class="n">ModelAdmin</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;인스타 이미지 정보.&quot;&quot;&quot;</span>
+
     <span class="n">list_display</span> <span class="o">=</span> <span class="p">(</span><span class="s2">&quot;url&quot;</span><span class="p">,</span> <span class="s2">&quot;title&quot;</span><span class="p">,</span> <span class="s2">&quot;selected&quot;</span><span class="p">)</span></div>
 
 
 <div class="viewcode-block" id="PokemonImageAdmin"><a class="viewcode-back" href="../../book.admin.html#book.admin.PokemonImageAdmin">[docs]</a><span class="nd">@admin</span><span class="o">.</span><span class="n">register</span><span class="p">(</span><span class="n">models</span><span class="o">.</span><span class="n">PokemonImage</span><span class="p">)</span>
 <span class="k">class</span> <span class="nc">PokemonImageAdmin</span><span class="p">(</span><span class="n">admin</span><span class="o">.</span><span class="n">ModelAdmin</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;포켓몬 이미지.&quot;&quot;&quot;</span>
+
     <span class="n">list_display</span> <span class="o">=</span> <span class="p">(</span><span class="s2">&quot;url&quot;</span><span class="p">,</span> <span class="s2">&quot;title&quot;</span><span class="p">,</span> <span class="s2">&quot;original_label&quot;</span><span class="p">,</span> <span class="s2">&quot;classified&quot;</span><span class="p">)</span></div>
 
 
 <div class="viewcode-block" id="CoronaAdmin"><a class="viewcode-back" href="../../book.admin.html#book.admin.CoronaAdmin">[docs]</a><span class="nd">@admin</span><span class="o">.</span><span class="n">register</span><span class="p">(</span><span class="n">models</span><span class="o">.</span><span class="n">Corona</span><span class="p">)</span>
 <span class="k">class</span> <span class="nc">CoronaAdmin</span><span class="p">(</span><span class="n">admin</span><span class="o">.</span><span class="n">ModelAdmin</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;코로나 정보.&quot;&quot;&quot;</span>
+
     <span class="n">list_display</span> <span class="o">=</span> <span class="p">(</span><span class="s2">&quot;date&quot;</span><span class="p">,</span> <span class="s2">&quot;confirmed&quot;</span><span class="p">,</span> <span class="s2">&quot;death&quot;</span><span class="p">,</span> <span class="s2">&quot;country&quot;</span><span class="p">)</span></div>
 
 
 <div class="viewcode-block" id="RatingAdmin"><a class="viewcode-back" href="../../book.admin.html#book.admin.RatingAdmin">[docs]</a><span class="nd">@admin</span><span class="o">.</span><span class="n">register</span><span class="p">(</span><span class="n">models</span><span class="o">.</span><span class="n">Rating</span><span class="p">)</span>
 <span class="k">class</span> <span class="nc">RatingAdmin</span><span class="p">(</span><span class="n">admin</span><span class="o">.</span><span class="n">ModelAdmin</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;이미지 분류 정보.&quot;&quot;&quot;</span>
+
     <span class="n">raw_id_fields</span> <span class="o">=</span> <span class="p">(</span><span class="s2">&quot;image&quot;</span><span class="p">,)</span></div>
 
 
 <div class="viewcode-block" id="PokemonRatingAdmin"><a class="viewcode-back" href="../../book.admin.html#book.admin.PokemonRatingAdmin">[docs]</a><span class="nd">@admin</span><span class="o">.</span><span class="n">register</span><span class="p">(</span><span class="n">models</span><span class="o">.</span><span class="n">PokemonRating</span><span class="p">)</span>
 <span class="k">class</span> <span class="nc">PokemonRatingAdmin</span><span class="p">(</span><span class="n">admin</span><span class="o">.</span><span class="n">ModelAdmin</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;포켓몬 분류 정보.&quot;&quot;&quot;</span>
+
     <span class="n">raw_id_fields</span> <span class="o">=</span> <span class="p">(</span><span class="s2">&quot;image&quot;</span><span class="p">,)</span></div>
 </pre></div>
 

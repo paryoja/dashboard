@@ -1,0 +1,303 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>book.views.krx &mdash; Yozit dashboard  documentation</title>
+  
+
+  
+  
+  
+  
+
+  
+  <script type="text/javascript" src="../../../_static/js/modernizr.min.js"></script>
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../../../" src="../../../_static/documentation_options.js"></script>
+        <script src="../../../_static/jquery.js"></script>
+        <script src="../../../_static/underscore.js"></script>
+        <script src="../../../_static/doctools.js"></script>
+        <script src="../../../_static/language_data.js"></script>
+    
+    <script type="text/javascript" src="../../../_static/js/theme.js"></script>
+
+    
+
+  
+  <link rel="stylesheet" href="../../../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
+    <link rel="index" title="Index" href="../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="../../../index.html" class="icon icon-home"> Yozit dashboard
+          
+
+          
+          </a>
+
+          
+            
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <p class="caption"><span class="caption-text">Contents:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../book.html">Yozit book package</a></li>
+</ul>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../../index.html">Yozit dashboard</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../../../index.html">Docs</a> &raquo;</li>
+        
+          <li><a href="../../index.html">Module code</a> &raquo;</li>
+        
+      <li>book.views.krx</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <h1>Source code for book.views.krx</h1><div class="highlight"><pre>
+<span></span><span class="sd">&quot;&quot;&quot;KRX 데이터 파싱.&quot;&quot;&quot;</span>
+
+<span class="kn">import</span> <span class="nn">logging</span>
+
+<span class="kn">from</span> <span class="nn">book</span> <span class="kn">import</span> <span class="n">models</span>
+<span class="kn">from</span> <span class="nn">book.nav</span> <span class="kn">import</span> <span class="n">get_render_dict</span>
+<span class="kn">from</span> <span class="nn">book.xml_helper</span> <span class="kn">import</span> <span class="n">XmlDictConfig</span><span class="p">,</span> <span class="n">get_xml_request</span>
+<span class="kn">from</span> <span class="nn">django.core</span> <span class="kn">import</span> <span class="n">exceptions</span>
+<span class="kn">from</span> <span class="nn">django.shortcuts</span> <span class="kn">import</span> <span class="n">render</span>
+
+<span class="n">logger</span> <span class="o">=</span> <span class="n">logging</span><span class="o">.</span><span class="n">getLogger</span><span class="p">(</span><span class="vm">__name__</span><span class="p">)</span>
+
+<span class="n">krx_price_query_url</span> <span class="o">=</span> <span class="s2">&quot;http://asp1.krx.co.kr/servlet/krx.asp.XMLSise?code=</span><span class="si">{}</span><span class="s2">&quot;</span>
+<span class="n">krx_statement_query_url</span> <span class="o">=</span> <span class="s2">&quot;http://asp1.krx.co.kr/servlet/krx.asp.XMLJemu?code=</span><span class="si">{}</span><span class="s2">&quot;</span>
+<span class="n">balance_order</span> <span class="o">=</span> <span class="p">[</span>
+    <span class="s2">&quot;hangMok&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;year1Money&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;year1GuSungRate&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;year1JungGamRate&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;year2Money&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;year2GuSungRate&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;year2JungGamRate&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;year3Money&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;year3GuSungRate&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;year3JungGamRate&quot;</span><span class="p">,</span>
+<span class="p">]</span>
+<span class="n">cash_order</span> <span class="o">=</span> <span class="p">[</span>
+    <span class="s2">&quot;hangMok&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;year1Money&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;year1JungGamRate&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;year2Money&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;year2JungGamRate&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;year3Money&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;year3JungGamRate&quot;</span><span class="p">,</span>
+<span class="p">]</span>
+
+
+<div class="viewcode-block" id="krx_realtime"><a class="viewcode-back" href="../../../book.views.krx.html#book.views.krx.krx_realtime">[docs]</a><span class="k">def</span> <span class="nf">krx_realtime</span><span class="p">(</span><span class="n">realtime_result</span><span class="p">,</span> <span class="n">query</span><span class="p">,</span> <span class="n">render_dict</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;실시간 데이터 분석.&quot;&quot;&quot;</span>
+    <span class="n">realtime_json</span> <span class="o">=</span> <span class="n">XmlDictConfig</span><span class="p">(</span><span class="n">realtime_result</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">find</span><span class="p">(</span><span class="s2">&quot;stockInfo&quot;</span><span class="p">))</span>
+    <span class="n">info_json</span> <span class="o">=</span> <span class="n">XmlDictConfig</span><span class="p">(</span><span class="n">realtime_result</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">find</span><span class="p">(</span><span class="s2">&quot;TBL_StockInfo&quot;</span><span class="p">))</span>
+    <span class="n">render_dict</span><span class="p">[</span><span class="s2">&quot;market_close&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="p">(</span>
+        <span class="n">realtime_json</span><span class="p">[</span><span class="s2">&quot;myJangGubun&quot;</span><span class="p">]</span> <span class="o">==</span> <span class="s2">&quot;장마감&quot;</span> <span class="ow">or</span> <span class="n">realtime_json</span><span class="p">[</span><span class="s2">&quot;myJangGubun&quot;</span><span class="p">]</span> <span class="o">==</span> <span class="s2">&quot;장개시전&quot;</span>
+    <span class="p">)</span>
+    <span class="n">render_dict</span><span class="p">[</span><span class="s2">&quot;realtime_result&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="p">(</span>
+        <span class="n">realtime_json</span><span class="p">,</span>
+        <span class="n">realtime_result</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span>
+        <span class="n">info_json</span><span class="p">,</span>
+    <span class="p">)</span>
+
+    <span class="k">if</span> <span class="s2">&quot;JongName&quot;</span> <span class="ow">in</span> <span class="n">info_json</span> <span class="ow">and</span> <span class="n">info_json</span><span class="p">[</span><span class="s2">&quot;JongName&quot;</span><span class="p">]:</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="n">models</span><span class="o">.</span><span class="n">Stock</span><span class="o">.</span><span class="n">objects</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">code</span><span class="o">=</span><span class="n">query</span><span class="p">)</span>
+        <span class="k">except</span> <span class="n">exceptions</span><span class="o">.</span><span class="n">ObjectDoesNotExist</span><span class="p">:</span>
+            <span class="n">stock</span> <span class="o">=</span> <span class="n">models</span><span class="o">.</span><span class="n">Stock</span><span class="p">(</span><span class="n">code</span><span class="o">=</span><span class="n">query</span><span class="p">,</span> <span class="n">name</span><span class="o">=</span><span class="n">info_json</span><span class="p">[</span><span class="s2">&quot;JongName&quot;</span><span class="p">])</span>
+            <span class="n">stock</span><span class="o">.</span><span class="n">save</span><span class="p">()</span></div>
+
+
+<div class="viewcode-block" id="krx_statement"><a class="viewcode-back" href="../../../book.views.krx.html#book.views.krx.krx_statement">[docs]</a><span class="k">def</span> <span class="nf">krx_statement</span><span class="p">(</span><span class="n">statement_result</span><span class="p">,</span> <span class="n">render_dict</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;회계정보 분석.&quot;&quot;&quot;</span>
+    <span class="n">balance_sheet</span> <span class="o">=</span> <span class="n">XmlDictConfig</span><span class="p">(</span><span class="n">statement_result</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">find</span><span class="p">(</span><span class="s2">&quot;TBL_DaeCha&quot;</span><span class="p">))</span>
+    <span class="k">if</span> <span class="s2">&quot;TBL_DaeCha_data&quot;</span> <span class="ow">in</span> <span class="n">balance_sheet</span><span class="p">:</span>
+        <span class="n">hangmok_list</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="k">for</span> <span class="n">item</span> <span class="ow">in</span> <span class="n">balance_sheet</span><span class="p">[</span><span class="s2">&quot;TBL_DaeCha_data&quot;</span><span class="p">]:</span>
+            <span class="c1"># 항목 이름 뒤에 숫자를 붙여 둬서 쓰기 어려우므로 제거</span>
+            <span class="n">item</span> <span class="o">=</span> <span class="p">{</span><span class="n">k</span><span class="p">[:</span><span class="o">-</span><span class="mi">1</span><span class="p">]:</span> <span class="n">v</span> <span class="k">for</span> <span class="n">k</span><span class="p">,</span> <span class="n">v</span> <span class="ow">in</span> <span class="n">item</span><span class="o">.</span><span class="n">items</span><span class="p">()}</span>
+            <span class="n">hangmok_list</span><span class="o">.</span><span class="n">append</span><span class="p">([</span><span class="n">item</span><span class="p">[</span><span class="n">order</span><span class="p">]</span> <span class="k">for</span> <span class="n">order</span> <span class="ow">in</span> <span class="n">balance_order</span><span class="p">])</span>
+        <span class="n">balance_sheet</span><span class="p">[</span><span class="s2">&quot;TBL_DaeCha_data&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">hangmok_list</span>
+        <span class="n">render_dict</span><span class="p">[</span><span class="s2">&quot;balance_sheet&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">balance_sheet</span>
+
+    <span class="n">income_statement</span> <span class="o">=</span> <span class="n">XmlDictConfig</span><span class="p">(</span><span class="n">statement_result</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">find</span><span class="p">(</span><span class="s2">&quot;TBL_SonIk&quot;</span><span class="p">))</span>
+    <span class="k">if</span> <span class="s2">&quot;TBL_SonIk_data&quot;</span> <span class="ow">in</span> <span class="n">income_statement</span><span class="p">:</span>
+        <span class="n">hangmok_list</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="k">for</span> <span class="n">item</span> <span class="ow">in</span> <span class="n">income_statement</span><span class="p">[</span><span class="s2">&quot;TBL_SonIk_data&quot;</span><span class="p">]:</span>
+            <span class="c1"># 항목 이름 뒤에 숫자를 붙여 둬서 쓰기 어려우므로 제거</span>
+            <span class="n">item</span> <span class="o">=</span> <span class="p">{</span><span class="n">k</span><span class="p">[:</span><span class="o">-</span><span class="mi">1</span><span class="p">]:</span> <span class="n">v</span> <span class="k">for</span> <span class="n">k</span><span class="p">,</span> <span class="n">v</span> <span class="ow">in</span> <span class="n">item</span><span class="o">.</span><span class="n">items</span><span class="p">()}</span>
+            <span class="n">hangmok_list</span><span class="o">.</span><span class="n">append</span><span class="p">([</span><span class="n">item</span><span class="p">[</span><span class="n">order</span><span class="p">]</span> <span class="k">for</span> <span class="n">order</span> <span class="ow">in</span> <span class="n">balance_order</span><span class="p">])</span>
+        <span class="n">income_statement</span><span class="p">[</span><span class="s2">&quot;TBL_SonIk_data&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">hangmok_list</span>
+        <span class="n">render_dict</span><span class="p">[</span><span class="s2">&quot;income_statement&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">income_statement</span>
+
+    <span class="n">cash_flow</span> <span class="o">=</span> <span class="n">XmlDictConfig</span><span class="p">(</span><span class="n">statement_result</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">find</span><span class="p">(</span><span class="s2">&quot;TBL_CashFlow&quot;</span><span class="p">))</span>
+    <span class="k">if</span> <span class="s2">&quot;TBL_CashFlow_data&quot;</span> <span class="ow">in</span> <span class="n">cash_flow</span><span class="p">:</span>
+        <span class="n">hangmok_list</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="k">for</span> <span class="n">item</span> <span class="ow">in</span> <span class="n">cash_flow</span><span class="p">[</span><span class="s2">&quot;TBL_CashFlow_data&quot;</span><span class="p">]:</span>
+            <span class="c1"># 항목 이름 뒤에 숫자를 붙여 둬서 쓰기 어려우므로 제거</span>
+            <span class="n">item</span> <span class="o">=</span> <span class="p">{</span><span class="n">k</span><span class="p">[:</span><span class="o">-</span><span class="mi">1</span><span class="p">]:</span> <span class="n">v</span> <span class="k">for</span> <span class="n">k</span><span class="p">,</span> <span class="n">v</span> <span class="ow">in</span> <span class="n">item</span><span class="o">.</span><span class="n">items</span><span class="p">()}</span>
+            <span class="n">hangmok_list</span><span class="o">.</span><span class="n">append</span><span class="p">([</span><span class="n">item</span><span class="p">[</span><span class="n">order</span><span class="p">]</span> <span class="k">for</span> <span class="n">order</span> <span class="ow">in</span> <span class="n">cash_order</span><span class="p">])</span>
+        <span class="n">cash_flow</span><span class="p">[</span><span class="s2">&quot;TBL_CashFlow_data&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">hangmok_list</span>
+        <span class="n">render_dict</span><span class="p">[</span><span class="s2">&quot;cash_flow&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">cash_flow</span>
+    <span class="n">render_dict</span><span class="p">[</span><span class="s2">&quot;statement_result&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">statement_result</span></div>
+
+
+<div class="viewcode-block" id="krx_price_query"><a class="viewcode-back" href="../../../book.views.krx.html#book.views.krx.krx_price_query">[docs]</a><span class="k">def</span> <span class="nf">krx_price_query</span><span class="p">(</span><span class="n">request</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    가격 정보.</span>
+
+<span class="sd">    :param request:</span>
+<span class="sd">    :return:</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">render_dict</span> <span class="o">=</span> <span class="n">get_render_dict</span><span class="p">(</span><span class="s2">&quot;krx_price_query&quot;</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">request</span><span class="o">.</span><span class="n">POST</span><span class="p">:</span>
+        <span class="n">query</span> <span class="o">=</span> <span class="n">request</span><span class="o">.</span><span class="n">POST</span><span class="p">[</span><span class="s2">&quot;query&quot;</span><span class="p">]</span>
+        <span class="n">render_dict</span><span class="p">[</span><span class="s2">&quot;query&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">query</span>
+
+        <span class="n">realtime_result</span> <span class="o">=</span> <span class="n">get_xml_request</span><span class="p">(</span><span class="n">krx_price_query_url</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">query</span><span class="p">))</span>
+        <span class="k">if</span> <span class="n">realtime_result</span><span class="p">:</span>
+            <span class="n">krx_realtime</span><span class="p">(</span><span class="n">realtime_result</span><span class="p">,</span> <span class="n">query</span><span class="p">,</span> <span class="n">render_dict</span><span class="p">)</span>
+
+        <span class="n">statement_result</span> <span class="o">=</span> <span class="n">get_xml_request</span><span class="p">(</span><span class="n">krx_statement_query_url</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">query</span><span class="p">))</span>
+        <span class="k">if</span> <span class="n">statement_result</span><span class="p">:</span>
+            <span class="n">krx_statement</span><span class="p">(</span><span class="n">statement_result</span><span class="p">,</span> <span class="n">render_dict</span><span class="p">)</span>
+
+    <span class="n">stocks</span> <span class="o">=</span> <span class="n">models</span><span class="o">.</span><span class="n">Stock</span><span class="o">.</span><span class="n">objects</span><span class="o">.</span><span class="n">all</span><span class="p">()</span><span class="o">.</span><span class="n">order_by</span><span class="p">(</span><span class="s2">&quot;code&quot;</span><span class="p">)</span>
+    <span class="n">render_dict</span><span class="p">[</span><span class="s2">&quot;stocks&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">stocks</span>
+    <span class="k">return</span> <span class="n">render</span><span class="p">(</span><span class="n">request</span><span class="p">,</span> <span class="s2">&quot;book/investment/krx_price_query.html&quot;</span><span class="p">,</span> <span class="n">render_dict</span><span class="p">)</span></div>
+</pre></div>
+
+           </div>
+           
+          </div>
+          <footer>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2020, Yoonjae Park
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>

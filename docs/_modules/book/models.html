@@ -144,12 +144,16 @@
            <div itemprop="articleBody">
             
   <h1>Source code for book.models</h1><div class="highlight"><pre>
-<span></span><span class="kn">from</span> <span class="nn">django.contrib.postgres</span> <span class="kn">import</span> <span class="n">fields</span>
+<span></span><span class="sd">&quot;&quot;&quot;Book 모델.&quot;&quot;&quot;</span>
+
+<span class="kn">from</span> <span class="nn">django.contrib.postgres</span> <span class="kn">import</span> <span class="n">fields</span>
 <span class="kn">from</span> <span class="nn">django.db</span> <span class="kn">import</span> <span class="n">models</span>
 <span class="kn">from</span> <span class="nn">django.utils.translation</span> <span class="kn">import</span> <span class="n">gettext_lazy</span> <span class="k">as</span> <span class="n">_</span>
 
 
 <div class="viewcode-block" id="Link"><a class="viewcode-back" href="../../book.models.html#book.api.serializers.Link">[docs]</a><span class="k">class</span> <span class="nc">Link</span><span class="p">(</span><span class="n">models</span><span class="o">.</span><span class="n">Model</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;유용한 Link.&quot;&quot;&quot;</span>
+
     <span class="n">added_date</span> <span class="o">=</span> <span class="n">models</span><span class="o">.</span><span class="n">DateTimeField</span><span class="p">(</span><span class="s2">&quot;date added&quot;</span><span class="p">,</span> <span class="n">auto_now_add</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
     <span class="n">url</span> <span class="o">=</span> <span class="n">models</span><span class="o">.</span><span class="n">URLField</span><span class="p">()</span>
 
@@ -157,66 +161,28 @@
     <span class="n">description</span> <span class="o">=</span> <span class="n">models</span><span class="o">.</span><span class="n">CharField</span><span class="p">(</span><span class="n">max_length</span><span class="o">=</span><span class="mi">128</span><span class="p">,</span> <span class="n">null</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">blank</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
     <span class="n">visit_count</span> <span class="o">=</span> <span class="n">models</span><span class="o">.</span><span class="n">IntegerField</span><span class="p">(</span><span class="n">default</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
 
-    <span class="k">def</span> <span class="fm">__str__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">description</span></div>
-
-
-<div class="viewcode-block" id="AuthUser"><a class="viewcode-back" href="../../book.models.html#book.api.serializers.AuthUser">[docs]</a><span class="k">class</span> <span class="nc">AuthUser</span><span class="p">(</span><span class="n">models</span><span class="o">.</span><span class="n">Model</span><span class="p">):</span>
-    <span class="n">password</span> <span class="o">=</span> <span class="n">models</span><span class="o">.</span><span class="n">CharField</span><span class="p">(</span><span class="n">max_length</span><span class="o">=</span><span class="mi">128</span><span class="p">)</span>
-    <span class="n">last_login</span> <span class="o">=</span> <span class="n">models</span><span class="o">.</span><span class="n">DateTimeField</span><span class="p">(</span><span class="n">blank</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">null</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
-    <span class="n">is_superuser</span> <span class="o">=</span> <span class="n">models</span><span class="o">.</span><span class="n">IntegerField</span><span class="p">()</span>
-    <span class="n">username</span> <span class="o">=</span> <span class="n">models</span><span class="o">.</span><span class="n">CharField</span><span class="p">(</span><span class="n">unique</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">max_length</span><span class="o">=</span><span class="mi">150</span><span class="p">)</span>
-    <span class="n">email</span> <span class="o">=</span> <span class="n">models</span><span class="o">.</span><span class="n">CharField</span><span class="p">(</span><span class="n">max_length</span><span class="o">=</span><span class="mi">254</span><span class="p">)</span>
-    <span class="n">date_joined</span> <span class="o">=</span> <span class="n">models</span><span class="o">.</span><span class="n">DateTimeField</span><span class="p">()</span>
-    <span class="n">is_staff</span> <span class="o">=</span> <span class="n">models</span><span class="o">.</span><span class="n">IntegerField</span><span class="p">(</span><span class="n">blank</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">null</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
-    <span class="n">is_active</span> <span class="o">=</span> <span class="n">models</span><span class="o">.</span><span class="n">IntegerField</span><span class="p">(</span><span class="n">blank</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">null</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
-    <span class="n">first_name</span> <span class="o">=</span> <span class="n">models</span><span class="o">.</span><span class="n">CharField</span><span class="p">(</span><span class="n">max_length</span><span class="o">=</span><span class="mi">30</span><span class="p">,</span> <span class="n">blank</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">null</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
-    <span class="n">phone</span> <span class="o">=</span> <span class="n">models</span><span class="o">.</span><span class="n">CharField</span><span class="p">(</span><span class="n">max_length</span><span class="o">=</span><span class="mi">45</span><span class="p">)</span>
-    <span class="n">date_of_birth</span> <span class="o">=</span> <span class="n">models</span><span class="o">.</span><span class="n">DateTimeField</span><span class="p">()</span>
-
-    <span class="k">class</span> <span class="nc">Meta</span><span class="p">:</span>
-        <span class="n">db_table</span> <span class="o">=</span> <span class="s2">&quot;book_auth_user&quot;</span></div>
-
-
-<div class="viewcode-block" id="Boards"><a class="viewcode-back" href="../../book.models.html#book.api.serializers.Boards">[docs]</a><span class="k">class</span> <span class="nc">Boards</span><span class="p">(</span><span class="n">models</span><span class="o">.</span><span class="n">Model</span><span class="p">):</span>
-    <span class="n">category</span> <span class="o">=</span> <span class="n">models</span><span class="o">.</span><span class="n">ForeignKey</span><span class="p">(</span><span class="s2">&quot;BoardCategories&quot;</span><span class="p">,</span> <span class="n">models</span><span class="o">.</span><span class="n">DO_NOTHING</span><span class="p">)</span>
-    <span class="n">user</span> <span class="o">=</span> <span class="n">models</span><span class="o">.</span><span class="n">ForeignKey</span><span class="p">(</span><span class="s2">&quot;AuthUser&quot;</span><span class="p">,</span> <span class="n">models</span><span class="o">.</span><span class="n">DO_NOTHING</span><span class="p">)</span>
-    <span class="n">title</span> <span class="o">=</span> <span class="n">models</span><span class="o">.</span><span class="n">CharField</span><span class="p">(</span><span class="n">max_length</span><span class="o">=</span><span class="mi">300</span><span class="p">)</span>
-    <span class="n">content</span> <span class="o">=</span> <span class="n">models</span><span class="o">.</span><span class="n">TextField</span><span class="p">()</span>
-    <span class="n">registered_date</span> <span class="o">=</span> <span class="n">models</span><span class="o">.</span><span class="n">DateTimeField</span><span class="p">(</span><span class="n">blank</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">null</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
-    <span class="n">last_update_date</span> <span class="o">=</span> <span class="n">models</span><span class="o">.</span><span class="n">DateTimeField</span><span class="p">(</span><span class="n">blank</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">null</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
-    <span class="n">view_count</span> <span class="o">=</span> <span class="n">models</span><span class="o">.</span><span class="n">IntegerField</span><span class="p">(</span><span class="n">blank</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">null</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
-    <span class="n">image</span> <span class="o">=</span> <span class="n">models</span><span class="o">.</span><span class="n">CharField</span><span class="p">(</span><span class="n">max_length</span><span class="o">=</span><span class="mi">255</span><span class="p">,</span> <span class="n">blank</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">null</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
-
-    <span class="k">class</span> <span class="nc">Meta</span><span class="p">:</span>
-        <span class="n">db_table</span> <span class="o">=</span> <span class="s2">&quot;boards&quot;</span></div>
-
-
-<div class="viewcode-block" id="BoardCategories"><a class="viewcode-back" href="../../book.models.html#book.api.serializers.BoardCategories">[docs]</a><span class="k">class</span> <span class="nc">BoardCategories</span><span class="p">(</span><span class="n">models</span><span class="o">.</span><span class="n">Model</span><span class="p">):</span>
-    <span class="n">category_type</span> <span class="o">=</span> <span class="n">models</span><span class="o">.</span><span class="n">CharField</span><span class="p">(</span><span class="n">max_length</span><span class="o">=</span><span class="mi">45</span><span class="p">)</span>
-    <span class="n">category_code</span> <span class="o">=</span> <span class="n">models</span><span class="o">.</span><span class="n">CharField</span><span class="p">(</span><span class="n">max_length</span><span class="o">=</span><span class="mi">100</span><span class="p">)</span>
-    <span class="n">category_name</span> <span class="o">=</span> <span class="n">models</span><span class="o">.</span><span class="n">CharField</span><span class="p">(</span><span class="n">max_length</span><span class="o">=</span><span class="mi">100</span><span class="p">)</span>
-    <span class="n">category_desc</span> <span class="o">=</span> <span class="n">models</span><span class="o">.</span><span class="n">CharField</span><span class="p">(</span><span class="n">max_length</span><span class="o">=</span><span class="mi">200</span><span class="p">)</span>
-    <span class="n">list_count</span> <span class="o">=</span> <span class="n">models</span><span class="o">.</span><span class="n">IntegerField</span><span class="p">(</span><span class="n">blank</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">null</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
-    <span class="n">authority</span> <span class="o">=</span> <span class="n">models</span><span class="o">.</span><span class="n">IntegerField</span><span class="p">(</span><span class="n">blank</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">null</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
-    <span class="n">creation_date</span> <span class="o">=</span> <span class="n">models</span><span class="o">.</span><span class="n">DateTimeField</span><span class="p">(</span><span class="n">blank</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">null</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
-    <span class="n">last_update_date</span> <span class="o">=</span> <span class="n">models</span><span class="o">.</span><span class="n">DateTimeField</span><span class="p">(</span><span class="n">blank</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">null</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
-
-    <span class="k">class</span> <span class="nc">Meta</span><span class="p">:</span>
-        <span class="n">db_table</span> <span class="o">=</span> <span class="s2">&quot;board_categories&quot;</span></div>
+    <span class="k">def</span> <span class="fm">__str__</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+        <span class="sd">&quot;&quot;&quot;설명만 제공.&quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="nb">str</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">description</span><span class="p">)</span></div>
 
 
 <div class="viewcode-block" id="Lotto"><a class="viewcode-back" href="../../book.models.html#book.api.serializers.Lotto">[docs]</a><span class="k">class</span> <span class="nc">Lotto</span><span class="p">(</span><span class="n">models</span><span class="o">.</span><span class="n">Model</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;로또 정보.&quot;&quot;&quot;</span>
+
     <span class="n">draw_number</span> <span class="o">=</span> <span class="n">models</span><span class="o">.</span><span class="n">IntegerField</span><span class="p">()</span>
     <span class="n">numbers</span> <span class="o">=</span> <span class="n">fields</span><span class="o">.</span><span class="n">JSONField</span><span class="p">()</span></div>
 
 
 <div class="viewcode-block" id="Stock"><a class="viewcode-back" href="../../book.models.html#book.api.serializers.Stock">[docs]</a><span class="k">class</span> <span class="nc">Stock</span><span class="p">(</span><span class="n">models</span><span class="o">.</span><span class="n">Model</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;주식 정보.&quot;&quot;&quot;</span>
+
     <span class="n">code</span> <span class="o">=</span> <span class="n">models</span><span class="o">.</span><span class="n">CharField</span><span class="p">(</span><span class="n">max_length</span><span class="o">=</span><span class="mi">10</span><span class="p">)</span>
     <span class="n">name</span> <span class="o">=</span> <span class="n">models</span><span class="o">.</span><span class="n">CharField</span><span class="p">(</span><span class="n">max_length</span><span class="o">=</span><span class="mi">30</span><span class="p">)</span></div>
 
 
 <div class="viewcode-block" id="Paper"><a class="viewcode-back" href="../../book.models.html#book.api.serializers.Paper">[docs]</a><span class="k">class</span> <span class="nc">Paper</span><span class="p">(</span><span class="n">models</span><span class="o">.</span><span class="n">Model</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;논문 정보.&quot;&quot;&quot;</span>
+
     <span class="n">title</span> <span class="o">=</span> <span class="n">models</span><span class="o">.</span><span class="n">CharField</span><span class="p">(</span><span class="n">max_length</span><span class="o">=</span><span class="mi">200</span><span class="p">,</span> <span class="n">blank</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">null</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
     <span class="n">link</span> <span class="o">=</span> <span class="n">models</span><span class="o">.</span><span class="n">URLField</span><span class="p">(</span><span class="n">blank</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">null</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
     <span class="n">file</span> <span class="o">=</span> <span class="n">models</span><span class="o">.</span><span class="n">FileField</span><span class="p">(</span><span class="n">blank</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">null</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
@@ -224,26 +190,35 @@
     <span class="n">authors</span> <span class="o">=</span> <span class="n">fields</span><span class="o">.</span><span class="n">ArrayField</span><span class="p">(</span><span class="n">models</span><span class="o">.</span><span class="n">CharField</span><span class="p">(</span><span class="n">max_length</span><span class="o">=</span><span class="mi">20</span><span class="p">),</span> <span class="n">blank</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">null</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
 
     <span class="k">def</span> <span class="fm">__str__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Title 만 제공.&quot;&quot;&quot;</span>
         <span class="k">return</span> <span class="nb">str</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">title</span><span class="p">)</span></div>
 
 
 <div class="viewcode-block" id="Book"><a class="viewcode-back" href="../../book.models.html#book.api.serializers.Book">[docs]</a><span class="k">class</span> <span class="nc">Book</span><span class="p">(</span><span class="n">models</span><span class="o">.</span><span class="n">Model</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;읽을 만한 책.&quot;&quot;&quot;</span>
+
     <span class="n">name</span> <span class="o">=</span> <span class="n">models</span><span class="o">.</span><span class="n">TextField</span><span class="p">()</span>
     <span class="n">author</span> <span class="o">=</span> <span class="n">models</span><span class="o">.</span><span class="n">CharField</span><span class="p">(</span><span class="n">max_length</span><span class="o">=</span><span class="mi">20</span><span class="p">)</span>
     <span class="n">year</span> <span class="o">=</span> <span class="n">models</span><span class="o">.</span><span class="n">IntegerField</span><span class="p">(</span><span class="n">blank</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">null</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
 
-    <span class="k">def</span> <span class="fm">__str__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+    <span class="k">def</span> <span class="fm">__str__</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+        <span class="sd">&quot;&quot;&quot;제목과 저자 정보.&quot;&quot;&quot;</span>
         <span class="k">return</span> <span class="s2">&quot;</span><span class="si">{}</span><span class="s2">: 저자 </span><span class="si">{}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">name</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">author</span><span class="p">)</span></div>
 
 
 <div class="viewcode-block" id="Category"><a class="viewcode-back" href="../../book.models.html#book.api.serializers.Category">[docs]</a><span class="k">class</span> <span class="nc">Category</span><span class="p">(</span><span class="n">models</span><span class="o">.</span><span class="n">Model</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;이미지 카테고리.&quot;&quot;&quot;</span>
+
     <span class="n">name</span> <span class="o">=</span> <span class="n">models</span><span class="o">.</span><span class="n">CharField</span><span class="p">(</span><span class="n">max_length</span><span class="o">=</span><span class="mi">200</span><span class="p">)</span>
 
     <span class="k">def</span> <span class="fm">__str__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="k">return</span> <span class="s2">&quot;</span><span class="si">{}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">name</span><span class="p">)</span></div>
+        <span class="sd">&quot;&quot;&quot;이미지 카테고리명.&quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="nb">str</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">name</span><span class="p">)</span></div>
 
 
 <div class="viewcode-block" id="PeopleImage"><a class="viewcode-back" href="../../book.models.html#book.api.serializers.PeopleImage">[docs]</a><span class="k">class</span> <span class="nc">PeopleImage</span><span class="p">(</span><span class="n">models</span><span class="o">.</span><span class="n">Model</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;이미지.&quot;&quot;&quot;</span>
+
     <span class="n">url</span> <span class="o">=</span> <span class="n">models</span><span class="o">.</span><span class="n">URLField</span><span class="p">(</span><span class="n">unique</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">max_length</span><span class="o">=</span><span class="mi">400</span><span class="p">)</span>
     <span class="n">title</span> <span class="o">=</span> <span class="n">models</span><span class="o">.</span><span class="n">TextField</span><span class="p">(</span><span class="n">max_length</span><span class="o">=</span><span class="mi">500</span><span class="p">)</span>
     <span class="n">category</span> <span class="o">=</span> <span class="n">models</span><span class="o">.</span><span class="n">ForeignKey</span><span class="p">(</span>
@@ -255,19 +230,23 @@
     <span class="n">content_parsed</span> <span class="o">=</span> <span class="n">models</span><span class="o">.</span><span class="n">BooleanField</span><span class="p">(</span><span class="n">null</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">blank</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">default</span><span class="o">=</span><span class="kc">None</span><span class="p">)</span>
 
 <div class="viewcode-block" id="PeopleImage.get_user_id"><a class="viewcode-back" href="../../book.models.html#book.api.serializers.PeopleImage.get_user_id">[docs]</a>    <span class="k">def</span> <span class="nf">get_user_id</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;URL 의 5번째 항목.&quot;&quot;&quot;</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">url</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s2">&quot;/&quot;</span><span class="p">)[</span><span class="mi">5</span><span class="p">]</span></div>
 
 <div class="viewcode-block" id="PeopleImage.save"><a class="viewcode-back" href="../../book.models.html#book.api.serializers.PeopleImage.save">[docs]</a>    <span class="k">def</span> <span class="nf">save</span><span class="p">(</span>
         <span class="bp">self</span><span class="p">,</span> <span class="n">force_insert</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">force_update</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">using</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">update_fields</span><span class="o">=</span><span class="kc">None</span>
     <span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;저장시 user_id 세팅.&quot;&quot;&quot;</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">user_id</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_user_id</span><span class="p">()</span>
         <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="n">save</span><span class="p">(</span><span class="n">force_insert</span><span class="p">,</span> <span class="n">force_update</span><span class="p">,</span> <span class="n">using</span><span class="p">,</span> <span class="n">update_fields</span><span class="p">)</span></div>
 
     <span class="k">def</span> <span class="fm">__str__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="k">return</span> <span class="s2">&quot;</span><span class="si">{}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">url</span><span class="p">)</span></div>
+        <span class="k">return</span> <span class="nb">str</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">url</span><span class="p">)</span></div>
 
 
 <div class="viewcode-block" id="User"><a class="viewcode-back" href="../../book.models.html#book.api.serializers.User">[docs]</a><span class="k">class</span> <span class="nc">User</span><span class="p">(</span><span class="n">models</span><span class="o">.</span><span class="n">Model</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;User 정보.&quot;&quot;&quot;</span>
+
     <span class="n">username</span> <span class="o">=</span> <span class="n">models</span><span class="o">.</span><span class="n">CharField</span><span class="p">(</span><span class="n">max_length</span><span class="o">=</span><span class="mi">30</span><span class="p">,</span> <span class="n">unique</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
     <span class="n">checked</span> <span class="o">=</span> <span class="n">models</span><span class="o">.</span><span class="n">BooleanField</span><span class="p">(</span><span class="n">default</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">null</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">blank</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
 
@@ -276,6 +255,8 @@
 
 
 <div class="viewcode-block" id="PokemonImage"><a class="viewcode-back" href="../../book.models.html#book.api.serializers.PokemonImage">[docs]</a><span class="k">class</span> <span class="nc">PokemonImage</span><span class="p">(</span><span class="n">models</span><span class="o">.</span><span class="n">Model</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;포켓몬 이미지.&quot;&quot;&quot;</span>
+
     <span class="n">url</span> <span class="o">=</span> <span class="n">models</span><span class="o">.</span><span class="n">URLField</span><span class="p">(</span><span class="n">unique</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">max_length</span><span class="o">=</span><span class="mi">400</span><span class="p">)</span>
     <span class="n">title</span> <span class="o">=</span> <span class="n">models</span><span class="o">.</span><span class="n">CharField</span><span class="p">(</span><span class="n">max_length</span><span class="o">=</span><span class="mi">200</span><span class="p">)</span>
     <span class="n">category</span> <span class="o">=</span> <span class="n">models</span><span class="o">.</span><span class="n">ForeignKey</span><span class="p">(</span>
@@ -290,6 +271,8 @@
 
 
 <div class="viewcode-block" id="Image"><a class="viewcode-back" href="../../book.models.html#book.api.serializers.Image">[docs]</a><span class="k">class</span> <span class="nc">Image</span><span class="p">(</span><span class="n">models</span><span class="o">.</span><span class="n">Model</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Image Base.&quot;&quot;&quot;</span>
+
     <span class="n">url</span> <span class="o">=</span> <span class="n">models</span><span class="o">.</span><span class="n">URLField</span><span class="p">(</span><span class="n">unique</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">max_length</span><span class="o">=</span><span class="mi">400</span><span class="p">)</span>
     <span class="n">title</span> <span class="o">=</span> <span class="n">models</span><span class="o">.</span><span class="n">CharField</span><span class="p">(</span><span class="n">max_length</span><span class="o">=</span><span class="mi">200</span><span class="p">)</span>
     <span class="n">category</span> <span class="o">=</span> <span class="n">models</span><span class="o">.</span><span class="n">ForeignKey</span><span class="p">(</span>
@@ -301,6 +284,8 @@
 
 
 <div class="viewcode-block" id="APIServers"><a class="viewcode-back" href="../../book.models.html#book.api.serializers.APIServers">[docs]</a><span class="k">class</span> <span class="nc">APIServers</span><span class="p">(</span><span class="n">models</span><span class="o">.</span><span class="n">Model</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;API 서버 위치.&quot;&quot;&quot;</span>
+
     <span class="n">ip</span> <span class="o">=</span> <span class="n">models</span><span class="o">.</span><span class="n">CharField</span><span class="p">(</span><span class="n">max_length</span><span class="o">=</span><span class="mi">200</span><span class="p">,</span> <span class="n">unique</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
     <span class="n">title</span> <span class="o">=</span> <span class="n">models</span><span class="o">.</span><span class="n">CharField</span><span class="p">(</span><span class="n">max_length</span><span class="o">=</span><span class="mi">20</span><span class="p">,</span> <span class="n">unique</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
     <span class="n">endpoint</span> <span class="o">=</span> <span class="n">models</span><span class="o">.</span><span class="n">CharField</span><span class="p">(</span><span class="n">max_length</span><span class="o">=</span><span class="mi">100</span><span class="p">)</span>
@@ -311,6 +296,8 @@
 
 
 <div class="viewcode-block" id="DeepLearningModel"><a class="viewcode-back" href="../../book.models.html#book.api.serializers.DeepLearningModel">[docs]</a><span class="k">class</span> <span class="nc">DeepLearningModel</span><span class="p">(</span><span class="n">models</span><span class="o">.</span><span class="n">Model</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;딥러닝 모델.&quot;&quot;&quot;</span>
+
     <span class="n">domain</span> <span class="o">=</span> <span class="n">models</span><span class="o">.</span><span class="n">TextField</span><span class="p">(</span><span class="n">max_length</span><span class="o">=</span><span class="mi">20</span><span class="p">)</span>
     <span class="n">version</span> <span class="o">=</span> <span class="n">models</span><span class="o">.</span><span class="n">TextField</span><span class="p">(</span><span class="n">max_length</span><span class="o">=</span><span class="mi">10</span><span class="p">)</span>
     <span class="n">latest</span> <span class="o">=</span> <span class="n">models</span><span class="o">.</span><span class="n">BooleanField</span><span class="p">(</span><span class="n">default</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
@@ -320,6 +307,8 @@
 
 
 <div class="viewcode-block" id="Rating"><a class="viewcode-back" href="../../book.models.html#book.api.serializers.Rating">[docs]</a><span class="k">class</span> <span class="nc">Rating</span><span class="p">(</span><span class="n">models</span><span class="o">.</span><span class="n">Model</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;이미지 선택 정보.&quot;&quot;&quot;</span>
+
     <span class="n">deep_model</span> <span class="o">=</span> <span class="n">models</span><span class="o">.</span><span class="n">ForeignKey</span><span class="p">(</span><span class="n">DeepLearningModel</span><span class="p">,</span> <span class="n">on_delete</span><span class="o">=</span><span class="n">models</span><span class="o">.</span><span class="n">CASCADE</span><span class="p">)</span>
     <span class="n">image</span> <span class="o">=</span> <span class="n">models</span><span class="o">.</span><span class="n">ForeignKey</span><span class="p">(</span><span class="n">PeopleImage</span><span class="p">,</span> <span class="n">on_delete</span><span class="o">=</span><span class="n">models</span><span class="o">.</span><span class="n">CASCADE</span><span class="p">)</span>
     <span class="n">data</span> <span class="o">=</span> <span class="n">fields</span><span class="o">.</span><span class="n">JSONField</span><span class="p">()</span>
@@ -330,6 +319,8 @@
 
 
 <div class="viewcode-block" id="PokemonRating"><a class="viewcode-back" href="../../book.models.html#book.api.serializers.PokemonRating">[docs]</a><span class="k">class</span> <span class="nc">PokemonRating</span><span class="p">(</span><span class="n">models</span><span class="o">.</span><span class="n">Model</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;포켓몬 이미지 분류 정보.&quot;&quot;&quot;</span>
+
     <span class="n">deep_model</span> <span class="o">=</span> <span class="n">models</span><span class="o">.</span><span class="n">ForeignKey</span><span class="p">(</span><span class="n">DeepLearningModel</span><span class="p">,</span> <span class="n">on_delete</span><span class="o">=</span><span class="n">models</span><span class="o">.</span><span class="n">CASCADE</span><span class="p">)</span>
     <span class="n">image</span> <span class="o">=</span> <span class="n">models</span><span class="o">.</span><span class="n">ForeignKey</span><span class="p">(</span><span class="n">PokemonImage</span><span class="p">,</span> <span class="n">on_delete</span><span class="o">=</span><span class="n">models</span><span class="o">.</span><span class="n">CASCADE</span><span class="p">)</span>
     <span class="n">data</span> <span class="o">=</span> <span class="n">fields</span><span class="o">.</span><span class="n">JSONField</span><span class="p">()</span>
@@ -339,6 +330,7 @@
         <span class="k">return</span> <span class="s2">&quot;</span><span class="si">{}</span><span class="s2"> </span><span class="si">{}</span><span class="s2"> </span><span class="si">{}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">id</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">positive</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">image</span><span class="o">.</span><span class="n">title</span><span class="p">)</span>
 
 <div class="viewcode-block" id="PokemonRating.get_prob"><a class="viewcode-back" href="../../book.models.html#book.api.serializers.PokemonRating.get_prob">[docs]</a>    <span class="k">def</span> <span class="nf">get_prob</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Class 별 확률 값 가져옴.&quot;&quot;&quot;</span>
         <span class="k">if</span> <span class="s2">&quot;classification&quot;</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">data</span> <span class="ow">and</span> <span class="s2">&quot;class_names&quot;</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">data</span><span class="p">:</span>
             <span class="n">result_list</span> <span class="o">=</span> <span class="p">[]</span>
             <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">data</span><span class="p">[</span><span class="s2">&quot;classification&quot;</span><span class="p">],</span> <span class="nb">list</span><span class="p">):</span>
@@ -350,7 +342,11 @@
 
 
 <div class="viewcode-block" id="Currency"><a class="viewcode-back" href="../../book.models.html#book.api.serializers.Currency">[docs]</a><span class="k">class</span> <span class="nc">Currency</span><span class="p">(</span><span class="n">models</span><span class="o">.</span><span class="n">Model</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;환전 내역.&quot;&quot;&quot;</span>
+
 <div class="viewcode-block" id="Currency.CurrencyChoices"><a class="viewcode-back" href="../../book.models.html#book.api.serializers.Currency.CurrencyChoices">[docs]</a>    <span class="k">class</span> <span class="nc">CurrencyChoices</span><span class="p">(</span><span class="n">models</span><span class="o">.</span><span class="n">TextChoices</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;환전.&quot;&quot;&quot;</span>
+
         <span class="n">USD</span> <span class="o">=</span> <span class="s2">&quot;USD&quot;</span><span class="p">,</span> <span class="n">_</span><span class="p">(</span><span class="s2">&quot;USD&quot;</span><span class="p">)</span>
         <span class="n">KRW</span> <span class="o">=</span> <span class="s2">&quot;KRW&quot;</span><span class="p">,</span> <span class="n">_</span><span class="p">(</span><span class="s2">&quot;KRW&quot;</span><span class="p">)</span></div>
 
@@ -367,11 +363,16 @@
     <span class="n">to_amount</span> <span class="o">=</span> <span class="n">models</span><span class="o">.</span><span class="n">FloatField</span><span class="p">()</span>
 
 <div class="viewcode-block" id="Currency.get_currency_rate"><a class="viewcode-back" href="../../book.models.html#book.api.serializers.Currency.get_currency_rate">[docs]</a>    <span class="k">def</span> <span class="nf">get_currency_rate</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;환율 계산.&quot;&quot;&quot;</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">from_amount</span> <span class="o">/</span> <span class="bp">self</span><span class="o">.</span><span class="n">to_amount</span></div></div>
 
 
 <div class="viewcode-block" id="Wine"><a class="viewcode-back" href="../../book.models.html#book.api.serializers.Wine">[docs]</a><span class="k">class</span> <span class="nc">Wine</span><span class="p">(</span><span class="n">models</span><span class="o">.</span><span class="n">Model</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;와인 정보.&quot;&quot;&quot;</span>
+
 <div class="viewcode-block" id="Wine.RatingChoices"><a class="viewcode-back" href="../../book.models.html#book.api.serializers.Wine.RatingChoices">[docs]</a>    <span class="k">class</span> <span class="nc">RatingChoices</span><span class="p">(</span><span class="n">models</span><span class="o">.</span><span class="n">IntegerChoices</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;와인 평가 등급.&quot;&quot;&quot;</span>
+
         <span class="n">one</span> <span class="o">=</span> <span class="mi">1</span>
         <span class="n">two</span> <span class="o">=</span> <span class="mi">2</span>
         <span class="n">three</span> <span class="o">=</span> <span class="mi">3</span>
@@ -386,6 +387,8 @@
 
 
 <div class="viewcode-block" id="Corona"><a class="viewcode-back" href="../../book.models.html#book.api.serializers.Corona">[docs]</a><span class="k">class</span> <span class="nc">Corona</span><span class="p">(</span><span class="n">models</span><span class="o">.</span><span class="n">Model</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;코로나 정보.&quot;&quot;&quot;</span>
+
     <span class="n">date</span> <span class="o">=</span> <span class="n">models</span><span class="o">.</span><span class="n">DateField</span><span class="p">()</span>
     <span class="n">confirmed</span> <span class="o">=</span> <span class="n">models</span><span class="o">.</span><span class="n">IntegerField</span><span class="p">()</span>
     <span class="n">death</span> <span class="o">=</span> <span class="n">models</span><span class="o">.</span><span class="n">IntegerField</span><span class="p">()</span>
@@ -393,12 +396,18 @@
 
 
 <div class="viewcode-block" id="BestPhoto"><a class="viewcode-back" href="../../book.models.html#book.api.serializers.BestPhoto">[docs]</a><span class="k">class</span> <span class="nc">BestPhoto</span><span class="p">(</span><span class="n">models</span><span class="o">.</span><span class="n">Model</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Best Photo 선택 정보.&quot;&quot;&quot;</span>
+
     <span class="n">img</span> <span class="o">=</span> <span class="n">models</span><span class="o">.</span><span class="n">ForeignKey</span><span class="p">(</span><span class="n">PeopleImage</span><span class="p">,</span> <span class="n">on_delete</span><span class="o">=</span><span class="n">models</span><span class="o">.</span><span class="n">CASCADE</span><span class="p">)</span>
     <span class="n">url</span> <span class="o">=</span> <span class="n">models</span><span class="o">.</span><span class="n">URLField</span><span class="p">(</span><span class="n">unique</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">max_length</span><span class="o">=</span><span class="mi">400</span><span class="p">)</span></div>
 
 
 <div class="viewcode-block" id="TodoItem"><a class="viewcode-back" href="../../book.models.html#book.api.serializers.TodoItem">[docs]</a><span class="k">class</span> <span class="nc">TodoItem</span><span class="p">(</span><span class="n">models</span><span class="o">.</span><span class="n">Model</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;할일 정보.&quot;&quot;&quot;</span>
+
 <div class="viewcode-block" id="TodoItem.StatusChoices"><a class="viewcode-back" href="../../book.models.html#book.api.serializers.TodoItem.StatusChoices">[docs]</a>    <span class="k">class</span> <span class="nc">StatusChoices</span><span class="p">(</span><span class="n">models</span><span class="o">.</span><span class="n">TextChoices</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;할일의 status.&quot;&quot;&quot;</span>
+
         <span class="n">DONE</span> <span class="o">=</span> <span class="s2">&quot;Done&quot;</span><span class="p">,</span> <span class="n">_</span><span class="p">(</span><span class="s2">&quot;Done&quot;</span><span class="p">)</span>
         <span class="n">TODO</span> <span class="o">=</span> <span class="s2">&quot;Todo&quot;</span><span class="p">,</span> <span class="n">_</span><span class="p">(</span><span class="s2">&quot;Todo&quot;</span><span class="p">)</span>
         <span class="n">IN_PROGRESS</span> <span class="o">=</span> <span class="s2">&quot;In Progress&quot;</span><span class="p">,</span> <span class="n">_</span><span class="p">(</span><span class="s2">&quot;In Progress&quot;</span><span class="p">)</span></div>

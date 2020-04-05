@@ -8,7 +8,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>book.urls module &mdash; Yozit dashboard  documentation</title>
+  <title>book.views.krx module &mdash; Yozit dashboard  documentation</title>
   
 
   
@@ -35,8 +35,8 @@
   <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
-    <link rel="next" title="book.utils module" href="book.utils.html" />
-    <link rel="prev" title="book.nav module" href="book.nav.html" /> 
+    <link rel="next" title="book.views.views module" href="book.views.views.html" />
+    <link rel="prev" title="book.views.people module" href="book.views.people.html" /> 
 </head>
 
 <body class="wy-body-for-nav">
@@ -83,19 +83,18 @@
               <p class="caption"><span class="caption-text">Contents:</span></p>
 <ul class="current">
 <li class="toctree-l1 current"><a class="reference internal" href="book.html">Yozit book package</a><ul class="current">
-<li class="toctree-l2"><a class="reference internal" href="book.html#subpackages">Subpackages</a></li>
-<li class="toctree-l2 current"><a class="reference internal" href="book.html#submodules">Submodules</a><ul class="current">
-<li class="toctree-l3"><a class="reference internal" href="book.admin.html">book.admin module</a></li>
-<li class="toctree-l3"><a class="reference internal" href="book.apps.html">book.apps module</a></li>
-<li class="toctree-l3"><a class="reference internal" href="book.forms.html">book.forms module</a></li>
-<li class="toctree-l3"><a class="reference internal" href="book.models.html">book.models module</a></li>
-<li class="toctree-l3"><a class="reference internal" href="book.nav.html">book.nav module</a></li>
-<li class="toctree-l3 current"><a class="current reference internal" href="#">book.urls module</a></li>
-<li class="toctree-l3"><a class="reference internal" href="book.utils.html">book.utils module</a></li>
-<li class="toctree-l3"><a class="reference internal" href="book.views_user.html">book.views_user module</a></li>
-<li class="toctree-l3"><a class="reference internal" href="book.xml_helper.html">book.xml_helper module</a></li>
+<li class="toctree-l2 current"><a class="reference internal" href="book.html#subpackages">Subpackages</a><ul class="current">
+<li class="toctree-l3"><a class="reference internal" href="book.api.html">book.api package</a></li>
+<li class="toctree-l3"><a class="reference internal" href="book.templatetags.html">book.templatetags package</a></li>
+<li class="toctree-l3"><a class="reference internal" href="book.tests.html">book.tests package</a></li>
+<li class="toctree-l3 current"><a class="reference internal" href="book.views.html">book.views package</a><ul class="current">
+<li class="toctree-l4 current"><a class="reference internal" href="book.views.html#submodules">Submodules</a></li>
+<li class="toctree-l4"><a class="reference internal" href="book.views.html#module-book.views">Module contents</a></li>
 </ul>
 </li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="book.html#submodules">Submodules</a></li>
 <li class="toctree-l2"><a class="reference internal" href="book.html#module-book">Module contents</a></li>
 </ul>
 </li>
@@ -146,13 +145,15 @@
         
           <li><a href="book.html">Yozit book package</a> &raquo;</li>
         
-      <li>book.urls module</li>
+          <li><a href="book.views.html">book.views package</a> &raquo;</li>
+        
+      <li>book.views.krx module</li>
     
     
       <li class="wy-breadcrumbs-aside">
         
             
-            <a href="_sources/book.urls.rst.txt" rel="nofollow"> View page source</a>
+            <a href="_sources/book.views.krx.rst.txt" rel="nofollow"> View page source</a>
           
         
       </li>
@@ -165,9 +166,35 @@
           <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
            <div itemprop="articleBody">
             
-  <div class="section" id="module-book.urls">
-<span id="book-urls-module"></span><h1>book.urls module<a class="headerlink" href="#module-book.urls" title="Permalink to this headline">¶</a></h1>
-<p>Book 의 URL.</p>
+  <div class="section" id="module-book.views.krx">
+<span id="book-views-krx-module"></span><h1>book.views.krx module<a class="headerlink" href="#module-book.views.krx" title="Permalink to this headline">¶</a></h1>
+<p>KRX 데이터 파싱.</p>
+<dl class="function">
+<dt id="book.views.krx.krx_price_query">
+<code class="sig-prename descclassname">book.views.krx.</code><code class="sig-name descname">krx_price_query</code><span class="sig-paren">(</span><em class="sig-param">request</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/book/views/krx.html#krx_price_query"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#book.views.krx.krx_price_query" title="Permalink to this definition">¶</a></dt>
+<dd><p>가격 정보.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>request</strong> – </p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="function">
+<dt id="book.views.krx.krx_realtime">
+<code class="sig-prename descclassname">book.views.krx.</code><code class="sig-name descname">krx_realtime</code><span class="sig-paren">(</span><em class="sig-param">realtime_result</em>, <em class="sig-param">query</em>, <em class="sig-param">render_dict</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/book/views/krx.html#krx_realtime"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#book.views.krx.krx_realtime" title="Permalink to this definition">¶</a></dt>
+<dd><p>실시간 데이터 분석.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="book.views.krx.krx_statement">
+<code class="sig-prename descclassname">book.views.krx.</code><code class="sig-name descname">krx_statement</code><span class="sig-paren">(</span><em class="sig-param">statement_result</em>, <em class="sig-param">render_dict</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/book/views/krx.html#krx_statement"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#book.views.krx.krx_statement" title="Permalink to this definition">¶</a></dt>
+<dd><p>회계정보 분석.</p>
+</dd></dl>
+
 </div>
 
 
@@ -178,10 +205,10 @@
   
     <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
       
-        <a href="book.utils.html" class="btn btn-neutral float-right" title="book.utils module" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
+        <a href="book.views.views.html" class="btn btn-neutral float-right" title="book.views.views module" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
       
       
-        <a href="book.nav.html" class="btn btn-neutral float-left" title="book.nav module" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+        <a href="book.views.people.html" class="btn btn-neutral float-left" title="book.views.people module" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
       
     </div>
   

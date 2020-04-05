@@ -144,8 +144,11 @@
            <div itemprop="articleBody">
             
   <h1>Source code for book.utils</h1><div class="highlight"><pre>
-<span></span><span class="kn">import</span> <span class="nn">base64</span>
+<span></span><span class="sd">&quot;&quot;&quot;유틸 함수.&quot;&quot;&quot;</span>
+
+<span class="kn">import</span> <span class="nn">base64</span>
 <span class="kn">import</span> <span class="nn">json</span>
+<span class="kn">import</span> <span class="nn">typing</span>
 
 <span class="kn">import</span> <span class="nn">lz4.frame</span>
 <span class="kn">import</span> <span class="nn">requests</span>
@@ -157,6 +160,7 @@
 
 
 <div class="viewcode-block" id="new_lotto"><a class="viewcode-back" href="../../book.utils.html#book.utils.new_lotto">[docs]</a><span class="k">def</span> <span class="nf">new_lotto</span><span class="p">(</span><span class="n">draw_number</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;로또 정보.&quot;&quot;&quot;</span>
     <span class="n">is_new</span> <span class="o">=</span> <span class="kc">False</span>
     <span class="k">try</span><span class="p">:</span>
         <span class="n">obj</span> <span class="o">=</span> <span class="n">Lotto</span><span class="o">.</span><span class="n">objects</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">draw_number</span><span class="o">=</span><span class="n">draw_number</span><span class="p">)</span>
@@ -180,11 +184,12 @@
 
 
 <div class="viewcode-block" id="get_page_info"><a class="viewcode-back" href="../../book.utils.html#book.utils.get_page_info">[docs]</a><span class="k">def</span> <span class="nf">get_page_info</span><span class="p">(</span><span class="n">object_list</span><span class="p">,</span> <span class="n">page</span><span class="p">,</span> <span class="n">count</span><span class="p">):</span>
-    <span class="n">pagenator</span> <span class="o">=</span> <span class="n">Paginator</span><span class="p">(</span><span class="n">object_list</span><span class="p">,</span> <span class="n">count</span><span class="p">)</span>
-    <span class="n">p</span> <span class="o">=</span> <span class="n">pagenator</span><span class="o">.</span><span class="n">page</span><span class="p">(</span><span class="n">page</span><span class="p">)</span>
+    <span class="sd">&quot;&quot;&quot;페이지 정보.&quot;&quot;&quot;</span>
+    <span class="n">paginator</span> <span class="o">=</span> <span class="n">Paginator</span><span class="p">(</span><span class="n">object_list</span><span class="p">,</span> <span class="n">count</span><span class="p">)</span>
+    <span class="n">p</span> <span class="o">=</span> <span class="n">paginator</span><span class="o">.</span><span class="n">page</span><span class="p">(</span><span class="n">page</span><span class="p">)</span>
 
     <span class="n">start_10</span> <span class="o">=</span> <span class="p">(</span><span class="n">page</span> <span class="o">-</span> <span class="mi">1</span><span class="p">)</span> <span class="o">//</span> <span class="mi">10</span> <span class="o">*</span> <span class="mi">10</span> <span class="o">+</span> <span class="mi">1</span>
-    <span class="n">end_10</span> <span class="o">=</span> <span class="nb">min</span><span class="p">(</span><span class="n">start_10</span> <span class="o">+</span> <span class="mi">9</span><span class="p">,</span> <span class="n">pagenator</span><span class="o">.</span><span class="n">num_pages</span><span class="p">)</span>
+    <span class="n">end_10</span> <span class="o">=</span> <span class="nb">min</span><span class="p">(</span><span class="n">start_10</span> <span class="o">+</span> <span class="mi">9</span><span class="p">,</span> <span class="n">paginator</span><span class="o">.</span><span class="n">num_pages</span><span class="p">)</span>
 
     <span class="n">page_list</span> <span class="o">=</span> <span class="p">[</span><span class="n">i</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">start_10</span><span class="p">,</span> <span class="n">end_10</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)]</span>
 
@@ -199,6 +204,7 @@
 
 
 <div class="viewcode-block" id="get_compressed_result"><a class="viewcode-back" href="../../book.utils.html#book.utils.get_compressed_result">[docs]</a><span class="k">def</span> <span class="nf">get_compressed_result</span><span class="p">(</span><span class="n">image_list</span><span class="p">,</span> <span class="n">count</span><span class="p">,</span> <span class="n">page</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;데이터 압축해서 제공.&quot;&quot;&quot;</span>
     <span class="n">paginator</span> <span class="o">=</span> <span class="n">Paginator</span><span class="p">(</span><span class="n">image_list</span><span class="p">,</span> <span class="n">count</span><span class="p">)</span>
     <span class="n">p</span> <span class="o">=</span> <span class="n">paginator</span><span class="o">.</span><span class="n">page</span><span class="p">(</span><span class="n">page</span><span class="p">)</span>
 
@@ -210,7 +216,14 @@
     <span class="k">return</span> <span class="n">HttpResponse</span><span class="p">(</span><span class="n">base64</span><span class="o">.</span><span class="n">b85encode</span><span class="p">(</span><span class="n">compressed</span><span class="p">))</span></div>
 
 
-<div class="viewcode-block" id="to_table"><a class="viewcode-back" href="../../book.utils.html#book.utils.to_table">[docs]</a><span class="k">def</span> <span class="nf">to_table</span><span class="p">(</span><span class="n">contents</span><span class="p">,</span> <span class="n">row_count</span><span class="p">):</span>
+<div class="viewcode-block" id="to_table"><a class="viewcode-back" href="../../book.utils.html#book.utils.to_table">[docs]</a><span class="k">def</span> <span class="nf">to_table</span><span class="p">(</span><span class="n">contents</span><span class="p">:</span> <span class="n">typing</span><span class="o">.</span><span class="n">List</span><span class="p">,</span> <span class="n">row_count</span><span class="p">:</span> <span class="nb">int</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">typing</span><span class="o">.</span><span class="n">List</span><span class="p">[</span><span class="n">typing</span><span class="o">.</span><span class="n">List</span><span class="p">]:</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    테이블 형태로 grouping.</span>
+
+<span class="sd">    :param contents: list 형태의 데이터.</span>
+<span class="sd">    :param row_count: 한줄에 포함될 element 개수</span>
+<span class="sd">    :return: grouping 된 테이블</span>
+<span class="sd">    &quot;&quot;&quot;</span>
     <span class="n">row</span> <span class="o">=</span> <span class="p">[]</span>
     <span class="n">table</span> <span class="o">=</span> <span class="p">[]</span>
     <span class="k">for</span> <span class="n">count</span><span class="p">,</span> <span class="n">img</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">contents</span><span class="p">):</span>

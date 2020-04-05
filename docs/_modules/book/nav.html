@@ -144,7 +144,9 @@
            <div itemprop="articleBody">
             
   <h1>Source code for book.nav</h1><div class="highlight"><pre>
-<span></span><span class="kn">import</span> <span class="nn">abc</span>
+<span></span><span class="sd">&quot;&quot;&quot;Navigation Bar Helper.&quot;&quot;&quot;</span>
+
+<span class="kn">import</span> <span class="nn">abc</span>
 <span class="kn">import</span> <span class="nn">json</span>
 <span class="kn">import</span> <span class="nn">typing</span>
 
@@ -160,7 +162,7 @@
 
 <div class="viewcode-block" id="NavBase"><a class="viewcode-back" href="../../book.nav.html#book.nav.NavBase">[docs]</a><span class="k">class</span> <span class="nc">NavBase</span><span class="p">:</span>
     <span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">    Navigation 항목의 base 가 되는 class</span>
+<span class="sd">    Navigation 항목의 base 가 되는 class.</span>
 
 <span class="sd">    :param description: Navigation bar 에 나타날 string</span>
 <span class="sd">    :type description: str</span>
@@ -186,6 +188,18 @@
         <span class="n">has_child</span><span class="p">:</span> <span class="nb">bool</span><span class="p">,</span>
         <span class="n">should_superuser</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">,</span>
     <span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        초기화.</span>
+
+<span class="sd">        :param description: Navigation bar 에 나타날 string</span>
+<span class="sd">        :type description: str</span>
+<span class="sd">        :param icon: Navigation bar 에 나타날 icon</span>
+<span class="sd">        :type icon: str</span>
+<span class="sd">        :param has_child: Nav Element 의 하위 항목 존재 여부</span>
+<span class="sd">        :type has_child: str</span>
+<span class="sd">        :param should_superuser: Superuser 에게만 보이게 설정</span>
+<span class="sd">        :type should_superuser: bool</span>
+<span class="sd">        &quot;&quot;&quot;</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">description</span> <span class="o">=</span> <span class="n">description</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">icon</span> <span class="o">=</span> <span class="n">icon</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">has_child</span> <span class="o">=</span> <span class="n">has_child</span>
@@ -194,6 +208,8 @@
 <div class="viewcode-block" id="NavBase.is_active"><a class="viewcode-back" href="../../book.nav.html#book.nav.NavBase.is_active">[docs]</a>    <span class="nd">@abc</span><span class="o">.</span><span class="n">abstractmethod</span>
     <span class="k">def</span> <span class="nf">is_active</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">current_page</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
         <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Nav 에서 active 표현할지를 알려주는 함수.</span>
+
 <span class="sd">        :param current_page: 현재 page 이름</span>
 <span class="sd">        :return: 현재 page 에 관련 있으면 True, 없으면 False</span>
 <span class="sd">        &quot;&quot;&quot;</span>
@@ -201,12 +217,13 @@
 
 <div class="viewcode-block" id="NavBase.get_active_set"><a class="viewcode-back" href="../../book.nav.html#book.nav.NavBase.get_active_set">[docs]</a>    <span class="nd">@abc</span><span class="o">.</span><span class="n">abstractmethod</span>
     <span class="k">def</span> <span class="nf">get_active_set</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">typing</span><span class="o">.</span><span class="n">Set</span><span class="p">[</span><span class="nb">str</span><span class="p">]:</span>
+        <span class="sd">&quot;&quot;&quot;Active 로 표시할 current page set.&quot;&quot;&quot;</span>
         <span class="k">pass</span></div></div>
 
 
 <div class="viewcode-block" id="NavCollection"><a class="viewcode-back" href="../../book.nav.html#book.nav.NavCollection">[docs]</a><span class="k">class</span> <span class="nc">NavCollection</span><span class="p">(</span><span class="n">NavBase</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">    Child 를 가지는 Navigation</span>
+<span class="sd">    Child 를 가지는 Navigation.</span>
 
 <span class="sd">    :param collection: Collapse 를 동작 시킬 때 collection 을 구별할 변수</span>
 <span class="sd">    :type collection: str</span>
@@ -221,6 +238,13 @@
     <span class="n">active_set</span><span class="p">:</span> <span class="n">typing</span><span class="o">.</span><span class="n">Set</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span>
 
     <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">collection</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">child_info</span><span class="p">:</span> <span class="nb">dict</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Child 를 가지고 있는 Navigation Item.</span>
+
+<span class="sd">        :param collection:</span>
+<span class="sd">        :param child_info:</span>
+<span class="sd">        :param kwargs:</span>
+<span class="sd">        &quot;&quot;&quot;</span>
         <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="n">has_child</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
 
         <span class="bp">self</span><span class="o">.</span><span class="n">collection</span> <span class="o">=</span> <span class="n">collection</span>
@@ -230,22 +254,34 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">_set_child</span><span class="p">(</span><span class="n">child_info</span><span class="p">)</span>
 
 <div class="viewcode-block" id="NavCollection.get_active_set"><a class="viewcode-back" href="../../book.nav.html#book.nav.NavCollection.get_active_set">[docs]</a>    <span class="k">def</span> <span class="nf">get_active_set</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">typing</span><span class="o">.</span><span class="n">Set</span><span class="p">[</span><span class="nb">str</span><span class="p">]:</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Child 의 Active 할 page 명 리스트.</span>
+
+<span class="sd">        :return: page 리스트</span>
+<span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">if</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">active_set</span><span class="p">:</span>
             <span class="k">for</span> <span class="n">child</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">child</span><span class="p">:</span>
                 <span class="bp">self</span><span class="o">.</span><span class="n">active_set</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="n">child</span><span class="o">.</span><span class="n">get_active_set</span><span class="p">())</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">active_set</span></div>
 
     <span class="k">def</span> <span class="nf">_set_child</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">child_info</span><span class="p">:</span> <span class="nb">dict</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Child 세팅.</span>
+
+<span class="sd">        :param child_info:</span>
+<span class="sd">        :return:</span>
+<span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">for</span> <span class="n">child</span> <span class="ow">in</span> <span class="n">child_info</span><span class="p">:</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">child</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">NavigationFactory</span><span class="o">.</span><span class="n">get_navigation_item</span><span class="p">(</span><span class="n">child</span><span class="p">))</span>
 
 <div class="viewcode-block" id="NavCollection.is_active"><a class="viewcode-back" href="../../book.nav.html#book.nav.NavCollection.is_active">[docs]</a>    <span class="k">def</span> <span class="nf">is_active</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">current_page</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
+        <span class="sd">&quot;&quot;&quot;Navigation 에서 active 로 표시 할 지 여부.&quot;&quot;&quot;</span>
         <span class="k">return</span> <span class="n">current_page</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_active_set</span><span class="p">()</span></div></div>
 
 
 <div class="viewcode-block" id="NavItem"><a class="viewcode-back" href="../../book.nav.html#book.nav.NavItem">[docs]</a><span class="k">class</span> <span class="nc">NavItem</span><span class="p">(</span><span class="n">NavBase</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">    말단 Navigation 노드</span>
+<span class="sd">    말단 Navigation 노드.</span>
 
 <span class="sd">    :param template: Link 눌렀을 때 이동할 link</span>
 <span class="sd">    :type template: str</span>
@@ -266,6 +302,8 @@
         <span class="o">**</span><span class="n">kwargs</span><span class="p">,</span>
     <span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        초기화.</span>
+
 <span class="sd">        :param template: template 명 혹은 url 링크</span>
 <span class="sd">        :param argument: template 에 argument 를 전달하기 위함</span>
 <span class="sd">        :param external: 외부 링크 여부, 내부인 경우 &quot;book&quot; namespace 사용</span>
@@ -295,20 +333,21 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">login_state</span> <span class="o">=</span> <span class="n">login_state</span>
 
 <div class="viewcode-block" id="NavItem.is_active"><a class="viewcode-back" href="../../book.nav.html#book.nav.NavItem.is_active">[docs]</a>    <span class="k">def</span> <span class="nf">is_active</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">current_page</span><span class="p">:</span> <span class="nb">str</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Active 여부.&quot;&quot;&quot;</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">template</span> <span class="o">==</span> <span class="n">current_page</span></div>
 
 <div class="viewcode-block" id="NavItem.get_active_set"><a class="viewcode-back" href="../../book.nav.html#book.nav.NavItem.get_active_set">[docs]</a>    <span class="k">def</span> <span class="nf">get_active_set</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">typing</span><span class="o">.</span><span class="n">Set</span><span class="p">[</span><span class="nb">str</span><span class="p">]:</span>
+        <span class="sd">&quot;&quot;&quot;Template 명 제공.&quot;&quot;&quot;</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">active</span></div></div>
 
 
 <div class="viewcode-block" id="NavigationFactory"><a class="viewcode-back" href="../../book.nav.html#book.nav.NavigationFactory">[docs]</a><span class="k">class</span> <span class="nc">NavigationFactory</span><span class="p">:</span>
-    <span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">    주어진 dictionary 를 적절한 Navigation 노드로 변환한다.</span>
-<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="sd">&quot;&quot;&quot;주어진 dictionary 를 적절한 Navigation 노드로 변환한다.&quot;&quot;&quot;</span>
 
 <div class="viewcode-block" id="NavigationFactory.get_navigation_item"><a class="viewcode-back" href="../../book.nav.html#book.nav.NavigationFactory.get_navigation_item">[docs]</a>    <span class="nd">@staticmethod</span>
     <span class="k">def</span> <span class="nf">get_navigation_item</span><span class="p">(</span><span class="n">info</span><span class="p">:</span> <span class="nb">dict</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">NavBase</span><span class="p">:</span>
         <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Navigation Item 가져옴.</span>
 
 <span class="sd">        :param info: navigation item 을 구성할 정보</span>
 <span class="sd">        :return: collection element 를 이용하여 Collection 인지, 말단 node 인지 구분</span>
@@ -321,7 +360,7 @@
 
 <div class="viewcode-block" id="Sidebar"><a class="viewcode-back" href="../../book.nav.html#book.nav.Sidebar">[docs]</a><span class="k">class</span> <span class="nc">Sidebar</span><span class="p">:</span>
     <span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">    Navigation 의 모든 정보를 가진 클래스</span>
+<span class="sd">    Navigation 의 모든 정보를 가진 클래스.</span>
 
 <span class="sd">    :param items: Navigation 정보를 가진 List, 각 항목당 horizontal line 으로 구분 됨</span>
 <span class="sd">    :type  items: typing.List[typing.Tuple]</span>
@@ -331,6 +370,8 @@
 
     <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">config</span><span class="p">:</span> <span class="n">typing</span><span class="o">.</span><span class="n">List</span><span class="p">[</span><span class="nb">dict</span><span class="p">]):</span>
         <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        초기화.</span>
+
 <span class="sd">        :param config: Navigation 설정</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">items</span> <span class="o">=</span> <span class="p">[]</span>
@@ -347,7 +388,7 @@
 
 <div class="viewcode-block" id="get_render_dict"><a class="viewcode-back" href="../../book.nav.html#book.nav.get_render_dict">[docs]</a><span class="k">def</span> <span class="nf">get_render_dict</span><span class="p">(</span><span class="n">current_page</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">dict</span><span class="p">:</span>
     <span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">    context 에 current_page 를 만들어 주는 함수</span>
+<span class="sd">    Context 에 current_page 를 만들어 주는 함수.</span>
 
 <span class="sd">    :param current_page: 현재 page string</span>
 <span class="sd">    :type current_page: str</span>

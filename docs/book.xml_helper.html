@@ -81,7 +81,7 @@
             
               <p class="caption"><span class="caption-text">Contents:</span></p>
 <ul class="current">
-<li class="toctree-l1 current"><a class="reference internal" href="book.html">book package</a><ul class="current">
+<li class="toctree-l1 current"><a class="reference internal" href="book.html">Yozit book package</a><ul class="current">
 <li class="toctree-l2"><a class="reference internal" href="book.html#subpackages">Subpackages</a></li>
 <li class="toctree-l2 current"><a class="reference internal" href="book.html#submodules">Submodules</a><ul class="current">
 <li class="toctree-l3"><a class="reference internal" href="book.admin.html">book.admin module</a></li>
@@ -143,7 +143,7 @@
     
       <li><a href="index.html">Docs</a> &raquo;</li>
         
-          <li><a href="book.html">book package</a> &raquo;</li>
+          <li><a href="book.html">Yozit book package</a> &raquo;</li>
         
       <li>book.xml_helper module</li>
     
@@ -166,11 +166,12 @@
             
   <div class="section" id="module-book.xml_helper">
 <span id="book-xml-helper-module"></span><h1>book.xml_helper module<a class="headerlink" href="#module-book.xml_helper" title="Permalink to this headline">¶</a></h1>
+<p>XML 파싱 Helper.</p>
 <dl class="class">
 <dt id="book.xml_helper.XmlDictConfig">
 <em class="property">class </em><code class="sig-prename descclassname">book.xml_helper.</code><code class="sig-name descname">XmlDictConfig</code><span class="sig-paren">(</span><em class="sig-param">parent_element</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/book/xml_helper.html#XmlDictConfig"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#book.xml_helper.XmlDictConfig" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">dict</span></code></p>
-<p>Example usage:</p>
+<p>Example usage.</p>
 <div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">tree</span> <span class="o">=</span> <span class="n">ElementTree</span><span class="o">.</span><span class="n">parse</span><span class="p">(</span><span class="s1">&#39;your_file.xml&#39;</span><span class="p">)</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">root</span> <span class="o">=</span> <span class="n">tree</span><span class="o">.</span><span class="n">getroot</span><span class="p">()</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">xmldict</span> <span class="o">=</span> <span class="n">XmlDictConfig</span><span class="p">(</span><span class="n">root</span><span class="p">)</span>
@@ -187,12 +188,22 @@
 <dt id="book.xml_helper.XmlListConfig">
 <em class="property">class </em><code class="sig-prename descclassname">book.xml_helper.</code><code class="sig-name descname">XmlListConfig</code><span class="sig-paren">(</span><em class="sig-param">a_list</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/book/xml_helper.html#XmlListConfig"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#book.xml_helper.XmlListConfig" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">list</span></code></p>
+<p>Xml 을 List 로 가져옴.</p>
 </dd></dl>
 
 <dl class="function">
 <dt id="book.xml_helper.get_xml_request">
-<code class="sig-prename descclassname">book.xml_helper.</code><code class="sig-name descname">get_xml_request</code><span class="sig-paren">(</span><em class="sig-param">url</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/book/xml_helper.html#get_xml_request"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#book.xml_helper.get_xml_request" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
+<code class="sig-prename descclassname">book.xml_helper.</code><code class="sig-name descname">get_xml_request</code><span class="sig-paren">(</span><em class="sig-param">url: str</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/book/xml_helper.html#get_xml_request"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#book.xml_helper.get_xml_request" title="Permalink to this definition">¶</a></dt>
+<dd><p>XML 을 리턴하는 URL 을 받아서 파싱된 결과를 리턴.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>url</strong> – API URL</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p></p>
+</dd>
+</dl>
+</dd></dl>
 
 </div>
 

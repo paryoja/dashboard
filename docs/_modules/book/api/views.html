@@ -144,7 +144,9 @@
            <div itemprop="articleBody">
             
   <h1>Source code for book.api.views</h1><div class="highlight"><pre>
-<span></span><span class="kn">from</span> <span class="nn">book.api.serializers</span> <span class="kn">import</span> <span class="p">(</span>
+<span></span><span class="sd">&quot;&quot;&quot;API Views.&quot;&quot;&quot;</span>
+
+<span class="kn">from</span> <span class="nn">book.api.serializers</span> <span class="kn">import</span> <span class="p">(</span>
     <span class="n">InstagramImageSerializer</span><span class="p">,</span>
     <span class="n">InstagramTextSerializer</span><span class="p">,</span>
     <span class="n">PokemonImageSerializer</span><span class="p">,</span>
@@ -157,12 +159,16 @@
 
 
 <div class="viewcode-block" id="StandardResultsSetPagination"><a class="viewcode-back" href="../../../book.api.views.html#book.api.views.StandardResultsSetPagination">[docs]</a><span class="k">class</span> <span class="nc">StandardResultsSetPagination</span><span class="p">(</span><span class="n">PageNumberPagination</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;100개 단위로 Pagination 수행.&quot;&quot;&quot;</span>
+
     <span class="n">page_size</span> <span class="o">=</span> <span class="mi">100</span>
     <span class="n">page_size_query_param</span> <span class="o">=</span> <span class="s2">&quot;page_size&quot;</span>
     <span class="n">max_page_size</span> <span class="o">=</span> <span class="mi">1000</span></div>
 
 
 <div class="viewcode-block" id="PokemonImageViewSet"><a class="viewcode-back" href="../../../book.api.views.html#book.api.views.PokemonImageViewSet">[docs]</a><span class="k">class</span> <span class="nc">PokemonImageViewSet</span><span class="p">(</span><span class="n">viewsets</span><span class="o">.</span><span class="n">ModelViewSet</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Pokemon 이미지 제공.&quot;&quot;&quot;</span>
+
     <span class="n">queryset</span> <span class="o">=</span> <span class="n">models</span><span class="o">.</span><span class="n">PokemonImage</span><span class="o">.</span><span class="n">objects</span><span class="o">.</span><span class="n">filter</span><span class="p">(</span><span class="n">classified</span><span class="o">=</span><span class="s2">&quot;little&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">order_by</span><span class="p">(</span><span class="s2">&quot;id&quot;</span><span class="p">)</span>
     <span class="n">permission_classes</span> <span class="o">=</span> <span class="p">[</span><span class="n">IsAuthenticatedOrReadOnly</span><span class="p">]</span>
 
@@ -173,6 +179,8 @@
 
 
 <div class="viewcode-block" id="InstagramTextViewSet"><a class="viewcode-back" href="../../../book.api.views.html#book.api.views.InstagramTextViewSet">[docs]</a><span class="k">class</span> <span class="nc">InstagramTextViewSet</span><span class="p">(</span><span class="n">viewsets</span><span class="o">.</span><span class="n">ModelViewSet</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Instagram Text 제공.&quot;&quot;&quot;</span>
+
     <span class="n">queryset</span> <span class="o">=</span> <span class="n">models</span><span class="o">.</span><span class="n">PeopleImage</span><span class="o">.</span><span class="n">objects</span><span class="o">.</span><span class="n">order_by</span><span class="p">(</span><span class="s2">&quot;id&quot;</span><span class="p">)</span>
     <span class="n">permission_classes</span> <span class="o">=</span> <span class="p">[</span><span class="n">IsAuthenticated</span><span class="p">]</span>
 
@@ -181,6 +189,8 @@
 
 
 <div class="viewcode-block" id="InstagramImageViewSet"><a class="viewcode-back" href="../../../book.api.views.html#book.api.views.InstagramImageViewSet">[docs]</a><span class="k">class</span> <span class="nc">InstagramImageViewSet</span><span class="p">(</span><span class="n">viewsets</span><span class="o">.</span><span class="n">ModelViewSet</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Instagram 이미지 제공.&quot;&quot;&quot;</span>
+
     <span class="n">queryset</span> <span class="o">=</span> <span class="n">models</span><span class="o">.</span><span class="n">PeopleImage</span><span class="o">.</span><span class="n">objects</span><span class="o">.</span><span class="n">order_by</span><span class="p">(</span><span class="s2">&quot;id&quot;</span><span class="p">)</span>
     <span class="n">permission_classes</span> <span class="o">=</span> <span class="p">[</span><span class="n">IsAuthenticated</span><span class="p">]</span>
 

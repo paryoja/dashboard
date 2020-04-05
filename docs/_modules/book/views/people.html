@@ -144,7 +144,8 @@
            <div itemprop="articleBody">
             
   <h1>Source code for book.views.people</h1><div class="highlight"><pre>
-<span></span><span class="kn">import</span> <span class="nn">requests</span>
+<span></span><span class="sd">&quot;&quot;&quot;인스타그램 내용 파싱.&quot;&quot;&quot;</span>
+<span class="kn">import</span> <span class="nn">requests</span>
 <span class="kn">from</span> <span class="nn">book</span> <span class="kn">import</span> <span class="n">models</span><span class="p">,</span> <span class="n">utils</span>
 <span class="kn">from</span> <span class="nn">book.nav</span> <span class="kn">import</span> <span class="n">get_render_dict</span>
 <span class="kn">from</span> <span class="nn">book.templatetags</span> <span class="kn">import</span> <span class="n">book_extras</span>
@@ -156,6 +157,12 @@
 
 <div class="viewcode-block" id="people"><a class="viewcode-back" href="../../../book.views.people.html#book.views.people.people">[docs]</a><span class="nd">@user_passes_test</span><span class="p">(</span><span class="k">lambda</span> <span class="n">u</span><span class="p">:</span> <span class="n">u</span><span class="o">.</span><span class="n">is_superuser</span><span class="p">)</span>
 <span class="k">def</span> <span class="nf">people</span><span class="p">(</span><span class="n">request</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    이미지 제공.</span>
+
+<span class="sd">    :param request:</span>
+<span class="sd">    :return:</span>
+<span class="sd">    &quot;&quot;&quot;</span>
     <span class="n">render_dict</span> <span class="o">=</span> <span class="n">get_render_dict</span><span class="p">(</span><span class="s2">&quot;people&quot;</span><span class="p">)</span>
 
     <span class="n">query</span> <span class="o">=</span> <span class="n">request</span><span class="o">.</span><span class="n">GET</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;query&quot;</span><span class="p">,</span> <span class="s2">&quot;&quot;</span><span class="p">)</span>
@@ -194,6 +201,7 @@
 
 <div class="viewcode-block" id="people_result"><a class="viewcode-back" href="../../../book.views.people.html#book.views.people.people_result">[docs]</a><span class="nd">@user_passes_test</span><span class="p">(</span><span class="k">lambda</span> <span class="n">u</span><span class="p">:</span> <span class="n">u</span><span class="o">.</span><span class="n">is_superuser</span><span class="p">)</span>
 <span class="k">def</span> <span class="nf">people_result</span><span class="p">(</span><span class="n">request</span><span class="p">,</span> <span class="n">page</span><span class="o">=</span><span class="mi">1</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;분류 결과 선택.&quot;&quot;&quot;</span>
     <span class="n">selected</span> <span class="o">=</span> <span class="n">request</span><span class="o">.</span><span class="n">GET</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;arg&quot;</span><span class="p">,</span> <span class="s2">&quot;True&quot;</span><span class="p">)</span>
     <span class="n">render_dict</span> <span class="o">=</span> <span class="n">get_render_dict</span><span class="p">(</span><span class="s2">&quot;people_result_</span><span class="si">{}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">selected</span><span class="p">))</span>
     <span class="n">render_dict</span><span class="p">[</span><span class="s2">&quot;arg&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">selected</span>
@@ -232,6 +240,7 @@
 
 <div class="viewcode-block" id="people_high_expectation"><a class="viewcode-back" href="../../../book.views.people.html#book.views.people.people_high_expectation">[docs]</a><span class="nd">@user_passes_test</span><span class="p">(</span><span class="k">lambda</span> <span class="n">u</span><span class="p">:</span> <span class="n">u</span><span class="o">.</span><span class="n">is_superuser</span><span class="p">)</span>
 <span class="k">def</span> <span class="nf">people_high_expectation</span><span class="p">(</span><span class="n">request</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;우선순위 순으로 보여줌.&quot;&quot;&quot;</span>
     <span class="n">render_dict</span> <span class="o">=</span> <span class="n">get_render_dict</span><span class="p">(</span><span class="s2">&quot;people_high_expectation&quot;</span><span class="p">)</span>
 
     <span class="n">query</span> <span class="o">=</span> <span class="n">request</span><span class="o">.</span><span class="n">GET</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;query&quot;</span><span class="p">,</span> <span class="s2">&quot;&quot;</span><span class="p">)</span>
@@ -269,6 +278,11 @@
 
 <span class="nd">@shared_task</span>
 <span class="k">def</span> <span class="nf">get_new_people_links</span><span class="p">():</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    인스타그램 text 속에 있는 user link 추출 후 링크 제공.</span>
+
+<span class="sd">    :return:</span>
+<span class="sd">    &quot;&quot;&quot;</span>
     <span class="n">selected_list</span> <span class="o">=</span> <span class="n">models</span><span class="o">.</span><span class="n">PeopleImage</span><span class="o">.</span><span class="n">objects</span><span class="o">.</span><span class="n">filter</span><span class="p">(</span><span class="n">title__contains</span><span class="o">=</span><span class="s2">&quot;@&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">filter</span><span class="p">(</span>
         <span class="n">content_parsed</span><span class="o">=</span><span class="kc">None</span>
     <span class="p">)[:</span><span class="mi">100</span><span class="p">]</span>
@@ -296,6 +310,7 @@
 
 <div class="viewcode-block" id="people_links"><a class="viewcode-back" href="../../../book.views.people.html#book.views.people.people_links">[docs]</a><span class="nd">@user_passes_test</span><span class="p">(</span><span class="k">lambda</span> <span class="n">u</span><span class="p">:</span> <span class="n">u</span><span class="o">.</span><span class="n">is_superuser</span><span class="p">)</span>
 <span class="k">def</span> <span class="nf">people_links</span><span class="p">(</span><span class="n">request</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;링크 제공.&quot;&quot;&quot;</span>
     <span class="n">render_dict</span> <span class="o">=</span> <span class="n">get_render_dict</span><span class="p">(</span><span class="s2">&quot;people_result&quot;</span><span class="p">)</span>
 
     <span class="n">get_new_people_links</span><span class="o">.</span><span class="n">delay</span><span class="p">()</span>
@@ -307,6 +322,7 @@
 
 <div class="viewcode-block" id="people_result_download"><a class="viewcode-back" href="../../../book.views.people.html#book.views.people.people_result_download">[docs]</a><span class="nd">@user_passes_test</span><span class="p">(</span><span class="k">lambda</span> <span class="n">u</span><span class="p">:</span> <span class="n">u</span><span class="o">.</span><span class="n">is_superuser</span><span class="p">)</span>
 <span class="k">def</span> <span class="nf">people_result_download</span><span class="p">(</span><span class="n">_</span><span class="p">,</span> <span class="n">selected</span><span class="p">,</span> <span class="n">page</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;이미지 통합 다운로드.&quot;&quot;&quot;</span>
     <span class="n">image_list</span> <span class="o">=</span> <span class="n">models</span><span class="o">.</span><span class="n">PeopleImage</span><span class="o">.</span><span class="n">objects</span><span class="o">.</span><span class="n">filter</span><span class="p">(</span><span class="n">selected</span><span class="o">=</span><span class="n">selected</span><span class="p">)</span><span class="o">.</span><span class="n">only</span><span class="p">(</span>
         <span class="s2">&quot;url&quot;</span><span class="p">,</span> <span class="s2">&quot;selected&quot;</span><span class="p">,</span> <span class="s2">&quot;page&quot;</span>
     <span class="p">)</span>

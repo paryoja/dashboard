@@ -35,7 +35,7 @@
   <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
-    <link rel="next" title="book.admin module" href="book.admin.html" />
+    <link rel="next" title="book.views.views_class module" href="book.views.views_class.html" />
     <link rel="prev" title="book.views.views module" href="book.views.views.html" /> 
 </head>
 
@@ -82,10 +82,9 @@
             
               <p class="caption"><span class="caption-text">Contents:</span></p>
 <ul class="current">
-<li class="toctree-l1 current"><a class="reference internal" href="book.html">book package</a><ul class="current">
+<li class="toctree-l1 current"><a class="reference internal" href="book.html">Yozit book package</a><ul class="current">
 <li class="toctree-l2 current"><a class="reference internal" href="book.html#subpackages">Subpackages</a><ul class="current">
 <li class="toctree-l3"><a class="reference internal" href="book.api.html">book.api package</a></li>
-<li class="toctree-l3"><a class="reference internal" href="book.migrations.html">book.migrations package</a></li>
 <li class="toctree-l3"><a class="reference internal" href="book.templatetags.html">book.templatetags package</a></li>
 <li class="toctree-l3"><a class="reference internal" href="book.tests.html">book.tests package</a></li>
 <li class="toctree-l3 current"><a class="reference internal" href="book.views.html">book.views package</a><ul class="current">
@@ -144,7 +143,7 @@
     
       <li><a href="index.html">Docs</a> &raquo;</li>
         
-          <li><a href="book.html">book package</a> &raquo;</li>
+          <li><a href="book.html">Yozit book package</a> &raquo;</li>
         
           <li><a href="book.views.html">book.views package</a> &raquo;</li>
         
@@ -169,10 +168,12 @@
             
   <div class="section" id="module-book.views.views_api">
 <span id="book-views-views-api-module"></span><h1>book.views.views_api module<a class="headerlink" href="#module-book.views.views_api" title="Permalink to this headline">¶</a></h1>
+<p>API로 사용할 함수 모음.</p>
 <dl class="class">
 <dt id="book.views.views_api.Domain">
 <em class="property">class </em><code class="sig-prename descclassname">book.views.views_api.</code><code class="sig-name descname">Domain</code><a class="reference internal" href="_modules/book/views/views_api.html#Domain"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#book.views.views_api.Domain" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<p>이미지 제공 도메인.</p>
 <dl class="attribute">
 <dt id="book.views.views_api.Domain.People">
 <code class="sig-name descname">People</code><em class="property"> = 'people'</em><a class="headerlink" href="#book.views.views_api.Domain.People" title="Permalink to this definition">¶</a></dt>
@@ -188,57 +189,93 @@
 <dl class="function">
 <dt id="book.views.views_api.call_api_server">
 <code class="sig-prename descclassname">book.views.views_api.</code><code class="sig-name descname">call_api_server</code><span class="sig-paren">(</span><em class="sig-param">img</em>, <em class="sig-param">domain: str</em><span class="sig-paren">)</span> &#x2192; Optional[requests.models.Response]<a class="reference internal" href="_modules/book/views/views_api.html#call_api_server"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#book.views.views_api.call_api_server" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
+<dd><p>분류를 위한 API 서버를 호출.</p>
+</dd></dl>
 
 <dl class="function">
 <dt id="book.views.views_api.get_id">
 <code class="sig-prename descclassname">book.views.views_api.</code><code class="sig-name descname">get_id</code><span class="sig-paren">(</span><em class="sig-param">request</em><span class="sig-paren">)</span> &#x2192; django.http.response.HttpResponse<a class="reference internal" href="_modules/book/views/views_api.html#get_id"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#book.views.views_api.get_id" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
+<dd><p>이미지 id 가져옴.</p>
+</dd></dl>
 
 <dl class="function">
 <dt id="book.views.views_api.get_image_directory_list">
 <code class="sig-prename descclassname">book.views.views_api.</code><code class="sig-name descname">get_image_directory_list</code><span class="sig-paren">(</span><em class="sig-param">data_type</em>, <em class="sig-param">url</em>, <em class="sig-param">a_parsed</em><span class="sig-paren">)</span> &#x2192; list<a class="reference internal" href="_modules/book/views/views_api.html#get_image_directory_list"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#book.views.views_api.get_image_directory_list" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
+<dd><p>이미지 directory 정보 파싱.</p>
+</dd></dl>
 
 <dl class="function">
 <dt id="book.views.views_api.get_img_rating">
 <code class="sig-prename descclassname">book.views.views_api.</code><code class="sig-name descname">get_img_rating</code><span class="sig-paren">(</span><em class="sig-param">domain</em>, <em class="sig-param">int_img_id</em><span class="sig-paren">)</span> &#x2192; Tuple[book.models.PokemonImage, django.db.models.query.QuerySet]<a class="reference internal" href="_modules/book/views/views_api.html#get_img_rating"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#book.views.views_api.get_img_rating" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
+<dd><p>Image 분류 결과 가져옴.</p>
+</dd></dl>
 
 <dl class="function">
 <dt id="book.views.views_api.get_response">
 <code class="sig-prename descclassname">book.views.views_api.</code><code class="sig-name descname">get_response</code><span class="sig-paren">(</span><em class="sig-param">img_id: str</em>, <em class="sig-param">domain: str</em><span class="sig-paren">)</span> &#x2192; dict<a class="reference internal" href="_modules/book/views/views_api.html#get_response"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#book.views.views_api.get_response" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
+<dd><p>예측 결과 가져옴. 없으면 예측.</p>
+</dd></dl>
 
 <dl class="function">
 <dt id="book.views.views_api.image">
 <code class="sig-prename descclassname">book.views.views_api.</code><code class="sig-name descname">image</code><span class="sig-paren">(</span><em class="sig-param">request</em>, <em class="sig-param">method</em>, <em class="sig-param">image_type='People'</em><span class="sig-paren">)</span> &#x2192; django.http.response.HttpResponse<a class="reference internal" href="_modules/book/views/views_api.html#image"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#book.views.views_api.image" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
+<dd><p>이미지 정보를 받거나 제거.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>request</strong> – </p></li>
+<li><p><strong>method</strong> – DELETE 나 GET</p></li>
+<li><p><strong>image_type</strong> – People 이거나 Pokemon</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p></p>
+</dd>
+</dl>
+</dd></dl>
 
 <dl class="function">
 <dt id="book.views.views_api.people_classification_api">
 <code class="sig-prename descclassname">book.views.views_api.</code><code class="sig-name descname">people_classification_api</code><span class="sig-paren">(</span><em class="sig-param">request</em><span class="sig-paren">)</span> &#x2192; django.http.response.HttpResponse<a class="reference internal" href="_modules/book/views/views_api.html#people_classification_api"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#book.views.views_api.people_classification_api" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
+<dd><p>이미지 분류 결과.</p>
+</dd></dl>
 
 <dl class="function">
 <dt id="book.views.views_api.pokemon_classification_api">
 <code class="sig-prename descclassname">book.views.views_api.</code><code class="sig-name descname">pokemon_classification_api</code><span class="sig-paren">(</span><em class="sig-param">request</em><span class="sig-paren">)</span> &#x2192; django.http.response.HttpResponse<a class="reference internal" href="_modules/book/views/views_api.html#pokemon_classification_api"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#book.views.views_api.pokemon_classification_api" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
+<dd><p>포켓몬 분류 결과.</p>
+</dd></dl>
 
 <dl class="function">
 <dt id="book.views.views_api.save_failure">
 <code class="sig-prename descclassname">book.views.views_api.</code><code class="sig-name descname">save_failure</code><span class="sig-paren">(</span><em class="sig-param">domain: str</em>, <em class="sig-param">json_data: dict</em>, <em class="sig-param">target_deep_model: book.models.DeepLearningModel</em>, <em class="sig-param">int_img_id: int</em><span class="sig-paren">)</span> &#x2192; None<a class="reference internal" href="_modules/book/views/views_api.html#save_failure"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#book.views.views_api.save_failure" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
+<dd><p>분류 결과 실패시 실패정보 저장.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>domain</strong> – </p></li>
+<li><p><strong>json_data</strong> – </p></li>
+<li><p><strong>target_deep_model</strong> – </p></li>
+<li><p><strong>int_img_id</strong> – </p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p></p>
+</dd>
+</dl>
+</dd></dl>
 
 <dl class="function">
 <dt id="book.views.views_api.save_success">
 <code class="sig-prename descclassname">book.views.views_api.</code><code class="sig-name descname">save_success</code><span class="sig-paren">(</span><em class="sig-param">domain: str</em>, <em class="sig-param">json_data: dict</em>, <em class="sig-param">target_deep_model: book.models.DeepLearningModel</em>, <em class="sig-param">int_img_id: int</em><span class="sig-paren">)</span> &#x2192; None<a class="reference internal" href="_modules/book/views/views_api.html#save_success"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#book.views.views_api.save_success" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
+<dd><p>분류 결과 예측 저장.</p>
+</dd></dl>
 
 <dl class="function">
 <dt id="book.views.views_api.set_rating">
 <code class="sig-prename descclassname">book.views.views_api.</code><code class="sig-name descname">set_rating</code><span class="sig-paren">(</span><em class="sig-param">request</em><span class="sig-paren">)</span> &#x2192; django.http.response.HttpResponse<a class="reference internal" href="_modules/book/views/views_api.html#set_rating"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#book.views.views_api.set_rating" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
+<dd><p>이미지의 분류 정보 등록.</p>
+</dd></dl>
 
 </div>
 
@@ -250,7 +287,7 @@
   
     <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
       
-        <a href="book.admin.html" class="btn btn-neutral float-right" title="book.admin module" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
+        <a href="book.views.views_class.html" class="btn btn-neutral float-right" title="book.views.views_class module" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
       
       
         <a href="book.views.views.html" class="btn btn-neutral float-left" title="book.views.views module" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>

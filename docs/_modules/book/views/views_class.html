@@ -144,73 +144,154 @@
            <div itemprop="articleBody">
             
   <h1>Source code for book.views.views_class</h1><div class="highlight"><pre>
-<span></span><span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">Any</span><span class="p">,</span> <span class="n">Dict</span>
+<span></span><span class="sd">&quot;&quot;&quot;Class View 를 이용한 view 구현.&quot;&quot;&quot;</span>
+<span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">Any</span><span class="p">,</span> <span class="n">Dict</span>
 
 <span class="kn">from</span> <span class="nn">book</span> <span class="kn">import</span> <span class="n">models</span>
 <span class="kn">from</span> <span class="nn">django.views.generic</span> <span class="kn">import</span> <span class="n">ListView</span><span class="p">,</span> <span class="n">TemplateView</span>
 
 
 <div class="viewcode-block" id="CurrentPageListView"><a class="viewcode-back" href="../../../book.views.views_class.html#book.views.views_class.CurrentPageListView">[docs]</a><span class="k">class</span> <span class="nc">CurrentPageListView</span><span class="p">(</span><span class="n">ListView</span><span class="p">):</span>
+    <span class="c1"># noinspection PyUnresolvedReferences</span>
     <span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">    Navbar 에서 current_page 를 세팅하는 view</span>
+<span class="sd">    Navbar 에서 current_page 를 세팅하는 ListView.</span>
 
-<span class="sd">    :param current_page</span>
+<span class="sd">    :param current_page: 현재 page</span>
+<span class="sd">    :type current_page: str</span>
 <span class="sd">    &quot;&quot;&quot;</span>
 
-    <span class="n">current_page</span> <span class="o">=</span> <span class="kc">None</span>
+    <span class="n">current_page</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="kc">None</span>
 
 <div class="viewcode-block" id="CurrentPageListView.get_context_data"><a class="viewcode-back" href="../../../book.views.views_class.html#book.views.views_class.CurrentPageListView.get_context_data">[docs]</a>    <span class="k">def</span> <span class="nf">get_context_data</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">:</span> <span class="n">Any</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">]:</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        current_page 를 context 에 추가.</span>
+
+<span class="sd">        :param kwargs:</span>
+<span class="sd">        :return:</span>
+<span class="sd">        &quot;&quot;&quot;</span>
         <span class="n">context</span> <span class="o">=</span> <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="n">get_context_data</span><span class="p">(</span><span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
         <span class="n">context</span><span class="p">[</span><span class="s2">&quot;current_page&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">current_page</span>
         <span class="k">return</span> <span class="n">context</span></div></div>
 
 
 <div class="viewcode-block" id="CurrentPageTemplateView"><a class="viewcode-back" href="../../../book.views.views_class.html#book.views.views_class.CurrentPageTemplateView">[docs]</a><span class="k">class</span> <span class="nc">CurrentPageTemplateView</span><span class="p">(</span><span class="n">TemplateView</span><span class="p">):</span>
+    <span class="c1"># noinspection PyUnresolvedReferences</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Navbar 에서 current_page 를 세팅하는 ListView.</span>
+
+<span class="sd">    :param current_page: 현재 page</span>
+<span class="sd">    :type current_page: str</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
     <span class="n">current_page</span> <span class="o">=</span> <span class="kc">None</span>
 
 <div class="viewcode-block" id="CurrentPageTemplateView.get_context_data"><a class="viewcode-back" href="../../../book.views.views_class.html#book.views.views_class.CurrentPageTemplateView.get_context_data">[docs]</a>    <span class="k">def</span> <span class="nf">get_context_data</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">:</span> <span class="n">Any</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">]:</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        current_page 를 context 에 추가.</span>
+
+<span class="sd">        :param kwargs:</span>
+<span class="sd">        :return:</span>
+<span class="sd">        &quot;&quot;&quot;</span>
         <span class="n">context</span> <span class="o">=</span> <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="n">get_context_data</span><span class="p">(</span><span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
         <span class="n">context</span><span class="p">[</span><span class="s2">&quot;current_page&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">current_page</span>
         <span class="k">return</span> <span class="n">context</span></div></div>
 
 
 <div class="viewcode-block" id="WebStackListView"><a class="viewcode-back" href="../../../book.views.views_class.html#book.views.views_class.WebStackListView">[docs]</a><span class="k">class</span> <span class="nc">WebStackListView</span><span class="p">(</span><span class="n">CurrentPageListView</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;WebStack.&quot;&quot;&quot;</span>
+
     <span class="n">current_page</span> <span class="o">=</span> <span class="s2">&quot;web_stack&quot;</span>
     <span class="n">template_name</span> <span class="o">=</span> <span class="s2">&quot;book/link/web_stack.html&quot;</span>
     <span class="n">queryset</span> <span class="o">=</span> <span class="n">models</span><span class="o">.</span><span class="n">Link</span><span class="o">.</span><span class="n">objects</span><span class="o">.</span><span class="n">filter</span><span class="p">(</span><span class="n">content_type</span><span class="o">=</span><span class="s2">&quot;Web&quot;</span><span class="p">)</span></div>
 
 
 <div class="viewcode-block" id="BookmarkListView"><a class="viewcode-back" href="../../../book.views.views_class.html#book.views.views_class.BookmarkListView">[docs]</a><span class="k">class</span> <span class="nc">BookmarkListView</span><span class="p">(</span><span class="n">CurrentPageListView</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;북마크 뷰.&quot;&quot;&quot;</span>
+
     <span class="n">current_page</span> <span class="o">=</span> <span class="s2">&quot;link&quot;</span>
     <span class="n">template_name</span> <span class="o">=</span> <span class="s2">&quot;book/link/link.html&quot;</span>
     <span class="n">queryset</span> <span class="o">=</span> <span class="n">models</span><span class="o">.</span><span class="n">Link</span><span class="o">.</span><span class="n">objects</span><span class="o">.</span><span class="n">exclude</span><span class="p">(</span><span class="n">content_type</span><span class="o">=</span><span class="s2">&quot;Web&quot;</span><span class="p">)</span></div>
 
 
 <div class="viewcode-block" id="WineListView"><a class="viewcode-back" href="../../../book.views.views_class.html#book.views.views_class.WineListView">[docs]</a><span class="k">class</span> <span class="nc">WineListView</span><span class="p">(</span><span class="n">CurrentPageListView</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;와인 뷰.&quot;&quot;&quot;</span>
+
     <span class="n">current_page</span> <span class="o">=</span> <span class="s2">&quot;wine&quot;</span>
     <span class="n">template_name</span> <span class="o">=</span> <span class="s2">&quot;book/wine.html&quot;</span>
     <span class="n">model</span> <span class="o">=</span> <span class="n">models</span><span class="o">.</span><span class="n">Wine</span></div>
 
 
 <div class="viewcode-block" id="RecommendBookListView"><a class="viewcode-back" href="../../../book.views.views_class.html#book.views.views_class.RecommendBookListView">[docs]</a><span class="k">class</span> <span class="nc">RecommendBookListView</span><span class="p">(</span><span class="n">CurrentPageListView</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;책 정보 뷰.&quot;&quot;&quot;</span>
+
     <span class="n">current_page</span> <span class="o">=</span> <span class="s2">&quot;recommend_book&quot;</span>
     <span class="n">template_name</span> <span class="o">=</span> <span class="s2">&quot;book/investment/recommend_book.html&quot;</span>
     <span class="n">model</span> <span class="o">=</span> <span class="n">models</span><span class="o">.</span><span class="n">Book</span></div>
 
 
+<div class="viewcode-block" id="PaperListViwew"><a class="viewcode-back" href="../../../book.views.views_class.html#book.views.views_class.PaperListViwew">[docs]</a><span class="k">class</span> <span class="nc">PaperListViwew</span><span class="p">(</span><span class="n">CurrentPageListView</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;논문 리스트 뷰.&quot;&quot;&quot;</span>
+
+    <span class="n">current_page</span> <span class="o">=</span> <span class="s2">&quot;paper&quot;</span>
+    <span class="n">template_name</span> <span class="o">=</span> <span class="s2">&quot;book/study/paper.html&quot;</span>
+    <span class="n">model</span> <span class="o">=</span> <span class="n">models</span><span class="o">.</span><span class="n">Paper</span></div>
+
+
+<span class="c1"># Template Views</span>
 <div class="viewcode-block" id="IndexTemplateView"><a class="viewcode-back" href="../../../book.views.views_class.html#book.views.views_class.IndexTemplateView">[docs]</a><span class="k">class</span> <span class="nc">IndexTemplateView</span><span class="p">(</span><span class="n">CurrentPageTemplateView</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;첫 페이지.&quot;&quot;&quot;</span>
+
     <span class="n">current_page</span> <span class="o">=</span> <span class="s2">&quot;index&quot;</span>
     <span class="n">template_name</span> <span class="o">=</span> <span class="s2">&quot;book/index.html&quot;</span></div>
 
 
 <div class="viewcode-block" id="AlgorithmTemplateView"><a class="viewcode-back" href="../../../book.views.views_class.html#book.views.views_class.AlgorithmTemplateView">[docs]</a><span class="k">class</span> <span class="nc">AlgorithmTemplateView</span><span class="p">(</span><span class="n">CurrentPageTemplateView</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;알고리즘 정보.&quot;&quot;&quot;</span>
+
     <span class="n">current_page</span> <span class="o">=</span> <span class="s2">&quot;algorithm&quot;</span>
     <span class="n">template_name</span> <span class="o">=</span> <span class="s2">&quot;book/algorithm.html&quot;</span></div>
 
 
 <div class="viewcode-block" id="LeadingStockTemplateView"><a class="viewcode-back" href="../../../book.views.views_class.html#book.views.views_class.LeadingStockTemplateView">[docs]</a><span class="k">class</span> <span class="nc">LeadingStockTemplateView</span><span class="p">(</span><span class="n">CurrentPageTemplateView</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;주식 정보.&quot;&quot;&quot;</span>
+
     <span class="n">current_page</span> <span class="o">=</span> <span class="s2">&quot;leading_stocks&quot;</span>
     <span class="n">template_name</span> <span class="o">=</span> <span class="s2">&quot;book/investment/leading_stocks.html&quot;</span></div>
+
+
+<div class="viewcode-block" id="TodoTemplateView"><a class="viewcode-back" href="../../../book.views.views_class.html#book.views.views_class.TodoTemplateView">[docs]</a><span class="k">class</span> <span class="nc">TodoTemplateView</span><span class="p">(</span><span class="n">CurrentPageTemplateView</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;할일 정보.&quot;&quot;&quot;</span>
+
+    <span class="n">current_page</span> <span class="o">=</span> <span class="s2">&quot;todo&quot;</span>
+    <span class="n">template_name</span> <span class="o">=</span> <span class="s2">&quot;book/todo.html&quot;</span></div>
+
+
+<div class="viewcode-block" id="SlideTemplateView"><a class="viewcode-back" href="../../../book.views.views_class.html#book.views.views_class.SlideTemplateView">[docs]</a><span class="k">class</span> <span class="nc">SlideTemplateView</span><span class="p">(</span><span class="n">CurrentPageTemplateView</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;슬라이드 정보.&quot;&quot;&quot;</span>
+
+    <span class="n">current_page</span> <span class="o">=</span> <span class="s2">&quot;slide&quot;</span>
+    <span class="n">template_name</span> <span class="o">=</span> <span class="s2">&quot;book/study/slide.html&quot;</span></div>
+
+
+<div class="viewcode-block" id="ColabTemplateView"><a class="viewcode-back" href="../../../book.views.views_class.html#book.views.views_class.ColabTemplateView">[docs]</a><span class="k">class</span> <span class="nc">ColabTemplateView</span><span class="p">(</span><span class="n">CurrentPageTemplateView</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Colab.&quot;&quot;&quot;</span>
+
+    <span class="n">current_page</span> <span class="o">=</span> <span class="s2">&quot;colab&quot;</span>
+    <span class="n">template_name</span> <span class="o">=</span> <span class="s2">&quot;book/study/colab.html&quot;</span></div>
+
+
+<div class="viewcode-block" id="IdeaTemplateView"><a class="viewcode-back" href="../../../book.views.views_class.html#book.views.views_class.IdeaTemplateView">[docs]</a><span class="k">class</span> <span class="nc">IdeaTemplateView</span><span class="p">(</span><span class="n">CurrentPageTemplateView</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;아이디어 정보.&quot;&quot;&quot;</span>
+
+    <span class="n">current_page</span> <span class="o">=</span> <span class="s2">&quot;idea&quot;</span>
+    <span class="n">template_name</span> <span class="o">=</span> <span class="s2">&quot;book/idea.html&quot;</span></div>
+
+
+<div class="viewcode-block" id="ChatbotTemplateView"><a class="viewcode-back" href="../../../book.views.views_class.html#book.views.views_class.ChatbotTemplateView">[docs]</a><span class="k">class</span> <span class="nc">ChatbotTemplateView</span><span class="p">(</span><span class="n">CurrentPageTemplateView</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Chatbot 관련 뷰.&quot;&quot;&quot;</span>
+
+    <span class="n">current_page</span> <span class="o">=</span> <span class="s2">&quot;chatbot&quot;</span>
+    <span class="n">template_name</span> <span class="o">=</span> <span class="s2">&quot;book/chatbot/chatbot.html&quot;</span></div>
 </pre></div>
 
            </div>

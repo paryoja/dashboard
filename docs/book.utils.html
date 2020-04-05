@@ -82,7 +82,7 @@
             
               <p class="caption"><span class="caption-text">Contents:</span></p>
 <ul class="current">
-<li class="toctree-l1 current"><a class="reference internal" href="book.html">book package</a><ul class="current">
+<li class="toctree-l1 current"><a class="reference internal" href="book.html">Yozit book package</a><ul class="current">
 <li class="toctree-l2"><a class="reference internal" href="book.html#subpackages">Subpackages</a></li>
 <li class="toctree-l2 current"><a class="reference internal" href="book.html#submodules">Submodules</a><ul class="current">
 <li class="toctree-l3"><a class="reference internal" href="book.admin.html">book.admin module</a></li>
@@ -144,7 +144,7 @@
     
       <li><a href="index.html">Docs</a> &raquo;</li>
         
-          <li><a href="book.html">book package</a> &raquo;</li>
+          <li><a href="book.html">Yozit book package</a> &raquo;</li>
         
       <li>book.utils module</li>
     
@@ -167,25 +167,41 @@
             
   <div class="section" id="module-book.utils">
 <span id="book-utils-module"></span><h1>book.utils module<a class="headerlink" href="#module-book.utils" title="Permalink to this headline">¶</a></h1>
+<p>유틸 함수.</p>
 <dl class="function">
 <dt id="book.utils.get_compressed_result">
 <code class="sig-prename descclassname">book.utils.</code><code class="sig-name descname">get_compressed_result</code><span class="sig-paren">(</span><em class="sig-param">image_list</em>, <em class="sig-param">count</em>, <em class="sig-param">page</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/book/utils.html#get_compressed_result"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#book.utils.get_compressed_result" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
+<dd><p>데이터 압축해서 제공.</p>
+</dd></dl>
 
 <dl class="function">
 <dt id="book.utils.get_page_info">
 <code class="sig-prename descclassname">book.utils.</code><code class="sig-name descname">get_page_info</code><span class="sig-paren">(</span><em class="sig-param">object_list</em>, <em class="sig-param">page</em>, <em class="sig-param">count</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/book/utils.html#get_page_info"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#book.utils.get_page_info" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
+<dd><p>페이지 정보.</p>
+</dd></dl>
 
 <dl class="function">
 <dt id="book.utils.new_lotto">
 <code class="sig-prename descclassname">book.utils.</code><code class="sig-name descname">new_lotto</code><span class="sig-paren">(</span><em class="sig-param">draw_number</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/book/utils.html#new_lotto"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#book.utils.new_lotto" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
+<dd><p>로또 정보.</p>
+</dd></dl>
 
 <dl class="function">
 <dt id="book.utils.to_table">
-<code class="sig-prename descclassname">book.utils.</code><code class="sig-name descname">to_table</code><span class="sig-paren">(</span><em class="sig-param">contents</em>, <em class="sig-param">row_count</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/book/utils.html#to_table"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#book.utils.to_table" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
+<code class="sig-prename descclassname">book.utils.</code><code class="sig-name descname">to_table</code><span class="sig-paren">(</span><em class="sig-param">contents: List</em>, <em class="sig-param">row_count: int</em><span class="sig-paren">)</span> &#x2192; List[List]<a class="reference internal" href="_modules/book/utils.html#to_table"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#book.utils.to_table" title="Permalink to this definition">¶</a></dt>
+<dd><p>테이블 형태로 grouping.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>contents</strong> – list 형태의 데이터.</p></li>
+<li><p><strong>row_count</strong> – 한줄에 포함될 element 개수</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>grouping 된 테이블</p>
+</dd>
+</dl>
+</dd></dl>
 
 </div>
 

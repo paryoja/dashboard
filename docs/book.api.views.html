@@ -35,7 +35,7 @@
   <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
-    <link rel="next" title="book.migrations package" href="book.migrations.html" />
+    <link rel="next" title="book.templatetags package" href="book.templatetags.html" />
     <link rel="prev" title="book.api.serializers module" href="book.api.serializers.html" /> 
 </head>
 
@@ -82,14 +82,13 @@
             
               <p class="caption"><span class="caption-text">Contents:</span></p>
 <ul class="current">
-<li class="toctree-l1 current"><a class="reference internal" href="book.html">book package</a><ul class="current">
+<li class="toctree-l1 current"><a class="reference internal" href="book.html">Yozit book package</a><ul class="current">
 <li class="toctree-l2 current"><a class="reference internal" href="book.html#subpackages">Subpackages</a><ul class="current">
 <li class="toctree-l3 current"><a class="reference internal" href="book.api.html">book.api package</a><ul class="current">
 <li class="toctree-l4 current"><a class="reference internal" href="book.api.html#submodules">Submodules</a></li>
 <li class="toctree-l4"><a class="reference internal" href="book.api.html#module-book.api">Module contents</a></li>
 </ul>
 </li>
-<li class="toctree-l3"><a class="reference internal" href="book.migrations.html">book.migrations package</a></li>
 <li class="toctree-l3"><a class="reference internal" href="book.templatetags.html">book.templatetags package</a></li>
 <li class="toctree-l3"><a class="reference internal" href="book.tests.html">book.tests package</a></li>
 <li class="toctree-l3"><a class="reference internal" href="book.views.html">book.views package</a></li>
@@ -144,7 +143,7 @@
     
       <li><a href="index.html">Docs</a> &raquo;</li>
         
-          <li><a href="book.html">book package</a> &raquo;</li>
+          <li><a href="book.html">Yozit book package</a> &raquo;</li>
         
           <li><a href="book.api.html">book.api package</a> &raquo;</li>
         
@@ -169,10 +168,12 @@
             
   <div class="section" id="module-book.api.views">
 <span id="book-api-views-module"></span><h1>book.api.views module<a class="headerlink" href="#module-book.api.views" title="Permalink to this headline">¶</a></h1>
+<p>API Views.</p>
 <dl class="class">
 <dt id="book.api.views.InstagramImageViewSet">
 <em class="property">class </em><code class="sig-prename descclassname">book.api.views.</code><code class="sig-name descname">InstagramImageViewSet</code><span class="sig-paren">(</span><em class="sig-param">**kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/book/api/views.html#InstagramImageViewSet"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#book.api.views.InstagramImageViewSet" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">rest_framework.viewsets.ModelViewSet</span></code></p>
+<p>Instagram 이미지 제공.</p>
 <dl class="attribute">
 <dt id="book.api.views.InstagramImageViewSet.filterset_fields">
 <code class="sig-name descname">filterset_fields</code><em class="property"> = ('selected',)</em><a class="headerlink" href="#book.api.views.InstagramImageViewSet.filterset_fields" title="Permalink to this definition">¶</a></dt>
@@ -206,6 +207,7 @@
 <dt id="book.api.views.InstagramTextViewSet">
 <em class="property">class </em><code class="sig-prename descclassname">book.api.views.</code><code class="sig-name descname">InstagramTextViewSet</code><span class="sig-paren">(</span><em class="sig-param">**kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/book/api/views.html#InstagramTextViewSet"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#book.api.views.InstagramTextViewSet" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">rest_framework.viewsets.ModelViewSet</span></code></p>
+<p>Instagram Text 제공.</p>
 <dl class="attribute">
 <dt id="book.api.views.InstagramTextViewSet.pagination_class">
 <code class="sig-name descname">pagination_class</code><a class="headerlink" href="#book.api.views.InstagramTextViewSet.pagination_class" title="Permalink to this definition">¶</a></dt>
@@ -234,6 +236,7 @@
 <dt id="book.api.views.PokemonImageViewSet">
 <em class="property">class </em><code class="sig-prename descclassname">book.api.views.</code><code class="sig-name descname">PokemonImageViewSet</code><span class="sig-paren">(</span><em class="sig-param">**kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/book/api/views.html#PokemonImageViewSet"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#book.api.views.PokemonImageViewSet" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">rest_framework.viewsets.ModelViewSet</span></code></p>
+<p>Pokemon 이미지 제공.</p>
 <dl class="attribute">
 <dt id="book.api.views.PokemonImageViewSet.filterset_fields">
 <code class="sig-name descname">filterset_fields</code><em class="property"> = ('title', 'url')</em><a class="headerlink" href="#book.api.views.PokemonImageViewSet.filterset_fields" title="Permalink to this definition">¶</a></dt>
@@ -267,6 +270,7 @@
 <dt id="book.api.views.StandardResultsSetPagination">
 <em class="property">class </em><code class="sig-prename descclassname">book.api.views.</code><code class="sig-name descname">StandardResultsSetPagination</code><a class="reference internal" href="_modules/book/api/views.html#StandardResultsSetPagination"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#book.api.views.StandardResultsSetPagination" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">rest_framework.pagination.PageNumberPagination</span></code></p>
+<p>100개 단위로 Pagination 수행.</p>
 <dl class="attribute">
 <dt id="book.api.views.StandardResultsSetPagination.max_page_size">
 <code class="sig-name descname">max_page_size</code><em class="property"> = 1000</em><a class="headerlink" href="#book.api.views.StandardResultsSetPagination.max_page_size" title="Permalink to this definition">¶</a></dt>
@@ -294,7 +298,7 @@
   
     <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
       
-        <a href="book.migrations.html" class="btn btn-neutral float-right" title="book.migrations package" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
+        <a href="book.templatetags.html" class="btn btn-neutral float-right" title="book.templatetags package" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
       
       
         <a href="book.api.serializers.html" class="btn btn-neutral float-left" title="book.api.serializers module" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>

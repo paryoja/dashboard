@@ -144,7 +144,9 @@
            <div itemprop="articleBody">
             
   <h1>Source code for book.views.views_api</h1><div class="highlight"><pre>
-<span></span><span class="kn">import</span> <span class="nn">json</span>
+<span></span><span class="sd">&quot;&quot;&quot;API로 사용할 함수 모음.&quot;&quot;&quot;</span>
+
+<span class="kn">import</span> <span class="nn">json</span>
 <span class="kn">import</span> <span class="nn">logging</span>
 <span class="kn">import</span> <span class="nn">re</span>
 <span class="kn">import</span> <span class="nn">typing</span>
@@ -164,17 +166,28 @@
 
 
 <div class="viewcode-block" id="Domain"><a class="viewcode-back" href="../../../book.views.views_api.html#book.views.views_api.Domain">[docs]</a><span class="k">class</span> <span class="nc">Domain</span><span class="p">:</span>
+    <span class="sd">&quot;&quot;&quot;이미지 제공 도메인.&quot;&quot;&quot;</span>
+
     <span class="n">People</span> <span class="o">=</span> <span class="s2">&quot;people&quot;</span>
     <span class="n">Pokemon</span> <span class="o">=</span> <span class="s2">&quot;pokemon&quot;</span></div>
 
 
 <div class="viewcode-block" id="image"><a class="viewcode-back" href="../../../book.views.views_api.html#book.views.views_api.image">[docs]</a><span class="k">def</span> <span class="nf">image</span><span class="p">(</span><span class="n">request</span><span class="p">,</span> <span class="n">method</span><span class="p">,</span> <span class="n">image_type</span><span class="o">=</span><span class="s2">&quot;People&quot;</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">HttpResponse</span><span class="p">:</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    이미지 정보를 받거나 제거.</span>
+
+<span class="sd">    :param request:</span>
+<span class="sd">    :param method: DELETE 나 GET</span>
+<span class="sd">    :param image_type: People 이거나 Pokemon</span>
+<span class="sd">    :return:</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">image_type</span> <span class="o">=</span> <span class="n">image_type</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span>
     <span class="n">image_id</span> <span class="o">=</span> <span class="n">request</span><span class="o">.</span><span class="n">POST</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;image_id&quot;</span><span class="p">)</span>
     <span class="k">if</span> <span class="n">image_id</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
         <span class="k">return</span> <span class="n">HttpResponseBadRequest</span><span class="p">(</span><span class="s2">&quot;Empty Image Id&quot;</span><span class="p">)</span>
-    <span class="k">if</span> <span class="n">image_type</span> <span class="o">==</span> <span class="s2">&quot;People&quot;</span><span class="p">:</span>
+    <span class="k">if</span> <span class="n">image_type</span> <span class="o">==</span> <span class="n">Domain</span><span class="o">.</span><span class="n">People</span><span class="p">:</span>
         <span class="n">img</span> <span class="o">=</span> <span class="n">models</span><span class="o">.</span><span class="n">PeopleImage</span><span class="o">.</span><span class="n">objects</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="nb">id</span><span class="o">=</span><span class="nb">int</span><span class="p">(</span><span class="n">image_id</span><span class="p">))</span>
-    <span class="k">elif</span> <span class="n">image_type</span> <span class="o">==</span> <span class="s2">&quot;Pokemon&quot;</span><span class="p">:</span>
+    <span class="k">elif</span> <span class="n">image_type</span> <span class="o">==</span> <span class="n">Domain</span><span class="o">.</span><span class="n">Pokemon</span><span class="p">:</span>
         <span class="n">img</span> <span class="o">=</span> <span class="n">models</span><span class="o">.</span><span class="n">PokemonImage</span><span class="o">.</span><span class="n">objects</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="nb">id</span><span class="o">=</span><span class="nb">int</span><span class="p">(</span><span class="n">image_id</span><span class="p">))</span>
     <span class="k">else</span><span class="p">:</span>
         <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;Unknown image type </span><span class="si">{}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">image_type</span><span class="p">))</span>
@@ -189,6 +202,7 @@
 
 
 <div class="viewcode-block" id="set_rating"><a class="viewcode-back" href="../../../book.views.views_api.html#book.views.views_api.set_rating">[docs]</a><span class="k">def</span> <span class="nf">set_rating</span><span class="p">(</span><span class="n">request</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">HttpResponse</span><span class="p">:</span>
+    <span class="sd">&quot;&quot;&quot;이미지의 분류 정보 등록.&quot;&quot;&quot;</span>
     <span class="n">img_id</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">request</span><span class="o">.</span><span class="n">POST</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;image_id&quot;</span><span class="p">))</span>
     <span class="n">data_type</span> <span class="o">=</span> <span class="n">request</span><span class="o">.</span><span class="n">POST</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;data_type&quot;</span><span class="p">)</span>
     <span class="k">if</span> <span class="n">data_type</span> <span class="o">==</span> <span class="n">Domain</span><span class="o">.</span><span class="n">Pokemon</span><span class="p">:</span>
@@ -206,6 +220,7 @@
 
 
 <div class="viewcode-block" id="get_id"><a class="viewcode-back" href="../../../book.views.views_api.html#book.views.views_api.get_id">[docs]</a><span class="k">def</span> <span class="nf">get_id</span><span class="p">(</span><span class="n">request</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">HttpResponse</span><span class="p">:</span>
+    <span class="sd">&quot;&quot;&quot;이미지 id 가져옴.&quot;&quot;&quot;</span>
     <span class="n">query</span> <span class="o">=</span> <span class="n">request</span><span class="o">.</span><span class="n">POST</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;query&quot;</span><span class="p">)</span>
     <span class="n">image_obj</span> <span class="o">=</span> <span class="n">models</span><span class="o">.</span><span class="n">PeopleImage</span><span class="o">.</span><span class="n">objects</span><span class="o">.</span><span class="n">filter</span><span class="p">(</span><span class="n">url__endswith</span><span class="o">=</span><span class="n">query</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span>
     <span class="k">return</span> <span class="n">HttpResponse</span><span class="p">(</span><span class="n">image_obj</span><span class="o">.</span><span class="n">id</span><span class="p">)</span></div>
@@ -216,6 +231,7 @@
 <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">typing</span><span class="o">.</span><span class="n">Tuple</span><span class="p">[</span>
     <span class="n">typing</span><span class="o">.</span><span class="n">Union</span><span class="p">[</span><span class="n">models</span><span class="o">.</span><span class="n">PokemonImage</span><span class="p">,</span> <span class="n">models</span><span class="o">.</span><span class="n">PokemonImage</span><span class="p">],</span> <span class="n">dj_models</span><span class="o">.</span><span class="n">query</span><span class="o">.</span><span class="n">QuerySet</span>
 <span class="p">]:</span>
+    <span class="sd">&quot;&quot;&quot;Image 분류 결과 가져옴.&quot;&quot;&quot;</span>
     <span class="k">if</span> <span class="n">domain</span> <span class="o">==</span> <span class="n">Domain</span><span class="o">.</span><span class="n">People</span><span class="p">:</span>
         <span class="n">img</span> <span class="o">=</span> <span class="n">models</span><span class="o">.</span><span class="n">PeopleImage</span><span class="o">.</span><span class="n">objects</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="nb">id</span><span class="o">=</span><span class="n">int_img_id</span><span class="p">)</span>
         <span class="n">existing_rating</span> <span class="o">=</span> <span class="n">models</span><span class="o">.</span><span class="n">Rating</span><span class="o">.</span><span class="n">objects</span><span class="o">.</span><span class="n">filter</span><span class="p">(</span>
@@ -239,6 +255,7 @@
     <span class="n">target_deep_model</span><span class="p">:</span> <span class="n">models</span><span class="o">.</span><span class="n">DeepLearningModel</span><span class="p">,</span>
     <span class="n">int_img_id</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span>
 <span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+    <span class="sd">&quot;&quot;&quot;분류 결과 예측 저장.&quot;&quot;&quot;</span>
     <span class="k">if</span> <span class="n">domain</span> <span class="o">==</span> <span class="n">Domain</span><span class="o">.</span><span class="n">People</span><span class="p">:</span>
         <span class="n">class_names</span> <span class="o">=</span> <span class="n">json_data</span><span class="p">[</span><span class="s2">&quot;class_names&quot;</span><span class="p">]</span>
         <span class="n">positive</span> <span class="o">=</span> <span class="n">json_data</span><span class="p">[</span><span class="s2">&quot;classification&quot;</span><span class="p">][</span><span class="n">class_names</span><span class="p">[</span><span class="s2">&quot;True&quot;</span><span class="p">]]</span>
@@ -268,6 +285,15 @@
     <span class="n">target_deep_model</span><span class="p">:</span> <span class="n">models</span><span class="o">.</span><span class="n">DeepLearningModel</span><span class="p">,</span>
     <span class="n">int_img_id</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span>
 <span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    분류 결과 실패시 실패정보 저장.</span>
+
+<span class="sd">    :param domain:</span>
+<span class="sd">    :param json_data:</span>
+<span class="sd">    :param target_deep_model:</span>
+<span class="sd">    :param int_img_id:</span>
+<span class="sd">    :return:</span>
+<span class="sd">    &quot;&quot;&quot;</span>
     <span class="k">if</span> <span class="n">domain</span> <span class="o">==</span> <span class="n">Domain</span><span class="o">.</span><span class="n">People</span><span class="p">:</span>
         <span class="n">rating</span> <span class="o">=</span> <span class="n">models</span><span class="o">.</span><span class="n">Rating</span><span class="p">(</span>
             <span class="n">deep_model</span><span class="o">=</span><span class="n">target_deep_model</span><span class="p">,</span> <span class="n">image_id</span><span class="o">=</span><span class="n">int_img_id</span><span class="p">,</span> <span class="n">data</span><span class="o">=</span><span class="n">json_data</span>
@@ -282,6 +308,7 @@
 
 
 <div class="viewcode-block" id="call_api_server"><a class="viewcode-back" href="../../../book.views.views_api.html#book.views.views_api.call_api_server">[docs]</a><span class="k">def</span> <span class="nf">call_api_server</span><span class="p">(</span><span class="n">img</span><span class="p">,</span> <span class="n">domain</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">typing</span><span class="o">.</span><span class="n">Optional</span><span class="p">[</span><span class="n">requests</span><span class="o">.</span><span class="n">Response</span><span class="p">]:</span>
+    <span class="sd">&quot;&quot;&quot;분류를 위한 API 서버를 호출.&quot;&quot;&quot;</span>
     <span class="n">data</span> <span class="o">=</span> <span class="p">{</span><span class="s2">&quot;requested_url&quot;</span><span class="p">:</span> <span class="n">img</span><span class="o">.</span><span class="n">url</span><span class="p">}</span>
     <span class="n">headers</span> <span class="o">=</span> <span class="p">{</span><span class="s2">&quot;Content-Type&quot;</span><span class="p">:</span> <span class="s2">&quot;application/json&quot;</span><span class="p">}</span>
 
@@ -305,6 +332,7 @@
 
 <span class="nd">@shared_task</span>
 <span class="k">def</span> <span class="nf">get_classification_result</span><span class="p">(</span><span class="n">domain</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">int_img_id</span><span class="p">:</span> <span class="nb">int</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+    <span class="sd">&quot;&quot;&quot;예측 결과 가져옴. 없으면 예측.&quot;&quot;&quot;</span>
     <span class="n">img</span><span class="p">,</span> <span class="n">existing_rating</span> <span class="o">=</span> <span class="n">get_img_rating</span><span class="p">(</span><span class="n">domain</span><span class="p">,</span> <span class="n">int_img_id</span><span class="p">)</span>
 
     <span class="c1"># 이미 가져온건지 다시 확인 -&gt; 작업 추가시에 중복되어 있을 수 있음</span>
@@ -344,6 +372,7 @@
 
 
 <div class="viewcode-block" id="get_response"><a class="viewcode-back" href="../../../book.views.views_api.html#book.views.views_api.get_response">[docs]</a><span class="k">def</span> <span class="nf">get_response</span><span class="p">(</span><span class="n">img_id</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">domain</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">dict</span><span class="p">:</span>
+    <span class="sd">&quot;&quot;&quot;예측 결과 가져옴. 없으면 예측.&quot;&quot;&quot;</span>
     <span class="n">int_img_id</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">img_id</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s2">&quot;_&quot;</span><span class="p">)[</span><span class="mi">1</span><span class="p">])</span>
 
     <span class="c1"># 이미 존재하는지 체크</span>
@@ -380,6 +409,7 @@
 
 
 <div class="viewcode-block" id="people_classification_api"><a class="viewcode-back" href="../../../book.views.views_api.html#book.views.views_api.people_classification_api">[docs]</a><span class="k">def</span> <span class="nf">people_classification_api</span><span class="p">(</span><span class="n">request</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">HttpResponse</span><span class="p">:</span>
+    <span class="sd">&quot;&quot;&quot;이미지 분류 결과.&quot;&quot;&quot;</span>
     <span class="n">img_id</span> <span class="o">=</span> <span class="n">request</span><span class="o">.</span><span class="n">POST</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;image_id&quot;</span><span class="p">)</span>
     <span class="k">if</span> <span class="n">img_id</span><span class="p">:</span>
         <span class="n">response</span> <span class="o">=</span> <span class="n">get_response</span><span class="p">(</span><span class="n">img_id</span><span class="p">,</span> <span class="n">domain</span><span class="o">=</span><span class="n">Domain</span><span class="o">.</span><span class="n">People</span><span class="p">)</span>
@@ -389,6 +419,7 @@
 
 
 <div class="viewcode-block" id="pokemon_classification_api"><a class="viewcode-back" href="../../../book.views.views_api.html#book.views.views_api.pokemon_classification_api">[docs]</a><span class="k">def</span> <span class="nf">pokemon_classification_api</span><span class="p">(</span><span class="n">request</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">HttpResponse</span><span class="p">:</span>
+    <span class="sd">&quot;&quot;&quot;포켓몬 분류 결과.&quot;&quot;&quot;</span>
     <span class="n">img_id</span> <span class="o">=</span> <span class="n">request</span><span class="o">.</span><span class="n">POST</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;image_id&quot;</span><span class="p">)</span>
     <span class="k">if</span> <span class="n">img_id</span><span class="p">:</span>
         <span class="n">response</span> <span class="o">=</span> <span class="n">get_response</span><span class="p">(</span><span class="n">img_id</span><span class="p">,</span> <span class="n">domain</span><span class="o">=</span><span class="n">Domain</span><span class="o">.</span><span class="n">Pokemon</span><span class="p">)</span>
@@ -397,6 +428,7 @@
 
 
 <div class="viewcode-block" id="get_image_directory_list"><a class="viewcode-back" href="../../../book.views.views_api.html#book.views.views_api.get_image_directory_list">[docs]</a><span class="k">def</span> <span class="nf">get_image_directory_list</span><span class="p">(</span><span class="n">data_type</span><span class="p">,</span> <span class="n">url</span><span class="p">,</span> <span class="n">a_parsed</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">list</span><span class="p">:</span>
+    <span class="sd">&quot;&quot;&quot;이미지 directory 정보 파싱.&quot;&quot;&quot;</span>
     <span class="k">if</span> <span class="n">data_type</span> <span class="o">==</span> <span class="s2">&quot;people&quot;</span><span class="p">:</span>
         <span class="n">json_url</span> <span class="o">=</span> <span class="n">url</span> <span class="o">+</span> <span class="n">a_parsed</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span> <span class="o">+</span> <span class="s2">&quot;/image.json&quot;</span>
         <span class="n">image_list_text</span> <span class="o">=</span> <span class="n">requests</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">json_url</span><span class="p">)</span><span class="o">.</span><span class="n">text</span>
@@ -428,6 +460,7 @@
 
 <span class="nd">@shared_task</span>
 <span class="k">def</span> <span class="nf">add_image_client</span><span class="p">(</span><span class="n">a_text</span><span class="p">,</span> <span class="n">url</span><span class="p">,</span> <span class="n">category_id</span><span class="p">,</span> <span class="n">data_type</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+    <span class="sd">&quot;&quot;&quot;이미지 등록 API.&quot;&quot;&quot;</span>
     <span class="n">a_parsed</span> <span class="o">=</span> <span class="n">a_pattern</span><span class="o">.</span><span class="n">findall</span><span class="p">(</span><span class="n">a_text</span><span class="p">)</span>
 
     <span class="k">if</span> <span class="ow">not</span> <span class="n">a_parsed</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">startswith</span><span class="p">(</span><span class="s2">&quot;../&quot;</span><span class="p">):</span>
@@ -458,6 +491,7 @@
 
 <span class="nd">@shared_task</span>
 <span class="k">def</span> <span class="nf">cron_image_add</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+    <span class="sd">&quot;&quot;&quot;주기적으로 이미지 등록.&quot;&quot;&quot;</span>
     <span class="k">try</span><span class="p">:</span>
         <span class="n">category_id</span> <span class="o">=</span> <span class="s2">&quot;people&quot;</span>
         <span class="n">data_type</span> <span class="o">=</span> <span class="s2">&quot;people&quot;</span>

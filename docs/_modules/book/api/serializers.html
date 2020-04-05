@@ -144,24 +144,38 @@
            <div itemprop="articleBody">
             
   <h1>Source code for book.api.serializers</h1><div class="highlight"><pre>
-<span></span><span class="kn">from</span> <span class="nn">book.models</span> <span class="kn">import</span> <span class="n">PeopleImage</span><span class="p">,</span> <span class="n">PokemonImage</span>
+<span></span><span class="sd">&quot;&quot;&quot;DRF Serializer.&quot;&quot;&quot;</span>
+
+<span class="kn">from</span> <span class="nn">book.models</span> <span class="kn">import</span> <span class="n">PeopleImage</span><span class="p">,</span> <span class="n">PokemonImage</span>
 <span class="kn">from</span> <span class="nn">rest_framework</span> <span class="kn">import</span> <span class="n">serializers</span>
 
 
 <div class="viewcode-block" id="PokemonImageSerializer"><a class="viewcode-back" href="../../../book.api.serializers.html#book.api.serializers.PokemonImageSerializer">[docs]</a><span class="k">class</span> <span class="nc">PokemonImageSerializer</span><span class="p">(</span><span class="n">serializers</span><span class="o">.</span><span class="n">ModelSerializer</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Pokemon 이미지 Serializer.&quot;&quot;&quot;</span>
+
 <div class="viewcode-block" id="PokemonImageSerializer.Meta"><a class="viewcode-back" href="../../../book.api.serializers.html#book.api.serializers.PokemonImageSerializer.Meta">[docs]</a>    <span class="k">class</span> <span class="nc">Meta</span><span class="p">:</span>
+        <span class="sd">&quot;&quot;&quot;Fields 설정.&quot;&quot;&quot;</span>
+
         <span class="n">model</span> <span class="o">=</span> <span class="n">PokemonImage</span>
         <span class="n">fields</span> <span class="o">=</span> <span class="p">(</span><span class="s2">&quot;url&quot;</span><span class="p">,</span> <span class="s2">&quot;title&quot;</span><span class="p">,</span> <span class="s2">&quot;original_label&quot;</span><span class="p">,</span> <span class="s2">&quot;classified&quot;</span><span class="p">)</span></div></div>
 
 
 <div class="viewcode-block" id="InstagramTextSerializer"><a class="viewcode-back" href="../../../book.api.serializers.html#book.api.serializers.InstagramTextSerializer">[docs]</a><span class="k">class</span> <span class="nc">InstagramTextSerializer</span><span class="p">(</span><span class="n">serializers</span><span class="o">.</span><span class="n">ModelSerializer</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;인스타그램 Text Serializer.&quot;&quot;&quot;</span>
+
 <div class="viewcode-block" id="InstagramTextSerializer.Meta"><a class="viewcode-back" href="../../../book.api.serializers.html#book.api.serializers.InstagramTextSerializer.Meta">[docs]</a>    <span class="k">class</span> <span class="nc">Meta</span><span class="p">:</span>
+        <span class="sd">&quot;&quot;&quot;Fields 설정.&quot;&quot;&quot;</span>
+
         <span class="n">model</span> <span class="o">=</span> <span class="n">PeopleImage</span>
         <span class="n">fields</span> <span class="o">=</span> <span class="p">(</span><span class="s2">&quot;title&quot;</span><span class="p">,)</span></div></div>
 
 
 <div class="viewcode-block" id="InstagramImageSerializer"><a class="viewcode-back" href="../../../book.api.serializers.html#book.api.serializers.InstagramImageSerializer">[docs]</a><span class="k">class</span> <span class="nc">InstagramImageSerializer</span><span class="p">(</span><span class="n">serializers</span><span class="o">.</span><span class="n">ModelSerializer</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;인스타그램 이미지 Serializer.&quot;&quot;&quot;</span>
+
 <div class="viewcode-block" id="InstagramImageSerializer.Meta"><a class="viewcode-back" href="../../../book.api.serializers.html#book.api.serializers.InstagramImageSerializer.Meta">[docs]</a>    <span class="k">class</span> <span class="nc">Meta</span><span class="p">:</span>
+        <span class="sd">&quot;&quot;&quot;Fields 설정.&quot;&quot;&quot;</span>
+
         <span class="n">model</span> <span class="o">=</span> <span class="n">PeopleImage</span>
         <span class="n">fields</span> <span class="o">=</span> <span class="p">(</span><span class="s2">&quot;url&quot;</span><span class="p">,</span> <span class="s2">&quot;selected&quot;</span><span class="p">)</span></div></div>
 </pre></div>
