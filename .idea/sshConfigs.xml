@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="SshConfigs">
+    <configs>
+      <sshConfig host="13.125.1.208" id="aa4f59e6-f70a-491d-9315-541bb0cbebd2" keyPath="C:\Users\paryoja\Downloads\seoul.pem" port="22" customName="aws" nameFormat="CUSTOM" username="ubuntu" />
+      <sshConfig host="13.67.47.175" id="0238873e-3220-41ce-8a22-1b2252b87844" keyPath="C:\Users\paryoja\Downloads\seoul.pem" port="22" customName="azure" nameFormat="CUSTOM" username="ubuntu" />
+      <sshConfig host="13.67.47.175" id="bf080d38-36d2-4a08-946d-65142a1f6be1" keyPath="C:\Users\paryoja\Downloads\seoul.pem" port="22" customName="azure" nameFormat="CUSTOM" username="ubuntu" />
+    </configs>
+  </component>
+</project>

@@ -12,7 +12,8 @@ services:
   celery: &celery
     env_file:
       - ./.envs/.local/.django
-      - ./.envs/.local/.postgres
+      - ./.envs/.production/.postgres
+#      - ./.envs/.local/.postgres
     depends_on:
       - rabbitmq
     build:
@@ -28,7 +29,8 @@ services:
     ports:
       - "38000:8000"
     command:
-      - /scripts/run_local.sh
+#      - /scripts/run_local.sh
+      - /scripts/run_local_without_migrate.sh
 
   flower:
     <<: *celery
