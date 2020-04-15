@@ -10,13 +10,29 @@ import urllib3
 from book import models
 from bs4 import BeautifulSoup
 from celery import shared_task
+from django.conf import settings
 from django.db import models as dj_models
 from django.forms.models import model_to_dict
 from django.http import HttpResponse, HttpResponseBadRequest, JsonResponse
+from elasticsearch import Elasticsearch
 
 logger = logging.getLogger(__name__)
 
 a_pattern = re.compile('<a href="(.+?)">(.+?)</a>')
+
+client = Elasticsearch(
+    hosts=[{"host": settings.ELASTICSEARCH_IP, "port": settings.ELASTICSEARCH_PORT}]
+)
+
+
+def elasticsearch(request):
+    """Query elastic search."""
+    query = request.POST.get("query")
+    result = client.search(
+        index="namu_wiki_analysis", body={"query": {"match": {"title": query}}},
+    )
+
+    return JsonResponse(result)
 
 
 class Domain:

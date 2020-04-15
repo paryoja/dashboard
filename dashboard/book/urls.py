@@ -3,7 +3,7 @@
 from django.urls import path
 
 from . import views_user
-from .views import krx, people, views, views_api, views_class
+from .views import krx, people, views_api, views_class, views_function
 
 app_name = "book"
 
@@ -21,17 +21,21 @@ urlpatterns += [
 
 # Pokemon
 urlpatterns += [
-    path("pokemon/", views.pokemon, name="pokemon_classification"),
-    path("pokemon/<int:page>", views.pokemon, name="pokemon_classification"),
-    path("pokemon_result/", views.pokemon_result, name="pokemon_result"),
-    path("pokemon_result/<int:page>", views.pokemon_result, name="pokemon_result"),
-    path("pokemon/sorted/", views.pokemon_sorted, name="pokemon_sorted"),
+    path("pokemon/", views_function.pokemon, name="pokemon_classification"),
+    path("pokemon/<int:page>", views_function.pokemon, name="pokemon_classification"),
+    path("pokemon_result/", views_function.pokemon_result, name="pokemon_result"),
+    path(
+        "pokemon_result/<int:page>",
+        views_function.pokemon_result,
+        name="pokemon_result",
+    ),
+    path("pokemon/sorted/", views_function.pokemon_sorted, name="pokemon_sorted"),
     path(
         "pokemon_export/<str:classified>/<int:page>",
-        views.pokemon_export,
+        views_function.pokemon_export,
         name="pokemon_export",
     ),
-    path("pokemon/relabel", views.pokemon_relabel, name="pokemon_relabel"),
+    path("pokemon/relabel", views_function.pokemon_relabel, name="pokemon_relabel"),
     path(
         "pokemon/classification_api",
         views_api.pokemon_classification_api,
@@ -41,13 +45,13 @@ urlpatterns += [
 
 # Corona
 urlpatterns += [
-    path("corona", views.corona, name="corona"),
+    path("corona", views_function.corona, name="corona"),
 ]
 
 # Chatbot
 urlpatterns += [
     path("chatbot/", views_class.ChatbotTemplateView.as_view(), name="chatbot"),
-    path("query_chatbot/", views.query_chatbot, name="query_chatbot"),
+    path("query_chatbot/", views_function.query_chatbot, name="query_chatbot"),
     path("query/", views_class.QueryView.as_view(), name="query"),
 ]
 
@@ -64,11 +68,15 @@ urlpatterns += [
         views_class.LeadingStockTemplateView.as_view(),
         name="leading_stocks",
     ),
-    path("investment/currency_change/", views.currency_change, name="currency_change"),
+    path(
+        "investment/currency_change/",
+        views_function.currency_change,
+        name="currency_change",
+    ),
     path("investment/krx_price_query/", krx.krx_price_query, name="krx_price_query"),
-    path("real_estate/", views.real_estate, name="real_estate"),
-    path("lotto/", views.lotto, name="lotto"),
-    path("export_lotto/", views.export_lotto, name="export_lotto"),
+    path("real_estate/", views_function.real_estate, name="real_estate"),
+    path("lotto/", views_function.lotto, name="lotto"),
+    path("export_lotto/", views_function.export_lotto, name="export_lotto"),
     path(
         "recommend_book/",
         views_class.RecommendBookListView.as_view(),
@@ -78,9 +86,9 @@ urlpatterns += [
 
 # ETC
 urlpatterns += [
-    path("food/", views.food, name="food"),
+    path("food/", views_function.food, name="food"),
     path("wine/", views_class.WineListView.as_view(), name="wine",),
-    path("law_search/", views.law_search, name="law_search"),
+    path("law_search/", views_function.law_search, name="law_search"),
     path("todo/", views_class.TodoTemplateView.as_view(), name="todo"),
     path("idea/", views_class.IdeaTemplateView.as_view(), name="idea"),
 ]
@@ -101,7 +109,7 @@ urlpatterns += [
         name="people_high_expectation",
     ),
     path("people/people_links/", people.people_links, name="people_links"),
-    path("people/relabel", views.relabel, name="people_relabel"),
+    path("people/relabel", views_function.relabel, name="people_relabel"),
     path(
         "people/classification_api",
         views_api.people_classification_api,
@@ -112,12 +120,17 @@ urlpatterns += [
 
 # Image api
 urlpatterns += [
-    path("add_image/", views.image, name="add_image"),
-    path("add_image/<str:data_type>", views.image, name="add_image"),
-    path("add_user/", views.add_user, name="add_user"),
+    path("add_image/", views_function.image, name="add_image"),
+    path("add_image/<str:data_type>", views_function.image, name="add_image"),
+    path("add_user/", views_function.add_user, name="add_user"),
     path("image/api/<str:method>", views_api.image, name="image"),
     path("image/api/<str:method>/<str:image_type>", views_api.image, name="image"),
     path("rating/api", views_api.set_rating, name="rating_api"),
+]
+
+# Elasticsearch api
+urlpatterns += [
+    path("elasticsearch/", views_api.elasticsearch, name="elasticsearch"),
 ]
 
 # session

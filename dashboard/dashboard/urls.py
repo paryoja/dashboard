@@ -19,7 +19,7 @@ from django.shortcuts import redirect
 from django.urls import include, path, reverse
 from django.views import defaults as default_views
 
-handler500 = "book.views.views.server_error_page"
+handler500 = "book.views.views_function.server_error_page"
 
 
 def simple_redirect(_):

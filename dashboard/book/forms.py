@@ -22,6 +22,6 @@ class QueryForm(forms.Form):
 
     query = forms.CharField(label="Query")
     helper = FormHelper()
-    helper.add_input(Submit("submit", "Submit", css_class="btn-primary"))
+    helper.add_input(Submit("submit", "Submit"))
 
     helper.form_method = "POST"
