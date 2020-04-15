@@ -529,3 +529,10 @@ def relabel(request):
     render_dict["query"] = query
 
     return render(request, "book/people/people_relabel.html", render_dict)
+
+
+def server_error_page(request):
+    """Error page for 500 error."""
+    response = render(request, "book/error/500.html")
+    response.status_code = 500
+    return response

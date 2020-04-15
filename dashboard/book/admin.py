@@ -1,5 +1,6 @@
 """Book Admin."""
 from django.contrib import admin
+from django.utils.safestring import mark_safe
 
 from . import models
 
@@ -88,7 +89,15 @@ class ImageAdmin(admin.ModelAdmin):
 class PeopleImageAdmin(admin.ModelAdmin):
     """인스타 이미지 정보."""
 
-    list_display = ("url", "title", "selected")
+    readonly_fields = ["insta_image"]
+
+    list_display = ("id", "user_id", "title", "selected", "insta_image", "url")
+    list_editable = ("selected",)
+    list_filter = ("selected", "user_id")
+
+    def insta_image(self, obj):
+        """Add image add for admin page."""
+        return mark_safe(f'<img src="{obj.url}"/>')
 
 
 @admin.register(models.PokemonImage)

@@ -1,0 +1,7 @@
+{% extends 'book/base/base.html' %}
+{% load crispy_forms_tags %}
+
+{% block body %}
+  <H1>Hello {{ current_page }}</H1>
+  {% crispy form %}
+{% endblock %}

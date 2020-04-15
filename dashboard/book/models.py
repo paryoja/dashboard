@@ -198,6 +198,11 @@ class PokemonRating(models.Model):
 class Currency(models.Model):
     """환전 내역."""
 
+    class Meta:
+        """Meta data for currency."""
+
+        verbose_name_plural = "Currencies"
+
     class CurrencyChoices(models.TextChoices):
         """환전."""
 

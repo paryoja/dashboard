@@ -99,9 +99,21 @@
         "description": "코로나"
       },
       {
-        "template": "chatbot",
-        "icon": "fa fa-comment",
-        "description": "챗봇"
+        "collection": "sbNLG",
+        "icon": "fa fa-language",
+        "description": "자연어분석",
+        "child_info": [
+          {
+            "template": "chatbot",
+            "icon": "fa fa-robot",
+            "description": "챗봇"
+          },
+          {
+            "template": "query",
+            "icon": "fa fa-comment",
+            "description": "문장분석"
+          }
+        ]
       },
       {
         "collection": "sbLink",
@@ -265,6 +277,20 @@
         "icon": "fa fa-cog",
         "description": "API",
         "should_superuser": true
+      },
+      {
+        "collection": "sbLocal",
+        "icon": "fa fa-igloo",
+        "description": "Home Services",
+        "should_superuser": true,
+        "child_info": [
+          {
+            "template": "http://paryoja.asuscomm.com:15601/",
+            "external": true,
+            "icon": "fa fa-chart-bar",
+            "description": "Kibana"
+          }
+        ]
       },
       {
         "collection": "sbCloud",

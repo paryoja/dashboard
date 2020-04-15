@@ -283,40 +283,30 @@ def pokemon_classification_api(request) -> HttpResponse:
 
 def get_image_directory_list(data_type, url, a_parsed) -> list:
     """이미지 directory 정보 파싱."""
-    if data_type == "people":
-        json_url = url + a_parsed[0][0] + "/image.json"
-        image_list_text = requests.get(json_url).text
-        try:
-            result = json.loads(image_list_text)["image_list"]
-        except json.JSONDecodeError as e:
-            print(json_url)
-            print(image_list_text)
-            raise Exception(f"{json_url} {image_list_text} {e}")
+    directory_url = url + a_parsed[0][0]
+    image_result = requests.get(directory_url)
+    bs = BeautifulSoup(image_result.text, "html.parser")
 
-    elif data_type == "pokemon":
-        directory_url = url + a_parsed[0][0]
-        image_result = requests.get(directory_url)
-        bs = BeautifulSoup(image_result.text, "html.parser")
-
-        all_a = bs.findAll("a", text=True)
-        result = []
-        for a in all_a:
-            image_a_parsed = a_pattern.findall("{}".format(a))
-            logger.info(image_a_parsed)
-            if not image_a_parsed[0][0].startswith("../"):
-                result.append(directory_url + image_a_parsed[0][0])
-
-    else:
-        raise ValueError("Unsupported data_type {}".format(data_type))
+    all_a = bs.findAll("a", text=True)
+    result = []
+    for a in all_a:
+        image_a_parsed = a_pattern.findall("{}".format(a))
+        logger.info(image_a_parsed)
+        if not image_a_parsed[0][0].startswith("../"):
+            result.append(directory_url + image_a_parsed[0][0])
 
     return result
 
 
 @shared_task
-def add_image_client(a_text, url, category_id, data_type) -> None:
+def add_image_client(
+    a_text, url, category_id, data_type
+) -> typing.Tuple[int, int, str]:
     """이미지 등록 API."""
     a_parsed = a_pattern.findall(a_text)
-
+    tried = 0
+    success = 0
+    exception = ""
     if not a_parsed[0][0].startswith("../"):
         result = get_image_directory_list(data_type, url, a_parsed)
         for img in result:
@@ -339,8 +329,12 @@ def add_image_client(a_text, url, category_id, data_type) -> None:
                 else:
                     raise ValueError("Unsupported data_type {}".format(data_type))
                 image_obj.save()
-            except Exception:
+                success += 1
+            except Exception as e:
+                exception = str(e)
                 continue
+        tried = len(result)
+    return tried, success, exception
 
 
 @shared_task

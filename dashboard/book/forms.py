@@ -1,5 +1,8 @@
 """Forms for book package."""
 
+from crispy_forms.helper import FormHelper
+from crispy_forms.layout import Submit
+from django import forms
 from django.contrib.auth.forms import AuthenticationForm
 from django.contrib.auth.models import User
 
@@ -12,3 +15,13 @@ class LoginForm(AuthenticationForm):
 
         model = User
         fields = ["username", "password"]
+
+
+class QueryForm(forms.Form):
+    """Sentence Query Form."""
+
+    query = forms.CharField(label="Query")
+    helper = FormHelper()
+    helper.add_input(Submit("submit", "Submit", css_class="btn-primary"))
+
+    helper.form_method = "POST"
