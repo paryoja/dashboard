@@ -6,7 +6,7 @@ django-extensions==2.2.9  # https://github.com/django-extensions/django-extensio
 django-debug-toolbar==2.2
 
 # linting
-pylint_django==2.0.14
+pylint_django==2.0.15
 pylint_celery==0.3
 flake8==3.7.9
 flake8-isort==2.9.1  # https://github.com/gforcada/flake8-isort
