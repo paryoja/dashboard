@@ -135,8 +135,21 @@ class QueryView(TemplateView, CurrentPageMixin):
         return context
 
 
-class RLView(TemplateView, CurrentPageMixin):
+class RLView(ListView, CurrentPageMixin):
     """Reinforcement Learning View."""
 
+    queryset = models.Lecture.objects.filter(
+        class_name=models.Lecture.LectureClassChoices.RL
+    ).order_by("-number")
     current_page = "reinforcement"
     template_name = "book/study/reinforcement.html"
+
+
+class NLPView(ListView, CurrentPageMixin):
+    """Natural Language Processing View."""
+
+    queryset = models.Lecture.objects.filter(
+        class_name=models.Lecture.LectureClassChoices.NLP
+    ).order_by("-number")
+    current_page = "nlp"
+    template_name = "book/study/nlp.html"

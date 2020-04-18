@@ -132,3 +132,10 @@ class PokemonRatingAdmin(admin.ModelAdmin):
     """포켓몬 분류 정보."""
 
     raw_id_fields = ("image",)
+
+
+@admin.register(models.Lecture)
+class LectureAdmin(admin.ModelAdmin):
+    """강의 정보."""
+
+    list_display = ("title", "status", "class_name", "number")

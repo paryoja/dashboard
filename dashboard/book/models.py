@@ -280,3 +280,31 @@ class TodoItem(models.Model):
 
     def __str__(self):
         return self.title
+
+
+class Lecture(models.Model):
+    """강의 정보."""
+
+    class LectureStatusChoices(models.TextChoices):
+        """강의 수강 정보의 status."""
+
+        DONE = "Done", _("Done")
+        TODO = "Todo", _("Todo")
+        IN_PROGRESS = "In Progress", _("In Progress")
+
+    class LectureClassChoices(models.TextChoices):
+        """강의 클래스."""
+
+        RL = "Reinforcement Learning", _("RL")
+        NLP = "Natural Language Processing", _("NLP")
+
+    title = models.CharField(max_length=100)
+    status = models.CharField(
+        choices=LectureStatusChoices.choices,
+        max_length=20,
+        default=LectureStatusChoices.TODO,
+    )
+    class_name = models.CharField(max_length=40, choices=LectureClassChoices.choices)
+    number = models.IntegerField()
+    video = models.URLField()
+    lecture_note = models.URLField()

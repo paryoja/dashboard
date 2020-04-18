@@ -29,7 +29,12 @@
           {
             "template": "reinforcement",
             "icon": "fa fa-chess-knight",
-            "description": "강화학습"
+            "description": "강화학습 (CS234)"
+          },
+          {
+            "template": "nlp",
+            "icon": "fa fa-comment-dots",
+            "description": "자연어처리 (CS224)"
           }
         ]
       },
