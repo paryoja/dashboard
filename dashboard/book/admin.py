@@ -4,9 +4,15 @@ from django.utils.safestring import mark_safe
 
 from . import models
 
-admin.site.register(models.TodoItem)
 admin.site.register(models.Category)
 admin.site.register(models.Wine)
+
+
+@admin.register(models.TodoItem)
+class TodoAdmin(admin.ModelAdmin):
+    """할일 정리."""
+
+    list_display = ("title", "status")
 
 
 @admin.register(models.Paper)

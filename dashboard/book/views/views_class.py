@@ -85,9 +85,10 @@ class LeadingStockTemplateView(TemplateView, CurrentPageMixin):
     template_name = "book/investment/leading_stocks.html"
 
 
-class TodoTemplateView(TemplateView, CurrentPageMixin):
+class TodoTemplateView(ListView, CurrentPageMixin):
     """할일 정보."""
 
+    model = models.TodoItem
     current_page = "todo"
     template_name = "book/todo.html"
 
@@ -132,3 +133,10 @@ class QueryView(TemplateView, CurrentPageMixin):
 
         context["form"] = forms.QueryForm()
         return context
+
+
+class RLView(TemplateView, CurrentPageMixin):
+    """Reinforcement Learning View."""
+
+    current_page = "reinforcement"
+    template_name = "book/study/reinforcement.html"

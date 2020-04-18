@@ -102,7 +102,7 @@ def people_high_expectation(request):
 
     selected_list = models.Rating.objects.filter(
         image__selected=None, deep_model__latest=True
-    )
+    ).select_related("image")
     render_dict["unclassified_count"] = selected_list.count()
 
     if query:

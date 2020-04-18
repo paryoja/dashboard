@@ -53,6 +53,7 @@ urlpatterns += [
     path("chatbot/", views_class.ChatbotTemplateView.as_view(), name="chatbot"),
     path("query_chatbot/", views_function.query_chatbot, name="query_chatbot"),
     path("query/", views_class.QueryView.as_view(), name="query"),
+    path("reinforcement/", views_class.RLView.as_view(), name="reinforcement"),
 ]
 
 # Link

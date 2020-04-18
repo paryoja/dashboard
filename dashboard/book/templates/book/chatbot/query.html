@@ -2,7 +2,7 @@
 {% load crispy_forms_tags %}
 
 {% block body %}
-  <H1>Hello {{ current_page }}</H1>
+  <H1>ES 질의</H1>
   {% crispy form %}
   <div id="elasticsearch"></div>
 {% endblock %}
@@ -10,6 +10,24 @@
 {% block scripts %}
   <script src="https://cdn.jsdelivr.net/npm/js-cookie@2/src/js.cookie.min.js"></script>
   <script>
+    function make_table(data) {
+      let html = '<table class="table table-hover"><thead><tr>'
+
+      for (let head in data[0]["_source"]) {
+        html += `<th>${head}</th>`
+      }
+      html += "</tr></thead><tbody>"
+      for (let row in data) {
+        html += "<tr>"
+        for (let col in data[row]["_source"]) {
+          html += `<td>${data[row]["_source"][col]}</td>`
+        }
+        html += "</tr>"
+      }
+      html += "</tbody></table>"
+      return html
+    }
+
     $("#submit-id-submit").click(function (e) {
       e.stopPropagation();
       e.preventDefault();
@@ -24,11 +42,14 @@
         method: 'POST',
         body: data,
         credentials: 'same-origin'
+      }).then(function (response) {
+        return response.json()
+      }).then(function (response) {
+        let result = make_table(response['hits']['hits'])
+        console.log(result);
+        $('#elasticsearch').html(result)
+        console.log(response)
       })
-              .then(function (response) {
-                $('#elasticsearch').text(response)
-                console.log(response)
-              })
 
     });
   </script>

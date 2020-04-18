@@ -49,11 +49,11 @@ def currency_change(request):
     return render(request, "book/investment/currency_change.html", render_dict)
 
 
-def export_lotto(request):
+def export_lotto(_):
     """
     로또 정보 Export.
 
-    :param request:
+    :param _: Placeholder for request
     :return:
     """
     max_object = models.Lotto.objects.order_by("-draw_number")[0]
@@ -398,7 +398,7 @@ def pokemon_result(request, page=1):
 
 
 @login_required
-def pokemon_export(request, classified="yes", page=1):
+def pokemon_export(_, classified="yes", page=1):
     """포켓몬 분류 결과 출력."""
     count = 1000
     image_list = models.PokemonImage.objects.filter(classified=classified)

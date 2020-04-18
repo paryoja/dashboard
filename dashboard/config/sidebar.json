@@ -25,6 +25,11 @@
             "template": "colab",
             "icon": "fa fa-file-code",
             "description": "실습자료"
+          },
+          {
+            "template": "reinforcement",
+            "icon": "fa fa-chess-knight",
+            "description": "강화학습"
           }
         ]
       },
@@ -170,6 +175,11 @@
         ]
       },
       {
+        "template": "algorithm",
+        "icon": "fa fa-brain",
+        "description": "알고리즘"
+      },
+      {
         "collection": "sbOther",
         "icon": "fe fe-star",
         "description": "그 외",
@@ -289,6 +299,12 @@
             "external": true,
             "icon": "fa fa-chart-bar",
             "description": "Kibana"
+          },
+          {
+            "template": "http://35.197.92.213:30080/",
+            "external": true,
+            "icon": "fa fa-chart-area",
+            "description": "Projector"
           }
         ]
       },
@@ -319,16 +335,24 @@
         ]
       },
       {
-        "template": "https://paryoja.github.io/dashboard/index.html",
-        "external": true,
-        "icon": "far fa-file-alt",
-        "description": "API Document"
-      },
-      {
-        "template": "https://paryoja.github.io/",
-        "external": true,
-        "icon": "fe fe-github",
-        "description": "Blog"
+        "collection": "sbDocument",
+        "icon": "fa fa-book",
+        "description": "Documents",
+        "should_superuser": false,
+        "child_info": [
+          {
+            "template": "https://paryoja.github.io/dashboard/index.html",
+            "external": true,
+            "icon": "far fa-file-alt",
+            "description": "API Document"
+          },
+          {
+            "template": "https://paryoja.github.io/",
+            "external": true,
+            "icon": "fe fe-github",
+            "description": "Blog"
+          }
+        ]
       },
       {
         "template": "https://github.com/paryoja/dashboard",

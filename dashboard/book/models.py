@@ -272,5 +272,11 @@ class TodoItem(models.Model):
         IN_PROGRESS = "In Progress", _("In Progress")
 
     title = models.CharField(max_length=100)
+    status = models.CharField(
+        choices=StatusChoices.choices, max_length=20, default=StatusChoices.TODO
+    )
     added_date = models.DateTimeField(auto_now_add=True)
     modified_date = models.DateTimeField(auto_now=True)
+
+    def __str__(self):
+        return self.title

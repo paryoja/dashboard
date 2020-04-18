@@ -1,34 +1,44 @@
 {% extends 'book/base/base.html' %}
 
 {% block body %}
-    <H1><i class="fa fa-check"></i> Todo List</H1>
-    <table class="table table-hover table-sm">
-        <thead>
-        <tr>
-            <th scope="col">Description</th>
-        </tr>
-        </thead>
-        <tbody>
-        <tr>
-            <td>DB 화</td>
-        </tr>
-        <tr>
-            <td>와인리스트 연동</td>
-        </tr>
-        <tr>
-            <td><strike>Nginx 연동</strike></td>
-        </tr>
-        <tr>
-            <td>맛집 날짜별 기록 기능, 지도 기능, 현위치에서 거리 기능</td>
-        </tr>
-        <tr>
-            <td><strike>Table hover 수정</strike></td>
-        </tr>
-        <tr>
-            <td>부동산 지도 기능</td>
-        </tr>
-        <tr>
-            <td>쇼핑 리스트</td>
-        </tr>
-        </tbody>
+  <H1><i class="fa fa-check"></i> Todo List</H1>
+  <table class="table table-hover table-sm">
+    <thead>
+    <tr>
+      <th scope="col">Description</th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr>
+      <td>DB 화</td>
+    </tr>
+    <tr>
+      <td>와인리스트 연동</td>
+    </tr>
+    <tr>
+      <td><strike>Nginx 연동</strike></td>
+    </tr>
+    <tr>
+      <td>맛집 날짜별 기록 기능, 지도 기능, 현위치에서 거리 기능</td>
+    </tr>
+    <tr>
+      <td><strike>Table hover 수정</strike></td>
+    </tr>
+    <tr>
+      <td>부동산 지도 기능</td>
+    </tr>
+    <tr>
+      <td>쇼핑 리스트</td>
+    </tr>
+    {% for obj in object_list %}
+      <tr>
+        <td>{% if obj.status == "Done" %}<strike>{% endif %}
+          {{ obj }}
+          {% if obj.status == "Done" %}</strike>{% endif %}
+        </td>
+      </tr>
+    {% endfor %}
+    </tbody>
+  </table>
+
 {% endblock %}

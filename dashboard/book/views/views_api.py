@@ -29,7 +29,11 @@ def elasticsearch(request):
     """Query elastic search."""
     query = request.POST.get("query")
     result = client.search(
-        index="namu_wiki_analysis", body={"query": {"match": {"title": query}}},
+        index="namu_wiki_analysis",
+        body={
+            "query": {"match": {"title": query}},
+            "_source": {"includes": ["title", "text"]},
+        },
     )
 
     return JsonResponse(result)
