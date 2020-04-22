@@ -19,7 +19,7 @@ mypy==0.770
 coverage==5.0.4  # https://github.com/nedbat/coveragepy
 
 # git pre-commit
-pre-commit==2.2.0
+pre-commit==2.3.0
 
 # documents
 Sphinx==3.0.0
