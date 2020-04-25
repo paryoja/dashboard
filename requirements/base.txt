@@ -32,3 +32,6 @@ whitenoise==5.0.1
 
 # elasticsearch
 elasticsearch==7.6.0
+
+# krx
+pykrx==0.1.18

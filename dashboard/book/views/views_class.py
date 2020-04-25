@@ -47,6 +47,14 @@ class WineListView(ListView, CurrentPageMixin):
     model = models.Wine
 
 
+class SavingsView(ListView, CurrentPageMixin):
+    """예적금 리스트."""
+
+    current_page = "savings"
+    template_name = "book/investment/savings.html"
+    model = models.Saving
+
+
 class RecommendBookListView(ListView, CurrentPageMixin):
     """책 정보 뷰."""
 

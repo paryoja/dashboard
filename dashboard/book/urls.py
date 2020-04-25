@@ -84,6 +84,7 @@ urlpatterns += [
         views_class.RecommendBookListView.as_view(),
         name="recommend_book",
     ),
+    path("savings/", views_class.SavingsView.as_view(), name="savings"),
 ]
 
 # ETC

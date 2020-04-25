@@ -1,5 +1,7 @@
 """Book Admin."""
 from django.contrib import admin
+from django.contrib.humanize.templatetags.humanize import intcomma
+from django.template.defaultfilters import floatformat
 from django.utils.safestring import mark_safe
 
 from . import models
@@ -74,7 +76,15 @@ class CurrencyAdmin(admin.ModelAdmin):
         ("To", {"fields": ["to_currency", "to_amount"]}),
         ("Rate", {"fields": ["currency_rate"]}),
     ]
-    list_display = ("date", "from_amount", "to_amount", "currency_rate")
+    list_display = ("date", "from_amount", "to_amount", "currency_rate", "rate")
+
+    def from_amount(self, obj):
+        """Format from_amount."""
+        return intcomma(floatformat(obj.from_amount))
+
+    def rate(self, obj):
+        """환율을 변환된 값으로 부터 계산한 값."""
+        return "%.2f" % (float(obj.from_amount) / float(obj.to_amount))
 
 
 @admin.register(models.DeepLearningModel)

@@ -7,6 +7,7 @@ from book.nav import get_render_dict
 from book.xml_helper import XmlDictConfig, get_xml_request
 from django.core import exceptions
 from django.shortcuts import render
+from pykrx import stock
 
 logger = logging.getLogger(__name__)
 
@@ -109,6 +110,12 @@ def krx_price_query(request):
         statement_result = get_xml_request(krx_statement_query_url.format(query))
         if statement_result:
             krx_statement(statement_result, render_dict)
+
+        df = stock.get_market_ohlcv_by_date("20200426", "20200426", query)
+        render_dict["market"] = df
+
+        ticker_name = stock.get_market_ticker_name(query)
+        render_dict["ticker_name"] = ticker_name
 
     stocks = models.Stock.objects.all().order_by("code")
     render_dict["stocks"] = stocks

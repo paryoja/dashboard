@@ -105,7 +105,7 @@
       },
       {
         "template": "corona",
-        "icon": "fa fa-exclamation-triangle",
+        "icon": "fa fa-biohazard",
         "description": "코로나"
       },
       {
@@ -176,6 +176,12 @@
             "template": "recommend_book",
             "icon": "fa fa-book",
             "description": "책"
+          },
+          {
+            "template": "savings",
+            "icon": "fa fa-piggy-bank",
+            "description": "예적금",
+            "should_superuser": true
           }
         ]
       },
