@@ -318,11 +318,55 @@ def get_image_directory_list(data_type, url, a_parsed) -> list:
     return result
 
 
+def get_image_meta(url) -> dict:
+    """이미지 meta 정보를 가지는 파일을 로드."""
+    response = requests.get(url)
+    return json.loads(response.text)
+
+
+def get_people_image_object(
+    img, result, category_id
+) -> typing.Optional[models.PeopleImage]:
+    """이미지 url로 부터 이미지 object를 생성."""
+    if img.endswith(".jpg"):
+        meta_path = img + ".json"
+
+        if meta_path in result:
+            # load meta data
+            meta = get_image_meta(meta_path)
+            try:
+                title = meta["edge_media_to_caption"]["edges"][0]["text"]
+            except (KeyError, IndexError):
+                title = ""
+            try:
+                page = f"/p/{meta['shortcode']}"
+            except KeyError:
+                page = ""
+        else:
+            meta = None
+            title = ""
+            page = ""
+
+        image_obj = models.PeopleImage(
+            url=img, title=title, category_id=category_id, page=page, meta=meta,
+        )
+        return image_obj
+    return None
+
+
 @shared_task
 def add_image_client(
     a_text, url, category_id, data_type
 ) -> typing.Tuple[int, int, str]:
-    """이미지 등록 API."""
+    """
+    이미지 등록 API.
+
+    :param a_text: 이미지 포함 directory
+    :param url:
+    :param category_id:
+    :param data_type:
+    :return:
+    """
     a_parsed = a_pattern.findall(a_text)
     tried = 0
     success = 0
@@ -332,12 +376,7 @@ def add_image_client(
         for img in result:
             try:
                 if data_type == "people":
-                    image_obj = models.PeopleImage(
-                        url=url + a_parsed[0][0] + img["local"],
-                        title=img["alt"][:500],
-                        category_id=category_id,
-                        page=img["a"],
-                    )
+                    image_obj = get_people_image_object(img, result, category_id)
                 elif data_type == "pokemon":
                     path = img.split("/")
                     image_obj = models.PokemonImage(
@@ -348,11 +387,12 @@ def add_image_client(
                     )
                 else:
                     raise ValueError("Unsupported data_type {}".format(data_type))
-                image_obj.save()
-                success += 1
+                if image_obj:
+                    image_obj.save()
+                    success += 1
             except Exception as e:
                 exception = str(e)
-                continue
+                raise Exception(exception)
         tried = len(result)
     return tried, success, exception
 

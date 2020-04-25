@@ -1,8 +1,17 @@
 """Book 모델."""
 
+import math
+
 from django.contrib.postgres import fields
 from django.db import models
 from django.utils.translation import gettext_lazy as _
+
+
+class CurrencyChoices(models.TextChoices):
+    """환전 또는 주식 거래에서 사용할 통화 목록."""
+
+    USD = "USD", _("USD")
+    KRW = "KRW", _("KRW")
 
 
 class Link(models.Model):
@@ -63,11 +72,25 @@ class Book(models.Model):
 class Category(models.Model):
     """이미지 카테고리."""
 
+    class Meta:
+        """Meta data for category."""
+
+        verbose_name_plural = "Categories"
+
     name = models.CharField(max_length=200)
 
     def __str__(self):
         """이미지 카테고리명."""
         return str(self.name)
+
+
+class StockTrade(models.Model):
+    """주식 매매내역."""
+
+    stock = models.ForeignKey(Stock, on_delete=models.CASCADE)
+    trade_date = models.DateField()
+    trade_amount = models.IntegerField()
+    currency = models.CharField(choices=CurrencyChoices.choices, max_length=10)
 
 
 class PeopleImage(models.Model):
@@ -81,6 +104,7 @@ class PeopleImage(models.Model):
     page = models.CharField(max_length=30)
     selected = models.BooleanField(null=True, blank=True)
     user_id = models.CharField(max_length=20)
+    meta = fields.JSONField(null=True, blank=True)
     content_parsed = models.BooleanField(null=True, blank=True, default=None)
 
     def get_user_id(self):
@@ -203,12 +227,6 @@ class Currency(models.Model):
 
         verbose_name_plural = "Currencies"
 
-    class CurrencyChoices(models.TextChoices):
-        """환전."""
-
-        USD = "USD", _("USD")
-        KRW = "KRW", _("KRW")
-
     date = models.DateField()
     from_currency = models.CharField(
         max_length=10, choices=CurrencyChoices.choices, default=CurrencyChoices.KRW
@@ -308,3 +326,70 @@ class Lecture(models.Model):
     number = models.IntegerField()
     video = models.URLField()
     lecture_note = models.URLField()
+
+
+class News(models.Model):
+    """뉴스 수집용."""
+
+    title = models.CharField(max_length=200)
+    source = models.CharField(max_length=100)
+    meta = fields.JSONField()
+
+
+class Bank(models.Model):
+    """은행."""
+
+    name = models.CharField(max_length=40)
+
+    def __str__(self):
+        return str(self.name)
+
+
+class Saving(models.Model):
+    """적금 계좌."""
+
+    date = models.DateField()
+    bank = models.ForeignKey(Bank, on_delete=models.CASCADE)
+    account_number = models.CharField(max_length=100)
+    principal = models.IntegerField()
+    interest = models.IntegerField()
+    is_tax_exemption = models.BooleanField()
+    range = models.IntegerField(default=12)
+
+    @property
+    def interest_rate(self):
+        """이자율."""
+        return float(self.interest) / float(self.principal)
+
+    @property
+    def tax_rate(self):
+        """세율."""
+        if self.is_tax_exemption:
+            return 0.014
+        else:
+            return 0.154
+
+    @property
+    def tax(self):
+        """세금."""
+        return math.floor(float(self.interest) * self.tax_rate)
+
+    @property
+    def interest_minus_tax(self):
+        """세금 제외 이자."""
+        return self.interest - self.tax
+
+    @property
+    def payment(self):
+        """실지금액."""
+        return self.principal + self.interest_minus_tax
+
+    @property
+    def interest_rate_minus_tax(self):
+        """실지급 기준 이자율."""
+        return self.interest_minus_tax / float(self.principal)
+
+    @property
+    def interest_rate_per_year(self):
+        """연환산 이자율."""
+        return math.pow(1.0 + self.interest_rate_minus_tax, 1.0 / self.range * 12) - 1.0

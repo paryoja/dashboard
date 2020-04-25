@@ -31,4 +31,4 @@ class InstagramImageSerializer(serializers.ModelSerializer):
         """Fields 설정."""
 
         model = PeopleImage
-        fields = ("url", "selected")
+        fields = "__all__"

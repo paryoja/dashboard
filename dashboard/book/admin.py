@@ -139,3 +139,40 @@ class LectureAdmin(admin.ModelAdmin):
     """강의 정보."""
 
     list_display = ("title", "status", "class_name", "number")
+
+
+@admin.register(models.Bank)
+class BankAdmin(admin.ModelAdmin):
+    """은행 정보."""
+
+    list_display = ("name",)
+
+
+@admin.register(models.Saving)
+class SavingAdmin(admin.ModelAdmin):
+    """적금 정보."""
+
+    list_display = (
+        "date",
+        "bank",
+        "account_number",
+        "principal",
+        "interest",
+        "interest_rate",
+        "tax",
+        "payment",
+        "interest_minus_tax",
+        "interest_rate_per_year",
+    )
+
+    def interest_rate(self, obj):
+        """이자율 포맷."""
+        return "%.2f%%" % (obj.interest_rate * 100)
+
+    def interest_rate_minus_tax(self, obj):
+        """실이자율 포맷."""
+        return "%.2f%%" % (obj.interest_rate_minus_tax * 100)
+
+    def interest_rate_per_year(self, obj):
+        """연환산 이자율 포맷."""
+        return "%.2f%%" % (obj.interest_rate_per_year * 100)
