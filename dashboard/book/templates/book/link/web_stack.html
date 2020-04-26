@@ -1,6 +1,21 @@
 {% extends 'book/base/base.html' %}
 
 {% block body %}
-<H1>Hello Link</H1>
-
+  <H1>Webstack</H1>
+  <table class="table table-hover">
+    <thead>
+    <tr>
+      <th>Name</th>
+      <th>Link</th>
+    </tr>
+    </thead>
+    <tbody>
+    {% for obj in object_list %}
+      <tr>
+        <td>{{ obj.description }}</td>
+        <td>{{ obj.url }}</td>
+      </tr>
+    {% endfor %}
+    </tbody>
+  </table>
 {% endblock %}

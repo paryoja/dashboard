@@ -1,0 +1,21 @@
+{% extends 'book/base/base.html' %}
+
+{% block body %}
+  <H1>Hello {{ current_page }}</H1>
+  <table>
+    <thead>
+    <tr>
+      <th>Date</th>
+      <th>Principal</th>
+    </tr>
+    </thead>
+    <tbody>
+    {% for obj in objects %}
+      <tr>
+        <td>{{ obj.date }}</td>
+        <td>{{ obj.principal }}</td>
+      </tr>
+    {% endfor %}
+    </tbody>
+  </table>
+{% endblock %}

@@ -111,8 +111,8 @@ def krx_price_query(request):
         if statement_result:
             krx_statement(statement_result, render_dict)
 
-        df = stock.get_market_ohlcv_by_date("20200426", "20200426", query)
-        render_dict["market"] = df
+        # df = stock.get_market_ohlcv_by_date("20200426", "20200426", query)
+        # render_dict["market"] = df
 
         ticker_name = stock.get_market_ticker_name(query)
         render_dict["ticker_name"] = ticker_name

@@ -41,6 +41,8 @@ class Stock(models.Model):
 
     code = models.CharField(max_length=10)
     name = models.CharField(max_length=30)
+    is_etf = models.BooleanField(default=False)
+    price_list = fields.JSONField(null=True, blank=True)
 
 
 class Paper(models.Model):
@@ -354,6 +356,7 @@ class Saving(models.Model):
     principal = models.IntegerField()
     interest = models.IntegerField()
     is_tax_exemption = models.BooleanField()
+    is_deposit = models.BooleanField(default=False)
     range = models.IntegerField(default=12)
 
     @property
@@ -393,3 +396,16 @@ class Saving(models.Model):
     def interest_rate_per_year(self):
         """연환산 이자율."""
         return math.pow(1.0 + self.interest_rate_minus_tax, 1.0 / self.range * 12) - 1.0
+
+
+class MomentumSummary(models.Model):
+    """모멘텀 투자 매달 정보."""
+
+    date = models.DateField()
+
+
+class MomentumItem(models.Model):
+    """모멘텀 투자 투자 계획."""
+
+    summary = models.ForeignKey(MomentumSummary, on_delete=models.CASCADE)
+    item = models.ForeignKey(Stock, on_delete=models.CASCADE)

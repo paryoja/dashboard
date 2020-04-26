@@ -2,3 +2,6 @@
 !.coveragerc
 !.env
 !.pylintrc
+!venv2
+!venv
+!log

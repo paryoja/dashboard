@@ -2,6 +2,7 @@
 from typing import Any, Dict
 
 from book import forms, models
+from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
 from django.views.generic import ListView, TemplateView
 from django.views.generic.base import ContextMixin
 
@@ -47,12 +48,34 @@ class WineListView(ListView, CurrentPageMixin):
     model = models.Wine
 
 
-class SavingsView(ListView, CurrentPageMixin):
+class SavingsView(ListView, CurrentPageMixin, LoginRequiredMixin, UserPassesTestMixin):
     """예적금 리스트."""
 
     current_page = "savings"
     template_name = "book/investment/savings.html"
-    model = models.Saving
+    queryset = models.Saving.objects.order_by("-date")
+
+    def test_func(self):
+        """Check whether user is superuser or not."""
+        return self.request.user.is_superuser
+
+
+class MomentumView(ListView, CurrentPageMixin, LoginRequiredMixin, UserPassesTestMixin):
+    """모멘텀 투자 정보 리스트."""
+
+    current_page = "momentum"
+    template_name = "book/investment/momentum.html"
+    queryset = models.MomentumSummary.objects.order_by("-date")
+
+    def test_func(self):
+        """Check whether user is superuser or not."""
+        return self.request.user.is_superuser
+
+    def get_context_data(self, **kwargs: Any) -> Dict[str, Any]:
+        """Form 을 context 에 추가."""
+        context = super().get_context_data(**kwargs)
+
+        return context
 
 
 class RecommendBookListView(ListView, CurrentPageMixin):

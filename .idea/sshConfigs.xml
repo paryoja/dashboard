@@ -4,7 +4,7 @@
     <configs>
       <sshConfig host="13.125.1.208" id="aa4f59e6-f70a-491d-9315-541bb0cbebd2" keyPath="C:\Users\paryoja\Downloads\seoul.pem" port="22" customName="aws" nameFormat="CUSTOM" username="ubuntu" />
       <sshConfig host="13.67.47.175" id="0238873e-3220-41ce-8a22-1b2252b87844" keyPath="C:\Users\paryoja\Downloads\seoul.pem" port="22" customName="azure" nameFormat="CUSTOM" username="ubuntu" />
-      <sshConfig host="13.67.47.175" id="d8dd2ba7-edfa-4e26-889e-7315d6c5d7b5" keyPath="C:\Users\paryoja\Downloads\seoul.pem" port="22" customName="azure" nameFormat="CUSTOM" username="ubuntu" />
+      <sshConfig host="13.67.47.175" id="44b4d793-a4ce-4ddd-885a-eaaafbbfd5f0" keyPath="C:\Users\paryoja\Downloads\seoul.pem" port="22" customName="azure" nameFormat="CUSTOM" username="ubuntu" />
     </configs>
   </component>
 </project>

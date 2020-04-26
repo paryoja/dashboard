@@ -536,3 +536,9 @@ def server_error_page(request):
     response = render(request, "book/error/500.html")
     response.status_code = 500
     return response
+
+
+def research(request):
+    """연구."""
+    render_dict = get_render_dict("research")
+    return render(request, "book/research.html", render_dict)

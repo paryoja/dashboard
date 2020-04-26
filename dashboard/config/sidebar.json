@@ -109,6 +109,11 @@
         "description": "코로나"
       },
       {
+        "template": "research",
+        "icon": "fa fa-user-graduate",
+        "description": "연구"
+      },
+      {
         "collection": "sbNLG",
         "icon": "fa fa-language",
         "description": "자연어분석",
@@ -143,6 +148,32 @@
         ]
       },
       {
+        "collection": "sbBank",
+        "icon": "fa fa-money-check",
+        "description": "계좌",
+        "should_superuser": true,
+        "child_info": [
+          {
+            "template": "savings",
+            "icon": "fa fa-piggy-bank",
+            "description": "예적금",
+            "should_superuser": true
+          },
+          {
+            "template": "currency_change",
+            "icon": "fa fa-exchange-alt",
+            "description": "환전 내역",
+            "should_superuser": true
+          },
+          {
+            "template": "momentum",
+            "icon": "fa fa-chart-line",
+            "description": "모멘텀",
+            "should_superuser": true
+          }
+        ]
+      },
+      {
         "collection": "sbInvestment",
         "icon": "fe fe-dollar-sign",
         "description": "투자",
@@ -151,11 +182,6 @@
             "template": "leading_stocks",
             "icon": "fa fa-money-check-alt",
             "description": "Leading Stocks"
-          },
-          {
-            "template": "currency_change",
-            "icon": "fa fa-exchange-alt",
-            "description": "Currency History"
           },
           {
             "template": "krx_price_query",
@@ -176,12 +202,6 @@
             "template": "recommend_book",
             "icon": "fa fa-book",
             "description": "책"
-          },
-          {
-            "template": "savings",
-            "icon": "fa fa-piggy-bank",
-            "description": "예적금",
-            "should_superuser": true
           }
         ]
       },

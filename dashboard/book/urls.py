@@ -48,6 +48,11 @@ urlpatterns += [
     path("corona", views_function.corona, name="corona"),
 ]
 
+# Research
+urlpatterns += {
+    path("research", views_function.research, name="research"),
+}
+
 # Chatbot
 urlpatterns += [
     path("chatbot/", views_class.ChatbotTemplateView.as_view(), name="chatbot"),
@@ -63,17 +68,23 @@ urlpatterns += [
     path("link/", views_class.BookmarkListView.as_view(), name="link",),
 ]
 
+# Banking
+urlpatterns += [
+    path("savings/", views_class.SavingsView.as_view(), name="savings"),
+    path(
+        "investment/currency_change/",
+        views_function.currency_change,
+        name="currency_change",
+    ),
+    path("momentum/", views_class.MomentumView.as_view(), name="momentum"),
+]
+
 # Investment
 urlpatterns += [
     path(
         "investment/leading_stocks/",
         views_class.LeadingStockTemplateView.as_view(),
         name="leading_stocks",
-    ),
-    path(
-        "investment/currency_change/",
-        views_function.currency_change,
-        name="currency_change",
     ),
     path("investment/krx_price_query/", krx.krx_price_query, name="krx_price_query"),
     path("real_estate/", views_function.real_estate, name="real_estate"),
@@ -84,7 +95,6 @@ urlpatterns += [
         views_class.RecommendBookListView.as_view(),
         name="recommend_book",
     ),
-    path("savings/", views_class.SavingsView.as_view(), name="savings"),
 ]
 
 # ETC

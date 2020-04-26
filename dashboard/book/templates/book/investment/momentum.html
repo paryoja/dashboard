@@ -1,0 +1,39 @@
+{% extends 'book/base/base.html' %}
+
+{% block body %}
+  <H1>Hello {{ current_page }}</H1>
+  <form>
+    <label for="datePicker">기준 날짜</label>
+    <input type="date" value="" id="datePicker">
+    <input type="submit" class="btn btn-primary">
+  </form>
+  <table class="table table-hover">
+    <thead>
+    <tr>
+      <th>Date</th>
+      <th>Principal</th>
+    </tr>
+    </thead>
+    <tbody>
+    {% for obj in objects %}
+      <tr>
+        <td>{{ obj.date }}</td>
+        <td>{{ obj.principal }}</td>
+      </tr>
+    {% endfor %}
+    </tbody>
+  </table>
+{% endblock %}
+
+{% block scripts %}
+  <script>
+    Date.prototype.toDateInputValue = (function () {
+      var local = new Date(this);
+      local.setMinutes(this.getMinutes() - this.getTimezoneOffset());
+      return local.toJSON().slice(0, 10);
+    });
+    $(document).ready(function () {
+      $('#datePicker').val(new Date().toDateInputValue());
+    });
+  </script>
+{% endblock %}

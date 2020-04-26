@@ -42,7 +42,7 @@ class LottoAdmin(admin.ModelAdmin):
 class StockAdmin(admin.ModelAdmin):
     """주식 정보."""
 
-    list_display = ("code", "name")
+    list_display = ("code", "name", "is_etf")
 
 
 @admin.register(models.Link)
