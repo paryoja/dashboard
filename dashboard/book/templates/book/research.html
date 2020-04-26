@@ -1,21 +1,42 @@
 {% extends 'book/base/base.html' %}
 
 {% block body %}
-  <H1>Hello {{ current_page }}</H1>
-  <table>
-    <thead>
-    <tr>
-      <th>Date</th>
-      <th>Principal</th>
-    </tr>
-    </thead>
-    <tbody>
-    {% for obj in objects %}
-      <tr>
-        <td>{{ obj.date }}</td>
-        <td>{{ obj.principal }}</td>
-      </tr>
-    {% endfor %}
-    </tbody>
-  </table>
+  <p>논문 읽기 리스트</p>
+
+  <ul>
+    <li>새로운 구조
+      <ul>
+        <li><a href="https://arxiv.org/pdf/2003.04630.pdf" target="_blank">Lagrangian Neural Networks</a></li>
+      </ul>
+    </li>
+    <li>Pre-training 모델
+      <ul>
+        <li>
+          <a href="https://arxiv.org/pdf/1910.13461v1.pdf" target="_blank">
+            BART: Denoising Sequence-to-Sequence Pre-training for Natural Language Generation, Translation, and
+            Comprehension
+          </a>
+        </li>
+      </ul>
+    </li>
+    <li>Codes
+      <ul>
+        <li>
+          <a href="https://github.com/tensorflow/tensor2tensor">Tensor2tensor</a>
+        </li>
+      </ul>
+    </li>
+  </ul>
+
+  <p>아이디어</p>
+  <ul>
+    <li>단어를 일부러 빼고 그 위치조차 알려주지 않으면 어떨까?</li>
+
+  </ul>
+
+  <p>할일</p>
+  <ul>
+    <li>데이터 수집 및 정제</li>
+    <li>모델 구현</li>
+  </ul>
 {% endblock %}
