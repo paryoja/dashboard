@@ -22,5 +22,5 @@ coverage==5.0.4  # https://github.com/nedbat/coveragepy
 pre-commit==2.2.0
 
 # documents
-Sphinx==3.0.0
+Sphinx==3.0.3
 sphinx-rtd-theme==0.4.3
