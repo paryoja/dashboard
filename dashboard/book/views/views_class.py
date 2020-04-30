@@ -59,6 +59,23 @@ class SavingsView(ListView, CurrentPageMixin, LoginRequiredMixin, UserPassesTest
         """Check whether user is superuser or not."""
         return self.request.user.is_superuser
 
+    def get_context_data(self, **kwargs: Any) -> Dict[str, Any]:
+        """Form 을 context 에 추가."""
+        context = super().get_context_data(**kwargs)
+
+        chart_map = {}
+
+        for obj in self.queryset:
+            chart_map[obj.date] = chart_map.get(obj.date, 0) + obj.interest_minus_tax
+
+        chart_label = sorted([label for label in chart_map])
+        chart_amount = [chart_map[label] for label in chart_label]
+
+        context["chart_label"] = [label.strftime("%Y-%m-%d") for label in chart_label]
+        context["chart_amount"] = chart_amount
+
+        return context
+
 
 class MomentumView(ListView, CurrentPageMixin, LoginRequiredMixin, UserPassesTestMixin):
     """모멘텀 투자 정보 리스트."""

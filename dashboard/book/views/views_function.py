@@ -35,9 +35,17 @@ def currency_change(request):
     total_from = 0.0
     total_to = 0.0
 
+    chart_data = {}
+    chart_amount = {}
+
     for currency in currency_list:
         total_from += currency.from_amount
         total_to += currency.to_amount
+
+        chart_data[currency.date] = currency.currency_rate
+        chart_amount[currency.date] = (
+            chart_amount.get(currency.date, 0) + currency.to_amount
+        )
     if total_to != 0.0:
         total = {"from": total_from, "to": total_to, "rate": total_from / total_to}
     else:
@@ -45,6 +53,11 @@ def currency_change(request):
 
     render_dict["currency_list"] = currency_list
     render_dict["total"] = total
+
+    chart_label = sorted([label for label in chart_data])
+    render_dict["chart_label"] = [label.strftime("%Y-%m-%d") for label in chart_label]
+    render_dict["chart_data"] = [chart_data[label] for label in chart_label]
+    render_dict["chart_amount"] = [chart_amount[label] for label in chart_label]
 
     return render(request, "book/investment/currency_change.html", render_dict)
 

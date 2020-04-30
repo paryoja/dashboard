@@ -1,40 +1,102 @@
 {% extends 'book/base/base.html' %}
 {% block body %}
-    {% load humanize %}
+  {% load humanize %}
+  <div class="chart-container">
+    <canvas id="currencyChart" width="400" height="300"></canvas>
+  </div>
+  <table class="table table-sm table-striped">
+    <tr>
+      <th rowspan="2">Date</th>
+      <th colspan="2">From</th>
+      <th colspan="2">To</th>
+      <th></th>
+    </tr>
+    <tr>
+      <th>Amount</th>
+      <th>Currency</th>
+      <th>Amount</th>
+      <th>Currency</th>
+      <th>Rate</th>
+    </tr>
+    {% for currency in currency_list %}
+      <tr>
+        <td>{{ currency.date }}</td>
+        <td class="text-right">{{ currency.from_amount | floatformat:0 | intcomma }}</td>
+        <td>{{ currency.from_currency }}</td>
 
-    <table class="table table-sm table-striped">
-        <tr>
-            <th rowspan="2">Date</th>
-            <th colspan="2">From</th>
-            <th colspan="2">To</th>
-            <th></th>
-        </tr>
-        <tr>
-            <th>Amount</th>
-            <th>Currency</th>
-            <th>Amount</th>
-            <th>Currency</th>
-            <th>Rate</th>
-        </tr>
-        {% for currency in currency_list %}
-            <tr>
-                <td>{{ currency.date }}</td>
-                <td class="text-right">{{ currency.from_amount | floatformat:0 | intcomma }}</td>
-                <td>{{ currency.from_currency }}</td>
+        <td class="text-right">{{ currency.to_amount | floatformat:2 | intcomma }}</td>
+        <td>{{ currency.to_currency }}</td>
 
-                <td class="text-right">{{ currency.to_amount | floatformat:2 | intcomma }}</td>
-                <td>{{ currency.to_currency }}</td>
+        <td>{{ currency.currency_rate }}</td>
+      </tr>
+    {% endfor %}
+    <tr>
+      <td>Total</td>
+      <td class="text-right">{{ total.from | floatformat:0 | intcomma }}</td>
+      <td>KRW</td>
+      <td class="text-right">{{ total.to | floatformat:2 | intcomma }}</td>
+      <td>USD</td>
+      <td>{{ total.rate | floatformat:2 }}</td>
+    </tr>
+  </table>
+  {{ chart_amount }}
+{% endblock %}
 
-                <td>{{ currency.currency_rate }}</td>
-            </tr>
-        {% endfor %}
-        <tr>
-            <td>Total</td>
-            <td class="text-right">{{ total.from | floatformat:0 | intcomma }}</td>
-            <td>KRW</td>
-            <td class="text-right">{{ total.to | floatformat:2 | intcomma }}</td>
-            <td>USD</td>
-            <td>{{ total.rate | floatformat:2 }}</td>
-        </tr>
-    </table>
+{% block scripts %}
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.24.0/moment-with-locales.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/chart.js@2.9.3/dist/Chart.min.js"
+          integrity="sha256-R4pqcOYV8lt7snxMQO/HSbVCFRPMdrhAFMH+vr9giYI=" crossorigin="anonymous"></script>
+  <script>
+    var ctx = document.getElementById('currencyChart').getContext('2d');
+    var myChart = new Chart(ctx, {
+      type: 'line',
+      data: {
+        labels: {{ chart_label | safe }},
+        datasets: [{
+          label: 'Currency Rate',
+          fill: false,
+          data: {{ chart_data | safe }},
+          backgroundColor:
+                  'rgba(54, 162, 235, 0.2)',
+          borderColor:
+                  'rgba(54, 162, 235, 1)',
+          borderWidth: 1
+        },
+          {
+            label: 'Amount',
+            type: 'bar',
+            fill: false,
+            data: {{ chart_amount | safe }},
+            backgroundColor:
+                    'rgba(255, 99, 132, 0.2)',
+            borderColor:
+                    'rgba(255, 99, 132, 1)',
+            borderWidth: 1,
+            yAxisID: "y-axis-2",
+          }]
+      },
+      options: {
+        maintainAspectRatio: false,
+        scales: {
+          xAxes: [{
+            type: 'time',
+            time: {
+              unit: 'month'
+            }
+          }],
+          yAxes: [
+            {}
+            , {
+              ticks: {
+                beginAtZero: true,
+              },
+              display: true,
+              position: 'right',
+              id: 'y-axis-2'
+            }
+          ]
+        }
+      }
+    });
+  </script>
 {% endblock %}
