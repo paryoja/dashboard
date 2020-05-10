@@ -89,6 +89,11 @@ urlpatterns += [
     path("investment/krx_price_query/", krx.krx_price_query, name="krx_price_query"),
     path("real_estate/", views_function.real_estate, name="real_estate"),
     path("lotto/", views_function.lotto, name="lotto"),
+    path(
+        "least_picked_number/",
+        views_function.least_picked_number,
+        name="least_picked_number",
+    ),
     path("export_lotto/", views_function.export_lotto, name="export_lotto"),
     path(
         "recommend_book/",
