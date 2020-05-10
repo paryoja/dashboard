@@ -3,19 +3,19 @@ import datetime
 import json
 import logging
 import math
+import requests
 import traceback
 import typing
-
-import requests
-from book import models, utils
-from book.nav import get_render_dict
-from book.views import views_api
-from book.xml_helper import XmlDictConfig, get_xml_request
 from bs4 import BeautifulSoup
 from django.contrib.auth.decorators import login_required, user_passes_test
 from django.db.models import Count
 from django.http import HttpResponse
 from django.shortcuts import render
+
+from book import models, utils
+from book.nav import get_render_dict
+from book.views import views_api
+from book.xml_helper import XmlDictConfig, get_xml_request
 
 logger = logging.getLogger(__name__)
 
@@ -125,6 +125,17 @@ def lotto(request):
     render_dict["all_objects"] = all_objects
 
     return render(request, "book/investment/lotto.html", render_dict)
+
+
+def least_picked_number(request):
+    render_dict = get_render_dict("lotto")
+
+    object_list = models.Lotto.objects.all()
+    for obj in object_list:
+        pass
+    render_dict["object_list"] = object_list
+
+    return render(request, "book/investment/least_picked_number.html", render_dict)
 
 
 # law_search
@@ -326,11 +337,11 @@ def pokemon(request, page=1):
 
     distinct = (
         models.PokemonImage.objects.filter(classified="yes")
-        .order_by()
-        .values("original_label")
-        .distinct()
-        .annotate(Count("id"))
-        .order_by("id__count")
+            .order_by()
+            .values("original_label")
+            .distinct()
+            .annotate(Count("id"))
+            .order_by("id__count")
     )
     distinct = utils.to_table(distinct, 5)
     render_dict["distinct"] = distinct
@@ -338,8 +349,8 @@ def pokemon(request, page=1):
     if query:
         image_list = (
             models.PokemonImage.objects.filter(original_label__icontains=query)
-            .filter(classified=None)
-            .order_by("?")[:400]
+                .filter(classified=None)
+                .order_by("?")[:400]
         )
     else:
         image_list = models.PokemonImage.objects.filter(classified=None).order_by("?")
@@ -384,10 +395,10 @@ def pokemon_result(request, page=1):
 
     distinct = (
         image_list.order_by()
-        .values("original_label")
-        .distinct()
-        .annotate(Count("id"))
-        .order_by("id__count")
+            .values("original_label")
+            .distinct()
+            .annotate(Count("id"))
+            .order_by("id__count")
     )
     distinct = utils.to_table(distinct, 5)
 

@@ -103,7 +103,7 @@ class PeopleImage(models.Model):
     category = models.ForeignKey(
         Category, on_delete=models.SET_NULL, null=True, blank=True
     )
-    page = models.CharField(max_length=30)
+    page = models.CharField(max_length=60)
     selected = models.BooleanField(null=True, blank=True)
     user_id = models.CharField(max_length=20)
     meta = fields.JSONField(null=True, blank=True)

@@ -1,0 +1,54 @@
+version: '3'
+
+volumes:
+  production_logs: {}
+
+services:
+  rabbitmq:
+    build:
+      context: .
+      dockerfile: dockerfiles/production/Dockerfile_rabbitmq
+
+  celery: &celery
+    env_file:
+      - ./.envs/.local/.django
+      - ./.envs/.local/.postgres
+    depends_on:
+      - rabbitmq
+    build:
+      context: .
+      dockerfile: dockerfiles/local/Dockerfile
+    volumes:
+      - ./:/work
+    command: ["./wait-for-it.sh", "rabbitmq:5672", "--", "/scripts/run_celery.sh"]
+
+  django:
+    <<: *celery
+    shm_size: '512MB'
+    ports:
+      - "38000:8000"
+    command:
+#      - /scripts/run_local.sh
+      - /scripts/run_local_without_migrate.sh
+
+  flower:
+    <<: *celery
+    ports:
+      - "5555:5555"
+    command: ["./wait-for-it.sh", "rabbitmq:5672", "--", "/scripts/run_flower.sh"]
+
+  nginx:
+    image:
+      "nginx:latest"
+    ports:
+      - "80:80"
+    volumes:
+      - ./config/nginx:/etc/nginx/conf.d
+      - ./:/work
+      - production_logs:/work/log/nginx
+    command: ["/work/dashboard/wait-for-it.sh", "django:38000", "--", "nginx", "-g", "daemon off;"]
+
+  postgres:
+    image: postgres:12.2
+    env_file:
+      - ./.envs/.local/.postgres
