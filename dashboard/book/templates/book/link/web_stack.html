@@ -6,12 +6,14 @@
     <thead>
     <tr>
       <th>Name</th>
+      <th>Description</th>
       <th>Link</th>
     </tr>
     </thead>
     <tbody>
     {% for obj in object_list %}
       <tr>
+        <td><a href="{{ obj.url }}" target="_blank">{{ obj.description }} <i class="fa fa-link"></i></a></td>
         <td>{{ obj.description }}</td>
         <td>{{ obj.url }}</td>
       </tr>

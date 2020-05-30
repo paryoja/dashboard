@@ -48,7 +48,7 @@ THIRD_PARTY_APPS = [
     "rest_framework.authtoken",
 ]
 
-LOCAL_APPS = ["book.apps.BookConfig", "chatbot.apps.ChatbotConfig"]
+LOCAL_APPS = ["book.apps.BookConfig", "chatbot.apps.ChatbotConfig", "bank.apps.BankConfig"]
 
 INSTALLED_APPS = DJANGO_APPS + THIRD_PARTY_APPS + LOCAL_APPS
 

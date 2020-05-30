@@ -1,7 +1,5 @@
 """Book Admin."""
 from django.contrib import admin
-from django.contrib.humanize.templatetags.humanize import intcomma
-from django.template.defaultfilters import floatformat
 from django.utils.safestring import mark_safe
 
 from . import models
@@ -66,27 +64,6 @@ class APIServerAdmin(admin.ModelAdmin):
     list_display = ("title", "ip", "port", "endpoint")
 
 
-@admin.register(models.Currency)
-class CurrencyAdmin(admin.ModelAdmin):
-    """환전 정보."""
-
-    fieldsets = [
-        ("Date information", {"fields": ["date"]}),
-        ("From", {"fields": ["from_currency", "from_amount"]}),
-        ("To", {"fields": ["to_currency", "to_amount"]}),
-        ("Rate", {"fields": ["currency_rate"]}),
-    ]
-    list_display = ("date", "from_amount", "to_amount", "currency_rate", "rate")
-
-    def from_amount(self, obj):
-        """Format from_amount."""
-        return intcomma(floatformat(obj.from_amount))
-
-    def rate(self, obj):
-        """환율을 변환된 값으로 부터 계산한 값."""
-        return "%.2f" % (float(obj.from_amount) / float(obj.to_amount))
-
-
 @admin.register(models.DeepLearningModel)
 class DeepLearningModelAdmin(admin.ModelAdmin):
     """딥러닝 모델 정보."""
@@ -149,40 +126,3 @@ class LectureAdmin(admin.ModelAdmin):
     """강의 정보."""
 
     list_display = ("title", "status", "class_name", "number")
-
-
-@admin.register(models.Bank)
-class BankAdmin(admin.ModelAdmin):
-    """은행 정보."""
-
-    list_display = ("name",)
-
-
-@admin.register(models.Saving)
-class SavingAdmin(admin.ModelAdmin):
-    """적금 정보."""
-
-    list_display = (
-        "date",
-        "bank",
-        "account_number",
-        "principal",
-        "interest",
-        "interest_rate",
-        "tax",
-        "payment",
-        "interest_minus_tax",
-        "interest_rate_per_year",
-    )
-
-    def interest_rate(self, obj):
-        """이자율 포맷."""
-        return "%.2f%%" % (obj.interest_rate * 100)
-
-    def interest_rate_minus_tax(self, obj):
-        """실이자율 포맷."""
-        return "%.2f%%" % (obj.interest_rate_minus_tax * 100)
-
-    def interest_rate_per_year(self, obj):
-        """연환산 이자율 포맷."""
-        return "%.2f%%" % (obj.interest_rate_per_year * 100)

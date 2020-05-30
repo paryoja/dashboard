@@ -20,48 +20,6 @@ from django.shortcuts import render
 logger = logging.getLogger(__name__)
 
 
-# investment
-@user_passes_test(lambda u: u.is_superuser)
-def currency_change(request):
-    """
-    환전 내용.
-
-    :param request:
-    :return:
-    """
-    render_dict = get_render_dict("currency_change")
-    currency_list = models.Currency.objects.all().order_by("-date")
-
-    total_from = 0.0
-    total_to = 0.0
-
-    chart_data = {}
-    chart_amount = {}
-
-    for currency in currency_list:
-        total_from += currency.from_amount
-        total_to += currency.to_amount
-
-        chart_data[currency.date] = currency.currency_rate
-        chart_amount[currency.date] = (
-            chart_amount.get(currency.date, 0) + currency.to_amount
-        )
-    if total_to != 0.0:
-        total = {"from": total_from, "to": total_to, "rate": total_from / total_to}
-    else:
-        total = {"from": total_from, "to": total_to, "rate": 0.0}
-
-    render_dict["currency_list"] = currency_list
-    render_dict["total"] = total
-
-    chart_label = sorted([label for label in chart_data])
-    render_dict["chart_label"] = [label.strftime("%Y-%m-%d") for label in chart_label]
-    render_dict["chart_data"] = [chart_data[label] for label in chart_label]
-    render_dict["chart_amount"] = [chart_amount[label] for label in chart_label]
-
-    return render(request, "book/investment/currency_change.html", render_dict)
-
-
 def export_lotto(_):
     """
     로또 정보 Export.
@@ -132,9 +90,29 @@ def least_picked_number(request):
     render_dict = get_render_dict("lotto")
 
     object_list = models.Lotto.objects.all()
+
+    number_dict = {k: 0 for k in range(1, 46)}
+
     for obj in object_list:
-        pass
+        multiple = int(obj.numbers["firstPrzwnerCo"])
+        for i in range(1, 7):
+            data = obj.numbers[f"drwtNo{i}"]
+            number_dict[data] = number_dict.get(data, 0) + multiple
     render_dict["object_list"] = object_list
+    number_dict = sorted([(k, v) for k, v in number_dict.items()], key=lambda x: x[1])
+    render_dict["number_dict"] = number_dict
+
+    number = [
+        (0, 1, 2, 3, 4, 5),
+        (0, 1, 2, 3, 4, 6),
+        (0, 1, 2, 3, 5, 6),
+        (0, 1, 2, 4, 5, 6),
+        (0, 1, 3, 4, 5, 6),
+    ]
+    selected_number = []
+    for number_set in number:
+        selected_number.append(sorted([number_dict[k] for k in number_set]))
+    render_dict["selected_number"] = selected_number
 
     return render(request, "book/investment/least_picked_number.html", render_dict)
 

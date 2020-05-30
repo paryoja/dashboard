@@ -1,201 +1,204 @@
 {% extends 'book/base/base.html' %}
 {% load humanize %}
 {% block body %}
-    <H1><i class="fa fa-money-bill-wave"></i> Lotto 조회
-        <a type="button" class="btn btn-secondary btn-sm" href="{% url 'book:export_lotto' %}" download="lotto.csv">
-            Export
-        </a>
-    </H1>
-    <form method="post">
-        {% csrf_token %}
-        <div class="input-group mb-3">
-            <input type="number" min="1" name="draw_number" class="form-control" placeholder="회차" aria-label="Query"
-                   aria-describedby="button-addon2" value="{{ draw_number }}">
-            <div class="input-group-append">
-                <button class="btn btn-outline-secondary" type="submit" id="button-addon2" name="upvote" value="Upvote">
-                    Submit
-                </button>
-            </div>
-        </div>
-    </form>
+  <H1><i class="fa fa-money-bill-wave"></i> Lotto 조회
+    <a type="button" class="btn btn-secondary btn-sm" href="{% url 'book:export_lotto' %}" download="lotto.csv">
+      Export
+    </a>
+    <a type="button" class="btn btn-secondary btn-sm" href="{% url 'book:least_picked_number' %}">
+      Least Picked
+    </a>
+  </H1>
+  <form method="post">
+    {% csrf_token %}
+    <div class="input-group mb-3">
+      <input type="number" min="1" name="draw_number" class="form-control" placeholder="회차" aria-label="Query"
+             aria-describedby="button-addon2" value="{{ draw_number }}">
+      <div class="input-group-append">
+        <button class="btn btn-outline-secondary" type="submit" id="button-addon2" name="upvote" value="Upvote">
+          Submit
+        </button>
+      </div>
+    </div>
+  </form>
 
 
-    {% if result %}
-        {% if result.returnValue == "fail" %}
-            <h3>{{ draw_number }}회는 아직 추첨하지 않았습니다.</h3>
-        {% else %}
-            <h2>{{ result.drwNoDate }} {{ draw_number }}회차 당첨번호</h2>
-            <div class="table-responsive">
-                <table class="table table-sm table-bordered">
-                    <thead>
-                    <tr>
-                        <th>1</th>
-                        <th>2</th>
-                        <th>3</th>
-                        <th>4</th>
-                        <th>5</th>
-                        <th>6</th>
-                        <th>보너스</th>
-                    </tr>
-                    </thead>
-                    <tbody>
-                    <tr>
-                        <td>{{ result.drwtNo1 }}</td>
-                        <td>{{ result.drwtNo2 }}</td>
-                        <td>{{ result.drwtNo3 }}</td>
-                        <td>{{ result.drwtNo4 }}</td>
-                        <td>{{ result.drwtNo5 }}</td>
-                        <td>{{ result.drwtNo6 }}</td>
-                        <td>{{ result.bnusNo }}</td>
-                    </tr>
-                    </tbody>
-                </table>
-
-                <h3>총 판매액: {{ result.totSellamnt|intcomma }}원</h3>
-                <table class="table table-sm table-hovered">
-                    <thead>
-                    <tr class="min-nowrap">
-                        <th>순위</th>
-                        <th>총 당첨금액</th>
-                        <th>당첨게임 수</th>
-                        <th>1게임 금액</th>
-                    </tr>
-                    </thead>
-                    <tbody class="min-nowrap">
-                    <tr>
-                        <td>1등</td>
-                        <td>{{ result.firstAccumamnt|intcomma }}원</td>
-                        <td>{{ result.firstPrzwnerCo }}</td>
-                        <td>{{ result.firstWinamnt|intcomma }}원</td>
-                    </tr>
-                    </tbody>
-                </table>
-            </div>
-        {% endif %}
-    {% endif %}
-
-    {% if all_objects %}
-        <canvas id="myChart" width="400" height="300"></canvas>
-        <table class="table table-sm table-hover">
-            <thead>
-            <tr class="min-nowrap">
-                <td>회차</td>
-                <td>총 판매액</td>
-                <td>1등 당첨금</td>
-                <td>당첨자 수</td>
-                <td>번호</td>
-            </tr>
-            </thead>
-            <tbody>
-            {% for obj in all_objects %}
-                <tr class="min-nowrap">
-                    <td>{{ obj.numbers.drwNoDate }} / {{ obj.draw_number }}</td>
-                    <td>{{ obj.numbers.totSellamnt|intcomma }}원</td>
-                    <td>{{ obj.numbers.firstWinamnt|intcomma }}원</td>
-                    <td>{{ obj.numbers.firstPrzwnerCo }}</td>
-                    <td>{{ obj.numbers.drwtNo1 }} {{ obj.numbers.drwtNo2 }} {{ obj.numbers.drwtNo3 }} {{ obj.numbers.drwtNo4 }} {{ obj.numbers.drwtNo5 }} {{ obj.numbers.drwtNo6 }}</td>
-                </tr>
-            {% endfor %}
-            </tbody>
+  {% if result %}
+    {% if result.returnValue == "fail" %}
+      <h3>{{ draw_number }}회는 아직 추첨하지 않았습니다.</h3>
+    {% else %}
+      <h2>{{ result.drwNoDate }} {{ draw_number }}회차 당첨번호</h2>
+      <div class="table-responsive">
+        <table class="table table-sm table-bordered">
+          <thead>
+          <tr>
+            <th>1</th>
+            <th>2</th>
+            <th>3</th>
+            <th>4</th>
+            <th>5</th>
+            <th>6</th>
+            <th>보너스</th>
+          </tr>
+          </thead>
+          <tbody>
+          <tr>
+            <td>{{ result.drwtNo1 }}</td>
+            <td>{{ result.drwtNo2 }}</td>
+            <td>{{ result.drwtNo3 }}</td>
+            <td>{{ result.drwtNo4 }}</td>
+            <td>{{ result.drwtNo5 }}</td>
+            <td>{{ result.drwtNo6 }}</td>
+            <td>{{ result.bnusNo }}</td>
+          </tr>
+          </tbody>
         </table>
+
+        <h3>총 판매액: {{ result.totSellamnt|intcomma }}원</h3>
+        <table class="table table-sm table-hovered">
+          <thead>
+          <tr class="min-nowrap">
+            <th>순위</th>
+            <th>총 당첨금액</th>
+            <th>당첨게임 수</th>
+            <th>1게임 금액</th>
+          </tr>
+          </thead>
+          <tbody class="min-nowrap">
+          <tr>
+            <td>1등</td>
+            <td>{{ result.firstAccumamnt|intcomma }}원</td>
+            <td>{{ result.firstPrzwnerCo }}</td>
+            <td>{{ result.firstWinamnt|intcomma }}원</td>
+          </tr>
+          </tbody>
+        </table>
+      </div>
     {% endif %}
+  {% endif %}
+
+  {% if all_objects %}
+    <canvas id="myChart" width="400" height="300"></canvas>
+    <table class="table table-sm table-hover">
+      <thead>
+      <tr class="min-nowrap">
+        <td>회차</td>
+        <td>총 판매액</td>
+        <td>1등 당첨금</td>
+        <td>당첨자 수</td>
+        <td>번호</td>
+      </tr>
+      </thead>
+      <tbody>
+      {% for obj in all_objects %}
+        <tr class="min-nowrap">
+          <td>{{ obj.numbers.drwNoDate }} / {{ obj.draw_number }}</td>
+          <td>{{ obj.numbers.totSellamnt|intcomma }}원</td>
+          <td>{{ obj.numbers.firstWinamnt|intcomma }}원</td>
+          <td>{{ obj.numbers.firstPrzwnerCo }}</td>
+          <td>{{ obj.numbers.drwtNo1 }} {{ obj.numbers.drwtNo2 }} {{ obj.numbers.drwtNo3 }} {{ obj.numbers.drwtNo4 }} {{ obj.numbers.drwtNo5 }} {{ obj.numbers.drwtNo6 }}</td>
+        </tr>
+      {% endfor %}
+      </tbody>
+    </table>
+  {% endif %}
 {% endblock %}
 {% block scripts %}
-    <script src="https://cdn.jsdelivr.net/npm/chart.js@2.9.3/dist/Chart.min.js"
-            integrity="sha256-R4pqcOYV8lt7snxMQO/HSbVCFRPMdrhAFMH+vr9giYI=" crossorigin="anonymous"></script>
-    <script>
-        var ctx = document.getElementById('myChart').getContext('2d');
-        var myChart = new Chart(ctx, {
-            type: 'bar',
-            data: {
-                labels: [{% for x in all_objects reversed %}"{{ x.draw_number }}",{% endfor %}
-                    {% for x in expected reversed %}"{{ x.date }}"{% if not forloop.last %}, {% endif %}{% endfor %}],
-                datasets: [
-                    {
-                        type: 'line',
-                        label: '판매량',
-                        data: [
-                            {% for obj in all_objects reversed %}
-                                {{ obj.numbers.totSellamnt }},
-                            {% endfor %}
-                        ],
-                        backgroundColor: 'rgba(255, 99, 132)',
-                        borderColor: 'rgba(255, 99, 132)',
-                        fill: false,
-                        yAxisID: 'y-axis-1',
-                    },
-                    {
-                        label: '1등 당첨금',
-                        data: [
-                            {% for obj in all_objects reversed %}
-                                {{ obj.numbers.firstWinamnt }},
-                            {% endfor %}
-                        ],
-                        backgroundColor: 'rgba(75, 192, 192)',
-                        borderColor: 'rgba(75, 192, 192)',
-                        fill: false,
-                        yAxisID: 'y-axis-2'
-                    }]
-            },
-            options: {
-                responsive: true,
-                hoverMode: 'index',
-                stacked: false,
-                title: {
-                    display: true,
-                    text: 'Chart.js Line Chart - Multi Axis'
-                },
-                scales: {
-                    yAxes: [{
-                        type: 'linear', // only linear but allow scale type registration. This allows extensions to exist solely for log scale for instance
-                        display: true,
-                        position: 'left',
-                        id: 'y-axis-1',
-                        ticks: {
-                            // Include a dollar sign in the ticks
-                            callback: function (value, index, values) {
-                                return Math.round(value / 100000000) + '억원';
-                            }
-                        }
-                    }, {
-                        type: 'linear', // only linear but allow scale type registration. This allows extensions to exist solely for log scale for instance
-                        display: true,
-                        position: 'right',
-                        id: 'y-axis-2',
-                        ticks: {
-                            // Include a dollar sign in the ticks
-                            callback: function (value, index, values) {
-                                return Math.round(value / 100000000) + '억원';
-                            }
-                        },
-                        // grid line settings
-                        gridLines: {
-                            drawOnChartArea: false, // only want the grid lines for one axis to show up
-                        },
-                    }],
-                },
-                hover: {
-                    mode: 'nearest',
-                    intersect: true
-                },
-                tooltips: {
-                    mode: 'index',
-                    position: 'nearest',
-                    intersect: false,
-                    callbacks: {
-                        label: function (tooltipItem, data) {
-                            var label = data.datasets[tooltipItem.datasetIndex].label || '';
-
-                            if (label) {
-                                label += ': ';
-                            }
-                            label += Math.round(tooltipItem.yLabel / 100000000) + '억원';
-                            return label;
-                        }
-                    }
-
-                },
+  <script src="https://cdn.jsdelivr.net/npm/chart.js@2.9.3/dist/Chart.min.js"
+          integrity="sha256-R4pqcOYV8lt7snxMQO/HSbVCFRPMdrhAFMH+vr9giYI=" crossorigin="anonymous"></script>
+  <script>
+    var ctx = document.getElementById('myChart').getContext('2d');
+    var myChart = new Chart(ctx, {
+      type: 'bar',
+      data: {
+        labels: [{% for x in all_objects reversed %}"{{ x.draw_number }}",{% endfor %}
+          {% for x in expected reversed %}"{{ x.date }}"{% if not forloop.last %}, {% endif %}{% endfor %}],
+        datasets: [
+          {
+            type: 'line',
+            label: '판매량',
+            data: [
+              {% for obj in all_objects reversed %}
+                {{ obj.numbers.totSellamnt }},
+              {% endfor %}
+            ],
+            backgroundColor: 'rgba(255, 99, 132)',
+            borderColor: 'rgba(255, 99, 132)',
+            fill: false,
+            yAxisID: 'y-axis-1',
+          },
+          {
+            label: '1등 당첨금',
+            data: [
+              {% for obj in all_objects reversed %}
+                {{ obj.numbers.firstWinamnt }},
+              {% endfor %}
+            ],
+            backgroundColor: 'rgba(75, 192, 192)',
+            borderColor: 'rgba(75, 192, 192)',
+            fill: false,
+            yAxisID: 'y-axis-2'
+          }]
+      },
+      options: {
+        responsive: true,
+        hoverMode: 'index',
+        stacked: false,
+        title: {
+          display: true,
+          text: '로또 당첨금/총액'
+        },
+        scales: {
+          yAxes: [{
+            type: 'linear', // only linear but allow scale type registration. This allows extensions to exist solely for log scale for instance
+            display: true,
+            position: 'left',
+            id: 'y-axis-1',
+            ticks: {
+              // Include a dollar sign in the ticks
+              callback: function (value, index, values) {
+                return Math.round(value / 100000000) + '억원';
+              }
             }
-        });
-    </script>
+          }, {
+            type: 'linear', // only linear but allow scale type registration. This allows extensions to exist solely for log scale for instance
+            display: true,
+            position: 'right',
+            id: 'y-axis-2',
+            ticks: {
+              // Include a dollar sign in the ticks
+              callback: function (value, index, values) {
+                return Math.round(value / 100000000) + '억원';
+              }
+            },
+            // grid line settings
+            gridLines: {
+              drawOnChartArea: false, // only want the grid lines for one axis to show up
+            },
+          }],
+        },
+        hover: {
+          mode: 'nearest',
+          intersect: true
+        },
+        tooltips: {
+          mode: 'index',
+          position: 'nearest',
+          intersect: false,
+          callbacks: {
+            label: function (tooltipItem, data) {
+              var label = data.datasets[tooltipItem.datasetIndex].label || '';
+
+              if (label) {
+                label += ': ';
+              }
+              label += Math.round(tooltipItem.yLabel / 100000000) + '억원';
+              return label;
+            }
+          }
+
+        },
+      }
+    });
+  </script>
 {% endblock %}

@@ -1,27 +1,11 @@
 """Class View 를 이용한 view 구현."""
 from typing import Any, Dict
 
-from book import forms, models
 from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
 from django.views.generic import ListView, TemplateView
-from django.views.generic.base import ContextMixin
 
-
-class CurrentPageMixin(ContextMixin):
-    """Current Page 를 추가해주는 mixin."""
-
-    current_page: str = None
-
-    def get_context_data(self, **kwargs: Any) -> Dict[str, Any]:
-        """
-        current_page 를 context 에 추가.
-
-        :param kwargs:
-        :return:
-        """
-        context = super().get_context_data(**kwargs)
-        context["current_page"] = self.current_page
-        return context
+from book import forms, models
+from .view_utils import CurrentPageMixin
 
 
 class WebStackListView(ListView, CurrentPageMixin):
@@ -46,35 +30,6 @@ class WineListView(ListView, CurrentPageMixin):
     current_page = "wine"
     template_name = "book/wine.html"
     model = models.Wine
-
-
-class SavingsView(ListView, CurrentPageMixin, LoginRequiredMixin, UserPassesTestMixin):
-    """예적금 리스트."""
-
-    current_page = "savings"
-    template_name = "book/investment/savings.html"
-    queryset = models.Saving.objects.order_by("-date")
-
-    def test_func(self):
-        """Check whether user is superuser or not."""
-        return self.request.user.is_superuser
-
-    def get_context_data(self, **kwargs: Any) -> Dict[str, Any]:
-        """Form 을 context 에 추가."""
-        context = super().get_context_data(**kwargs)
-
-        chart_map = {}
-
-        for obj in self.queryset:
-            chart_map[obj.date] = chart_map.get(obj.date, 0) + obj.interest_minus_tax
-
-        chart_label = sorted([label for label in chart_map])
-        chart_amount = [chart_map[label] for label in chart_label]
-
-        context["chart_label"] = [label.strftime("%Y-%m-%d") for label in chart_label]
-        context["chart_amount"] = chart_amount
-
-        return context
 
 
 class MomentumView(ListView, CurrentPageMixin, LoginRequiredMixin, UserPassesTestMixin):

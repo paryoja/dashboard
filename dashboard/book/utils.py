@@ -1,16 +1,73 @@
 """유틸 함수."""
-
 import base64
+import csv
 import json
 import typing
 
 import lz4.frame
 import requests
+from django import forms
+from django.contrib import admin
 from django.core import exceptions, serializers
 from django.core.paginator import Paginator
 from django.http import HttpResponse
+from django.shortcuts import redirect, render
+from django.urls import path
 
 from .models import Lotto
+
+
+class CsvImportForm(forms.Form):
+    csv_file = forms.FileField()
+
+
+class ExportCsvMixin(admin.ModelAdmin):
+    csv_file = forms.FileField()
+    field_names = None
+
+    def export_as_csv(self, request, queryset):
+        meta = self.model._meta
+        if self.field_names:
+            field_names = self.field_names
+        else:
+            field_names = [field.name for field in meta.fields]
+
+        response = HttpResponse(content_type='text/csv')
+        response['Content-Disposition'] = 'attachment; filename={}.csv'.format(meta)
+        writer = csv.writer(response)
+
+        writer.writerow(field_names)
+        for obj in queryset:
+            row = writer.writerow([getattr(obj, field) for field in field_names])
+
+        return response
+
+    export_as_csv.short_description = "Export Selected"
+
+    def get_urls(self):
+        urls = super().get_urls()
+        my_urls = [
+            path('import-csv/', self.import_csv),
+        ]
+        return my_urls + urls
+
+    def import_csv(self, request):
+        if request.method == "POST":
+            csv_file = request.FILES["csv_file"]
+            reader = csv.DictReader(csv_file.read().decode('utf-8').splitlines(), delimiter=",")
+            for r in reader:
+                if 'id' in r:
+                    r['id'] = int(r['id'])
+                obj = self.model(**r)
+                obj.save()
+
+            self.message_user(request, "Your csv file has been imported")
+            return redirect("..")
+        form = CsvImportForm()
+        payload = {"form": form}
+        return render(
+            request, "admin/csv_form.html", payload
+        )
 
 
 def new_lotto(draw_number):

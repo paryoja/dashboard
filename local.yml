@@ -12,8 +12,8 @@ services:
   celery: &celery
     env_file:
       - ./.envs/.local/.django
-      - ./.envs/.production/.postgres
-#      - ./.envs/.local/.postgres
+#      - ./.envs/.production/.postgres
+      - ./.envs/.local/.postgres
     depends_on:
       - rabbitmq
     build:

@@ -3,7 +3,7 @@
 from django.urls import path
 
 from . import views_user
-from .views import krx, people, views_api, views_class, views_function
+from .views import krx, people, views_api, views_class, views_function, bank
 
 app_name = "book"
 
@@ -70,10 +70,10 @@ urlpatterns += [
 
 # Banking
 urlpatterns += [
-    path("savings/", views_class.SavingsView.as_view(), name="savings"),
+    path("savings/", bank.SavingsView.as_view(), name="savings"),
     path(
         "investment/currency_change/",
-        views_function.currency_change,
+        bank.currency_change,
         name="currency_change",
     ),
     path("momentum/", views_class.MomentumView.as_view(), name="momentum"),
