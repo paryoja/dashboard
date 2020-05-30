@@ -1,17 +1,18 @@
+"""Banking에 관련된 View."""
+
 import logging
 from typing import Any, Dict
 
+from bank import models as bank_models
+from book.nav import get_render_dict
 from django.contrib.auth.decorators import user_passes_test
 from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
 from django.shortcuts import render
 from django.views.generic import ListView
 
-from bank import models as bank_models
-from book.nav import get_render_dict
+from .view_utils import CurrentPageMixin
 
 logger = logging.getLogger(__name__)
-
-from .view_utils import CurrentPageMixin
 
 
 # investment
