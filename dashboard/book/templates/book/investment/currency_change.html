@@ -6,28 +6,27 @@
   </div>
   <table class="table table-sm table-striped">
     <tr>
-      <th rowspan="2">Date</th>
-      <th colspan="2">From</th>
-      <th colspan="2">To</th>
+      <th rowspan="2" class="text-center">Date</th>
+      <th colspan="2" class="text-center">From</th>
+      <th colspan="2" class="text-center">To</th>
       <th></th>
     </tr>
     <tr>
-      <th>Amount</th>
-      <th>Currency</th>
-      <th>Amount</th>
-      <th>Currency</th>
-      <th>Rate</th>
+      <th class="text-right">Amount</th>
+      <th class="text-center">Currency</th>
+      <th class="text-right">Amount</th>
+      <th class="text-center">Currency</th>
+      <th class="text-center">Rate</th>
     </tr>
     {% for currency in currency_list %}
       <tr>
-        <td>{{ currency.date }}</td>
+        <td class="text-right">{{ currency.date }}</td>
         <td class="text-right">{{ currency.from_amount | floatformat:0 | intcomma }}</td>
-        <td>{{ currency.from_currency }}</td>
+        <td class="text-center">{{ currency.from_currency }}</td>
 
         <td class="text-right">{{ currency.to_amount | floatformat:2 | intcomma }}</td>
-        <td>{{ currency.to_currency }}</td>
-
-        <td>{{ currency.currency_rate }}</td>
+        <td class="text-center">{{ currency.to_currency }}</td>
+        <td class="text-center">{{ currency.currency_rate }}</td>
       </tr>
     {% endfor %}
     <tr>
@@ -39,7 +38,6 @@
       <td>{{ total.rate | floatformat:2 }}</td>
     </tr>
   </table>
-  {{ chart_amount }}
 {% endblock %}
 
 {% block scripts %}

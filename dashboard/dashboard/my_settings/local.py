@@ -9,7 +9,7 @@ SECRET_KEY = env.str(
     default="nyL82uqeMOVK4VrLyafHXVNQS2dt2GD4K07CIJAPyrh2ux2FXmPms6EI1jEdDe4E",
 )
 
-ALLOWED_HOSTS = ["localhost", "0.0.0.0", "127.0.0.1"]
+ALLOWED_HOSTS = ["localhost", "0.0.0.0", "127.0.0.1", "192.168.29.88"]
 
 # https://django-debug-toolbar.readthedocs.io/en/latest/installation.html#prerequisites
 INSTALLED_APPS += ["debug_toolbar", "django_extensions"]  # noqa F405
@@ -24,7 +24,7 @@ DEBUG_TOOLBAR_CONFIG = {
 }
 
 # https://django-debug-toolbar.readthedocs.io/en/latest/installation.html#internal-ips
-INTERNAL_IPS = ["127.0.0.1", "10.0.2.2", "172.23.0.7"]
+INTERNAL_IPS = ["127.0.0.1", "10.0.2.2", "172.23.0.7", "172.19.0.4"]
 
 if env("USE_DOCKER") == "yes":
     import socket

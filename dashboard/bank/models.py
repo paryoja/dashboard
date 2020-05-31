@@ -1,3 +1,4 @@
+"""금융에 관련된 모든 모델."""
 import math
 
 from django.db import models
@@ -95,3 +96,32 @@ class Currency(models.Model):
     def get_currency_rate(self):
         """환율 계산."""
         return self.from_amount / self.to_amount
+
+
+class Account(models.Model):
+    """계좌 정보."""
+
+    bank = models.ForeignKey(Bank, on_delete=models.CASCADE)
+    account_number = models.CharField(max_length=100)
+    amount = models.FloatField()
+    last_updated = models.DateTimeField(auto_now_add=True)
+
+
+class AccountSnapshot(models.Model):
+    """특정 시점의 계좌내 금액."""
+
+    account = models.ForeignKey(Account, on_delete=models.CASCADE)
+    added_time = models.DateTimeField(auto_now_add=True)
+    currency = models.CharField(
+        max_length=10, choices=CurrencyChoices.choices, default=CurrencyChoices.KRW
+    )
+
+
+class Transaction(models.Model):
+    """이체 내역."""
+
+    account = models.ForeignKey(Account, on_delete=models.CASCADE)
+    note = models.CharField(max_length=50)
+    amount = models.FloatField()
+    is_income = models.BooleanField()
+    datetime = models.DateTimeField()

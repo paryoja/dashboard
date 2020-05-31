@@ -154,6 +154,12 @@
         "should_superuser": true,
         "child_info": [
           {
+            "template": "account",
+            "icon": "fa fa-money-check-alt",
+            "description": "계좌내역",
+            "should_superuser": true
+          },
+          {
             "template": "savings",
             "icon": "fa fa-piggy-bank",
             "description": "예적금",

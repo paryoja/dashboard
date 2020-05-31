@@ -1,0 +1,7 @@
+{% extends 'book/base/base.html' %}
+{% load humanize %}
+{% block body %}
+  {% for object in object_list %}
+    {{ object }}
+  {% endfor %}
+{% endblock %}

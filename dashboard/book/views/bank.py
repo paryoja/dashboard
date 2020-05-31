@@ -84,3 +84,11 @@ class SavingsView(ListView, CurrentPageMixin, LoginRequiredMixin, UserPassesTest
         context["chart_amount"] = chart_amount
 
         return context
+
+
+class AccountView(ListView, CurrentPageMixin, LoginRequiredMixin, UserPassesTestMixin):
+    """계좌 내역 리스트."""
+
+    current_page = "account"
+    template_name = "book/investment/account.html"
+    model = bank_models.Account

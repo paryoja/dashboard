@@ -15,6 +15,7 @@ Including another URLconf
 """
 from django.conf import settings
 from django.contrib import admin
+from django.http import HttpResponse
 from django.shortcuts import redirect
 from django.urls import include, path, reverse
 from django.views import defaults as default_views
@@ -30,6 +31,12 @@ def simple_redirect(_):
     :return:
     """
     return redirect(reverse("book:index"))
+
+
+def get_ip(request):
+    """Debug용."""
+    ip = request.META["REMOTE_ADDR"]
+    return HttpResponse("{}".format(ip))
 
 
 urlpatterns = [
@@ -60,6 +67,7 @@ if settings.DEBUG:
             kwargs={"exception": Exception("Page not Found")},
         ),
         path("500/", default_views.server_error),
+        path("debug/", get_ip),
     ]
 
     if "debug_toolbar" in settings.INSTALLED_APPS:
