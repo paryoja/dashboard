@@ -106,6 +106,9 @@ class Account(models.Model):
     amount = models.FloatField()
     last_updated = models.DateTimeField(auto_now_add=True)
 
+    def __str__(self):
+        return "{} {}".format(self.bank, self.account_number)
+
 
 class AccountSnapshot(models.Model):
     """특정 시점의 계좌내 금액."""
@@ -115,6 +118,7 @@ class AccountSnapshot(models.Model):
     currency = models.CharField(
         max_length=10, choices=CurrencyChoices.choices, default=CurrencyChoices.KRW
     )
+    amount = models.FloatField()
 
 
 class Transaction(models.Model):

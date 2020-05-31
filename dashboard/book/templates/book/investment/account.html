@@ -1,7 +1,22 @@
 {% extends 'book/base/base.html' %}
 {% load humanize %}
 {% block body %}
-  {% for object in object_list %}
-    {{ object }}
-  {% endfor %}
+  <table class="table table-hover">
+    <thead>
+    <tr>
+      <th>은행</th>
+      <th>계좌번호</th>
+      <th>잔액</th>
+    </tr>
+    </thead>
+    <tbody>
+    {% for object in object_list %}
+      <tr>
+        <td>{{ object.bank }}</td>
+        <td>{{ object.account_number }}</td>
+        <td>{{ object.amount | floatformat:0 | intcomma }}</td>
+      </tr>
+    {% endfor %}
+    </tbody>
+  </table>
 {% endblock %}

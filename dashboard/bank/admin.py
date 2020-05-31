@@ -1,9 +1,11 @@
+"""Bank 모듈의 Admin View."""
+
 # Register your models here.
+from book import utils
 from django.contrib import admin
 from django.contrib.humanize.templatetags.humanize import intcomma
 from django.template.defaultfilters import floatformat
 
-from book import utils
 from . import models
 
 
@@ -80,3 +82,17 @@ class CurrencyAdmin(utils.ExportCsvMixin):
     def rate(self, obj):
         """환율을 변환된 값으로 부터 계산한 값."""
         return "%.2f" % (float(obj.from_amount) / float(obj.to_amount))
+
+
+@admin.register(models.Account)
+class AccountAdmin(utils.ExportCsvMixin):
+    """계좌 정보."""
+
+    pass
+
+
+@admin.register(models.AccountSnapshot)
+class AccountSnapshotAdmin(utils.ExportCsvMixin):
+    """계좌 내역 정보."""
+
+    pass
