@@ -4,17 +4,21 @@
   <table class="table table-hover">
     <thead>
     <tr>
-      <th>은행</th>
-      <th>계좌번호</th>
-      <th>잔액</th>
+      <th style="text-align:center">은행</th>
+      <th style="text-align:center">계좌번호</th>
+      <th style="text-align:center">계좌명</th>
+      <th style="text-align:center">잔액</th>
+      <th style="text-align:center">날짜</th>
     </tr>
     </thead>
     <tbody>
-    {% for object in object_list %}
+    {% for object, snapshot in object_list %}
       <tr>
-        <td>{{ object.bank }}</td>
-        <td>{{ object.account_number }}</td>
-        <td>{{ object.amount | floatformat:0 | intcomma }}</td>
+        <td style="text-align:center">{{ object.bank }}</td>
+        <td style="text-align:right">{{ object.account_number }}</td>
+        <td style="text-align:center">{{ object.account_name }}</td>
+        <td style="text-align:right">{{ snapshot.amount | floatformat | intcomma }} {{ snapshot.currency }}</td>
+        <td style="text-align:center">{{ snapshot.added_time | date:"Y n d D" }} {{ snapshot.added_time | time:"H:i" }}</td>
       </tr>
     {% endfor %}
     </tbody>

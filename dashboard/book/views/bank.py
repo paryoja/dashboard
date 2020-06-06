@@ -8,7 +8,7 @@ from book.nav import get_render_dict
 from django.contrib.auth.decorators import user_passes_test
 from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
 from django.shortcuts import render
-from django.views.generic import ListView
+from django.views.generic import ListView, TemplateView
 
 from .view_utils import CurrentPageMixin
 
@@ -69,7 +69,7 @@ class SavingsView(ListView, CurrentPageMixin, LoginRequiredMixin, UserPassesTest
         return self.request.user.is_superuser
 
     def get_context_data(self, **kwargs: Any) -> Dict[str, Any]:
-        """Form 을 context 에 추가."""
+        """Chart 내용을 context 에 추가."""
         context = super().get_context_data(**kwargs)
 
         chart_map = {}
@@ -86,9 +86,26 @@ class SavingsView(ListView, CurrentPageMixin, LoginRequiredMixin, UserPassesTest
         return context
 
 
-class AccountView(ListView, CurrentPageMixin, LoginRequiredMixin, UserPassesTestMixin):
+class AccountView(
+    TemplateView, CurrentPageMixin, LoginRequiredMixin, UserPassesTestMixin
+):
     """계좌 내역 리스트."""
 
     current_page = "account"
     template_name = "book/investment/account.html"
-    model = bank_models.Account
+
+    def get_context_data(self, **kwargs: Any) -> Dict[str, Any]:
+        """Get latest snapshots."""
+        context = super().get_context_data(**kwargs)
+        latest = bank_models.Account.objects.all().prefetch_related(
+            "accountsnapshot_set", "bank"
+        )
+        object_list = []
+        for obj in latest:
+            snapshot = obj.accountsnapshot_set.all().order_by("-added_time")
+            if snapshot:
+                object_list.append((obj, snapshot[0]))
+            else:
+                object_list.append((obj, None))
+        context["object_list"] = object_list
+        return context

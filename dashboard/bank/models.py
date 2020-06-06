@@ -103,7 +103,7 @@ class Account(models.Model):
 
     bank = models.ForeignKey(Bank, on_delete=models.CASCADE)
     account_number = models.CharField(max_length=100)
-    amount = models.FloatField()
+    account_name = models.CharField(max_length=100)
     last_updated = models.DateTimeField(auto_now_add=True)
 
     def __str__(self):
