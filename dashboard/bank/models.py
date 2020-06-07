@@ -12,6 +12,14 @@ class CurrencyChoices(models.TextChoices):
     KRW = "KRW", _("KRW")
 
 
+class AccountTypeChoices(models.TextChoices):
+    """계좌 종류."""
+
+    Saving = "Saving", _("입출금")
+    Periodic = "Periodic", _("적금")
+    Deposit = "Deposit", _("예금")
+
+
 # Create your models here.
 class Bank(models.Model):
     """은행."""
@@ -102,9 +110,14 @@ class Account(models.Model):
     """계좌 정보."""
 
     bank = models.ForeignKey(Bank, on_delete=models.CASCADE)
-    account_number = models.CharField(max_length=100)
+    account_number = models.CharField(max_length=100, null=True, blank=True)
     account_name = models.CharField(max_length=100)
     last_updated = models.DateTimeField(auto_now_add=True)
+    account_type = models.TextField(
+        max_length=30,
+        choices=AccountTypeChoices.choices,
+        default=AccountTypeChoices.Saving,
+    )
 
     def __str__(self):
         return "{} {}".format(self.bank, self.account_number)

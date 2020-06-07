@@ -1,12 +1,43 @@
 {% extends 'book/base/base.html' %}
 {% load humanize %}
 {% block body %}
-  <table class="table table-hover">
+  {% if summary %}
+    <h2>은행별 내역</h2>
+    <table class="table table-hover">
+      <thead>
+      <tr>
+        <th style="text-align:center">은행</th>
+        <th style="text-align:center">합계</th>
+      </tr>
+      </thead>
+      <tbody>
+      {% for bank, sum in summary.items %}
+        <tr>
+          {% for currency, amount in sum.items %}
+            <td style="text-align:center"><a href="{% url 'book:bank' bank.id %}">{{ bank }}</a></td>
+            <td style="text-align:right">{{ amount | floatformat:0 | intcomma }} {{ currency }}</td>
+          {% endfor %}
+        </tr>
+      {% endfor %}
+      {% for currency, amount in total.items %}
+        <tr>
+          {% if forloop.first %}
+            <td rowspan="{{ total | length }}" style="text-align:center">총합</td>
+          {% endif %}
+          <td style="text-align:right">{{ amount | floatformat:0 | intcomma }} {{ currency }}</td>
+        </tr>
+      {% endfor %}
+      </tbody>
+    </table>
+  {% endif %}
+  <h2>계좌별 내역</h2>
+  <table class="table table-striped">
     <thead>
     <tr>
       <th style="text-align:center">은행</th>
       <th style="text-align:center">계좌번호</th>
       <th style="text-align:center">계좌명</th>
+      <th style="text-align:center">계좌 종류</th>
       <th style="text-align:center">잔액</th>
       <th style="text-align:center">날짜</th>
     </tr>
@@ -17,6 +48,7 @@
         <td style="text-align:center">{{ object.bank }}</td>
         <td style="text-align:right">{{ object.account_number }}</td>
         <td style="text-align:center">{{ object.account_name }}</td>
+        <td style="text-align:center">{{ object.get_account_type_display }}</td>
         <td style="text-align:right">{{ snapshot.amount | floatformat | intcomma }} {{ snapshot.currency }}</td>
         <td style="text-align:center">{{ snapshot.added_time | date:"Y n d D" }} {{ snapshot.added_time | time:"H:i" }}</td>
       </tr>

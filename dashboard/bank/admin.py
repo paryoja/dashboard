@@ -88,7 +88,13 @@ class CurrencyAdmin(utils.ExportCsvMixin):
 class AccountAdmin(utils.ExportCsvMixin):
     """계좌 정보."""
 
-    list_display = ("bank", "account_number", "account_name", "last_updated")
+    list_display = (
+        "bank",
+        "account_number",
+        "account_name",
+        "account_type",
+        "last_updated",
+    )
 
 
 @admin.register(models.AccountSnapshot)

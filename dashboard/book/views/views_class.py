@@ -1,11 +1,11 @@
 """Class View 를 이용한 view 구현."""
 from typing import Any, Dict
 
-from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
+from book import forms, models
+from django.contrib.auth.mixins import LoginRequiredMixin
 from django.views.generic import ListView, TemplateView
 
-from book import forms, models
-from .view_utils import CurrentPageMixin
+from .view_utils import CurrentPageMixin, SuperuserMixin
 
 
 class WebStackListView(ListView, CurrentPageMixin):
@@ -32,16 +32,12 @@ class WineListView(ListView, CurrentPageMixin):
     model = models.Wine
 
 
-class MomentumView(ListView, CurrentPageMixin, LoginRequiredMixin, UserPassesTestMixin):
+class MomentumView(ListView, CurrentPageMixin, LoginRequiredMixin, SuperuserMixin):
     """모멘텀 투자 정보 리스트."""
 
     current_page = "momentum"
     template_name = "book/investment/momentum.html"
     queryset = models.MomentumSummary.objects.order_by("-date")
-
-    def test_func(self):
-        """Check whether user is superuser or not."""
-        return self.request.user.is_superuser
 
     def get_context_data(self, **kwargs: Any) -> Dict[str, Any]:
         """Form 을 context 에 추가."""

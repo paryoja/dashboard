@@ -6,11 +6,11 @@ from typing import Any, Dict
 from bank import models as bank_models
 from book.nav import get_render_dict
 from django.contrib.auth.decorators import user_passes_test
-from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
+from django.contrib.auth.mixins import LoginRequiredMixin
 from django.shortcuts import render
-from django.views.generic import ListView, TemplateView
+from django.views.generic import DetailView, ListView, TemplateView
 
-from .view_utils import CurrentPageMixin
+from .view_utils import CurrentPageMixin, SuperuserMixin
 
 logger = logging.getLogger(__name__)
 
@@ -57,7 +57,7 @@ def currency_change(request):
     return render(request, "book/investment/currency_change.html", render_dict)
 
 
-class SavingsView(ListView, CurrentPageMixin, LoginRequiredMixin, UserPassesTestMixin):
+class SavingsView(ListView, LoginRequiredMixin, SuperuserMixin, CurrentPageMixin):
     """예적금 리스트."""
 
     current_page = "savings"
@@ -86,8 +86,16 @@ class SavingsView(ListView, CurrentPageMixin, LoginRequiredMixin, UserPassesTest
         return context
 
 
-class AccountView(
-    TemplateView, CurrentPageMixin, LoginRequiredMixin, UserPassesTestMixin
+class BankDetailView(DetailView, LoginRequiredMixin, SuperuserMixin, CurrentPageMixin):
+    """은행 상세 정보."""
+
+    model = bank_models.Bank
+    current_page = "account"
+    template_name = "book/investment/bank.html"
+
+
+class AccountListView(
+    TemplateView, LoginRequiredMixin, SuperuserMixin, CurrentPageMixin
 ):
     """계좌 내역 리스트."""
 
@@ -97,9 +105,11 @@ class AccountView(
     def get_context_data(self, **kwargs: Any) -> Dict[str, Any]:
         """Get latest snapshots."""
         context = super().get_context_data(**kwargs)
-        latest = bank_models.Account.objects.all().prefetch_related(
+        object_list = bank_models.Account.objects.all().prefetch_related(
             "accountsnapshot_set", "bank"
         )
+        latest = object_list.order_by("bank", "account_number")
+
         object_list = []
         for obj in latest:
             snapshot = obj.accountsnapshot_set.all().order_by("-added_time")
@@ -107,5 +117,29 @@ class AccountView(
                 object_list.append((obj, snapshot[0]))
             else:
                 object_list.append((obj, None))
+
+        summary = {}
+        total = {}
+        for obj, snapshot in object_list:
+            if snapshot:
+                value = summary.get(obj.bank, {})
+                currency = value.get(snapshot.currency, 0.0)
+
+                value[snapshot.currency] = currency + snapshot.amount
+                summary[obj.bank] = value
+
+                aggregation = total.get(snapshot.currency, 0.0)
+                total[snapshot.currency] = aggregation + snapshot.amount
+
         context["object_list"] = object_list
+        context["summary"] = summary
+        context["total"] = total
         return context
+
+
+class AccountDetailView(
+    DetailView, LoginRequiredMixin, SuperuserMixin, CurrentPageMixin
+):
+    """계좌 상세 정보."""
+
+    pass

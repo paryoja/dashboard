@@ -73,7 +73,8 @@ urlpatterns += [
     path("savings/", bank.SavingsView.as_view(), name="savings"),
     path("investment/currency_change/", bank.currency_change, name="currency_change",),
     path("momentum/", views_class.MomentumView.as_view(), name="momentum"),
-    path("account/", bank.AccountView.as_view(), name="account"),
+    path("bank/<int:pk>", bank.BankDetailView.as_view(), name="bank"),
+    path("account/", bank.AccountListView.as_view(), name="account"),
 ]
 
 # Investment

@@ -18,46 +18,55 @@ from .models import Lotto
 
 
 class CsvImportForm(forms.Form):
+    """CSV Import 시 사용할 Form."""
+
     csv_file = forms.FileField()
 
 
 class ExportCsvMixin(admin.ModelAdmin):
+    """CSV Export 기능 제공용 Mixin."""
+
     csv_file = forms.FileField()
     field_names = None
 
     def export_as_csv(self, request, queryset):
+        """CSV으로 Export."""
         meta = self.model._meta
         if self.field_names:
             field_names = self.field_names
         else:
             field_names = [field.name for field in meta.fields]
 
-        response = HttpResponse(content_type='text/csv')
-        response['Content-Disposition'] = 'attachment; filename={}.csv'.format(meta)
+        response = HttpResponse(content_type="text/csv")
+        response["Content-Disposition"] = "attachment; filename={}.csv".format(meta)
         writer = csv.writer(response)
 
         writer.writerow(field_names)
         for obj in queryset:
-            row = writer.writerow([getattr(obj, field) for field in field_names])
+            writer.writerow([getattr(obj, field) for field in field_names])
 
         return response
 
     export_as_csv.short_description = "Export Selected"
 
     def get_urls(self):
+        """Get urls."""
         urls = super().get_urls()
         my_urls = [
-            path('import-csv/', self.import_csv),
+            path("import-csv/", self.import_csv),
         ]
         return my_urls + urls
 
     def import_csv(self, request):
+        """Import CSV File."""
         if request.method == "POST":
             csv_file = request.FILES["csv_file"]
-            reader = csv.DictReader(csv_file.read().decode('utf-8').splitlines(), delimiter=",")
+            reader = csv.DictReader(
+                csv_file.read().decode("utf-8").splitlines(), delimiter=","
+            )
             for r in reader:
-                if 'id' in r:
-                    r['id'] = int(r['id'])
+                if "id" in r:
+                    r["id"] = int(r["id"])
                 obj = self.model(**r)
                 obj.save()
 
@@ -65,9 +74,7 @@ class ExportCsvMixin(admin.ModelAdmin):
             return redirect("..")
         form = CsvImportForm()
         payload = {"form": form}
-        return render(
-            request, "admin/csv_form.html", payload
-        )
+        return render(request, "admin/csv_form.html", payload)
 
 
 def new_lotto(draw_number):
@@ -82,6 +89,7 @@ def new_lotto(draw_number):
                 "method": "getLottoNumber",
                 "drwNo": draw_number,
             }
+            # https://www.nlotto.co.kr/common.do?method=getLottoNumber&drwNo=912
             result = requests.get("https://www.nlotto.co.kr/common.do", params=params)
             result = json.loads(result.text)
             if not result["returnValue"] == "fail":

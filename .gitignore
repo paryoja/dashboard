@@ -20,3 +20,10 @@ env.sh
 !.envs/.local/
 **/.mypy_cache/
 **/_build/*
+
+dashboard/django.log
+dashboard/celerybeat.pid
+dashboard/celerybeat-schedule.db
+dashboard/worker.txt
+
+log/nginx/*
