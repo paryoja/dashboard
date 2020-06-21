@@ -23,3 +23,12 @@ def get_split(value, index):
         return value.split("/")[index]
     except IndexError:
         return None
+
+
+@register.filter(name="get_value")
+def get_value(collection, key):
+    """Dictionary에서 value 값을 꺼내온다."""
+    try:
+        return collection[key]
+    except KeyError:
+        return None

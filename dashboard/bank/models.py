@@ -133,12 +133,31 @@ class AccountSnapshot(models.Model):
     )
     amount = models.FloatField()
 
+    def __str__(self) -> str:
+        return "{} {} {}".format(
+            self.account.account_number,
+            self.added_time.strftime("%Y-%m-%d"),
+            self.amount,
+        )
+
+
+class TransactionType(models.TextChoices):
+    """이체 타입."""
+
+    INCOME = "INCOME", _("수입")
+    SPENT = "SPENT", _("지출")
+    TRANSFER = "TRANSFER", _("이체")
+
 
 class Transaction(models.Model):
     """이체 내역."""
 
+    datetime = models.DateTimeField()
+    transaction_type = models.CharField(max_length=10, choices=TransactionType.choices)
     account = models.ForeignKey(Account, on_delete=models.CASCADE)
+    category = models.CharField(max_length=10, default="미분류")
+    detail = models.CharField(max_length=30)
     note = models.CharField(max_length=50)
     amount = models.FloatField()
+    currency = models.CharField(choices=CurrencyChoices.choices, max_length=10)
     is_income = models.BooleanField()
-    datetime = models.DateTimeField()

@@ -1,8 +1,16 @@
 {% extends 'book/base/base.html' %}
 {% load humanize %}
+{% load book_extras %}
 {% block body %}
   {% if summary %}
-    <h2>은행별 내역</h2>
+    <div class="row">
+      <div class="col-6"><h2>은행별 내역</h2></div>
+      <div class="col-6">
+        <a class="btn btn-sm btn-outline-primary" href="{% url 'book:add_snapshot' %}">내역 추가</a>
+        <a class="btn btn-sm btn-outline-primary" href="{% url 'book:snapshot_difference' %}">변경 내역</a>
+      </div>
+    </div>
+
     <table class="table table-hover">
       <thead>
       <tr>
@@ -30,7 +38,10 @@
       </tbody>
     </table>
   {% endif %}
-  <h2>계좌별 내역</h2>
+  <div class="chart-container">
+    <canvas id="myChart" width="400" height="300"></canvas>
+  </div>
+  <h2>계좌별 최신 내역</h2>
   <table class="table table-striped">
     <thead>
     <tr>
@@ -45,7 +56,7 @@
     <tbody>
     {% for object, snapshot in object_list %}
       <tr>
-        <td style="text-align:center">{{ object.bank }}</td>
+        <td style="text-align:center"><a href="{% url 'book:bank' object.bank.id %}">{{ object.bank }}</a></td>
         <td style="text-align:right">{{ object.account_number }}</td>
         <td style="text-align:center">{{ object.account_name }}</td>
         <td style="text-align:center">{{ object.get_account_type_display }}</td>
@@ -55,4 +66,43 @@
     {% endfor %}
     </tbody>
   </table>
+{% endblock %}
+{% block scripts %}
+  <script src="https://cdn.jsdelivr.net/npm/chart.js@2.9.3/dist/Chart.min.js"
+          integrity="sha256-R4pqcOYV8lt7snxMQO/HSbVCFRPMdrhAFMH+vr9giYI=" crossorigin="anonymous"></script>
+  <script>
+    var ctx = document.getElementById('myChart').getContext('2d');
+    var myChart = new Chart(ctx, {
+      type: 'pie',
+      data: {
+        labels: [{% for bank, sum in summary.items %}"{{ bank }}",{% endfor %}],
+        datasets: [{
+          label: '# of Votes',
+          data: [{% for bank, sum in summary.items %}{{ sum|get_value:"KRW" }}, {% endfor %}],
+          backgroundColor: [
+            'rgba(255, 99, 132, 0.2)',
+            'rgba(54, 162, 235, 0.2)',
+            'rgba(255, 206, 86, 0.2)',
+            'rgba(75, 192, 192, 0.2)',
+            'rgba(153, 102, 255, 0.2)',
+            'rgba(255, 159, 64, 0.2)'
+          ],
+          borderColor: [
+            'rgba(255, 99, 132, 1)',
+            'rgba(54, 162, 235, 1)',
+            'rgba(255, 206, 86, 1)',
+            'rgba(75, 192, 192, 1)',
+            'rgba(153, 102, 255, 1)',
+            'rgba(255, 159, 64, 1)'
+          ],
+          borderWidth: 1
+        }]
+      },
+      options: {
+        maintainAspectRatio: false,
+        cutoutPercentage: 40,
+      }
+    });
+  </script>
+
 {% endblock %}

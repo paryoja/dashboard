@@ -75,6 +75,12 @@ urlpatterns += [
     path("momentum/", views_class.MomentumView.as_view(), name="momentum"),
     path("bank/<int:pk>", bank.BankDetailView.as_view(), name="bank"),
     path("account/", bank.AccountListView.as_view(), name="account"),
+    path("add_snapshot/", bank.AddSnapsthoView.as_view(), name="add_snapshot"),
+    path(
+        "snapshot_difference/",
+        bank.SnapshotDifferenceView.as_view(),
+        name="snapshot_difference",
+    ),
 ]
 
 # Investment

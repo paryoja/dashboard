@@ -1,0 +1,27 @@
+{% extends "book/base/base.html" %}
+{% load book_extras %}
+{% load humanize %}
+{% block body %}
+  <h1>Hi</h1>
+  <table class="table table-hover">
+    <tr>
+      <td>계좌</td>
+      {% for head in header %}
+        <td colspan="2" style="text-align:center">{{ head }}</td>
+      {% endfor %}
+    </tr>
+    {% for key, value in difference.items %}
+      <tr>
+        <td>{{ key.bank }} {{ key.account_name }}</td>
+        {% for data, diff in value %}
+          <td style="text-align:right">{{ data.amount | floatformat:0 | intcomma }} {{ data.currency }}</td>
+          {% if diff is not None %}
+            <td style="text-align:right"> ({{ diff | floatformat:0 | intcomma }})</td>
+          {% else %}
+            <td></td>
+          {% endif %}
+        {% endfor %}
+      </tr>
+    {% endfor %}
+  </table>
+{% endblock %}

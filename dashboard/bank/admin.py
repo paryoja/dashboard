@@ -100,5 +100,3 @@ class AccountAdmin(utils.ExportCsvMixin):
 @admin.register(models.AccountSnapshot)
 class AccountSnapshotAdmin(utils.ExportCsvMixin):
     """계좌 내역 정보."""
-
-    pass

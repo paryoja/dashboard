@@ -1,14 +1,17 @@
 """Banking에 관련된 View."""
 
 import logging
-from typing import Any, Dict
+import typing
+from collections import defaultdict
 
 from bank import models as bank_models
+from bank.forms import AddSnapshotForm
 from book.nav import get_render_dict
 from django.contrib.auth.decorators import user_passes_test
 from django.contrib.auth.mixins import LoginRequiredMixin
-from django.shortcuts import render
-from django.views.generic import DetailView, ListView, TemplateView
+from django.shortcuts import redirect, render
+from django.urls import reverse
+from django.views.generic import DetailView, FormView, ListView, TemplateView
 
 from .view_utils import CurrentPageMixin, SuperuserMixin
 
@@ -68,7 +71,7 @@ class SavingsView(ListView, LoginRequiredMixin, SuperuserMixin, CurrentPageMixin
         """Check whether user is superuser or not."""
         return self.request.user.is_superuser
 
-    def get_context_data(self, **kwargs: Any) -> Dict[str, Any]:
+    def get_context_data(self, **kwargs: typing.Any) -> typing.Dict[str, typing.Any]:
         """Chart 내용을 context 에 추가."""
         context = super().get_context_data(**kwargs)
 
@@ -94,6 +97,29 @@ class BankDetailView(DetailView, LoginRequiredMixin, SuperuserMixin, CurrentPage
     template_name = "book/investment/bank.html"
 
 
+class AddSnapsthoView(FormView, LoginRequiredMixin, SuperuserMixin, CurrentPageMixin):
+    """Sanpshot 추가 뷰."""
+
+    form_class = AddSnapshotForm
+    current_page = "account"
+    template_name = "book/bank/add_snapshot.html"
+
+    def post(self, request, *args, **kwargs):
+        """입력된 폼으로부터 snapshot 추가."""
+        form = self.form_class(request.POST)
+        form.is_valid()
+
+        for key, value in form.cleaned_data.items():
+            if key.startswith("account_"):
+                snapshot_id = int(key.split("_")[1])
+                snapshot = bank_models.AccountSnapshot(
+                    account_id=snapshot_id, amount=value
+                )
+                snapshot.save()
+
+        return redirect(reverse("book:account"))
+
+
 class AccountListView(
     TemplateView, LoginRequiredMixin, SuperuserMixin, CurrentPageMixin
 ):
@@ -102,7 +128,7 @@ class AccountListView(
     current_page = "account"
     template_name = "book/investment/account.html"
 
-    def get_context_data(self, **kwargs: Any) -> Dict[str, Any]:
+    def get_context_data(self, **kwargs: typing.Any) -> typing.Dict[str, typing.Any]:
         """Get latest snapshots."""
         context = super().get_context_data(**kwargs)
         object_list = bank_models.Account.objects.all().prefetch_related(
@@ -134,6 +160,59 @@ class AccountListView(
         context["object_list"] = object_list
         context["summary"] = summary
         context["total"] = total
+        return context
+
+
+class SnapshotDifferenceView(
+    TemplateView, LoginRequiredMixin, SuperuserMixin, CurrentPageMixin
+):
+    """계좌 내역 변경 내용."""
+
+    template_name = "book/bank/snapshot_difference.html"
+    current_page = "account"
+
+    @staticmethod
+    def get_snapshot_difference() -> typing.Tuple[list, dict]:
+        """Snapshot 마다의 계좌 잔액 변화 내역."""
+        snapshots = bank_models.AccountSnapshot.objects.all().prefetch_related(
+            "account"
+        )
+
+        account_info = defaultdict(lambda: defaultdict())
+        date_set = set()
+        for snapshot in snapshots:
+            added_time = snapshot.added_time.strftime("%Y-%m-%d")
+            account_info[snapshot.account][added_time] = snapshot
+            date_set.add(added_time)
+
+        date_set = sorted(list(date_set))
+        difference = defaultdict(list)
+        for account, data in account_info.items():
+            diff = list()
+            prev_value = None
+            for date in date_set:
+                try:
+                    value = data[date]
+                except KeyError:
+                    value = None
+                if value:
+                    if not prev_value:
+                        prev_value = value
+                        diff.append((value, None))
+                    else:
+                        diff.append((value, value.amount - prev_value.amount))
+                        prev_value = value
+                else:
+                    diff.append((None, None))
+            difference[account].extend(diff)
+        return date_set, dict(difference)
+
+    def get_context_data(self, **kwargs: typing.Any) -> typing.Dict[str, typing.Any]:
+        """변화 내역 제공."""
+        context = super().get_context_data(**kwargs)
+        header, difference = self.get_snapshot_difference()
+        context["difference"] = difference
+        context["header"] = header
         return context
 
 
