@@ -17,6 +17,7 @@ urlpatterns += [
     path("study/slide/", views_class.SlideTemplateView.as_view(), name="slide",),
     path("study/paper/", views_class.PaperListViwew.as_view(), name="paper",),
     path("study/colab/", views_class.ColabTemplateView.as_view(), name="colab",),
+    path("study/react/", views_class.ReactTemplateView.as_view(), name="react"),
 ]
 
 # Pokemon

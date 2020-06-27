@@ -106,6 +106,13 @@ class ColabTemplateView(TemplateView, CurrentPageMixin):
     template_name = "book/study/colab.html"
 
 
+class ReactTemplateView(TemplateView, CurrentPageMixin):
+    """React."""
+
+    current_page = "react"
+    template_name = "book/study/react.html"
+
+
 class IdeaTemplateView(TemplateView, CurrentPageMixin):
     """아이디어 정보."""
 

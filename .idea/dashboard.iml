@@ -24,6 +24,7 @@
     <orderEntry type="library" name="embed" level="application" />
     <orderEntry type="library" name="tex-mml-chtml" level="application" />
     <orderEntry type="library" name="chart.js" level="application" />
+    <orderEntry type="library" name="react" level="application" />
   </component>
   <component name="PyDocumentationSettings">
     <option name="renderExternalDocumentation" value="true" />

@@ -35,6 +35,11 @@
             "template": "nlp",
             "icon": "fa fa-comment-dots",
             "description": "자연어처리 (CS224)"
+          },
+          {
+            "template": "react",
+            "icon": "fab fa-react",
+            "description": "리엑트"
           }
         ]
       },
