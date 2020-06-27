@@ -1,3 +1,3 @@
-from django.shortcuts import render
+"""은행 관련 view."""
 
 # Create your views here.
