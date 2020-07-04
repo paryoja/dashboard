@@ -10,8 +10,29 @@
 <script src="https://cdnjs.cloudflare.com/ajax/libs/react/15.6.1/react.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/react/15.6.1/react-dom.js"></script>
 <script>
+  var Component = React.createClass({
+    propTypes: {
+      firstName: React.PropTypes.string.isRequired,
+      middleName: React.PropTypes.string,
+      familyName: React.PropTypes.string.isRequired,
+      address: React.PropTypes.string,
+    },
+    getDefaultProps: function() {
+      return {
+        middleName: '',
+        address: 'n/a',
+      }
+    },
+    render: function () {
+      return React.DOM.span(null, "My name is " + this.props.firstName + " " + this.props.familyName);
+    }
+  })
+  var ComponentFactory = React.createFactory(Component)
   ReactDOM.render(
-          React.DOM.h1(null, "Hello World!"),
+          React.createElement(Component, {
+            firstName: "Bob",
+            familyName: "Tom"
+          }),
           document.getElementById("app")
   )
 </script>

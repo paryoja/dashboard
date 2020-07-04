@@ -46,9 +46,15 @@ THIRD_PARTY_APPS = [
     "crispy_forms",
     "rest_framework_api_key",
     "rest_framework.authtoken",
+    "channels",
+    "drf_yasg",
 ]
 
-LOCAL_APPS = ["book.apps.BookConfig", "chatbot.apps.ChatbotConfig", "bank.apps.BankConfig"]
+LOCAL_APPS = [
+    "book.apps.BookConfig",
+    "chatbot.apps.ChatbotConfig",
+    "bank.apps.BankConfig",
+]
 
 INSTALLED_APPS = DJANGO_APPS + THIRD_PARTY_APPS + LOCAL_APPS
 
@@ -171,3 +177,15 @@ NAV_ITEM_JSON = ROOT_DIR.path("config/sidebar.json")
 
 ELASTICSEARCH_IP = env.str("ELASTICSEARCH_IP", "localhost")
 ELASTICSEARCH_PORT = env.int("ELASTICSEARCH_PORT", 9200)
+
+# Channel 설정
+ASGI_APPLICATION = "chatbot.routing.application"
+CHANNEL_LAYERS = {
+    "default": {
+        "BACKEND": "channels_rabbitmq.core.RabbitmqChannelLayer",
+        "CONFIG": {
+            "host": "amqp://rabbitmq:5672/myvhost",
+            # "ssl_context": ... (optional)
+        },
+    },
+}

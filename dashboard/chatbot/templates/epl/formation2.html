@@ -1,0 +1,26 @@
+{% load static %}
+<link rel="stylesheet" type="text/css" href="{% static 'epl/match-centre.css' %}">
+<body style="padding-top: 0px;">
+<div class="matchCentre">
+  {{ lineup_html|safe }}
+
+  <table>
+
+    {% for team, squad in lineup.items %}
+      <tr>
+        <th>{{ team }}</th>
+      </tr>
+      {% for member in squad %}
+        <tr>
+          <td>{{ member.name }}</td>
+          <td>{{ member.position }}</td>
+          <td>{{ member.starting }}</td>
+          <td>{{ member.participate }}</td>
+        </tr>
+      {% endfor %}
+    {% endfor %}
+  </table>
+</div>
+</body>
+
+

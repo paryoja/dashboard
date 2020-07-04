@@ -13,6 +13,15 @@ class ChatForm(forms.Form):
     helper.add_input(Submit("Submit", "utterance", css_class="btn-primary"))
 
 
+class ChattingForm(forms.Form):
+    """채팅방."""
+
+    utterance = forms.CharField(label="Utterance", required=True)
+    helper = FormHelper()
+    helper.form_method = "POST"
+    helper.add_input(Submit("Submit", "utterance", css_class="btn-primary"))
+
+
 # 참고용 폼
 # from crispy_forms.bootstrap import FormActions, PrependedAppendedText, PrependedText
 # from crispy_forms.helper import FormHelper

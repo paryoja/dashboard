@@ -1,0 +1,73 @@
+{% load static %}
+<link rel="stylesheet" type="text/css" href="{% static 'epl/match-centre.css' %}">
+<div class="matchCentre">
+  <section class="squads mcMainTab active" data-ui-class="matchCentreSquadLabelContainer" data-ui-tab="Squads">
+    <div aria-hidden="true" class="mcLineUpContainter matchCentrePitchContainer" data-ui-tab="Pitch"
+         style="">
+      <div class="col-4-m pitchContainer">
+        <div class="badge badge-image-container" data-widget="club-badge-image" data-size="50">
+          <img class="badge-image badge-image--50 js-badge-image"
+               src="https://resources.premierleague.com/premierleague/badges/50/t49.png"
+               srcset="https://resources.premierleague.com/premierleague/badges/50/t49.png,
+                             https://resources.premierleague.com/premierleague/badges/50/t49@x2.png 2x">
+        </div>
+        <span class="visuallyHidden">Sheffield United overview page</span>
+        <div class="pitch">
+          <img src="{% static 'epl/lineup-pitch.jpg' %}" alt="Pitch">
+          <div class="team home pitchPositonsContainer" data-team-id="18" aria-hidden="true">
+            <div class="row">
+              <div class="pos t49-bg">1</div>
+            </div>
+            <div class="row">
+              <div class="pos t49-bg">6</div>
+              <div class="pos t49-bg">12</div>
+              <div class="pos t49-bg">19</div>
+            </div>
+            <div class="row">
+              <div class="pos t49-bg">2</div>
+              <div class="pos t49-bg">32</div>
+              <div class="pos t49-bg">16</div>
+              <div class="pos t49-bg">23</div>
+              <div class="pos t49-bg">3</div>
+            </div>
+            <div class="row">
+              <div class="pos t49-bg">9</div>
+              <div class="pos t49-bg">17</div>
+            </div>
+          </div>
+          <div class="team away pitchPositonsContainer" data-team-id="21" aria-hidden="true">
+            <div class="row">
+              <div class="pos t6-bg">1</div>
+            </div>
+            <div class="row">
+              <div class="pos t6-bg">33</div>
+              <div class="pos t6-bg">15</div>
+              <div class="pos t6-bg">6</div>
+              <div class="pos t6-bg">24</div>
+            </div>
+            <div class="row">
+              <div class="pos t6-bg">18</div>
+              <div class="pos t6-bg">17</div>
+            </div>
+            <div class="row">
+              <div class="pos t6-bg">7</div>
+              <div class="pos t6-bg">23</div>
+              <div class="pos t6-bg">27</div>
+            </div>
+            <div class="row">
+              <div class="pos t6-bg">10</div>
+            </div>
+          </div>
+        </div>
+        <a href="/clubs/21/Tottenham-Hotspur/overview">
+          <div class="badge badge-image-container" data-widget="club-badge-image" data-size="50">
+            <img class="badge-image badge-image--50 js-badge-image"
+                 src="https://resources.premierleague.com/premierleague/badges/50/t6.png"
+                 srcset="https://resources.premierleague.com/premierleague/badges/50/t6.png, https://resources.premierleague.com/premierleague/badges/50/t6@x2.png 2x">
+          </div>
+          <span class="visuallyHidden">Tottenham Hotspur overview page</span>
+        </a>
+      </div>
+    </div>
+  </section>
+</div>

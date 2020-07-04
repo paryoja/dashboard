@@ -40,6 +40,11 @@
             "template": "react",
             "icon": "fab fa-react",
             "description": "리엑트"
+          },
+          {
+            "template": "vue",
+            "icon": "fab fa-vuejs",
+            "description": "뷰"
           }
         ]
       },
@@ -132,6 +137,11 @@
             "template": "query",
             "icon": "fa fa-comment",
             "description": "문장분석"
+          },
+          {
+            "template": "chatting",
+            "icon": "fa fa-comments",
+            "description": "대화창"
           }
         ]
       },

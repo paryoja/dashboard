@@ -113,6 +113,13 @@ class ReactTemplateView(TemplateView, CurrentPageMixin):
     template_name = "book/study/react.html"
 
 
+class VueTemplateView(TemplateView, CurrentPageMixin):
+    """Vue."""
+
+    current_page = "vue"
+    template_name = "book/study/vue.html"
+
+
 class IdeaTemplateView(TemplateView, CurrentPageMixin):
     """아이디어 정보."""
 

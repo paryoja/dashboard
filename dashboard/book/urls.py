@@ -1,5 +1,6 @@
 """Book 의 URL."""
 
+from chatbot import views as chatbot_views
 from django.urls import path
 
 from . import views_user
@@ -18,6 +19,7 @@ urlpatterns += [
     path("study/paper/", views_class.PaperListViwew.as_view(), name="paper",),
     path("study/colab/", views_class.ColabTemplateView.as_view(), name="colab",),
     path("study/react/", views_class.ReactTemplateView.as_view(), name="react"),
+    path("study/vue/", views_class.VueTemplateView.as_view(), name="vue"),
 ]
 
 # Pokemon
@@ -61,6 +63,7 @@ urlpatterns += [
     path("query/", views_class.QueryView.as_view(), name="query"),
     path("reinforcement/", views_class.RLView.as_view(), name="reinforcement"),
     path("nlp/", views_class.NLPView.as_view(), name="nlp"),
+    path("chatting/", chatbot_views.ChattingView.as_view(), name="chatting"),
 ]
 
 # Link

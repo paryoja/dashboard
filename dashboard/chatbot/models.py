@@ -35,3 +35,25 @@ class People(models.Model):
 
     name = models.CharField(max_length=100)
     information = JSONField(null=True, blank=True)
+
+
+class Match(models.Model):
+    """경기 정보."""
+
+    line_up = models.TextField()
+    information = models.TextField()
+
+
+class Player(models.Model):
+    """선수 정보."""
+
+    name = models.TextField()
+
+
+class Lineup(models.Model):
+    """라인업."""
+
+    player = models.ForeignKey(Player, on_delete=models.CASCADE)
+    team = models.ForeignKey(Match, on_delete=models.CASCADE)
+    is_substitute = models.BooleanField()
+    is_participated = models.BooleanField()

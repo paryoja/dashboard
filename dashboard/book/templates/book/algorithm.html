@@ -1,47 +1,15 @@
 {% extends 'book/base/base.html' %}
 
 {% block body %}
-    <div class="embed-responsive embed-responsive-16by9">
-        <iframe class="embed-responsive-item" src="https://www.youtube.com/embed/rh7aKl0djIk"
-                allowfullscreen></iframe>
-    </div>
-    <div class="embed-responsive embed-responsive-16by9">
-        <iframe class="embed-responsive-item" src="https://www.youtube.com/embed/w5XxXWJrARU"
-                allowfullscreen></iframe>
-    </div>
+  <div class="embed-responsive embed-responsive-16by9">
+    <iframe class="embed-responsive-item" src="https://www.youtube.com/embed/rh7aKl0djIk"
+            allowfullscreen></iframe>
+  </div>
+  <div class="embed-responsive embed-responsive-16by9">
+    <iframe class="embed-responsive-item" src="https://www.youtube.com/embed/w5XxXWJrARU"
+            allowfullscreen></iframe>
+  </div>
 
-    <div class="embed-responsive embed-responsive-16by9">
-        <iframe class="embed-responsive-item" src="https://www.youtube.com/embed/1Ckc0fD5jHg"
-                allowfullscreen></iframe>
-    </div>
-    <div id="like_button_container"></div>
-    <div id="js_root"></div>
+  <iframe src="{% url 'chatbot:epl' %}" style="height: 550px;width: 710px"></iframe>
 
-    <div class="embed-responsive embed-responsive-16by9">
-        <iframe class="embed-responsive-item" src="https://www.youtube.com/embed/LrZkSqDDpCM"
-                allowfullscreen></iframe>
-    </div>
-    <div class="embed-responsive embed-responsive-16by9">
-        <iframe class="embed-responsive-item" src="https://www.youtube.com/embed/nAe-RoWZ0Gk"
-                allowfullscreen></iframe>
-    </div>
-    <div class="embed-responsive embed-responsive-16by9">
-        <iframe class="embed-responsive-item" src="https://www.youtube.com/embed/TXXeGHhyJOE"
-                allowfullscreen></iframe>
-    </div>
-    <div class="embed-responsive embed-responsive-16by9">
-        <iframe class="embed-responsive-item" src="https://www.youtube.com/embed/PSlTOehNR-U"
-                allowfullscreen></iframe>
-    </div>
-
-    <div class="embed-responsive embed-responsive-16by9">
-        <iframe class="embed-responsive-item" src="https://www.youtube.com/embed/0qRSiy4XG2c"
-                allowfullscreen></iframe>
-    </div>
-{% endblock %}
-{% block scripts %}
-    {% load static %}
-    <script src="https://unpkg.com/react@16/umd/react.production.min.js" crossorigin></script>
-    <script src="https://unpkg.com/react-dom@16/umd/react-dom.production.min.js" crossorigin></script>
-    <script src="{% static 'book/js/like_button.js' %}"></script>
 {% endblock %}
