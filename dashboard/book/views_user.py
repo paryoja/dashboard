@@ -24,9 +24,6 @@ class BookLoginView(auth_views.LoginView):
 
     form_class = CustomAuthenticationForm
 
-    def __init__(self):
-        super(BookLoginView, self).__init__()
-
     def get_context_data(self, **kwargs):
         """Set current page."""
         context = super().get_context_data(**kwargs)
