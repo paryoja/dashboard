@@ -180,13 +180,10 @@ ELASTICSEARCH_IP = env.str("ELASTICSEARCH_IP", "localhost")
 ELASTICSEARCH_PORT = env.int("ELASTICSEARCH_PORT", 9200)
 
 # Channel 설정
-ASGI_APPLICATION = "chatbot.routing.application"
+ASGI_APPLICATION = "dashboard.routing.application"
 CHANNEL_LAYERS = {
     "default": {
         "BACKEND": "channels_rabbitmq.core.RabbitmqChannelLayer",
-        "CONFIG": {
-            "host": "amqp://rabbitmq:5672/myvhost",
-            # "ssl_context": ... (optional)
-        },
+        "CONFIG": {"host": "amqp://rabbitmq:5672/myvhost"},
     },
 }

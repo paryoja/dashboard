@@ -4,6 +4,7 @@ from typing import Any, Dict
 from book import forms, models
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.views.generic import ListView, TemplateView
+from people import models as people_models
 
 from .view_utils import CurrentPageMixin, SuperuserMixin
 
@@ -166,3 +167,11 @@ class NLPView(ListView, CurrentPageMixin):
     ).order_by("-number")
     current_page = "nlp"
     template_name = "book/study/nlp.html"
+
+
+class FriendListView(LoginRequiredMixin, ListView, CurrentPageMixin):
+    """친구 리스트."""
+
+    queryset = people_models.Person.objects.all()
+    current_page = "friend_list"
+    template_name = "people/person.html"

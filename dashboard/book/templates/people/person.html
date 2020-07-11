@@ -1,0 +1,9 @@
+{% extends 'book/base/base.html' %}
+{% block body %}
+  <h1>Friends List</h1>
+  <table>
+  {% for object in object_list %}
+    <tr><td>{{ object }}</td></tr>
+  {% endfor %}
+  </table>
+{% endblock %}

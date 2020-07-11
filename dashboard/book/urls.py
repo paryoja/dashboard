@@ -169,3 +169,8 @@ urlpatterns += [
 urlpatterns += [
     path("algorithm/", views_class.AlgorithmTemplateView.as_view(), name="algorithm",),
 ]
+
+# Friends
+urlpatterns += {
+    path("friend_list/", views_class.FriendListView.as_view(), name="friend_list"),
+}

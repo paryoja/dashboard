@@ -1,15 +1,6 @@
 {% extends 'book/base/base.html' %}
 
 {% block body %}
-  <div class="embed-responsive embed-responsive-16by9">
-    <iframe class="embed-responsive-item" src="https://www.youtube.com/embed/rh7aKl0djIk"
-            allowfullscreen></iframe>
-  </div>
-  <div class="embed-responsive embed-responsive-16by9">
-    <iframe class="embed-responsive-item" src="https://www.youtube.com/embed/w5XxXWJrARU"
-            allowfullscreen></iframe>
-  </div>
-
   <iframe src="{% url 'chatbot:epl' %}" style="height: 550px;width: 710px"></iframe>
 
 {% endblock %}

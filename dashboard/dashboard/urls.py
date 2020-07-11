@@ -49,7 +49,7 @@ def simple_redirect(_):
 
 
 def get_ip(request):
-    """Debug용."""
+    """Debug 용."""
     ip = request.META["REMOTE_ADDR"]
     return HttpResponse("{}".format(ip))
 

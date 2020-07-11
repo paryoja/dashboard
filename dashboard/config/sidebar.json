@@ -321,6 +321,13 @@
         "icon": "fe fe-log-out",
         "description": "Logout",
         "login_state": "login"
+      },
+      {
+        "template": "friend_list",
+        "icon": "fa fa-user-friends",
+        "description": "Friends",
+        "should_superuser": true,
+        "login_state": "login"
       }
     ]
   },
