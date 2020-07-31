@@ -31,7 +31,7 @@ gunicorn==20.0.4
 whitenoise==5.1.0
 
 # elasticsearch
-elasticsearch==7.6.0
+elasticsearch==7.8.1
 
 # krx
 pykrx==0.1.22
