@@ -13,7 +13,9 @@ class AddSnapshotForm(forms.Form):
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
-        for account in Account.objects.all().order_by("bank", "account_name"):
+        for account in Account.objects.filter(closed=False).order_by(
+            "bank", "account_name"
+        ):
             self.fields["account_{}".format(account.id)] = forms.IntegerField(
                 label="{} {} {}".format(
                     account.bank, account.account_name, account.account_number
