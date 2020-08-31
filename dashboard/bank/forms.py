@@ -16,6 +16,9 @@ class AddSnapshotForm(forms.Form):
         for account in Account.objects.filter(closed=False).order_by(
             "bank", "account_name"
         ):
+            if account.bank.name == "Total":
+                continue
+
             self.fields["account_{}".format(account.id)] = forms.IntegerField(
                 label="{} {} {}".format(
                     account.bank, account.account_name, account.account_number

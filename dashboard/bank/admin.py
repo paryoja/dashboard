@@ -88,6 +88,7 @@ class CurrencyAdmin(utils.ExportCsvMixin):
 class AccountAdmin(utils.ExportCsvMixin):
     """계좌 정보."""
 
+    search_fields = ("account_number", "account_name", "closed")
     list_display = (
         "bank",
         "account_number",
