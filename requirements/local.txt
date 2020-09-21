@@ -3,7 +3,7 @@
 # debug
 Werkzeug==1.0.1
 django-extensions==3.0.5  # https://github.com/django-extensions/django-extensions
-django-debug-toolbar==2.2
+django-debug-toolbar==3.1
 
 # linting
 pylint_django==2.3.0
