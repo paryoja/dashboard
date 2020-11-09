@@ -37,7 +37,7 @@ elasticsearch==7.6.0
 pykrx==0.1.22
 
 # socket
-channels==2.4.0
+channels==3.0.2
 channels_rabbitmq
 
 drf-yasg==1.17.1
