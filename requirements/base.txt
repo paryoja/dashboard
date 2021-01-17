@@ -38,6 +38,6 @@ pykrx==0.1.22
 
 # socket
 channels==2.4.0
-channels_rabbitmq
+channels_rabbitmq==2.0.0
 
 drf-yasg==1.17.1
