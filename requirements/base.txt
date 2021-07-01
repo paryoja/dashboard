@@ -1,5 +1,5 @@
 # postgresql
-psycopg2-binary==2.8.5
+psycopg2-binary==2.8.6
 
 # url parsing
 urllib3==1.26.6
