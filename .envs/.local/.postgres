@@ -2,6 +2,6 @@
 # ------------------------------------------------------------------------------
 POSTGRES_HOST=postgres
 POSTGRES_PORT=5432
-POSTGRES_DB=cc_test
-POSTGRES_USER=tTZmPWGeSymeoJfHTWhAHarOIpeXfGhL
-POSTGRES_PASSWORD=Jy4dEhlhDGE5c4GhRVTgcwyJnroWuizVwQlSl0fQSzwNZ8kSZ62kTpqLpoGtj2CK
+POSTGRES_DB=dashboard
+POSTGRES_USER=ebyftcweej
+POSTGRES_PASSWORD=KYdBYhJUQ65CEe3SQcW8

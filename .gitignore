@@ -27,3 +27,5 @@ dashboard/celerybeat-schedule.db
 dashboard/worker.txt
 
 log/nginx/*
+cert/
+*.sql.gz
