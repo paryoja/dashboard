@@ -7,10 +7,10 @@ beautifulsoup4==4.9.1
 
 # task worker
 flower==0.9.7
-celery==5.1.2
+celery==4.4.7
 
 # html request
-requests==2.24.0
+requests==2.25.1
 
 # compression
 lz4==3.1.0
@@ -31,13 +31,13 @@ gunicorn==20.0.4
 whitenoise==5.2.0
 
 # elasticsearch
-elasticsearch==7.13.2
+elasticsearch==7.13.1
 
 # krx
 pykrx==1.0.14
 
 # socket
-channels==2.4.0
+channels==3.0.3
 channels_rabbitmq==4.0.0
 
 drf-yasg==1.17.1
