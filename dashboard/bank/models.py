@@ -118,6 +118,7 @@ class Account(models.Model):
         choices=AccountTypeChoices.choices,
         default=AccountTypeChoices.Saving,
     )
+    closed = models.BooleanField(default=False)
 
     def __str__(self):
         return "{} {}".format(self.bank, self.account_number)

@@ -15,7 +15,7 @@ class ChatConsumer(WebsocketConsumer):
         """웹 소켓 연결 종료 시 실행."""
         pass
 
-    def receive(self, text_data):
+    def receive(self, text_data=None, bytes_data=None):
         """클라이언트로부터 메세지를 받을 시 실행."""
         text_data_json = json.loads(text_data)
         message = text_data_json["message"]
