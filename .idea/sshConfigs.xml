@@ -2,10 +2,7 @@
 <project version="4">
   <component name="SshConfigs">
     <configs>
-      <sshConfig host="yozit.duckdns.org" id="aa4f59e6-f70a-491d-9315-541bb0cbebd2" keyPath="C:\Users\paryoja\.ssh\seoul.pem" port="22" customName="aws" nameFormat="CUSTOM" username="ubuntu" />
-      <sshConfig host="13.67.47.175" id="d78313b4-3244-48aa-bba9-3a95a1668164" keyPath="C:\Users\paryoja\Downloads\seoul.pem" port="22" customName="azure" nameFormat="CUSTOM" username="ubuntu" />
-      <sshConfig host="13.125.1.208" id="b76c2a5c-a6e7-4c10-813e-12451a73becb" keyPath="C:\Users\paryoja\Downloads\seoul.pem" port="22" customName="aws" nameFormat="CUSTOM" />
-      <sshConfig host="13.67.47.175" id="eb4a6625-23ab-46c1-ad11-970ab28209de" keyPath="C:\Users\paryoja\Downloads\seoul.pem" port="22" customName="azure" nameFormat="CUSTOM" />
+      <sshConfig authType="PASSWORD" host="paryoja.asuscomm.com" id="64adac05-74a4-4e52-bfe9-f490789ebbfa" port="10022" nameFormat="DESCRIPTIVE" username="yjpark" />
     </configs>
   </component>
 </project>

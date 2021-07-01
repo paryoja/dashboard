@@ -13,8 +13,8 @@ set -o nounset
 
 
 working_dir="$(dirname ${0})"
-source "${working_dir}/_sourced/constants.sh"
-source "${working_dir}/_sourced/messages.sh"
+source "${working_dir}/constants.sh"
+source "${working_dir}/messages.sh"
 
 
 message_welcome "Backing up the '${POSTGRES_DB}' database..."

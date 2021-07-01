@@ -108,7 +108,7 @@ class AddSnapsthoView(FormView, LoginRequiredMixin, SuperuserMixin, CurrentPageM
         """입력된 폼으로부터 snapshot 추가."""
         form = self.form_class(request.POST)
         form.is_valid()
-
+        total_value = 0
         for key, value in form.cleaned_data.items():
             if key.startswith("account_"):
                 snapshot_id = int(key.split("_")[1])
@@ -116,7 +116,12 @@ class AddSnapsthoView(FormView, LoginRequiredMixin, SuperuserMixin, CurrentPageM
                     account_id=snapshot_id, amount=value
                 )
                 snapshot.save()
-
+                total_value += value
+        total_account = bank_models.Account.objects.filter(account_name="Total")[0]
+        total_snapshot = bank_models.AccountSnapshot(
+            account_id=total_account, amount=total_value
+        )
+        total_snapshot.save()
         return redirect(reverse("book:account"))
 
 
@@ -147,6 +152,9 @@ class AccountListView(
         summary = {}
         total = {}
         for obj, snapshot in object_list:
+            if obj.bank.name == "Total":
+                continue
+
             if snapshot:
                 value = summary.get(obj.bank, {})
                 currency = value.get(snapshot.currency, 0.0)
