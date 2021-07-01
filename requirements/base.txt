@@ -2,12 +2,12 @@
 psycopg2-binary==2.8.5
 
 # url parsing
-urllib3==1.25.9
+urllib3==1.26.6
 beautifulsoup4==4.9.1
 
 # task worker
 flower==0.9.5
-celery==4.4.6
+celery==5.1.2
 
 # html request
 requests==2.24.0
@@ -16,28 +16,28 @@ requests==2.24.0
 lz4==3.1.0
 
 # Django
-django==3.0.8
+django==3.2.4
 django-environ==0.4.5
-djangorestframework==3.11.0
+djangorestframework==3.11.2
 django-celery-beat==2.0.0 # https://github.com/celery/django-celery-beat
-django-filter==2.3.0
-django-crispy-forms==1.9.1
+django-filter==2.4.0
+django-crispy-forms==1.12.0
 djangorestframework-api-key==2.0.0
 
 # wsgi
 gunicorn==20.0.4
 
 # static
-whitenoise==5.1.0
+whitenoise==5.2.0
 
 # elasticsearch
-elasticsearch==7.6.0
+elasticsearch==7.9.0
 
 # krx
-pykrx==0.1.22
+pykrx==1.0.14
 
 # socket
 channels==2.4.0
-channels_rabbitmq
+channels_rabbitmq==4.0.0
 
 drf-yasg==1.17.1
