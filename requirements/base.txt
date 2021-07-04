@@ -34,7 +34,7 @@ whitenoise==5.2.0
 elasticsearch==7.13.1
 
 # krx
-pykrx==1.0.14
+pykrx==1.0.15
 
 # socket
 channels==3.0.3
