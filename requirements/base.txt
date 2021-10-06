@@ -16,7 +16,7 @@ requests==2.26.0
 lz4==3.1.0
 
 # Django
-django==3.2.5
+django==3.2.8
 django-environ==0.4.5
 djangorestframework==3.12.4
 django-celery-beat==2.2.1 # https://github.com/celery/django-celery-beat
