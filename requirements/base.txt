@@ -20,7 +20,7 @@ django==3.2.5
 django-environ==0.4.5
 djangorestframework==3.12.4
 django-celery-beat==2.2.1 # https://github.com/celery/django-celery-beat
-django-filter==2.4.0
+django-filter==22.1
 django-crispy-forms==1.12.0
 djangorestframework-api-key==2.0.0
 
