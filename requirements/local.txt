@@ -16,7 +16,7 @@ flake8-docstrings==1.6.0
 django-stubs==1.9.0  # https://github.com/typeddjango/django-stubs
 pytest-django==4.5.1
 coverage==6.2  # https://github.com/nedbat/coveragepy
-mypy==0.910
+mypy==0.990
 
 # git pre-commit
 pre-commit==2.15.0
