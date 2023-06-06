@@ -7,7 +7,7 @@ beautifulsoup4==4.9.3
 
 # task worker
 flower==0.9.7
-celery==4.4.7
+celery==5.3.0
 
 # html request
 requests==2.26.0
