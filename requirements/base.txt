@@ -25,7 +25,7 @@ django-crispy-forms==1.12.0
 djangorestframework-api-key==2.0.0
 
 # wsgi
-gunicorn==20.1.0
+gunicorn==21.0.1
 
 # static
 whitenoise==5.2.0
