@@ -40,4 +40,4 @@ pykrx==1.0.16
 channels==3.0.4
 channels_rabbitmq==4.0.0
 
-drf-yasg==1.17.1
+drf-yasg==1.21.7
