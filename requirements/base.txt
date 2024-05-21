@@ -10,7 +10,7 @@ flower==0.9.7
 celery==4.4.7
 
 # html request
-requests==2.26.0
+requests==2.32.1
 
 # compression
 lz4==3.1.0
